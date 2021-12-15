@@ -1,2 +1,6 @@
-# ManyFEWS
-The Many Flood Early Warning System
+ # Many-FEWS
+Many-FEWS is a flood early warning system that can be deployed by a community where there is currently no system in place. The system uses weather forecast information from the [Global Ensemble Forecast System](https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast) produced by [NOAA](https://www.noaa.gov), coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework. 
+
+The development timeline is for the initial version of the system to be available in Spring 2022. 
+
+The development of the new flood early warning system was funded under the [Java Flood One](https://www.durham.ac.uk/research/institutes-and-centres/hazard-risk-resilience/research/current-projects/indonesia-java-flood-one/) project funded by [UKRI’s NERC](https://nerc.ukri.org) and Indonesia’s [Ristekdikti.](http://litbangda.ristekdikti.go.id) The project is run by [Durham University](https://www.dur.ac.uk), the [UK Centre for Ecology and Hydrology](https://www.ceh.ac.uk), [Bandung Insitute of Technology](https://www.itb.ac.id) and local NGO in Indonesia [Jaga Balai](https://instagram.com/jagabalai?utm_medium=copy_link). 
