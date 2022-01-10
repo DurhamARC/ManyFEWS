@@ -1,5 +1,5 @@
- # Many-FEWS
-Many-FEWS is a flood early warning system that can be deployed by a community where there is currently no system in place. The system uses weather forecast information from the [Global Ensemble Forecast System](https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast) produced by [NOAA](https://www.noaa.gov), coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework. 
+ # ManyFEWS
+ManyFEWS is a flood early warning system that can be deployed by a community where there is currently no system in place. The system uses weather forecast information from the [Global Ensemble Forecast System](https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast) produced by [NOAA](https://www.noaa.gov), coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework. 
 
 The development timeline is for the initial version of the system to be available in Spring 2022. 
 
