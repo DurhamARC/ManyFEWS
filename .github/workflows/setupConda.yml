@@ -1,0 +1,13 @@
+#- name: setup-conda
+  # You may pin to the exact commit or the version.
+  # uses: s-weigand/setup-conda@945fd9e7c92f1efb12634ba552ee0b2ec140a5fd
+  uses: s-weigand/setup-conda@v1.1.0
+  with:
+    # Whether to activate the conda base env (Default: 'true')
+    activate-conda: # optional, default is true
+    # If conda should be updated before running other commands (Default: 'false')
+    update-conda: # optional, default is false
+    # Python version which should be installed with conda (default: 'Default')
+    python-version: # optional, default is default
+    # Additional channels like 'conda-forge' which can be used to install packages
+    conda-channels: # optional, default is 
