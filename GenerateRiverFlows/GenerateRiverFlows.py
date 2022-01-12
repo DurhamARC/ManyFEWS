@@ -1,9 +1,18 @@
 """
-This python script is converted from Professor Simon Mathias (Professor of Environmental Engineering).
+This python script is converted from Professor Simon Mathias(Professor of Environmental Engineering)'s
+script, which is used to generate river flows.
                                                             Created by Jiada Tu
                                                             13/01/2022
 """
 import numpy as np
+
+
+
+
+
+
+
+
 
 def GenerateRiverFlows( t0, GEFSdata, F0):
     """
@@ -36,4 +45,7 @@ def GenerateRiverFlows( t0, GEFSdata, F0):
 
     # Determine number of data points
     N = np.size(GEFSdata,1);
+
+    # Specify date-time in days of each data point
+
 
