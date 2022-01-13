@@ -12,6 +12,8 @@ script, which is used to generate river flows.
 import numpy as np
 import xlrd
 from datetime import date
+import math
+
 
 # here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
 # Specify start time
@@ -30,14 +32,14 @@ def excel_to_matrix(path, sheetNum):
     return datamatrix
 
 GefsDataFile = u'/Users/abeltu/Desktop/GenerateRiverFlows/GEFSdata.xlsx'
-sheetNum = 0
+sheetNum = 16
 gefsData = excel_to_matrix(GefsDataFile,sheetNum)
 
 # Import initial conditions for 100 models
 InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelInitialConditions.csv'
 F0 = np.loadtxt(open(InitialConditionFile), delimiter=',', usecols=range(3))
 
-def GenerateRiverFlows( t0, GEFSdata, F0):
+def GenerateRiverFlows( t0, gesfData, F0):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
     
@@ -67,8 +69,61 @@ def GenerateRiverFlows( t0, GEFSdata, F0):
     dt = 0.25
 
     # Determine number of data points
-    N = np.size(GEFSdata,1)
+    N = np.size(gefsData[:,1])
 
     # Specify date-time in days of each data point
+    t = t0 + np.arange(0,(N/4 - dt),dt)
+
+    # Get relative humidity (%)
+    RH = gefsData[:,0]
+
+    # Convert temperature to deg C
+    TempMax = gefsData[:,1] - 273.15
+    TempMin = gefsData[:,2] - 273.15
+
+    # Estimate average temperature
+    T = (TempMin+TempMax)/2
+
+    # Determine daily minimum temperature of each hour
+    MinTemPerHour = np.array(TempMin).reshape(16, 4).min(axis=1) #Min Temperature of each hour(at 4 time points).
+    Tmin = np.repeat(MinTemPerHour,4)
+
+    # Determine daily maximum temperature of each hour
+    MaxTemPerHour = np.array(TempMax).reshape(16, 4).max(axis=1) #Max Temperature of each hour(at 4 time points).
+    Tmax = np.repeat(MaxTemPerHour,4)
+
+    # Determine magnitude of wind speed at 10 m
+    u10 = np.sqrt((gefsData[:,3])**2 + (gefsData[:,4])**2)
+
+    # Estimate wind speed at 2 m
+    z0 = 0.006247 # m(surface roughness equivalent to FAO56 reference crop)
+    z2 = 2 # m
+    z10 = 10 # m
+    u0 = 0 # m/s
+    uTAU = ((u10-u0)/2.5) / (math.log(z10/z0))
+    u2 = 2.5 * uTAU * (math.log(z2/z0)) + u0
+
+    # Extract precipitation data (mm)
+    precip = gefsData[:,5]
+
+    # Convert preiciptation to (mm/day)
+    qp = precip / dt
+
+    # Details specific for Majalaya catchment
+    lat = -7.125 # mean latutude (degrees)
+    alt = 1157 # mean altitude (m above sea level)
+    CatArea = 212.2640 # Catchment area (km2)
+
+    # Get model parameters for Majalaya catchment
+    parametersFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelParameters.csv'
+    X = np.loadtxt(open(parametersFile), delimiter=',', usecols=range(4))
+
+    # Determine reference crop evapotranspiration (mm/day)
+#    Ep = FAO56(t,Tmin,Tmax,alt,lat,T,u2,RH,[])
+
+    # Determine flow rate, Q (m3/s)
+#    Q = ModelFun(qp,Ep,dt,CatArea,X,F0)
+
+#    return Eq, Q
 
 
