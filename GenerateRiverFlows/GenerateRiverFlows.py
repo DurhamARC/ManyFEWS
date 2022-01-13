@@ -11,7 +11,6 @@ script, which is used to generate river flows.
 
 import numpy as np
 import xlrd
-import csv
 from datetime import date
 
 # here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
@@ -27,12 +26,16 @@ def excel_to_matrix(path, sheetNum):
     for x in range(1,row):
         row = np.matrix(table.row_values(x))
         datamatrix[x, :] = row
-    datamatrix = np.delete(datamatrix, 0, axis=0)
+    datamatrix = np.delete(datamatrix, 0, axis=0) # Delete the first blank line.(Its elements are all zero)
     return datamatrix
 
-datafile = u'/Users/abeltu/Desktop/GenerateRiverFlows/GEFSdata.xlsx'
+GefsDataFile = u'/Users/abeltu/Desktop/GenerateRiverFlows/GEFSdata.xlsx'
 sheetNum = 0
-gefsData = excel_to_matrix(datafile,sheetNum)
+gefsData = excel_to_matrix(GefsDataFile,sheetNum)
+
+# Import initial conditions for 100 models
+InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelInitialConditions.csv'
+F0 = np.loadtxt(open(InitialConditionFile), delimiter=',', usecols=range(3))
 
 def GenerateRiverFlows( t0, GEFSdata, F0):
     """
