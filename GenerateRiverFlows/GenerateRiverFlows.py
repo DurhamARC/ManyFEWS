@@ -71,8 +71,8 @@ dt = 0.25
 # Determine number of data points
 N = np.size(gefsData[:,1])
 
-# Specify date-time in days of each data point
-t = t0 + np.arange(0,(N/4 - dt),dt)
+# Specify date number
+t = t0 + np.arange(0,N/4,dt)
 
 # Get relative humidity (%)
 RH = gefsData[:,0]
@@ -133,9 +133,9 @@ X = np.loadtxt(open(parametersFile), delimiter=',', usecols=range(4))
 # def FAO56(t, Tmin, Tmax, alt, lat, T, u2, RH, Rs):
 
 # Ensure Tmax > Tmin
-sumTem = np.vstack((Tmax,Tmin))
-Tmax = np.amax(sumTem, axis = 0)
-Tmin = np.amin(sumTem, axis = 0)
+Tmax = np.maximum(Tmax,Tmin)
+Tmin = np.minimum(Tmax,Tmin)
+
 
 # u2 (m/s)
 # P (kPa)
@@ -176,7 +176,6 @@ es = (eoTmax+eoTmin) / 2
 
 if RH is not None:
     ea = (RH / 100) * es
-
 else:
     # Dewpoint temperature (Tdew) from Eq. 48
     Tdew = Tmin  # This might need to be increased for tropical conditions SAM 14 / 09 / 2019
@@ -187,14 +186,24 @@ else:
 varphi = (lat * math.pi) / 180
 
 # Determine day of the year as a number from 1 to 365
+beginDate = date(2010, 1, 1)
+beginDateNum = (beginDate - date(beginDate.year -1, 12, 31)).days
+J = beginDateNum + np.arange(0,N/4,dt)
 
+# Inverse relative distance Earth-Sun from Eq. 23
+dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
 
+# Solar declination from Eq. 24
+delta = 0.409 * np.sin((((2 * math.pi) / 365) * J) - 1.39)
 
-"""
-%Determine day of the year as a number from 1 to 365
-for n=1:size(t,3)
-    [yyyy,~,~]=datevec(t(:,:,n));
-    t0(:,:,n)=datenum(yyyy,1,1);
-end
-J=t-t0+1;
-"""
+# Sunset hour angle from Eq. 25
+ws = np.arccos((-math.tan(varphi)) * (np.tan(delta)))
+
+# Extraterrestrial radiation from Eq. 21
+Gsc = 0.0820
+Ra = ((((24 * 60) / (math.pi)) * Gsc) * dr * (ws * (math.sin(varphi)) * (np.sin(delta)) +
+(math.cos(varphi)) * (np.cos(delta)) * np.sin(ws)))
+
+# Incoming solar radiation from Eq. 50
+kRS=0.16
+
