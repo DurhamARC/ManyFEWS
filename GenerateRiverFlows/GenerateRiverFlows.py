@@ -174,14 +174,27 @@ eo = 0.6108 * (np.exp((17.27 * T) / (T + 237.3)))
 # Assume saturation vapor pressure is mean
 es = (eoTmax+eoTmin) / 2
 
+if RH is not None:
+    ea = (RH / 100) * es
+
+else:
+    # Dewpoint temperature (Tdew) from Eq. 48
+    Tdew = Tmin  # This might need to be increased for tropical conditions SAM 14 / 09 / 2019
+    # Actual vapour pressure (ea) from Eq. 14
+    ea = 0.6108 * (np.exp((17.27 * Tdew) / (Tdew + 237.3)))
+
+# Convert latitude from degrees to radians from Eq. 22
+varphi = (lat * math.pi) / 180
+
+# Determine day of the year as a number from 1 to 365
+
+
 
 """
-if isempty(RH)
-    %Dewpoint temperature (Tdew) from Eq. 48
-    Tdew=Tmin; %This might need to be increased for tropical conditions SAM 14/09/2019
-    %Actual vapour pressure (ea) from Eq. 14
-    ea=0.6108*exp(17.27*Tdew./(Tdew+237.3));
-else
-    ea=RH/100.*es;
+%Determine day of the year as a number from 1 to 365
+for n=1:size(t,3)
+    [yyyy,~,~]=datevec(t(:,:,n));
+    t0(:,:,n)=datenum(yyyy,1,1);
 end
+J=t-t0+1;
 """
