@@ -143,13 +143,13 @@ Tmin = np.minimum(Tmax,Tmin)
 # Rn (MJ/m2/day)
 
 try:
-    T = T
+    T
 except NameError:
     T = (Tmin+Tmax)/2
 
 # This is based on FAO56 Example 20 for the estimation of evapotranspiration
 try:
-    u2 = u2
+    u2
 except NameError:
     u2 = np.zeros(np.shape(T)) # create an undefined array
     u2[:] = 2 # Assume wind speed of 2 m/s
@@ -174,9 +174,12 @@ eo = 0.6108 * (np.exp((17.27 * T) / (T + 237.3)))
 # Assume saturation vapor pressure is mean
 es = (eoTmax+eoTmin) / 2
 
-if RH is not None:
+#if RH is not None:
+#    ea = (RH / 100) * es
+#else:
+try:
     ea = (RH / 100) * es
-else:
+except NameError:
     # Dewpoint temperature (Tdew) from Eq. 48
     Tdew = Tmin  # This might need to be increased for tropical conditions SAM 14 / 09 / 2019
     # Actual vapour pressure (ea) from Eq. 14
@@ -206,4 +209,45 @@ Ra = ((((24 * 60) / (math.pi)) * Gsc) * dr * (ws * (math.sin(varphi)) * (np.sin(
 
 # Incoming solar radiation from Eq. 50
 kRS=0.16
+
+try:
+    Rs
+except NameError:
+    Rs = kRS * (np.sqrt(Tmax -Tmin)) * Ra
+
+# Clear-sky solar radiation from Eq. 37
+Rso = ((0.75 + (2e-5) * alt)) * Ra
+
+# Net solar radiation from Eq. 38
+alpha = 0.23
+Rns = (1-alpha) * Rs
+
+# Outgoing net longwave radiation from Eq. 39
+sig = 4.903e-9
+sigTmax4 = sig * (np.power((Tmax+273.15), 4))
+sigTmin4 = sig * (np.power((Tmin+273.15), 4))
+sigT4 = (sigTmax4+sigTmin4) / 2
+RsRso = Rs / Rso
+RsRso[RsRso > 1] = 1
+Rnl = sigT4 * (0.34 - (0.14 * np.sqrt(ea))) * ( 1.35 * RsRso - 0.35)
+
+# Rnl = sigT4 * (0.56- (0.25 * np.sqrt(ea))) * ( 1.35 * RsRso - 0.35) [This is what you need for UK instead]
+# Net radiation from Eq. 40
+Rn = Rns-Rnl
+
+# Assume zero soil heat flux
+G = 0
+# Calculate reference evapotranspiration from Eq. 6
+T1 = 0.408 * Del * (Rn-G)
+T2 = ((gam * 900) / (T+273)) * u2 * (es-ea)
+T3 = Del + (gam * (1+0.34 * u2))
+ETo = (T1 + T2) / T3
+
+#   Determine open water evaporation
+alpha = 0.05 # Albedo for wet bare soil (p. 43)
+Rns = (1-alpha) * Rs
+Rn = Rns - Rnl
+T1 = 0.408 * Del * (Rn-G)
+T3 = Del + gam # (i.e., rs=0)
+E0 = (T1+T2) / T3
 
