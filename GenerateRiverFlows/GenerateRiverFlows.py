@@ -174,9 +174,6 @@ eo = 0.6108 * (np.exp((17.27 * T) / (T + 237.3)))
 # Assume saturation vapor pressure is mean
 es = (eoTmax+eoTmin) / 2
 
-#if RH is not None:
-#    ea = (RH / 100) * es
-#else:
 try:
     ea = (RH / 100) * es
 except NameError:
@@ -208,7 +205,7 @@ Ra = ((((24 * 60) / (math.pi)) * Gsc) * dr * (ws * (math.sin(varphi)) * (np.sin(
 (math.cos(varphi)) * (np.cos(delta)) * np.sin(ws)))
 
 # Incoming solar radiation from Eq. 50
-kRS=0.16
+kRS = 0.16
 
 try:
     Rs
@@ -251,3 +248,91 @@ T1 = 0.408 * Del * (Rn-G)
 T3 = Del + gam # (i.e., rs=0)
 E0 = (T1+T2) / T3
 
+
+# def ModelFun(qp,Ep,dt,CatArea,X,F0):
+"""
+qp - rainfall (mm/day)
+Ep - potential evapotranspiration (mm/day)
+dt - time-step (day)
+CatArea - catchment area (km2)
+X - array containing model parameters
+F0 - array containing initial condition of state variables
+Q - river flow rate (m3/s)
+"""
+# for n in range (np.size(X[:,1])):
+# Extract parameters
+Smax = X[0,0] #(mm)
+qmax = X[0,1] # (mm/day)
+k = X[0,2] # (mm/day)
+Tr = X[0,3] # (days)
+
+# Extract initial conditions
+S0 = F0[0,0] # initial storage level for PDM (mm)
+qSLOW0 = F0[0,1] # initial slow flow rate (mm/day)
+qFAST0 = F0[0,2] # initial fast flow rate (mm/day)
+
+    # Determine surface runoff and drainage
+
+    # def PDMmodel(qp,Ep,Smax,gamma,k,dt,S0):
+    # Specify input parameters:
+    # Smax=80; %Maximum storage for PDM (mm)
+    # gamma=0.1; %Exponent for Pareto distribution
+    # Initialisation steps:
+numPoint = np.size(qp)
+
+    # Initialise vectors
+qd = np.zeros(numPoint)
+qro = np.zeros(numPoint)
+Ea = np.zeros(numPoint)
+
+try:
+    S0
+except NameError:
+    S0 = Smax / 20 # Estimate initial value
+
+S = np.full((N+1),S0)
+gamma = 1
+
+Ep = ETo # This line just for developing, need to delete at the end.
+
+
+for i in range(N):
+    # Pareto CDF
+    F = 1 - (math.pow((1 - (S[i]) / Smax),gamma))
+
+    # Determine drainage rate
+    qd[i] = k * S[i] / Smax
+
+    # Trial value for S
+    Strial = S[i] + (((1 - F) * qp[i] - Ep[i] - qd[i]) * dt)
+
+    # To start with try the following:
+    S[i+1] = Strial # Catchment storage
+    qro[i] = F * qp[i] # River flow contribution
+    Ea[i] = Ep[i] #Actual evapotranspiration
+
+    if (Strial <= 0):
+        S[i+1] = 0
+        qd[i] = 0
+        Ea[i] = ((1-F) * qp[i]) + (S[i] / dt)
+    elif (Strial >= Smax):  # Force S<=Smax
+        S[i+1] = Smax
+        qro[i] = qp[i] - Ep[i] - ((Smax-S[i]) / dt) -qd[i]
+S = S[:-1]
+
+"""
+    %Determine surface runoff and drainage
+    [qro,qd,~,S]=PDMmodel(qp,Ep,Smax,1,k,dt,S0);
+    %Determine slow flow
+    qSLOW=RoutingFun(qd,Tr,1,dt,qSLOW0);
+    %Determine fast flow
+    qFAST=RoutingFun(qro,qmax,5/3,dt,qFAST0);
+    %Determine river flow
+    q=qFAST+qSLOW;
+    %Covert to m3/s
+    Q(:,n)=q*CatArea*1e3/24/60^2;
+    %Update initial condition vector with 
+    %final values of state variables
+    F0(n,:)=[S(end) qSLOW(end) qFAST(end)];
+end
+"""
