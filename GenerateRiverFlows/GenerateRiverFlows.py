@@ -273,14 +273,16 @@ qFAST0 = F0[0,2] # initial fast flow rate (mm/day)
 
     # Determine surface runoff and drainage
 
+
+#############################################################################################
 # def PDMmodel(qp,Ep,Smax,gamma,k,dt,S0):
-    # Specify input parameters:
-    # Smax=80; %Maximum storage for PDM (mm)
-    # gamma=0.1; %Exponent for Pareto distribution
-    # Initialisation steps:
+# Specify input parameters:
+# Smax=80; %Maximum storage for PDM (mm)
+# gamma=0.1; %Exponent for Pareto distribution
+# Initialisation steps:
 numPoint = np.size(qp)
 
-    # Initialise vectors
+# Initialise vectors
 qd = np.zeros(numPoint)
 qro = np.zeros(numPoint)
 Ea = np.zeros(numPoint)
@@ -320,9 +322,63 @@ for i in range(N):
         qro[i] = qp[i] - Ep[i] - ((Smax-S[i]) / dt) -qd[i]
 S = S[:-1]
 
+
+
+###############################################################################################
+
+# Determine slow flow
+
+# def RoutingFun(qs,X,b,dt,q0):
+numPoint = np.size(qp) # Determine number of data points
+
+# Specify input parameters:
+# b=5/3 Exponent in q=a*vˆb
+# Initialisation steps:
+
+b = 1 # This line is for developing only, need to be deleted at the end.
+X = 63.9820# This line is for developing only, need to be deleted at the end.
+q0 = qSLOW0 # This line is for developing only, need to be deleted at the end.
+qs = qd # This line is for developing only, need to be deleted at the end.
+
+
+if (b == 1):
+    # This means it's a linear store
+    #so X is the residence time in days
+    Tr = X
+    a = 1 / Tr
+    vmax = float("inf")
+
+else:
+    # This means it's a non-linear store
+    # so X is qmax in mm/day
+    qmax = X
+    dtDAY = 1 # this is needed because qmax is determine with daily data
+    a = (math.pow(qmax,(1-b))) * (math.pow((b * dtDAY), (-b)))
+    vmax = math.pow((a * b * dt), (1 / (1 - b)))  # Limit on v for stability
+
+# Initialise vectors
+try:
+    q0
+except NameError:
+    q0 = 2 # Estimate initial value
+
+q = np.full((N+1), q0)
+v = np.power((q / a), (1 / b))
+
+for i in range(N): # Step through each day
+    print(i)
+    # Trial values for q and v:
+    qtrial = a * math.pow(v[i], b)
+    vtrial = v[i] + ((qs[i] - qtrial) * dt)
+
+    if (vtrial < vmax): # Ordinarily use trial values
+        q[i] = qtrial # River flow (mm/day)
+        v[i+1] = vtrial # River storage (mm)
+    else: #Force v<=vmax
+        q[i] = qs[i] - ((vmax-v[i]) / dt)
+        v[i+1] = vmax
 """
-    %Determine surface runoff and drainage
-    [qro,qd,~,S]=PDMmodel(qp,Ep,Smax,1,k,dt,S0);
+
     %Determine slow flow
     qSLOW=RoutingFun(qd,Tr,1,dt,qSLOW0);
     %Determine fast flow
