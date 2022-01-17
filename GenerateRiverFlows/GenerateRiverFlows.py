@@ -68,7 +68,6 @@ def ModelFun(qp,Ep,dt,CatArea,X,F0):
         Q[:,n] = (q * CatArea *(1e3) /24)/(3600)
 
         # Update initial condition vector with final values of state variables
-    #   n = 0 # this parameter need to be removed after development., just for debugging.
         F0[n,:] = [(S[-1]), (qSLOW[-1]), (qFAST[-1])]
     return Q, F0
 
@@ -140,9 +139,6 @@ def PDMmodel(qp,Ep,Smax,gamma,k,dt,S0):
         S0 = Smax / 20 # Estimate initial value
 
     S = np.full((numPoint + 1),S0)
-
-#    Ep = ETo # This line just for developing, need to delete at the end.
-
 
     for i in range(numPoint):
         # Pareto CDF
