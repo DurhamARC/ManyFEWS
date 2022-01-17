@@ -347,11 +347,11 @@ def GenerateRiverFlows( t0, gesfData, F0):
     T = (TempMin+TempMax)/2
 
     # Determine daily minimum temperature of each hour
-    MinTemPerHour = np.array(TempMin).reshape(16, 4).min(axis=1) #Min Temperature of each hour(at 4 time points).
+    MinTemPerHour = np.array(TempMin).reshape((int(N/4)), 4).min(axis=1) #Min Temperature of each hour(at 4 time points).
     Tmin = np.repeat(MinTemPerHour,4)
 
     # Determine daily maximum temperature of each hour
-    MaxTemPerHour = np.array(TempMax).reshape(16, 4).max(axis=1) #Max Temperature of each hour(at 4 time points).
+    MaxTemPerHour = np.array(TempMax).reshape((int(N/4)), 4).max(axis=1) #Max Temperature of each hour(at 4 time points).
     Tmax = np.repeat(MaxTemPerHour,4)
 
     # Determine magnitude of wind speed at 10 m
@@ -408,7 +408,7 @@ gefsData = excel_to_matrix(GefsDataFile,sheetNum)
 # Import initial conditions for 100 models
 InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelInitialConditions.csv'
 F0 = np.loadtxt(open(InitialConditionFile), delimiter=',', usecols=range(3))
-riverFlowsData = GenerateRiverFlows( t0, gefsData, F0)
+riverFlowsData = GenerateRiverFlows(t0, gefsData, F0)
 
 # "riverFlowsData" is a data tuple, which:
 # riverFlowsData[0] ====> Q
