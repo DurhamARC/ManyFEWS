@@ -406,9 +406,12 @@ InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffM
 F0 = np.loadtxt(open(InitialConditionFile), delimiter=',', usecols=range(3))
 riverFlowsData = GenerateRiverFlows(t0, gefsData, F0)
 
+
 # "riverFlowsData" is a data tuple, which:
 # riverFlowsData[0] ====> Q
 # riverFlowsData[1] ====> F0
 # riverFlowsData[2] ====> t
 # riverFlowsData[3] ====> qp
 # riverFlowsData[1] ====> Ep
+
+print(riverFlowsData[1])

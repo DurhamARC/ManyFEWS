@@ -7,7 +7,7 @@ jobs:
     - name: Run a multi-line script
       env:
         MY_VAR: Hello World!
-        MY_NAME: P3TERX
+        MY_NAME: Abel_Tu
       run: |
         echo $MY_VAR
         echo My name is $MY_NAME
