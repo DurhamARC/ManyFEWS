@@ -16,7 +16,7 @@ jobs:
           activate-conda: true
       - name: install Python dependencies
         run: |
-#          conda create -n manyFEMS
+          conda create -n manyFEMS
           conda install numpy
           conda install xlrd==1.2.0
 
