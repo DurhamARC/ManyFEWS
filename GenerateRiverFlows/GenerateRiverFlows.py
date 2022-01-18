@@ -373,7 +373,7 @@ def GenerateRiverFlows( t0, gesfData, F0):
     CatArea = 212.2640 # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
-    parametersFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelParameters.csv'
+    parametersFile = './RainfallRunoffModelParameters.csv'
     X = np.loadtxt(open(parametersFile), delimiter=',', usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
