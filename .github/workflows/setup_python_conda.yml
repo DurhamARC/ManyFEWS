@@ -1,15 +1,41 @@
 name: set up python environment
 on: push
+
 jobs:
-  my-job:
-    name: set up python3
-    runs-on: macos-10.15
+  setEnv:
+    name: set up python conda environment
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: "ubuntu-latest"
+            lock-file: "conda_locks/conda-linux-64.lock"
+          - os: "macos-latest"
+            lock-file: "conda_locks/conda-osx-64.lock"
+          - os: "windows-latest"
+            lock-file: "conda_locks/conda-win-64.lock"
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
-    - name: Set up Python 3.8
-    - uses: actions/setup-python@v2
-      with:
-      python-version: 3.8
-    - run: python -v
-
-
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: false
+          activate-environment: explicit-env
+          environment-file: ${{ matrix.lock-file }}
+      - run: |
+          conda info
+          conda list
+          conda config --show-sources
+          conda config --show
+          printenv | sort
+      - name: Run unit tests
+        run: pytest
+        working-directory: MesaModel
+      - name: Check that lhs_sampling works (and output header matches the example)
+        run: |
+          python lhs_sampling.py
+          diff <(head -n 1 lhs_params.csv) <(head -n 1 example_lhs_params.csv)
+        working-directory: hamilton/parameter_input
 
