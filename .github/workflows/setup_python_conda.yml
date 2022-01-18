@@ -17,10 +17,18 @@ jobs:
       - uses: s-weigand/setup-conda@v1
         with:
           activate-conda: true
-      - name: run a multi-line script
+
+      - name: install Python dependencies
+        run: |
+          conda create -n manyFEMS
+          
+          
+
+      - name: test python environment and 'hello world' CI
         run: |
           which python
           echo hellow world
           python GenerateRiverFlows/hellow_world.py
+
 
 
