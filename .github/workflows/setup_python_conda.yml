@@ -23,4 +23,5 @@ jobs:
       - run: conda install numpy
       - run: conda install xlrd
       - run: conda list
+      - run: conda activate manyFEMS
 
