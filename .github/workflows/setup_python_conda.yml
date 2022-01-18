@@ -34,8 +34,6 @@ jobs:
       - name: run script 'GenerateRiverFlows.py'
         run: |
           cd GenerateRiverFlows
-          ls
-          pwd
           python GenerateRiverFlows.py
 
 
