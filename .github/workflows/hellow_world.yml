@@ -5,12 +5,10 @@ jobs:
     name: My first job
     runs-on: macos-10.15
     steps:
-    - name: Run a multi-line script
-      env:
-        MY_VAR: Hello World!
-        MY_NAME: Abel_Tu
-      run: |
-        echo $MY_VAR
-        echo My name is $MY_NAM
+    - uses: actions/setup-python@v2
+    with:
+    python-version: '3.9.7' 
+    architecture: 'x64' 
+    - run: python
 
 
