@@ -10,6 +10,7 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python 3.9.7
         uses: actions/setup-python@v2
         with:
@@ -21,8 +22,6 @@ jobs:
       - name: install Python dependencies
         run: |
           conda create -n manyFEMS
-          
-          
 
       - name: test python environment and 'hello world' CI
         run: |
