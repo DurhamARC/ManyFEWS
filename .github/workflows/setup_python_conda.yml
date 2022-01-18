@@ -17,12 +17,13 @@ jobs:
       - uses: s-weigand/setup-conda@v1
         with:
           activate-conda: true
-      - run: conda --version
-      - run: which python
-      - run: conda create -n manyFEMS python=3.9
-      - run: conda install numpy
-      - run: conda install xlrd
-      - run: conda list
-      - run: conda init bash
-      - run: conda activate manyFEMS
+      - run: |
+          conda --version
+          which python
+          conda create -n manyFEMS python=3.9
+          conda install numpy
+          conda install xlrd
+          conda list
+          conda init bash
+          conda activate manyFEMS
 
