@@ -17,12 +17,9 @@ jobs:
       - uses: s-weigand/setup-conda@v1
         with:
           activate-conda: true
-      - run: conda --version
-      - run: which python
-      - run: conda create -n manyFEMS python=3.9
-      - run: conda install numpy
-      - run: conda install xlrd
-      - run: conda list
-      - run: conda init bash
-      - run: conda activate manyFEMS
+      - name: run a multi-line script
+        run: |
+          which python
+          echo hellow world
+
 
