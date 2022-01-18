@@ -30,12 +30,4 @@ jobs:
           conda config --show-sources
           conda config --show
           printenv | sort
-      - name: Run unit tests
-        run: pytest
-        working-directory: MesaModel
-      - name: Check that lhs_sampling works (and output header matches the example)
-        run: |
-          python lhs_sampling.py
-          diff <(head -n 1 lhs_params.csv) <(head -n 1 example_lhs_params.csv)
-        working-directory: hamilton/parameter_input
 
