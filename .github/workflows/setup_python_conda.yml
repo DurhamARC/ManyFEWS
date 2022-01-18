@@ -32,7 +32,9 @@ jobs:
           python GenerateRiverFlows/hellow_world.py
 
       - name: run script 'GenerateRiverFlows.py'
-        run: python GenerateRiverFlows/GenerateRiverFlows.py
+        run: |
+          ls GenerateRiverFlows
+          python GenerateRiverFlows/GenerateRiverFlows.py
 
 
 
