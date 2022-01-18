@@ -398,13 +398,13 @@ def GenerateRiverFlows( t0, gesfData, F0):
 
 
 # GefsDataFile = u'/Users/abeltu/Desktop/GenerateRiverFlows/GEFSdata.xlsx'
-GefsDataFile = u'GEFSdata.xlsx'
+GefsDataFile = u'./GEFSdata.xlsx'
 sheetNum = 16
 gefsData = excel_to_matrix(GefsDataFile,sheetNum)
 
 # Import initial conditions for 100 models
 # InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelInitialConditions.csv'
-InitialConditionFile = 'RainfallRunoffModelInitialConditions.csv'
+InitialConditionFile = u'./RainfallRunoffModelInitialConditions.csv'
 F0 = np.loadtxt(open(InitialConditionFile), delimiter=',', usecols=range(3))
 riverFlowsData = GenerateRiverFlows(t0, gefsData, F0)
 
