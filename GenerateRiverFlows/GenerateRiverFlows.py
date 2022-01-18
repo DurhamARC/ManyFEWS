@@ -13,6 +13,7 @@ import numpy as np
 import xlrd
 from datetime import date
 import math
+import os
 
 
 # here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
@@ -373,8 +374,10 @@ def GenerateRiverFlows( t0, gesfData, F0):
     CatArea = 212.2640 # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
-    parametersFile = './RainfallRunoffModelParameters.csv'
+    currentPath = os.getcwd()
+    parametersFile = os.path.join(currentPath, 'RainfallRunoffModelParameters.csv')
     X = np.loadtxt(open(parametersFile), delimiter=',', usecols=range(4))
+
 
     # Determine reference crop evapotranspiration (mm/day)
     fa056OutputData = FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH)
