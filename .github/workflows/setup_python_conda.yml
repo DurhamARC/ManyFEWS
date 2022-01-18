@@ -4,30 +4,19 @@ on: push
 jobs:
   setEnv:
     name: set up python conda environment
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: "ubuntu-latest"
-            lock-file: "conda_locks/conda-linux-64.lock"
-          - os: "macos-latest"
-            lock-file: "conda_locks/conda-osx-64.lock"
-          - os: "windows-latest"
-            lock-file: "conda_locks/conda-win-64.lock"
+    runs-on: macos-10.15
     defaults:
       run:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - name: Set up Python 3.9.7
+        uses: actions/setup-python@v2
         with:
-          auto-update-conda: false
-          activate-environment: explicit-env
-          environment-file: ${{ matrix.lock-file }}
-      - run: |
-          conda info
-          conda list
-          conda config --show-sources
-          conda config --show
-          printenv | sort
+          python-version: 3.9
+      - uses: s-weigand/setup-conda@v1
+        with:
+          activate-conda: false
+      - run: conda --version
+      - run: which python
 
