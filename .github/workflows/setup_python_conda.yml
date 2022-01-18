@@ -9,7 +9,7 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@Dev
       - name: Set up Python 3.9.7
         uses: actions/setup-python@v2
         with:
