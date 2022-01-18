@@ -17,7 +17,8 @@ jobs:
       - uses: s-weigand/setup-conda@v1
         with:
           activate-conda: true
-      - run: |
+      - name: run a multi-line script
+        run: |
           conda --version
           which python
           conda create -n manyFEMS python=3.9
