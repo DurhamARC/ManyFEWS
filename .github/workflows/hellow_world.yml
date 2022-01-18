@@ -3,7 +3,7 @@ on: push
 jobs:
   my_first_job:
     name: My first job
-    runs-on: macos-latest
+    runs-on: macos-10.15
     steps:
     - name: Run a multi-line script
       env:
