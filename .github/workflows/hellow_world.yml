@@ -3,7 +3,7 @@ on: push
 jobs:
   my_first_job:
     name: My first job
-    runs-on: mac-10.15.7
+    runs-on: mac-10.15
     steps:
     - name: checkout
       uses: actions/checkout@master
@@ -11,7 +11,7 @@ jobs:
       run: echo "Hello World!"
   my_second_job:
     name: My second job
-    runs-on: macos-latest
+    runs-on: linux-lastest
     steps:
     - name: Run a multi-line script
       env:
