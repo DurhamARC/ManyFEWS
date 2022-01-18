@@ -3,14 +3,6 @@ on: push
 jobs:
   my_first_job:
     name: My first job
-    runs-on: mac-10.15
-    steps:
-    - name: checkout
-      uses: actions/checkout@master
-    - name: Run a single-line script
-      run: echo "Hello World!"
-  my_second_job:
-    name: My second job
     runs-on: linux-lastest
     steps:
     - name: Run a multi-line script
@@ -20,3 +12,5 @@ jobs:
       run: |
         echo $MY_VAR
         echo My name is $MY_NAM
+
+
