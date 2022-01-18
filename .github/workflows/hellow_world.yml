@@ -1,13 +1,14 @@
-name: Hello World
+name: set up python environment
 on: push
 jobs:
-  my_first_job:
-    name: My first job
+  my-job:
+    name: set up python3
     runs-on: macos-10.15
     steps:
-      - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
-      python-version: '3.x' 
-      - run: python
+        python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+    - run: python
 
 
