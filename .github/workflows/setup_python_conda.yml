@@ -35,6 +35,7 @@ jobs:
         run: |
           cd GenerateRiverFlows
           ls
+          pwd
           python GenerateRiverFlows.py
 
 
