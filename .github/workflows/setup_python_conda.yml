@@ -33,7 +33,6 @@ jobs:
 
       - name: run script 'GenerateRiverFlows.py'
         run: |
-          which GenerateRiverFlows
           python GenerateRiverFlows/GenerateRiverFlows.py
 
 
