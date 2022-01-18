@@ -5,9 +5,9 @@ jobs:
   setEnv:
     name: set up python conda environment
     runs-on: macos-10.15
-    defaults:
-      run:
-        shell: bash -l {0}
+ #   defaults:
+ #     run:
+ #       shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
 
@@ -22,8 +22,6 @@ jobs:
       - name: install Python dependencies
         run: |
           conda create -n manyFEMS
-          conda init bash
-          conda activate manyFEMS
 
       - name: test python environment and 'hello world' CI
         run: |
