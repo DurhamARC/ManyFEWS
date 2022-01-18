@@ -22,6 +22,7 @@ jobs:
       - name: install Python dependencies
         run: |
           conda create -n manyFEMS
+          conda activate manyFEMS
 
       - name: test python environment and 'hello world' CI
         run: |
