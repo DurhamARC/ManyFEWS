@@ -19,4 +19,8 @@ jobs:
           activate-conda: false
       - run: conda --version
       - run: which python
+      - run: conda create -n manyFEMS python=3.9
+      - run: conda install numpy
+      - run: conda install xlrd
+      - run: conda list
 
