@@ -32,7 +32,7 @@ jobs:
           cd GenerateRiverFlows
           python GenerateRiverFlows.py
 
-  setEnv:
+  setupEnv:
     name: set up python conda environment
     runs-on: macos-10.15
     defaults:
