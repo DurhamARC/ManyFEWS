@@ -16,8 +16,6 @@ jobs:
       - name: check Python dependencies
         run: |
           which python
-          source activate manyFEWS
-          which python
 
       - name: test python environment and 'hello world' CI
         run: |
