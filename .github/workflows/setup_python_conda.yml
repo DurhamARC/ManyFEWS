@@ -17,8 +17,9 @@ jobs:
       - name: install Python dependencies
         run: |
           conda create -n manyFEMS
-          conda install numpy
-          conda install xlrd==1.2.0
+          conda install --yes --file ./condaEnv/requirements.txt
+#          conda install numpy
+#          conda install xlrd==1.2.0
       - name: check Python dependencies
         run: |
           which python
