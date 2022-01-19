@@ -15,7 +15,7 @@ jobs:
         with:
           activate-conda: true
       - name: install Python dependencies
-        run: conda env create -f ./condaEnv/condaEnv.yaml
+        run: conda env create -f ./condaEnv/manyFEMSdependency.yml
 
       - name: test python environment and 'hello world' CI
         run: |
