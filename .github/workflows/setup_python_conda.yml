@@ -11,14 +11,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
       - uses: s-weigand/setup-conda@v1
         with:
           activate-conda: true
       - name: install Python dependencies
         run: |
           conda create -n manyFEMS
-#          conda install --yes --file ./condaEnv/requirements.txt
           conda install numpy
           conda install xlrd==1.2.0
       - name: check Python dependencies
