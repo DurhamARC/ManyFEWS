@@ -12,8 +12,8 @@ jobs:
         with:
           python-version: 3.9
       - uses: s-weigand/setup-conda@v1
-        with:
-          activate-conda: true
+ #       with:
+ #         activate-conda: true
       - name: install Python dependencies
         run: |
           conda env create -f ./condaEnv/manyFEMSdependency.yml
