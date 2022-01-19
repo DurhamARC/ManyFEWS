@@ -5,28 +5,22 @@ jobs:
   setEnv:
     name: set up python conda environment
     runs-on: macos-10.15
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Set up Python 3.9.7
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: 3.9
     steps:
       - uses: actions/checkout@v2
-      - name: Anaconda-Action
-        id: step1
-        uses: fdiblen/anaconda-action@0.1.7
+      - name: Set up Python 3.9.7
+        uses: actions/setup-python@v2
         with:
-          envFileName: './condaEnv/manyFEMSenv.yml'
-#      - uses: s-weigand/setup-conda@v1
-#        with:
-#          activate-conda: true
-#      - name: install Python dependencies
-#        run: |
-#          conda create -n manyFEMS
+          python-version: 3.9
+
+      - uses: s-weigand/setup-conda@v1
+        with:
+          activate-conda: true
+      - name: install Python dependencies
+        run: |
+          conda create -n manyFEMS
 #          conda install --yes --file ./condaEnv/requirements.txt
-#          conda install numpy
-#          conda install xlrd==1.2.0
+          conda install numpy
+          conda install xlrd==1.2.0
       - name: check Python dependencies
         run: |
           which python
