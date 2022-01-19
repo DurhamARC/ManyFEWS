@@ -3,7 +3,7 @@ on: push
 
 jobs:
   setEnv:
-    name: set up python conda environment
+    name: set up python conda environment and run
     runs-on: macos-10.15
     defaults:
       run:
@@ -19,14 +19,6 @@ jobs:
       - run: |
           conda info
           conda list
-      - name: check Python dependencies
-        run: |
-          which python
-      - name: test python environment and 'hello world' CI
-        run: |
-          which python
-          echo hellow world
-          python GenerateRiverFlows/hellow_world.py
       - name: run script 'GenerateRiverFlows.py'
         run: |
           cd GenerateRiverFlows
