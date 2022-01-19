@@ -5,36 +5,6 @@ jobs:
   setEnv:
     name: set up python conda environment
     runs-on: macos-10.15
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.9.7
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - uses: s-weigand/setup-conda@v1
-        with:
-          activate-conda: true
-      - name: install Python dependencies
-        run: |
-          conda create -n manyFEMS
-          conda install numpy
-          conda install xlrd==1.2.0
-      - name: check Python dependencies
-        run: |
-          which python
-      - name: test python environment and 'hello world' CI
-        run: |
-          which python
-          echo hellow world
-          python GenerateRiverFlows/hellow_world.py
-      - name: run script 'GenerateRiverFlows.py'
-        run: |
-          cd GenerateRiverFlows
-          python GenerateRiverFlows.py
-
-  setupEnv:
-    name: set up python conda environment
-    runs-on: macos-10.15
     defaults:
       run:
         shell: bash -l {0}
@@ -49,7 +19,6 @@ jobs:
       - run: |
           conda info
           conda list
-
       - name: check Python dependencies
         run: |
           which python
