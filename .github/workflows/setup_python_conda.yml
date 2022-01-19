@@ -19,6 +19,7 @@ jobs:
           conda create -n manyFEMS
           conda install numpy
           conda install xlrd==1.2.0
+          
 
       - name: test python environment and 'hello world' CI
         run: |
