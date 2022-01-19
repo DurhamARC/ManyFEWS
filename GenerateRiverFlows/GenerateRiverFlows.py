@@ -18,9 +18,10 @@ import os
 
 # here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
 # Specify start time
-t0 = date.toordinal(date(2010,1,1))+366
+t0 = date.toordinal(date(2010, 1, 1)) + 366
 
-def ModelFun(qp,Ep,dt,CatArea,X,F0):
+
+def ModelFun(qp, Ep, dt, CatArea, X, F0):
 
     # qp - rainfall (mm/day)
     # Ep - potential evapotranspiration (mm/day)
@@ -29,22 +30,22 @@ def ModelFun(qp,Ep,dt,CatArea,X,F0):
     # X - array containing model parameters
     # F0 - array containing initial condition of state variables
     # Q - river flow rate (m3/s)
-    Q = np.zeros(((np.size(Ep[:])),(np.size(X[:,1])))) # initialize the matrix Q
+    Q = np.zeros(((np.size(Ep[:])), (np.size(X[:, 1]))))  # initialize the matrix Q
 
-    for n in range (np.size(X[:,1])):
+    for n in range(np.size(X[:, 1])):
         # Extract parameters
-        Smax = X[n,0] #(mm)
-        qmax = X[n,1] # (mm/day)
-        k = X[n,2] # (mm/day)
-        Tr = X[n,3] # (days)
+        Smax = X[n, 0]  # (mm)
+        qmax = X[n, 1]  # (mm/day)
+        k = X[n, 2]  # (mm/day)
+        Tr = X[n, 3]  # (days)
 
         # Extract initial conditions
-        S0 = F0[n,0] # initial storage level for PDM (mm)
-        qSLOW0 = F0[n,1] # initial slow flow rate (mm/day)
-        qFAST0 = F0[n,2] # initial fast flow rate (mm/day)
+        S0 = F0[n, 0]  # initial storage level for PDM (mm)
+        qSLOW0 = F0[n, 1]  # initial slow flow rate (mm/day)
+        qFAST0 = F0[n, 2]  # initial fast flow rate (mm/day)
 
         # Determine surface runoff and drainage
-        pdOutputData = PDMmodel(qp,Ep,Smax, 1,k,dt,S0)
+        pdOutputData = PDMmodel(qp, Ep, Smax, 1, k, dt, S0)
 
         # "pdOutputData" is a data tuple, which:
         # pdOutputData[0] ====> qro
@@ -66,23 +67,24 @@ def ModelFun(qp,Ep,dt,CatArea,X,F0):
         q = qFAST + qSLOW
 
         # Covert to m3/s
-        Q[:,n] = (q * CatArea *(1e3) /24)/(3600)
+        Q[:, n] = (q * CatArea * (1e3) / 24) / (3600)
 
         # Update initial condition vector with final values of state variables
-        F0[n,:] = [(S[-1]), (qSLOW[-1]), (qFAST[-1])]
+        F0[n, :] = [(S[-1]), (qSLOW[-1]), (qFAST[-1])]
     return Q, F0
 
-def RoutingFun(qs,X,b,dt,q0):
 
-    numPoint = np.size(qs) # Determine number of data points
+def RoutingFun(qs, X, b, dt, q0):
+
+    numPoint = np.size(qs)  # Determine number of data points
 
     # Specify input parameters:
     # b=5/3 Exponent in q=a*vˆb
     # Initialisation steps:
 
-    if (b == 1):
+    if b == 1:
         # This means it's a linear store
-        #so X is the residence time in days
+        # so X is the residence time in days
         Tr = X
         a = 1 / Tr
         vmax = float("inf")
@@ -91,37 +93,37 @@ def RoutingFun(qs,X,b,dt,q0):
         # This means it's a non-linear store
         # so X is qmax in mm/day
         qmax = X
-        dtDAY = 1 # this is needed because qmax is determine with daily data
-        a = (math.pow(qmax,(1-b))) * (math.pow((b * dtDAY), (-b)))
+        dtDAY = 1  # this is needed because qmax is determine with daily data
+        a = (math.pow(qmax, (1 - b))) * (math.pow((b * dtDAY), (-b)))
         vmax = math.pow((a * b * dt), (1 / (1 - b)))  # Limit on v for stability
 
     # Initialise vectors
     try:
         q0
     except NameError:
-        q0 = 2 # Estimate initial value
+        q0 = 2  # Estimate initial value
 
     q = np.full((numPoint + 1), q0)
     v = np.power((q / a), (1 / b))
 
-    for i in range(numPoint): # Step through each day
+    for i in range(numPoint):  # Step through each day
         # Trial values for q and v:
         qtrial = a * math.pow(v[i], b)
         vtrial = v[i] + ((qs[i] - qtrial) * dt)
 
-        if (vtrial < vmax): # Ordinarily use trial values
-            q[i] = qtrial # River flow (mm/day)
-            v[i+1] = vtrial # River storage (mm)
-        else: #Force v<=vmax
-            q[i] = qs[i] - ((vmax-v[i]) / dt)
-            v[i+1] = vmax
+        if vtrial < vmax:  # Ordinarily use trial values
+            q[i] = qtrial  # River flow (mm/day)
+            v[i + 1] = vtrial  # River storage (mm)
+        else:  # Force v<=vmax
+            q[i] = qs[i] - ((vmax - v[i]) / dt)
+            v[i + 1] = vmax
 
     q = q[:-1]
 
     return q
 
-def PDMmodel(qp,Ep,Smax,gamma,k,dt,S0):
 
+def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
 
     # Specify input parameters:
     # Smax=80; %Maximum storage for PDM (mm)
@@ -137,13 +139,13 @@ def PDMmodel(qp,Ep,Smax,gamma,k,dt,S0):
     try:
         S0
     except NameError:
-        S0 = Smax / 20 # Estimate initial value
+        S0 = Smax / 20  # Estimate initial value
 
-    S = np.full((numPoint + 1),S0)
+    S = np.full((numPoint + 1), S0)
 
     for i in range(numPoint):
         # Pareto CDF
-        F = 1 - (math.pow((1 - (S[i]) / Smax),gamma))
+        F = 1 - (math.pow((1 - (S[i]) / Smax), gamma))
 
         # Determine drainage rate
         qd[i] = k * S[i] / Smax
@@ -152,26 +154,27 @@ def PDMmodel(qp,Ep,Smax,gamma,k,dt,S0):
         Strial = S[i] + (((1 - F) * qp[i] - Ep[i] - qd[i]) * dt)
 
         # To start with try the following:
-        S[i+1] = Strial # Catchment storage
-        qro[i] = F * qp[i] # River flow contribution
-        Ea[i] = Ep[i] #Actual evapotranspiration
+        S[i + 1] = Strial  # Catchment storage
+        qro[i] = F * qp[i]  # River flow contribution
+        Ea[i] = Ep[i]  # Actual evapotranspiration
 
-        if (Strial <= 0):
-            S[i+1] = 0
+        if Strial <= 0:
+            S[i + 1] = 0
             qd[i] = 0
-            Ea[i] = ((1-F) * qp[i]) + (S[i] / dt)
-        elif (Strial >= Smax):  # Force S<=Smax
-            S[i+1] = Smax
-            qro[i] = qp[i] - Ep[i] - ((Smax-S[i]) / dt) -qd[i]
+            Ea[i] = ((1 - F) * qp[i]) + (S[i] / dt)
+        elif Strial >= Smax:  # Force S<=Smax
+            S[i + 1] = Smax
+            qro[i] = qp[i] - Ep[i] - ((Smax - S[i]) / dt) - qd[i]
     S = S[:-1]
 
     return qro, qd, Ea, S
 
+
 def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Ensure Tmax > Tmin
-    Tmax = np.maximum(Tmax,Tmin)
-    Tmin = np.minimum(Tmax,Tmin)
+    Tmax = np.maximum(Tmax, Tmin)
+    Tmin = np.minimum(Tmax, Tmin)
 
     # u2 (m/s)
     # P (kPa)
@@ -181,20 +184,22 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     try:
         T
     except NameError:
-        T = (Tmin+Tmax)/2
+        T = (Tmin + Tmax) / 2
 
     # This is based on FAO56 Example 20 for the estimation of evapotranspiration
     try:
         u2
     except NameError:
-        u2 = np.zeros(np.shape(T)) # create an undefined array
-        u2[:] = 2 # Assume wind speed of 2 m/s
+        u2 = np.zeros(np.shape(T))  # create an undefined array
+        u2[:] = 2  # Assume wind speed of 2 m/s
 
     # Slope of saturation curve (Del) from Eq. 13
-    Del = (4098*(0.6108*(np.exp(((17.27 * T) / (T + 237.3)))))) / np.square(T + 237.3)
+    Del = (4098 * (0.6108 * (np.exp(((17.27 * T) / (T + 237.3)))))) / np.square(
+        T + 237.3
+    )
 
     # Atmospheric pressure (P) from Eq. 7
-    P = 101.3 * (math.pow(((293-0.0065 * alt) / 293), 5.26))
+    P = 101.3 * (math.pow(((293 - 0.0065 * alt) / 293), 5.26))
 
     # Psychrimetric constant (gam) from Eq. 8
     cp = 1.013e-3
@@ -208,7 +213,7 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     eo = 0.6108 * (np.exp((17.27 * T) / (T + 237.3)))
 
     # Assume saturation vapor pressure is mean
-    es = (eoTmax+eoTmin) / 2
+    es = (eoTmax + eoTmin) / 2
 
     try:
         ea = (RH / 100) * es
@@ -223,8 +228,8 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Determine day of the year as a number from 1 to 365
     beginDate = date(2010, 1, 1)
-    beginDateNum = (beginDate - date(beginDate.year -1, 12, 31)).days
-    J = beginDateNum + np.arange(0, ((np.size(t[:]))/4), dt)
+    beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
+    J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
     dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
@@ -237,8 +242,14 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Extraterrestrial radiation from Eq. 21
     Gsc = 0.0820
-    Ra = ((((24 * 60) / (math.pi)) * Gsc) * dr * (ws * (math.sin(varphi)) * (np.sin(delta)) +
-    (math.cos(varphi)) * (np.cos(delta)) * np.sin(ws)))
+    Ra = (
+        (((24 * 60) / (math.pi)) * Gsc)
+        * dr
+        * (
+            ws * (math.sin(varphi)) * (np.sin(delta))
+            + (math.cos(varphi)) * (np.cos(delta)) * np.sin(ws)
+        )
+    )
 
     # Incoming solar radiation from Eq. 50
     kRS = 0.16
@@ -246,59 +257,63 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     try:
         Rs
     except NameError:
-        Rs = kRS * (np.sqrt(Tmax -Tmin)) * Ra
+        Rs = kRS * (np.sqrt(Tmax - Tmin)) * Ra
 
     # Clear-sky solar radiation from Eq. 37
     Rso = ((0.75 + (2e-5) * alt)) * Ra
 
     # Net solar radiation from Eq. 38
     alpha = 0.23
-    Rns = (1-alpha) * Rs
+    Rns = (1 - alpha) * Rs
 
     # Outgoing net longwave radiation from Eq. 39
     sig = 4.903e-9
-    sigTmax4 = sig * (np.power((Tmax+273.15), 4))
-    sigTmin4 = sig * (np.power((Tmin+273.15), 4))
-    sigT4 = (sigTmax4+sigTmin4) / 2
+    sigTmax4 = sig * (np.power((Tmax + 273.15), 4))
+    sigTmin4 = sig * (np.power((Tmin + 273.15), 4))
+    sigT4 = (sigTmax4 + sigTmin4) / 2
     RsRso = Rs / Rso
     RsRso[RsRso > 1] = 1
-    Rnl = sigT4 * (0.34 - (0.14 * np.sqrt(ea))) * ( 1.35 * RsRso - 0.35)
+    Rnl = sigT4 * (0.34 - (0.14 * np.sqrt(ea))) * (1.35 * RsRso - 0.35)
 
     # Rnl = sigT4 * (0.56- (0.25 * np.sqrt(ea))) * ( 1.35 * RsRso - 0.35) [This is what you need for UK instead]
     # Net radiation from Eq. 40
-    Rn = Rns-Rnl
+    Rn = Rns - Rnl
 
     # Assume zero soil heat flux
     G = 0
     # Calculate reference evapotranspiration from Eq. 6
-    T1 = 0.408 * Del * (Rn-G)
-    T2 = ((gam * 900) / (T+273)) * u2 * (es-ea)
-    T3 = Del + (gam * (1+0.34 * u2))
+    T1 = 0.408 * Del * (Rn - G)
+    T2 = ((gam * 900) / (T + 273)) * u2 * (es - ea)
+    T3 = Del + (gam * (1 + 0.34 * u2))
     ETo = (T1 + T2) / T3
 
     #   Determine open water evaporation
-    alpha = 0.05 # Albedo for wet bare soil (p. 43)
-    Rns = (1-alpha) * Rs
+    alpha = 0.05  # Albedo for wet bare soil (p. 43)
+    Rns = (1 - alpha) * Rs
     Rn = Rns - Rnl
-    T1 = 0.408 * Del * (Rn-G)
-    T3 = Del + gam # (i.e., rs=0)
-    E0 = (T1+T2) / T3
+    T1 = 0.408 * Del * (Rn - G)
+    T3 = Del + gam  # (i.e., rs=0)
+    E0 = (T1 + T2) / T3
 
-    return ETo ,E0
+    return ETo, E0
+
 
 # Import GEFS weather data. (please notice here, the start sheet‘s number is "0")
 def excel_to_matrix(path, sheetNum):
     table = xlrd.open_workbook(path).sheets()[sheetNum]
     row = table.nrows
     col = table.ncols
-    datamatrix = np.zeros((row, col)) # ignore the first title row.
-    for x in range(1,row):
+    datamatrix = np.zeros((row, col))  # ignore the first title row.
+    for x in range(1, row):
         row = np.matrix(table.row_values(x))
         datamatrix[x, :] = row
-    datamatrix = np.delete(datamatrix, 0, axis=0) # Delete the first blank line.(Its elements are all zero)
+    datamatrix = np.delete(
+        datamatrix, 0, axis=0
+    )  # Delete the first blank line.(Its elements are all zero)
     return datamatrix
 
-def GenerateRiverFlows( t0, gesfData, F0):
+
+def GenerateRiverFlows(t0, gesfData, F0):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
@@ -328,56 +343,59 @@ def GenerateRiverFlows( t0, gesfData, F0):
     dt = 0.25
 
     # Determine number of data points
-    N = np.size(gefsData[:,1])
+    N = np.size(gefsData[:, 1])
 
     # Specify date number
-    t = t0 + np.arange(0,N/4,dt)
+    t = t0 + np.arange(0, N / 4, dt)
 
     # Get relative humidity (%)
-    RH = gefsData[:,0]
+    RH = gefsData[:, 0]
 
     # Convert temperature to deg C
-    TempMax = gefsData[:,1] - 273.15
-    TempMin = gefsData[:,2] - 273.15
+    TempMax = gefsData[:, 1] - 273.15
+    TempMin = gefsData[:, 2] - 273.15
 
     # Estimate average temperature
-    T = (TempMin+TempMax)/2
+    T = (TempMin + TempMax) / 2
 
     # Determine daily minimum temperature of each hour
-    MinTemPerHour = np.array(TempMin).reshape((int(N/4)), 4).min(axis=1) #Min Temperature of each hour(at 4 time points).
-    Tmin = np.repeat(MinTemPerHour,4)
+    MinTemPerHour = (
+        np.array(TempMin).reshape((int(N / 4)), 4).min(axis=1)
+    )  # Min Temperature of each hour(at 4 time points).
+    Tmin = np.repeat(MinTemPerHour, 4)
 
     # Determine daily maximum temperature of each hour
-    MaxTemPerHour = np.array(TempMax).reshape((int(N/4)), 4).max(axis=1) #Max Temperature of each hour(at 4 time points).
-    Tmax = np.repeat(MaxTemPerHour,4)
+    MaxTemPerHour = (
+        np.array(TempMax).reshape((int(N / 4)), 4).max(axis=1)
+    )  # Max Temperature of each hour(at 4 time points).
+    Tmax = np.repeat(MaxTemPerHour, 4)
 
     # Determine magnitude of wind speed at 10 m
-    u10 = np.sqrt((gefsData[:,3])**2 + (gefsData[:,4])**2)
+    u10 = np.sqrt((gefsData[:, 3]) ** 2 + (gefsData[:, 4]) ** 2)
 
     # Estimate wind speed at 2 m
-    z0 = 0.006247 # m(surface roughness equivalent to FAO56 reference crop)
-    z2 = 2 # m
-    z10 = 10 # m
-    u0 = 0 # m/s
-    uTAU = ((u10-u0)/2.5) / (math.log(z10/z0))
-    u2 = 2.5 * uTAU * (math.log(z2/z0)) + u0
+    z0 = 0.006247  # m(surface roughness equivalent to FAO56 reference crop)
+    z2 = 2  # m
+    z10 = 10  # m
+    u0 = 0  # m/s
+    uTAU = ((u10 - u0) / 2.5) / (math.log(z10 / z0))
+    u2 = 2.5 * uTAU * (math.log(z2 / z0)) + u0
 
     # Extract precipitation data (mm)
-    precip = gefsData[:,5]
+    precip = gefsData[:, 5]
 
     # Convert preiciptation to (mm/day)
     qp = precip / dt
 
     # Details specific for Majalaya catchment
-    lat = -7.125 # mean latutude (degrees)
-    alt = 1157 # mean altitude (m above sea level)
-    CatArea = 212.2640 # Catchment area (km2)
+    lat = -7.125  # mean latutude (degrees)
+    alt = 1157  # mean altitude (m above sea level)
+    CatArea = 212.2640  # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
     currentPath = os.getcwd()
-    parametersFile = os.path.join(currentPath, 'RainfallRunoffModelParameters.csv')
-    X = np.loadtxt(open(parametersFile), delimiter=',', usecols=range(4))
-
+    parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
+    X = np.loadtxt(open(parametersFile), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
     fa056OutputData = FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH)
@@ -389,7 +407,7 @@ def GenerateRiverFlows( t0, gesfData, F0):
     E0 = fa056OutputData[1]
 
     # Determine flow rate, Q (m3/s)
-    modelfunOutputData = ModelFun(qp,Ep,dt,CatArea,X,F0)
+    modelfunOutputData = ModelFun(qp, Ep, dt, CatArea, X, F0)
 
     # "modelfunOutputData " is a data tuple, which:
     # modelfunOutputData [0] ====> Q
@@ -401,14 +419,14 @@ def GenerateRiverFlows( t0, gesfData, F0):
 
 
 # GefsDataFile = u'/Users/abeltu/Desktop/GenerateRiverFlows/GEFSdata.xlsx'
-GefsDataFile = u'./GEFSdata.xlsx'
+GefsDataFile = u"./GEFSdata.xlsx"
 sheetNum = 16
-gefsData = excel_to_matrix(GefsDataFile,sheetNum)
+gefsData = excel_to_matrix(GefsDataFile, sheetNum)
 
 # Import initial conditions for 100 models
 # InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelInitialConditions.csv'
-InitialConditionFile = u'./RainfallRunoffModelInitialConditions.csv'
-F0 = np.loadtxt(open(InitialConditionFile), delimiter=',', usecols=range(3))
+InitialConditionFile = u"./RainfallRunoffModelInitialConditions.csv"
+F0 = np.loadtxt(open(InitialConditionFile), delimiter=",", usecols=range(3))
 riverFlowsData = GenerateRiverFlows(t0, gefsData, F0)
 
 
