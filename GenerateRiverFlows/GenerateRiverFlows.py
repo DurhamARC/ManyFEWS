@@ -18,8 +18,6 @@ import os
 
 # here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
 # Specify start time
-t0 = date.toordinal(date(2010, 1, 1)) + 366
-
 
 def ModelFun(qp, Ep, dt, CatArea, X, F0):
 
@@ -313,7 +311,7 @@ def excel_to_matrix(path, sheetNum):
     return datamatrix
 
 
-def GenerateRiverFlows(t0, gesfData, F0):
+def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
@@ -393,9 +391,10 @@ def GenerateRiverFlows(t0, gesfData, F0):
     CatArea = 212.2640  # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
-    currentPath = os.getcwd()
-    parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
-    X = np.loadtxt(open(parametersFile), delimiter=",", usecols=range(4))
+    #currentPath = os.getcwd()
+    #parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
+
+    X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
     fa056OutputData = FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH)
@@ -416,25 +415,3 @@ def GenerateRiverFlows(t0, gesfData, F0):
     F0 = modelfunOutputData[1]
 
     return Q, F0, t, qp, Ep
-
-
-# GefsDataFile = u'/Users/abeltu/Desktop/GenerateRiverFlows/GEFSdata.xlsx'
-GefsDataFile = u"./GEFSdata.xlsx"
-sheetNum = 16
-gefsData = excel_to_matrix(GefsDataFile, sheetNum)
-
-# Import initial conditions for 100 models
-# InitialConditionFile = '/Users/abeltu/Desktop/GenerateRiverFlows/RainfallRunoffModelInitialConditions.csv'
-InitialConditionFile = u"./RainfallRunoffModelInitialConditions.csv"
-F0 = np.loadtxt(open(InitialConditionFile), delimiter=",", usecols=range(3))
-riverFlowsData = GenerateRiverFlows(t0, gefsData, F0)
-
-
-# "riverFlowsData" is a data tuple, which:
-# riverFlowsData[0] ====> Q
-# riverFlowsData[1] ====> F0
-# riverFlowsData[2] ====> t
-# riverFlowsData[3] ====> qp
-# riverFlowsData[1] ====> Ep
-
-print(riverFlowsData[1])
