@@ -21,5 +21,4 @@ jobs:
           conda list
       - name: run script 'GenerateRiverFlows.py'
         run: |
-          cd GenerateRiverFlows
           python test_manyFEMS/unit/test_GeneraterRiverFlow/GenerateRiverFlowsExample.py
