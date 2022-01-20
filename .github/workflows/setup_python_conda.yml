@@ -22,4 +22,4 @@ jobs:
       - name: run script 'GenerateRiverFlows.py'
         run: |
           cd GenerateRiverFlows
-          python GenerateRiverFlows.py
+          python test_manyFEMS/unit/test_GeneraterRiverFlow/GenerateRiverFlowsExample.py
