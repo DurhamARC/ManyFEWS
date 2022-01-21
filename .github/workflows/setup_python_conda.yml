@@ -19,6 +19,6 @@ jobs:
       - run: |
           conda info
           conda list
-      - name: run script 'GenerateRiverFlows.py'
+      - name: run test script 'test_GenerateRiverFlows.py'
         run: |
-          python test_manyFEMS/unit/test_GeneraterRiverFlow/GenerateRiverFlowsExample.py
+          pytest test_manyFEMS/unit/test_GenerateRiverFlow/test_GenerateRiverFlows.py
