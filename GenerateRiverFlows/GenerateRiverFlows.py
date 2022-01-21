@@ -19,6 +19,7 @@ import os
 # here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
 # Specify start time
 
+
 def ModelFun(qp, Ep, dt, CatArea, X, F0):
 
     # qp - rainfall (mm/day)
@@ -303,7 +304,9 @@ def excel_to_matrix(path, sheetNum):
     col = table.ncols
     datamatrix = np.zeros((row, col))  # ignore the first title row.
     for x in range(1, row):
-        row = np.matrix(table.row_values(x))
+        #        row = np.matrix(table.row_values(x))
+        #        print(type(row))
+        row = np.array(table.row_values(x))
         datamatrix[x, :] = row
     datamatrix = np.delete(
         datamatrix, 0, axis=0
@@ -391,8 +394,8 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     CatArea = 212.2640  # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
-    #currentPath = os.getcwd()
-    #parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
+    # currentPath = os.getcwd()
+    # parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
 
     X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
@@ -414,4 +417,4 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     Q = modelfunOutputData[0]
     F0 = modelfunOutputData[1]
 
-    return Q, F0, t, qp, Ep
+    return Q, t, qp, Ep
