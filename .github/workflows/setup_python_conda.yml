@@ -10,6 +10,7 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
+      - uses: psf/black@stable
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: anaconda-client-env
