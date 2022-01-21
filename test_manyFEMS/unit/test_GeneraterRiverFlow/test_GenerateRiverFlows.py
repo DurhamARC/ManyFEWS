@@ -47,7 +47,7 @@ def test_GenerateRiverFlows():
     qpErr = np.absolute(qp - qpbenchmark)
     epErr = np.absolute((Ep - Eqbenchmark) / Eqbenchmark)
 
-    assert (np.max(aerr) > 0).all()
-    assert (np.max(terr) > 0).all()
-    assert (np.max(qpErr) > 0).all()
-    assert (np.max(epErr) > 0).all()
+    assert (np.max(aerr) < 0.0001).all()
+    assert (np.max(terr) < 0.0001).all()
+    assert (np.max(qpErr) < 0.0001).all()
+    assert (np.max(epErr) < 0.0001).all()
