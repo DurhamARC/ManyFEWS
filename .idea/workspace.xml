@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c924858-309b-4ec2-adc8-5139fdd41ac6" name="Changes" comment="&quot;update github action yaml file&quot;">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ManyFEWS.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+    <list default="true" id="0c924858-309b-4ec2-adc8-5139fdd41ac6" name="Changes" comment="&quot;&quot;">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +84,9 @@
       <module name="ManyFEWS" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/GenerateRiverFlows" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -218,14 +216,8 @@
       <workItem from="1642603027857" duration="4089000" />
       <workItem from="1642623130030" duration="293000" />
       <workItem from="1642674015707" duration="18166000" />
-      <workItem from="1642759622812" duration="5897000" />
-    </task>
-    <task id="LOCAL-00043" summary="&quot;update yaml file for github action&quot;">
-      <created>1642543747111</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1642543747112</updated>
+      <workItem from="1642759622812" duration="6084000" />
+      <workItem from="1642938358658" duration="278000" />
     </task>
     <task id="LOCAL-00044" summary="&quot;update yaml file for github action&quot;">
       <created>1642543926793</created>
@@ -563,7 +555,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642771698404</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="&quot;&quot;">
+      <created>1642778419301</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1642778419301</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -613,7 +612,6 @@
     <MESSAGE value="&quot;update the workflow yaml file&quot;" />
     <MESSAGE value="&quot;reformatted GenerateRiverFlows.py to black code format.&quot;" />
     <MESSAGE value="&quot; create a conda environment.yml file for creating python environment&quot;" />
-    <MESSAGE value="&quot;&quot;" />
     <MESSAGE value="&quot;update github action workflow yaml file&quot;" />
     <MESSAGE value="&quot;1.create a conda environment yml file (./condaEnv/manyFEMSenv.yml) instead of specifying the dependencies. 2.update the action yaml file.&quot;" />
     <MESSAGE value="&quot;Adjusted paths to input files (use absolute paths)&quot;" />
@@ -623,7 +621,8 @@
     <MESSAGE value="&quot;update the workflow yaml file.&quot;" />
     <MESSAGE value="&quot;correct the test function &quot;test_GenerateRiverFlows.py.&quot;" />
     <MESSAGE value="&quot;update github action yaml file&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;update github action yaml file&quot;" />
+    <MESSAGE value="&quot;&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
