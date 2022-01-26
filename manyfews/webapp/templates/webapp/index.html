@@ -1,0 +1,14 @@
+{% load static %}
+{% load leaflet_tags %}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'webapp/map.css' %}" />
+    {% leaflet_js %}
+    {% leaflet_css %}
+</head>
+
+<body>
+    <h1>ManyFEWS</h1>
+    {% leaflet_map "map" %}
+</body>
