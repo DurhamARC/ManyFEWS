@@ -8,27 +8,48 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='AccumulatedRisk',
+            name="AccumulatedRisk",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cat', models.BigIntegerField()),
-                ('value', models.FloatField()),
-                ('geom', django.contrib.gis.db.models.fields.MultiPointField(srid=4362)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("cat", models.BigIntegerField()),
+                ("value", models.FloatField()),
+                (
+                    "geom",
+                    django.contrib.gis.db.models.fields.MultiPointField(srid=4362),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Stream',
+            name="Stream",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cat', models.BigIntegerField()),
-                ('value', models.BigIntegerField()),
-                ('label', models.CharField(max_length=10, null=True)),
-                ('geom', django.contrib.gis.db.models.fields.MultiLineStringField(srid=4362)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("cat", models.BigIntegerField()),
+                ("value", models.BigIntegerField()),
+                ("label", models.CharField(max_length=10, null=True)),
+                (
+                    "geom",
+                    django.contrib.gis.db.models.fields.MultiLineStringField(srid=4362),
+                ),
             ],
         ),
     ]

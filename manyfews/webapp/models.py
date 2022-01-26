@@ -9,9 +9,9 @@ class AccumulatedRisk(models.Model):
 
 # Auto-generated `LayerMapping` dictionary for AccumulatedRisk model
 accumulatedrisk_mapping = {
-    'cat': 'cat',
-    'value': 'value',
-    'geom': 'MULTIPOINT',
+    "cat": "cat",
+    "value": "value",
+    "geom": "MULTIPOINT",
 }
 
 
@@ -24,8 +24,8 @@ class Stream(models.Model):
 
 # Auto-generated `LayerMapping` dictionary for Stream model
 stream_mapping = {
-    'cat': 'cat',
-    'value': 'value',
-    'label': 'label',
-    'geom': 'MULTILINESTRING',
+    "cat": "cat",
+    "value": "value",
+    "label": "label",
+    "geom": "MULTILINESTRING",
 }
