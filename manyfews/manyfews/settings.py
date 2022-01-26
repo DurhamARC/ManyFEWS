@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'djgeojson',
+    'leaflet',
     'webapp',
 ]
 
@@ -124,3 +126,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (54.766, -1.569),
+    'DEFAULT_ZOOM': 16,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'DEFAULT_PRECISION': 6,
+}

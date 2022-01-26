@@ -23,9 +23,26 @@
 
 6. Run the django app in development mode:
 
-   ```
+   ```bash
    cd manyfews
    python manage.py runserver
    ```
 
    Go to http://127.0.0.1:8000/webapp/ and check that your app works.
+
+7. Run the django database migrations to set up the database:
+
+   ```bash
+   python manage.py migrate
+   ```
+
+## Loading sample data
+
+This is a temporary step until we can populate the database with data from the model.
+
+Run from the top `manyfews` directory:
+
+```bash
+python manage.py shell
+>>> exec(open('webapp/load.py').read())
+```
