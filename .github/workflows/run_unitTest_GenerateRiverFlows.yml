@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
+        rev: 19.10b0
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: anaconda-client-env
