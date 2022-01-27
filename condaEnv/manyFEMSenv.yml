@@ -16,16 +16,20 @@ dependencies:
   - celery=5.2.1=pyhd8ed1ab_0
   - certifi=2021.10.8=py39h6e9494a_1
   - cffi=1.15.0=py39hc55c11b_1
+  - cfgv=3.3.1=pyhd8ed1ab_0
   - click=8.0.3=pyhd3eb1b0_0
   - click-didyoumean=0.3.0=pyhd8ed1ab_0
   - click-plugins=1.1.1=py_0
   - click-repl=0.2.0=pyhd8ed1ab_0
   - cryptography=36.0.1=py39h209aa08_0
+  - distlib=0.3.4=pyhd8ed1ab_0
   - django=4.0=pyhd8ed1ab_1
   - django-celery-beat=2.2.1=pyhd8ed1ab_0
   - django-leaflet=0.28.1=pyh6c4a22f_0
   - django-timezone-field=4.1.2=pyhd8ed1ab_0
   - djangorestframework=3.13.1=pyhd8ed1ab_0
+  - filelock=3.4.2=pyhd8ed1ab_1
+  - identify=2.4.5=pyhd8ed1ab_0
   - iniconfig=1.1.1=pyhd3eb1b0_0
   - intel-openmp=2021.4.0=hecd8cb5_3538
   - kombu=5.2.3=py39h6e9494a_0
@@ -40,13 +44,16 @@ dependencies:
   - mkl_random=1.2.2=py39hb2f4e1b_0
   - mypy_extensions=0.4.3=py39hecd8cb5_1
   - ncurses=6.3=hca72f7f_2
+  - nodeenv=1.6.0=pyhd8ed1ab_0
   - numpy=1.21.2=py39h4b4dc7a_0
   - numpy-base=1.21.2=py39he0bd621_0
   - openssl=1.1.1l=h0d85af4_0
   - packaging=21.3=pyhd3eb1b0_0
   - pathspec=0.7.0=py_0
   - pip=21.3.1=pyhd8ed1ab_0
+  - platformdirs=2.3.0=pyhd8ed1ab_0
   - pluggy=1.0.0=py39hecd8cb5_0
+  - pre-commit=2.17.0=py39h6e9494a_0
   - prompt-toolkit=3.0.24=pyha770c72_0
   - prompt_toolkit=3.0.24=hd8ed1ab_0
   - psycopg2=2.8.6=py39hbcfaee0_1
@@ -59,6 +66,7 @@ dependencies:
   - python-dateutil=2.8.2=pyhd8ed1ab_0
   - python_abi=3.9=2_cp39
   - pytz=2021.3=pyhd8ed1ab_0
+  - pyyaml=6.0=py39h89e85a6_3
   - readline=8.1.2=hca72f7f_1
   - regex=2021.11.2=py39hca72f7f_0
   - setuptools=58.0.4=py39hecd8cb5_0
@@ -70,11 +78,14 @@ dependencies:
   - typed-ast=1.4.3=py39h9ed2024_1
   - typing_extensions=3.10.0.2=pyh06a4308_0
   - tzdata=2021e=hda174b7_0
+  - ukkonen=1.0.1=py39hf018cea_1
   - vine=5.0.0=pyhd8ed1ab_1
+  - virtualenv=20.13.0=py39h6e9494a_0
   - wcwidth=0.2.5=pyh9f0ad1d_2
   - wheel=0.37.1=pyhd3eb1b0_0
   - xlrd=1.2.0=py_0
   - xz=5.2.5=h1de35cc_0
+  - yaml=0.2.5=h0d85af4_2
   - zlib=1.2.11=h4dc903c_4
   - pip:
     - django-geojson==3.2.0

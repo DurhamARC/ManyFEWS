@@ -8,8 +8,7 @@ Make sure you have the following installed:
 
  * conda (e.g. [miniconda](https://docs.conda.io/en/latest/miniconda.html) if you don't already have conda installed)
  * [RabbitMQ](https://www.rabbitmq.com/download.html)
- * [PostgreSQL](https://www.postgresql.org/download/)
- * [PostGIS](https://postgis.net/docs/manual-3.2/postgis_installation.html)
+ * [PostgreSQL](https://www.postgresql.org/download/) and [PostGIS](https://postgis.net/docs/manual-3.2/postgis_installation.html) - see (see https://docs.djangoproject.com/en/3.2/ref/contrib/gis/install/postgis/)
 
 ## Setup
 
@@ -22,7 +21,12 @@ Make sure you have the following installed:
    $ conda activate ManyFEWS
    ```
 
-4. Install postgres 14 and PostGIS (see https://docs.djangoproject.com/en/3.2/ref/contrib/gis/install/postgis/)
+4. Set up the pre-commit hook (see `.pre-commit-config.yaml`) to run `black` before committing:
+
+   ```bash
+   pre-commit install
+   ```
+
 5. Create a `manyfews` user and database and enable the PostGIS extension:
 
    ```bash
