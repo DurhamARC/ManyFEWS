@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
+    "django_celery_beat",
     "djgeojson",
     "leaflet",
+    "calculations",
     "webapp",
 ]
 
@@ -128,3 +130,5 @@ LEAFLET_CONFIG = {
     "MAX_ZOOM": 18,
     "DEFAULT_PRECISION": 6,
 }
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

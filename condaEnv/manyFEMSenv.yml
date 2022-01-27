@@ -3,18 +3,32 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - amqp=5.0.9=pyhd8ed1ab_0
   - appdirs=1.4.4=pyhd3eb1b0_0
   - asgiref=3.5.0=pyhd8ed1ab_0
   - attrs=21.4.0=pyhd3eb1b0_0
+  - backports=1.0=py_2
+  - backports.functools_lru_cache=1.6.4=pyhd8ed1ab_0
+  - billiard=3.6.4.0=py39h89e85a6_1
   - black=19.10b0=py_0
   - blas=1.0=mkl
   - ca-certificates=2021.10.8=h033912b_0
+  - celery=5.2.1=pyhd8ed1ab_0
   - certifi=2021.10.8=py39h6e9494a_1
+  - cffi=1.15.0=py39hc55c11b_1
   - click=8.0.3=pyhd3eb1b0_0
+  - click-didyoumean=0.3.0=pyhd8ed1ab_0
+  - click-plugins=1.1.1=py_0
+  - click-repl=0.2.0=pyhd8ed1ab_0
+  - cryptography=36.0.1=py39h209aa08_0
   - django=4.0=pyhd8ed1ab_1
+  - django-celery-beat=2.2.1=pyhd8ed1ab_0
   - django-leaflet=0.28.1=pyh6c4a22f_0
+  - django-timezone-field=4.1.2=pyhd8ed1ab_0
+  - djangorestframework=3.13.1=pyhd8ed1ab_0
   - iniconfig=1.1.1=pyhd3eb1b0_0
   - intel-openmp=2021.4.0=hecd8cb5_3538
+  - kombu=5.2.3=py39h6e9494a_0
   - krb5=1.17.2=h60d9502_0
   - libcxx=12.0.0=h2f01273_0
   - libedit=3.1.20191231=h0678c8f_2
@@ -33,11 +47,16 @@ dependencies:
   - pathspec=0.7.0=py_0
   - pip=21.3.1=pyhd8ed1ab_0
   - pluggy=1.0.0=py39hecd8cb5_0
+  - prompt-toolkit=3.0.24=pyha770c72_0
+  - prompt_toolkit=3.0.24=hd8ed1ab_0
   - psycopg2=2.8.6=py39hbcfaee0_1
   - py=1.10.0=pyhd3eb1b0_0
+  - pycparser=2.21=pyhd8ed1ab_0
   - pyparsing=3.0.4=pyhd3eb1b0_0
   - pytest=6.2.5=py39hecd8cb5_2
   - python=3.9.7=h88f2d9e_1
+  - python-crontab=2.5.1=pyh9f0ad1d_0
+  - python-dateutil=2.8.2=pyhd8ed1ab_0
   - python_abi=3.9=2_cp39
   - pytz=2021.3=pyhd8ed1ab_0
   - readline=8.1.2=hca72f7f_1
@@ -51,6 +70,8 @@ dependencies:
   - typed-ast=1.4.3=py39h9ed2024_1
   - typing_extensions=3.10.0.2=pyh06a4308_0
   - tzdata=2021e=hda174b7_0
+  - vine=5.0.0=pyhd8ed1ab_1
+  - wcwidth=0.2.5=pyh9f0ad1d_2
   - wheel=0.37.1=pyhd3eb1b0_0
   - xlrd=1.2.0=py_0
   - xz=5.2.5=h1de35cc_0
