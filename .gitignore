@@ -130,3 +130,9 @@ dmypy.json
 
 # Ingore the .idea folder (Pycharm IDE file)
 **/.idea/
+
+# Ingore the GEFSdata file
+/Data/gec00.t00z.pgrb2b.0p50.f000
+
+#Ingore the Grib2_utils file
+/Grib2_utils
