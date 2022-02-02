@@ -38,13 +38,16 @@ Make sure you have the following installed:
    > CREATE EXTENSION postgis;
    ```
 
+   Exit the postgresql shell using Ctrl-D or typing `\q`.
+
 7. Run the django database migrations to set up the database:
 
    ```bash
+   cd manyfews
    python manage.py migrate
    ```
 
-8. Create an admin user:
+8. Create an admin user (still in the `manyfews` directory):
 
    ```bash
    python manage.py createsuperuser
@@ -52,14 +55,13 @@ Make sure you have the following installed:
 
    (Follow the prompts to add a username, email and password.)
 
-9. Run the django app in development mode:
+9. Run the django app in development mode (still in the `manyfews` directory):
 
-  ```bash
-  cd manyfews
-  python manage.py runserver
-  ```
+   ```bash
+   python manage.py runserver
+   ```
 
-  Go to http://127.0.0.1:8000/ and check that the app works.
+   Go to http://127.0.0.1:8000/ and check that the app works.
 
 10. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
 
