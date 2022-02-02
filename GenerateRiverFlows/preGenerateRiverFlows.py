@@ -21,7 +21,7 @@ import os
 
 # download GEFSdata from ftp server.
 rootUrl = "https://ftp.ncep.noaa.gov/data/nccf/com/gens/prod/"
-fileDate = "20220131"  # date format: YYYYMMDD
+fileDate = "20220130"  # date format: YYYYMMDD
 subUrl = "/00/atmos/pgrb2bp5/"
 fileName = "gec00.t00z.pgrb2b.0p50.f000"
 fullUrl = rootUrl + "gefs." + fileDate + subUrl + fileName
@@ -30,3 +30,5 @@ projectPath = os.path.abspath(
 )
 outPutpath = os.path.join(projectPath, "Data", fileName)
 urlretrieve(fullUrl, outPutpath)
+
+# extract data from GEFSdata: rainfall, temperature, and Humidity.
