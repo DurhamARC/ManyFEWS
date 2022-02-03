@@ -5,7 +5,7 @@ class ZentraDevice(models.Model):
     device_sn = models.CharField(primary_key=True, max_length=100)
     device_name = models.CharField(max_length=100, blank=True, default="")
     location = models.PointField()
-    height = models.FloatField()
+    height = models.FloatField(default=1)
 
 
 class ZentraReading(models.Model):
