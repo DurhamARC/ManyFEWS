@@ -72,3 +72,20 @@ Make sure you have the following installed:
 11. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
 
 12. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
+
+
+## Making model changes
+
+Django database models are defined in `models.py` in each app (`calculations`, `webapp`). If you make a change to a model, you need to run the following steps:
+
+```
+python manage.py makemigrations
+```
+
+This creates a file in the `migrations` directory describing the changes to the model since `makemigrations` was last run.
+
+```
+python manage.py migrate
+```
+
+This applies all changes from the `migrations` diretories for each app to your database.
