@@ -43,7 +43,7 @@ def zentraReader(backTime, stationSN):
             zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][0][
                 "value"
             ]
-        )  # solar Radiation, 'unit':' W/m²'
+        )  # solar radiation, 'unit':' W/m²'
 
         precip.append(
             zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][1][
@@ -105,7 +105,38 @@ def zentraReader(backTime, stationSN):
             ]
         )  # Max Precip Rate, 'units': ' mm/h'
 
-    print(tStamp)
+    zentraDataSum = [
+        tStamp,
+        solar,
+        precip,
+        wDirection,
+        wSpeed,
+        gustSpeed,
+        vaporPressure,
+        atmosPressure,
+        airTem,
+        maxPrecipRate,
+        rhTemp,
+        VPD,
+    ]
+    zentraDataKeys = [
+        "time stamp",
+        "solar radiation",
+        "precipitation",
+        "wind direction",
+        "wind speed",
+        "guest speed",
+        "vapor pressure",
+        "atmospheric pressure",
+        "air temperature",
+        "max precipitation Rate",
+        "RH senor temperature",
+        "VPD",
+    ]
+
+    zentraDataSet = dict(zip(zentraDataKeys, zentraDataSum))
+
+    return zentraDataSet
 
 
-zentraReader(1, "06-02047")
+print(zentraReader(0.1, "06-02047"))
