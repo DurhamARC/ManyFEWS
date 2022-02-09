@@ -5,6 +5,16 @@ import datetime
 
 def zentraReader(backTime, stationSN):
 
+    """
+    a function for extracting observation climate data from ZENTRA cloud: https://zentracloud.com/,
+    and output data sets into a dictionary.
+
+    :param backTime: the back days number you want to extract (unit: day).
+    :param stationSN: the serial number of meter station.
+    :return: observation data sets.
+
+    """
+
     # obtain start time ( 30 days before) and device's SN
     startTime = datetime.datetime.now() - datetime.timedelta(days=backTime)
 
@@ -105,6 +115,7 @@ def zentraReader(backTime, stationSN):
             ]
         )  # Max Precip Rate, 'units': ' mm/h'
 
+    # output data sets into a dictionary
     zentraDataSum = [
         tStamp,
         solar,
@@ -137,6 +148,3 @@ def zentraReader(backTime, stationSN):
     zentraDataSet = dict(zip(zentraDataKeys, zentraDataSum))
 
     return zentraDataSet
-
-
-print(zentraReader(0.1, "06-02047"))
