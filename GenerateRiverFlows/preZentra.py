@@ -3,23 +3,21 @@ from os import getenv
 import datetime
 
 
-def zentraReader(backTime, stationSN):
+def zentraReader(backTime, stationSN, token):
 
     """
-    a function for extracting observation climate data from ZENTRA cloud: https://zentracloud.com/,
+    This function is used to extract observation climate data from ZENTRA cloud: https://zentracloud.com/,
     and output data sets into a dictionary.
 
     :param backTime: the back days number you want to extract (unit: day).
     :param stationSN: the serial number of meter station.
+    :param token: authentication token.
     :return: observation data sets.
 
     """
 
     # obtain start time ( 30 days before) and device's SN
     startTime = datetime.datetime.now() - datetime.timedelta(days=backTime)
-
-    # authentication into the Zentra Cloud API
-    token = ZentraToken(username=getenv("zentra_un"), password=getenv("zentra_pw"))
 
     # Get the readings for a device
     readings = ZentraReadings().get(
@@ -148,3 +146,20 @@ def zentraReader(backTime, stationSN):
     zentraDataSet = dict(zip(zentraDataKeys, zentraDataSum))
 
     return zentraDataSet
+
+
+def authZentraCloud():
+    """
+    This function is used to return authentication token for the Zentra cloud.
+    Username & password should be defined as environment parameters.
+
+    :return: authentication token.
+    """
+
+    # authentication into the Zentra Cloud API
+    token = ZentraToken(username=getenv("zentra_un"), password=getenv("zentra_pw"))
+
+    return token
+
+
+print(zentraReader(1, "06-02047", authZentraCloud()))
