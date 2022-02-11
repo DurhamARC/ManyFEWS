@@ -139,3 +139,6 @@ dmypy.json
 
 #Ingore the Grib2_utils file
 /Grib2_utils
+
+#Ingore the env parameter
+/manyfews/manyfews/.env
