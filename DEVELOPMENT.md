@@ -40,6 +40,8 @@ Make sure you have the following installed:
 
    Exit the postgresql shell using Ctrl-D or typing `\q`.
 
+6. Set up environment variables in Django
+
 7. Run the django database migrations to set up the database:
 
    ```bash
