@@ -1,18 +1,13 @@
 from .models import ZentraReading
 from .models import ZentraDevice
-from django.utils import timezone
 from .preZentra import zentraReader
 from .preZentra import authZentraCloud
 
-now = timezone.now()
 zentraDevice = ZentraDevice.objects.get(device_sn="06-02047")
 sn = zentraDevice.device_sn
 
 # extract data from met station
 zentraAtmos = zentraReader(1, sn, authZentraCloud())
-
-
-print(zentraAtmos.keys())
 
 # import data into DB
 for i in range(len(zentraAtmos["local date"])):
