@@ -11,13 +11,16 @@ sn = zentraDevice.device_sn
 # extract data from met station
 zentraAtmos = zentraReader(1, sn, authZentraCloud())
 
+
+print(zentraAtmos.keys())
+
 # import data into DB
 for i in range(len(zentraAtmos["local date"])):
     zentraData = ZentraReading(
         date=zentraAtmos["local date"][i],
         device=zentraDevice,
         precipitation=zentraAtmos["precipitation"][i],
-        relative_humidity=zentraAtmos["RH senor temperature"][i],
+        relative_humidity=zentraAtmos["Relative Humidity"][i],
         air_temperature=zentraAtmos["air temperature"][i],
         wind_speed=zentraAtmos["wind speed"][i],
         wind_direction=zentraAtmos["wind direction"][i],
