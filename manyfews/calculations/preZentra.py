@@ -1,6 +1,7 @@
 from zentra.api import *
 from os import getenv
 import datetime
+import math
 
 
 def zentraReader(backTime, stationSN, token):
@@ -38,8 +39,7 @@ def zentraReader(backTime, stationSN, token):
     rhTemp = []
     VPD = []
     covertDate = []
-
-    print(zentraData["device"]["timeseries"][0]["configuration"]["values"][0][3])
+    RH = []
 
     # Extract time stamp, Precipitation, solar, temperature, and humidity
     for i in range(
@@ -124,6 +124,28 @@ def zentraReader(backTime, stationSN, token):
         date = datetime.datetime.fromtimestamp(ts, tz)  # convert date
         covertDate.append(date)
 
+        # calculate RH by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
+        #                  RH = VP / esTair
+        #                 which:Tc is the Air Temperature
+        #                       VP is the Vapour Pressure
+        #                       RH is the Relative Humidity between zero and one.
+
+        Tempair = zentraData["device"]["timeseries"][0]["configuration"]["values"][i][
+            3
+        ][7]["value"]
+
+        vapPressure = zentraData["device"]["timeseries"][0]["configuration"]["values"][
+            i
+        ][3][8]["value"]
+        rh = vapPressure / (0.611 * (math.exp((17.502 * Tempair) / (240.97 + Tempair))))
+
+        if rh > 1:
+            rh = 1
+        elif rh < 0:
+            rh = 0
+
+        RH.append(rh)
+
     # output data sets into a dictionary
     zentraDataSum = [
         covertDate,
@@ -139,6 +161,7 @@ def zentraReader(backTime, stationSN, token):
         maxPrecipRate,
         rhTemp,
         VPD,
+        RH,
     ]
     zentraDataKeys = [
         "local date",
@@ -154,6 +177,7 @@ def zentraReader(backTime, stationSN, token):
         "max precipitation Rate",
         "RH senor temperature",
         "VPD",
+        "Relative Humidity",
     ]
 
     zentraDataSet = dict(zip(zentraDataKeys, zentraDataSum))
