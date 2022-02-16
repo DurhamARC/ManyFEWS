@@ -1,3 +1,6 @@
+from urllib.request import urlretrieve
+import os
+
 """
 This script is developed to download files, read files, and export necessary data for generating river flows.
 Download from stp server:
@@ -12,23 +15,27 @@ folder, and all are global at 0.25 degree resolution. The file naming system is:
     0p25 = this means it is the 0.25 degree resolution model
     f240 = number of hours into the future that the forecast is for.
 
-                                                                                Sim & Jiada
-                                                                                01/02/2022
+                                                                                Sim & Jiada                                                                                01/02/2022
 """
 
-from urllib.request import urlretrieve
-import os
 
-# download GEFSdata from ftp server.
-rootUrl = "https://ftp.ncep.noaa.gov/data/nccf/com/gens/prod/"
-fileDate = "20220130"  # date format: YYYYMMDD
-subUrl = "/00/atmos/pgrb2bp5/"
-fileName = "gec00.t00z.pgrb2b.0p50.f000"
-fullUrl = rootUrl + "gefs." + fileDate + subUrl + fileName
-projectPath = os.path.abspath(
-    os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../")
-)
-outPutpath = os.path.join(projectPath, "Data", fileName)
-urlretrieve(fullUrl, outPutpath)
+def GEFSdownloader():
 
-# extract data from GEFSdata: rainfall, temperature, and Humidity.
+    # download GEFSdata from ftp server.
+    rootUrl = "https://ftp.ncep.noaa.gov/data/nccf/com/gens/prod/"
+    fileDate = "20220211"  # date format: YYYYMMDD
+    subUrl = "/00/atmos/pgrb2bp5/"
+    fileName = "gec00.t00z.pgrb2b.0p50.f000"
+    fullUrl = rootUrl + "gefs." + fileDate + subUrl + fileName
+    projectPath = os.path.abspath(
+        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../")
+    )
+    outPutpath = os.path.join(projectPath, "Data", fileName)
+    urlretrieve(fullUrl, outPutpath)
+
+    # extract data from GEFSdata: rainfall, temperature, and Humidity.
+
+
+GEFSdownloader()
+
+# extract data from GEFS file
