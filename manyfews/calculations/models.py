@@ -21,6 +21,7 @@ class ZentraReading(models.Model):
 
 class NoaaForecast(models.Model):
     date = models.DateTimeField()
+    location = models.PointField()
     precipitation = models.FloatField()
     min_temperature = models.FloatField()
     max_temperature = models.FloatField()
