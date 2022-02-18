@@ -40,7 +40,16 @@ Make sure you have the following installed:
 
    Exit the postgresql shell using Ctrl-D or typing `\q`.
 
-6. Set up environment variables in Django
+6. Set up environment variables in Django.  
+   ```bash
+   $ cd manyfews
+   $ vi .env.CI 
+   > replace 'zentraCloudUserName' with your user name of your Zentra cloud account. 
+   > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
+   > Save and quit.
+   $ mv .env.CI .env
+   $ cd ..
+   ```
 
 7. Run the django database migrations to set up the database:
 
