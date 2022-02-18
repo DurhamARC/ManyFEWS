@@ -45,7 +45,7 @@ jobs:
           pytest ./test_manyFEMS/unit/test_GeneraterRiverFlow/test_GenerateRiverFlows.py
       - name: Run Django migrations
         run: |
-          pwd
+          mv ./manyfews/.env.CI ./manyfews/.env
           python manage.py migrate
         working-directory: manyfews
       - name: Run Django tests
