@@ -1,6 +1,8 @@
 from urllib.request import urlretrieve
 import pygrib
 import numpy as np
+from datetime import date, datetime
+from datetime import datetime
 
 
 def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
@@ -37,39 +39,107 @@ def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
     rootUrl = "https://ftp.ncep.noaa.gov/data/nccf/com/gens/prod/"
     subUrl = "/00/atmos/pgrb2ap5/"
     fileNameBase = "geavg.t00z.pgrb2a.0p50.f"
-    fileName = fileNameBase + str(forecastHour)
+    fileName = fileNameBase + (str(forecastHour)).zfill(3)
     fullUrl = rootUrl + "gefs." + fileDate + subUrl + fileName
     gefsFile = urlretrieve(fullUrl)
     gefsData = pygrib.open(gefsFile[0])
 
     # extract necessary data sets:
-    RH = gefsData[64]  # metre relative humidity, unit:% (instant).
-    maxTemp = gefsData[65]  # Maximum temperature: unit:K (max).
-    minTemp = gefsData[66]  # Minimum temperature: unit:K (min).
-    uWind = gefsData[67]  # metre U wind component: unit:m/s (instant).
-    vWind = gefsData[68]  # metre V wind component: unit:m s**-1 (instant).
-    totalPrecip = gefsData[69]  # Total Precipitation: unit:kg/m2 (accum).
+    for grb in gefsData:
 
-    lats, lons = RH.latlons()  # obtain information on latitude & longitude.
+        # metre relative humidity, unit:% (instant).
+        if grb.parameterName == "Relative humidity" and grb.level == 2:
+            lats, lons = grb.latlons()
+            index = cellIndexFinder(
+                latitudeInfo=lats,
+                longitudeInfo=lons,
+                latValue=latValue,
+                lonValue=lonValue,
+            )
+            RHvalue = grb.values[index]
 
-    # find the Index of the specific location in gefs data.
-    latsIndex = np.where(lats == latValue)
-    lonsIndex = np.where(lons == lonValue)
-    index = (latsIndex[0][0], lonsIndex[1][0])
+        # Maximum temperature: unit:K (max).
+        elif grb.parameterName == "Maximum temperature" and grb.level == 2:
+            lats, lons = grb.latlons()
+            index = cellIndexFinder(
+                latitudeInfo=lats,
+                longitudeInfo=lons,
+                latValue=latValue,
+                lonValue=lonValue,
+            )
+            maxTempValue = grb.values[index]
 
-    # extract values of the specific point.
-    RHvalue = RH.values[index]
-    maxTempValue = maxTemp.values[index]
-    minTempValue = minTemp.values[index]
-    uWindValue = uWind.values[index]
-    vWindValue = vWind.values[index]
-    totalPrecipValue = totalPrecip.values[index]
+        # Minimum temperature: unit:K (min).
+        elif grb.parameterName == "Minimum temperature" and grb.level == 2:
+            lats, lons = grb.latlons()
+            index = cellIndexFinder(
+                latitudeInfo=lats,
+                longitudeInfo=lons,
+                latValue=latValue,
+                lonValue=lonValue,
+            )
+            minTempValue = grb.values[index]
+
+        # metre U wind component: unit:m/s (instant).
+        elif grb.parameterName == "u-component of wind" and grb.level == 10:
+            lats, lons = grb.latlons()
+            index = cellIndexFinder(
+                latitudeInfo=lats,
+                longitudeInfo=lons,
+                latValue=latValue,
+                lonValue=lonValue,
+            )
+            uWindValue = grb.values[index]
+
+        # metre V wind component: unit:m/s (instant).
+        elif grb.parameterName == "v-component of wind" and grb.level == 10:
+            lats, lons = grb.latlons()
+            index = cellIndexFinder(
+                latitudeInfo=lats,
+                longitudeInfo=lons,
+                latValue=latValue,
+                lonValue=lonValue,
+            )
+            vWindValue = grb.values[index]
+
+        # Total Precipitation: unit:kg/m2 (accum).
+        elif grb.parameterName == "Total precipitation" and grb.level == 0:
+            lats, lons = grb.latlons()
+            index = cellIndexFinder(
+                latitudeInfo=lats,
+                longitudeInfo=lons,
+                latValue=latValue,
+                lonValue=lonValue,
+            )
+            totalPrecipValue = grb.values[index]
 
     return RHvalue, maxTempValue, minTempValue, uWindValue, vWindValue, totalPrecipValue
 
 
-gefsData = GEFSdownloader(
-    fileDate="20220215", forecastHour=240, latValue=-80.5, lonValue=175
-)
+def cellIndexFinder(latitudeInfo, longitudeInfo, latValue, lonValue):
+    """
+    This function is developed for finder the index of the specific cell in gefs data.
 
-print(gefsData[0])
+    :param latitudeInfo: the latitude matrix of the grid.
+    :param longitudeInfo: the longtitude matrix of the grid.
+    :param latValue: the latitude of the specific cell
+    :param lonValue: the longitude of the specific cell
+    :return: the index of the cell location.
+    """
+
+    # find the Index of the specific location in gefs data.
+    latsIndex = np.where(latitudeInfo == latValue)
+    lonsIndex = np.where(longitudeInfo == lonValue)
+    index = (latsIndex[0][0], lonsIndex[1][0])
+
+    return index
+
+
+for i in range(1):
+    # forcastHour = 6 + i*6
+    forcastHour = 3
+    gefsData = GEFSdownloader(
+        fileDate="20220216", forecastHour=forcastHour, latValue=-80.5, lonValue=175
+    )
+
+    print(forcastHour, gefsData[0], gefsData[1], gefsData[2], gefsData[3], gefsData[4])
