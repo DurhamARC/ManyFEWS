@@ -1,8 +1,8 @@
 from urllib.request import urlretrieve
 import pygrib
 import numpy as np
-from datetime import date, datetime
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from .models import NoaaForecast
 
 
 def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
@@ -135,11 +135,36 @@ def cellIndexFinder(latitudeInfo, longitudeInfo, latValue, lonValue):
     return index
 
 
-for i in range(1):
-    # forcastHour = 6 + i*6
-    forcastHour = 3
+downloadDate = datetime.utcnow() - timedelta(days=3)  # download 3 days back GEFS data.
+fileDate = downloadDate.strftime("%Y%m%d")
+
+timeStamp = downloadDate.timestamp()
+tz = timezone(timedelta(hours=0))
+date = datetime.fromtimestamp(timeStamp, tz)
+
+
+for i in range(65):
+    forcastHour = 6 + i * 6
     gefsData = GEFSdownloader(
-        fileDate="20220216", forecastHour=forcastHour, latValue=-80.5, lonValue=175
+        fileDate=fileDate, forecastHour=forcastHour, latValue=-80.5, lonValue=175
+    )
+    print(
+        forcastHour,
+        gefsData[0],
+        gefsData[1],
+        gefsData[2],
+        gefsData[3],
+        gefsData[4],
+        gefsData[5],
+    )
+    gefsData = NoaaForecast(
+        date=date,
+        precipitation=gefsData[5],
+        min_temperature=gefsData[2],
+        max_temperature=gefsData[1],
+        wind_u=gefsData[3],
+        wind_v=gefsData[4],
+        relative_humidity=gefsData[0],
     )
 
-    print(forcastHour, gefsData[0], gefsData[1], gefsData[2], gefsData[3], gefsData[4])
+    gefsData.save()

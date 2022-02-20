@@ -21,12 +21,13 @@ class ZentraReading(models.Model):
 
 class NoaaForecast(models.Model):
     date = models.DateTimeField()
-    location = models.PointField()
+    #   location = models.PointField()
     precipitation = models.FloatField()
     min_temperature = models.FloatField()
     max_temperature = models.FloatField()
     wind_u = models.FloatField()
     wind_v = models.FloatField()
+    relative_humidity = models.FloatField()
 
 
 # Should we convert Noaa/Zentra data to the same format before storing?
