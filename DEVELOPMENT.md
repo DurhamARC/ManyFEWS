@@ -47,7 +47,7 @@ Make sure you have the following installed:
    > replace 'zentraCloudUserName' with your user name of your Zentra cloud account. 
    > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
    > Save and quit.
-   $ mv .env.CI .env
+   $ cp .env.CI .env
    $ cd ..
    ```
 
