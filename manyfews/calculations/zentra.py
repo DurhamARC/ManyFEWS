@@ -1,6 +1,6 @@
 from .models import ZentraReading
 from .models import ZentraDevice
-from zentra.api import *
+from zentra.api import ZentraReadings, ZentraToken
 from os import getenv
 import datetime
 import math
