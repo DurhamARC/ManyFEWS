@@ -40,7 +40,7 @@ def zentraReader(backTime, stationSN, token):
     maxPrecipRate = []
     rhTemp = []
     VPD = []
-    covertDate = []
+    convertedDate = []
     RH = []
 
     # Extract time stamp, Precipitation, solar, temperature, and humidity
@@ -125,7 +125,7 @@ def zentraReader(backTime, stationSN, token):
         date = datetime.fromtimestamp(
             ts, tz=timezone.utc
         )  # change time stamp to UTC time.
-        covertDate.append(date)
+        convertedDate.append(date)
 
         # calculate RH by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
         #                  RH = VP / esTair
@@ -151,7 +151,7 @@ def zentraReader(backTime, stationSN, token):
 
     # output data sets into a dictionary
     zentraDataSum = [
-        covertDate,
+        convertedDate,
         tStamp,
         solar,
         precip,
