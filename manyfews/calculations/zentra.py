@@ -122,7 +122,7 @@ def zentraReader(backTime, stationSN, token):
         ts = zentraData["device"]["timeseries"][0]["configuration"]["values"][i][
             0
         ]  # time stamp
-        tz = datetime.timezone(datetime.timedelta(hours=6))  # time zone
+        tz = datetime.timezone(datetime.timedelta(hours=0))  # UTC time zone
         date = datetime.datetime.fromtimestamp(ts, tz)  # convert date
         covertDate.append(date)
 
