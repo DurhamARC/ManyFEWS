@@ -13,13 +13,14 @@ def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
     here is an example link (01/02/2022):
     "https://ftp.ncep.noaa.gov/data/nccf/com/gens/prod/gefs.20220201/00/atmos/pgrb2ap5/". There are many files in this
     folder, and all are global at 0.25 degree resolution. The file naming system is:
-    gep30.t00z.pgrb2s.0p25.f240
-    gep = global ensemble prediction
-    30 = ensemble number. In this case it was the 30th member.
-    t00z = not sure, but they all have this code so we do not need to adjust for it.
-    pgrb2s = the number of weather forecast variables
-    0p25 = this means it is the 0.25 degree resolution model
-    f240 = number of hours into the future that the forecast is for.
+    For example: gep30.t00z.pgrb2s.0p25.f240
+                 gep = global ensemble prediction
+                 30 = ensemble number. In this case it was the 30th member.
+                 t00z = not sure, but they all have this code so we do not need to adjust for it.
+                 pgrb2s = the number of weather forecast variables
+                 0p25 = this means it is the 0.25 degree resolution model
+                 f240 = number of hours into the future that the forecast is for,
+                        here is an example of the parameter 'forecastHour' = 240.
 
     :param fileDate: the select date of file with format: YYYYMMDD (only three days back)
     :param fileName: the name of GEFS file. ( e.g. geavg.t00z.pgrb2a.0p50.f240)
