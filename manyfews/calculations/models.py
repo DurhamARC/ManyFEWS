@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 
 
 class ZentraDevice(models.Model):
@@ -21,13 +22,13 @@ class ZentraReading(models.Model):
 
 class NoaaForecast(models.Model):
     date = models.DateTimeField()
-    #   location = models.PointField()
+    location = models.PointField(default=Point(0, 0))
     precipitation = models.FloatField()
     min_temperature = models.FloatField()
     max_temperature = models.FloatField()
     wind_u = models.FloatField()
     wind_v = models.FloatField()
-    relative_humidity = models.FloatField()
+    relative_humidity = models.FloatField(default=0)
 
 
 # Should we convert Noaa/Zentra data to the same format before storing?

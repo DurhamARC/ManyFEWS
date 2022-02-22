@@ -3,6 +3,7 @@ import pygrib
 import numpy as np
 from datetime import datetime, timedelta, timezone
 from .models import NoaaForecast
+from django.contrib.gis.geos import Point
 
 
 def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
@@ -135,36 +136,66 @@ def cellIndexFinder(latitudeInfo, longitudeInfo, latValue, lonValue):
     return index
 
 
-downloadDate = datetime.utcnow() - timedelta(days=3)  # download 3 days back GEFS data.
-fileDate = downloadDate.strftime("%Y%m%d")
+def dataBaseWriter(dt, forecastDays, backDays, latValue, lonValue):
+    """
+    This function is used to save data from gefs file into Database.
+    ( calculations_noaaforecast table).
 
-timeStamp = downloadDate.timestamp()
-tz = timezone(timedelta(hours=0))
-date = datetime.fromtimestamp(timeStamp, tz)
+    :param dt: Specify time-step in days. ( the interval is every 0.125 day(3 hours))
+    :param forecastDays: Number of Days into the future that the forecast is for.
+    :param backDays: the back days number you want to extract (unit: day) (Maximum = 3 days).
+    :param latValue: the latitude of the specific cell.
+                    (the solution is 0.5 degree. range [-90, 90] with 0.5 interval)
+    :param lonValue: the longtidue of the specific cell.
+                    (the solution is 0.5 degree. range [-90, 90] with 0.5 interval)
+    :return: none
+    """
+
+    # calculate the number of time steps
+    # For example: update interval: 0.25 day = 6 h.
+    #              Number of Days into the future that the forecast is for
+    #              16 days = 4 * 16 = 65 loop steps.
+    #  Therefore, the gefs files are:
+    #  geavg.t00z.pgrb2a.0p50.f006 ---> geavg.t00z.pgrb2a.0p50.f384
+
+    loopRange = int(forecastDays / dt)
+    deltaHour = int(24 * dt)
+
+    downloadDate = datetime.utcnow() - timedelta(
+        days=int(backDays)
+    )  # download 3 days back GEFS data.
+    fileDate = downloadDate.strftime("%Y%m%d")
+    date = datetime.astimezone(downloadDate, tz=timezone(timedelta(hours=0)))
+
+    for i in range(loopRange):
+        forcastHour = deltaHour + i * deltaHour
+        gefsData = GEFSdownloader(
+            fileDate=fileDate,
+            forecastHour=forcastHour,
+            latValue=latValue,
+            lonValue=lonValue,
+        )
+        print(
+            forcastHour,
+            gefsData[0],
+            gefsData[1],
+            gefsData[2],
+            gefsData[3],
+            gefsData[4],
+            gefsData[5],
+        )
+        gefsData = NoaaForecast(
+            location=Point(latValue, lonValue),
+            date=date,
+            precipitation=gefsData[5],
+            min_temperature=gefsData[2],
+            max_temperature=gefsData[1],
+            wind_u=gefsData[3],
+            wind_v=gefsData[4],
+            relative_humidity=gefsData[0],
+        )
+
+        gefsData.save()
 
 
-for i in range(65):
-    forcastHour = 6 + i * 6
-    gefsData = GEFSdownloader(
-        fileDate=fileDate, forecastHour=forcastHour, latValue=-80.5, lonValue=175
-    )
-    print(
-        forcastHour,
-        gefsData[0],
-        gefsData[1],
-        gefsData[2],
-        gefsData[3],
-        gefsData[4],
-        gefsData[5],
-    )
-    gefsData = NoaaForecast(
-        date=date,
-        precipitation=gefsData[5],
-        min_temperature=gefsData[2],
-        max_temperature=gefsData[1],
-        wind_u=gefsData[3],
-        wind_v=gefsData[4],
-        relative_humidity=gefsData[0],
-    )
-
-    gefsData.save()
+dataBaseWriter(dt=0.25, forecastDays=16, backDays=3, latValue=-80.5, lonValue=175)
