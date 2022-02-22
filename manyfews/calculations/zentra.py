@@ -2,7 +2,7 @@ from .models import ZentraReading
 from .models import ZentraDevice
 from zentra.api import ZentraReadings, ZentraToken
 from os import getenv
-import datetime
+from datetime import timedelta, timezone, datetime
 import math
 
 
@@ -20,7 +20,7 @@ def zentraReader(backTime, stationSN, token):
     """
 
     # obtain start time ( 30 days before) and device's SN
-    startTime = datetime.datetime.now() - datetime.timedelta(days=backTime)
+    startTime = datetime.now() - timedelta(days=backTime)
 
     # Get the readings for a device
     readings = ZentraReadings().get(
@@ -122,8 +122,9 @@ def zentraReader(backTime, stationSN, token):
         ts = zentraData["device"]["timeseries"][0]["configuration"]["values"][i][
             0
         ]  # time stamp
-        tz = datetime.timezone(datetime.timedelta(hours=0))  # UTC time zone
-        date = datetime.datetime.fromtimestamp(ts, tz)  # convert date
+        date = datetime.fromtimestamp(
+            ts, tz=timezone.utc
+        )  # change time stamp to UTC time.
         covertDate.append(date)
 
         # calculate RH by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
