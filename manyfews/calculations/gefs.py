@@ -169,10 +169,10 @@ def dataBaseWriter(dt, forecastDays, backDays, latValue, lonValue):
     date = datetime.astimezone(downloadDate, tz=timezone(timedelta(hours=0)))
 
     for i in range(loopRange):
-        forcastHour = deltaHour + i * deltaHour
+        forceastHour = deltaHour + i * deltaHour
         gefsData = GEFSdownloader(
             fileDate=fileDate,
-            forecastHour=forcastHour,
+            forecastHour=forecastHour,
             latValue=latValue,
             lonValue=lonValue,
         )
