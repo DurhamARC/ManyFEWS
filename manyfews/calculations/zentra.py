@@ -1,5 +1,4 @@
 from .models import ZentraReading
-from .models import ZentraDevice
 from zentra.api import ZentraReadings, ZentraToken
 from datetime import timedelta, timezone, datetime
 from django.conf import settings
@@ -111,12 +110,3 @@ def zentraReader(backTime, stationSN):
         )
 
         zentraData.save()
-
-
-# get met station's SN
-zentraDevice = ZentraDevice.objects.get(device_sn="06-02047")
-sn = zentraDevice.device_sn
-
-# save into Data base
-backTime = 0.5
-zentraReader(backTime=backTime, stationSN=sn)

@@ -171,7 +171,9 @@ def dataBaseWriter(dt, forecastDays):
 
     for i in range(loopRange):
         forceastHour = deltaHour + i * deltaHour
-        print(forceastHour)
+
+        print("forceastHour:", forceastHour)
+
         gefsData = GEFSdownloader(
             fileDate=fileDate,
             forecastHour=forceastHour,
