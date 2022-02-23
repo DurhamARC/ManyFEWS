@@ -15,7 +15,21 @@ def zentraReader(backTime, stationSN, token):
     :param backTime: the back days number you want to extract (unit: day).
     :param stationSN: the serial number of meter station.
     :param token: authentication token.
-    :return: observation data sets.
+    :return zentraDataSum: a list of observation data sets.
+                          [0: "local date",
+                           1: "time stamp",
+                           2: "solar radiation",
+                           3. "precipitation",
+                           4. "wind direction",
+                           5. "wind speed",
+                           6. "guest speed",
+                           7. "vapor pressure",
+                           8. "atmospheric pressure",
+                           9. "air temperature",
+                          10. "max precipitation Rate",
+                          11. "RH senor temperature",
+                          12. "VPD",
+                          13. "Relative Humidity",]
 
     """
 
@@ -166,26 +180,8 @@ def zentraReader(backTime, stationSN, token):
         VPD,
         RH,
     ]
-    zentraDataKeys = [
-        "local date",
-        "time stamp",
-        "solar radiation",
-        "precipitation",
-        "wind direction",
-        "wind speed",
-        "guest speed",
-        "vapor pressure",
-        "atmospheric pressure",
-        "air temperature",
-        "max precipitation Rate",
-        "RH senor temperature",
-        "VPD",
-        "Relative Humidity",
-    ]
 
-    zentraDataSet = dict(zip(zentraDataKeys, zentraDataSum))
-
-    return zentraDataSet
+    return zentraDataSum
 
 
 def authZentraCloud():
@@ -216,15 +212,15 @@ def dataBaseWriter(sn, backTime):
 
     # import data into DB
 
-    for i in range(len(zentraAtmos["local date"])):
+    for i in range(len(zentraAtmos[0])):
         zentraData = ZentraReading(
-            date=zentraAtmos["local date"][i],
+            date=zentraAtmos[0][i],
             device=zentraDevice,
-            precipitation=zentraAtmos["precipitation"][i],
-            relative_humidity=zentraAtmos["Relative Humidity"][i],
-            air_temperature=zentraAtmos["air temperature"][i],
-            wind_speed=zentraAtmos["wind speed"][i],
-            wind_direction=zentraAtmos["wind direction"][i],
+            precipitation=zentraAtmos[3][i],
+            relative_humidity=zentraAtmos[13][i],
+            air_temperature=zentraAtmos[9][i],
+            wind_speed=zentraAtmos[5][i],
+            wind_direction=zentraAtmos[4][i],
         )
 
         zentraData.save()
