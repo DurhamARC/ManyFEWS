@@ -31,18 +31,10 @@ def zentraReader(backTime, stationSN):
     )
     zentraData = readings.response
 
-    tStamp = []
-    solar = []
     precip = []
     wDirection = []
     wSpeed = []
-    gustSpeed = []
-    vaporPressure = []
-    atmosPressure = []
     airTem = []
-    maxPrecipRate = []
-    rhTemp = []
-    VPD = []
     convertedDate = []
     RH = []
 
@@ -50,16 +42,6 @@ def zentraReader(backTime, stationSN):
     for i in range(
         len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
     ):
-
-        tStamp.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][0]
-        )  # time stamp data
-
-        solar.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][0][
-                "value"
-            ]
-        )  # solar radiation, 'unit':' W/m²'
 
         precip.append(
             zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][1][
@@ -84,42 +66,6 @@ def zentraReader(backTime, stationSN):
                 "value"
             ]
         )  # wind speed, 'units': ' m/s'
-
-        vaporPressure.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][8][
-                "value"
-            ]
-        )  # vapor pressure, 'units': ' kPa'
-
-        atmosPressure.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][9][
-                "value"
-            ]
-        )  # Atmospheric Pressure, 'units': 'kPa'
-
-        VPD.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][14][
-                "value"
-            ]
-        )  # VPD, 'units': ' kPa'
-
-        rhTemp.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][13][
-                "value"
-            ]
-        )  # RH Senor Temp, 'units': ' °C'
-
-        gustSpeed.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][6][
-                "value"
-            ]
-        )  # Gust Speed, 'units': ' m/s'
-
-        maxPrecipRate.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][12][
-                "value"
-            ]
-        )  # Max Precip Rate, 'units': ' mm/h'
 
         # convert time stamp to Date
         ts = zentraData["device"]["timeseries"][0]["configuration"]["values"][i][
