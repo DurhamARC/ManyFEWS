@@ -21,7 +21,10 @@ ZENTRA_UN = env("zentra_un")
 ZENTRA_PW = env("zentra_pw")
 LAT_VALUE = env("latValue")
 LON_VALUE = env("lonValue")
-
+ZENTRA_BACKTIME = env("zentra_backtime")
+STATION_SN = env("station_SN")
+GEFS_TIME_STEP = env("gefs_timestep")
+GEFS_FORECAST_DAYS = env("gefs_forecastDays")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

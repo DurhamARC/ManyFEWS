@@ -191,6 +191,3 @@ def dataBaseWriter(dt, forecastDays):
         )
 
         gefsData.save()
-
-
-dataBaseWriter(dt=0.25, forecastDays=16)
