@@ -23,12 +23,12 @@ def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
                         here is an example of the parameter 'forecastHour' = 240.
 
     :param fileDate: the select date of file with format: YYYYMMDD (only three days back)
-    :param fileName: the name of GEFS file. ( e.g. geavg.t00z.pgrb2a.0p50.f240)
+    :param forecastHour: the number of hours into the future that the forecast is for.
     :param latValue: the latitude of the specific cell.
                     (the solution is 0.5 degree. range [-90, 90] with 0.5 interval)
     :param lonValue: the longtitue of the specific cell.
                     (the solution is 0.5 degree, range [-180, 180] with 0.5 interval)
-    :return: the GEFS data at the specific location and date.
+    :return: a tuple of values with GEFS data at the specific location and date.
                 0.Relative Humidity.
                 1.Maximum Temperature.
                 2.Minimum Temperature.
