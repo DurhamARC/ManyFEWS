@@ -19,6 +19,9 @@ environ.Env.read_env()
 
 ZENTRA_UN = env("zentra_un")
 ZENTRA_PW = env("zentra_pw")
+LAT_VALUE = env("latValue")
+LON_VALUE = env("lonValue")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

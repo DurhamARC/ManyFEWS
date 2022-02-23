@@ -1,4 +1,3 @@
-import urllib.error
 from urllib.request import urlretrieve
 import pygrib
 import numpy as np
@@ -6,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from .models import NoaaForecast
 from django.contrib.gis.geos import Point
 from retrying import retry
+from django.conf import settings
 
 # if report error, retrying 72 times (6 hours), sleep 300 seconds (5 minutes) between attempts
 @retry(stop_max_attempt_number=72, wait_fixed=300)
@@ -141,17 +141,13 @@ def cellIndexFinder(latitudeInfo, longitudeInfo, latValue, lonValue):
     return index
 
 
-def dataBaseWriter(dt, forecastDays, latValue, lonValue):
+def dataBaseWriter(dt, forecastDays):
     """
     This function is used to save data from gefs file into Database.
     ( calculations_noaaforecast table).
 
     :param dt: Specify time-step in days. ( the interval is every 0.125 day(3 hours))
     :param forecastDays: Number of Days into the future that the forecast is for.
-    :param latValue: the latitude of the specific cell.
-                    (the solution is 0.5 degree. range [-90, 90] with 0.5 interval)
-    :param lonValue: the longtidue of the specific cell.
-                    (the solution is 0.5 degree. range [-90, 90] with 0.5 interval)
     :return: none
     """
 
@@ -169,25 +165,20 @@ def dataBaseWriter(dt, forecastDays, latValue, lonValue):
     fileDate = downloadDate.strftime("%Y%m%d")
     date = datetime.astimezone(downloadDate, tz=timezone(timedelta(hours=0)))
 
-    #    GEFSdownloader(fileDate=fileDate,forecastHour=6,latValue=latValue,lonValue=lonValue,)
+    # get the lat & lon value of studying cell
+    latValue = float(settings.LAT_VALUE)
+    lonValue = float(settings.LON_VALUE)
 
     for i in range(loopRange):
         forceastHour = deltaHour + i * deltaHour
+        print(forceastHour)
         gefsData = GEFSdownloader(
             fileDate=fileDate,
             forecastHour=forceastHour,
             latValue=latValue,
             lonValue=lonValue,
         )
-        print(
-            forceastHour,
-            gefsData[0],
-            gefsData[1],
-            gefsData[2],
-            gefsData[3],
-            gefsData[4],
-            gefsData[5],
-        )
+
         gefsData = NoaaForecast(
             location=Point(latValue, lonValue),
             date=date,
@@ -202,4 +193,4 @@ def dataBaseWriter(dt, forecastDays, latValue, lonValue):
         gefsData.save()
 
 
-dataBaseWriter(dt=0.25, forecastDays=16, latValue=-80.5, lonValue=175)
+dataBaseWriter(dt=0.25, forecastDays=16)

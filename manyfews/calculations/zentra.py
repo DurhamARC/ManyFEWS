@@ -1,8 +1,8 @@
 from .models import ZentraReading
 from .models import ZentraDevice
 from zentra.api import ZentraReadings, ZentraToken
-from os import getenv
 from datetime import timedelta, timezone, datetime
+from django.conf import settings
 import math
 
 
@@ -23,7 +23,7 @@ def zentraReader(backTime, stationSN):
     startTime = datetime.now() - timedelta(days=backTime)
 
     # return authentication token for the Zentra cloud
-    token = ZentraToken(username=getenv("zentra_un"), password=getenv("zentra_pw"))
+    token = ZentraToken(username=settings.ZENTRA_UN, password=settings.ZENTRA_PW)
 
     # Get the readings for a device
     readings = ZentraReadings().get(
