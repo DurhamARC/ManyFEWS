@@ -6,35 +6,24 @@ from datetime import timedelta, timezone, datetime
 import math
 
 
-def zentraReader(backTime, stationSN, token):
+def zentraReader(backTime, stationSN):
 
     """
     This function is used to extract observation climate data from ZENTRA cloud: https://zentracloud.com/,
-    and output data sets into a dictionary.
+    and output data sets into Database ( calculations_zentrareading table)
 
     :param backTime: the back days number you want to extract (unit: day).
     :param stationSN: the serial number of meter station.
     :param token: authentication token.
-    :return zentraDataSum: a list of observation data sets.
-                          [0: "local date",
-                           1: "time stamp",
-                           2: "solar radiation",
-                           3. "precipitation",
-                           4. "wind direction",
-                           5. "wind speed",
-                           6. "guest speed",
-                           7. "vapor pressure",
-                           8. "atmospheric pressure",
-                           9. "air temperature",
-                          10. "max precipitation Rate",
-                          11. "RH senor temperature",
-                          12. "VPD",
-                          13. "Relative Humidity",]
+    :return none
 
     """
 
     # obtain start time ( 30 days before) and device's SN
     startTime = datetime.now() - timedelta(days=backTime)
+
+    # return authentication token for the Zentra cloud
+    token = ZentraToken(username=getenv("zentra_un"), password=getenv("zentra_pw"))
 
     # Get the readings for a device
     readings = ZentraReadings().get(
@@ -163,64 +152,16 @@ def zentraReader(backTime, stationSN, token):
 
         RH.append(rh)
 
-    # output data sets into a dictionary
-    zentraDataSum = [
-        convertedDate,
-        tStamp,
-        solar,
-        precip,
-        wDirection,
-        wSpeed,
-        gustSpeed,
-        vaporPressure,
-        atmosPressure,
-        airTem,
-        maxPrecipRate,
-        rhTemp,
-        VPD,
-        RH,
-    ]
-
-    return zentraDataSum
-
-
-def authZentraCloud():
-    """
-    This function is used to return authentication token for the Zentra cloud.
-    Username & password should be defined as environment parameters.
-
-    :return: authentication token.
-    """
-
-    # authentication into the Zentra Cloud API
-    token = ZentraToken(username=getenv("zentra_un"), password=getenv("zentra_pw"))
-
-    return token
-
-
-def dataBaseWriter(sn, backTime):
-    """
-    This function is used to save data from zentra cloud into
-    Database ( calculations_zentrareading table)
-    :param sn: met station Serial number
-    :param backTime: the back days number you want to extract (unit: day).
-    :return: none
-    """
-
-    # extract data from met station
-    zentraAtmos = zentraReader(backTime, sn, authZentraCloud())
-
     # import data into DB
-
-    for i in range(len(zentraAtmos[0])):
+    for i in range(len(convertedDate)):
         zentraData = ZentraReading(
-            date=zentraAtmos[0][i],
+            date=convertedDate[i],
             device=zentraDevice,
-            precipitation=zentraAtmos[3][i],
-            relative_humidity=zentraAtmos[13][i],
-            air_temperature=zentraAtmos[9][i],
-            wind_speed=zentraAtmos[5][i],
-            wind_direction=zentraAtmos[4][i],
+            precipitation=precip[i],
+            relative_humidity=RH[i],
+            air_temperature=airTem[i],
+            wind_speed=wSpeed[i],
+            wind_direction=wDirection[i],
         )
 
         zentraData.save()
@@ -232,4 +173,4 @@ sn = zentraDevice.device_sn
 
 # save into Data base
 backTime = 0.5
-dataBaseWriter(sn, backTime)
+zentraReader(backTime=backTime, stationSN=sn)
