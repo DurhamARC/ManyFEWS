@@ -8,7 +8,6 @@ from django.conf import settings
 
 app = Celery()
 
-
 import logging
 
 logger = logging.getLogger(__name__)
