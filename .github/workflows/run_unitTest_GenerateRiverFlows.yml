@@ -49,5 +49,8 @@ jobs:
           python manage.py migrate
         working-directory: manyfews
       - name: Run Django tests
+        env:
+          zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
+          zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
         run: python manage.py test
         working-directory: manyfews
