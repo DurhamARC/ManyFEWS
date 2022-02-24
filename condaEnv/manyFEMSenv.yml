@@ -18,6 +18,6 @@ dependencies:
   - pip:
     - django-geojson==3.2.0
     - django-environ
-    - retry
-    - git+https://github.com/mt-climate-office/Zentra-APIgit+https://github.com/mt-climate-office/Zentra-API
+    - git+https://github.com/mt-climate-office/Zentra-API
+    - pygrib
 prefix: /usr/local/Caskroom/miniconda/base/envs/ManyFEWS

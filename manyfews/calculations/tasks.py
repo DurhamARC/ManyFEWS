@@ -49,3 +49,6 @@ def prepareZentra():
     backTime = float(settings.ZENTRA_BACKTIME)
 
     zentraReader(backTime=backTime, stationSN=sn)
+
+
+# prepareGEFS()
