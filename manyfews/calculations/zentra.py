@@ -19,7 +19,6 @@ def zentraReader(backTime, stationSN):
 
     """
 
-
     # obtain start time ( 30 days before) and device's SN
     startTime = datetime.now() - timedelta(days=backTime)
 

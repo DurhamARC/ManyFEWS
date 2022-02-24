@@ -6,7 +6,6 @@ from .gefs import dataBaseWriter
 from django.conf import settings
 
 
-
 app = Celery()
 
 import logging
@@ -48,5 +47,3 @@ def prepareZentra():
     backTime = float(settings.ZENTRA_BACKTIME)
 
     zentraReader(backTime=backTime, stationSN=stationSN)
-
-
