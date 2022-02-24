@@ -43,7 +43,7 @@ Make sure you have the following installed:
 
 6. Register a Zentra Cloud account.
    1. Sign up for an account on: `https://zentracloud.com/accounts/login/`;
-   2. Then contact Prof.Sim (sim.reaney@dur.ac.uk) to add your account to the Durham University organization.
+   2. Then contact the administrator for your Zentra Cloud organisation to add your user account to the organisation.
 
 
 7. Set up environment variables in Django.  
