@@ -3,8 +3,9 @@ from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
-from .models import ZentraDevice
 from django.conf import settings
+
+
 
 app = Celery()
 
@@ -42,13 +43,10 @@ def prepareZentra():
 
     # prepare Zentra Cloud data
     stationSN = settings.STATION_SN
-    zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
-    sn = zentraDevice.device_sn
 
     # save into Data base
     backTime = float(settings.ZENTRA_BACKTIME)
 
-    zentraReader(backTime=backTime, stationSN=sn)
+    zentraReader(backTime=backTime, stationSN=stationSN)
 
 
-# prepareGEFS()

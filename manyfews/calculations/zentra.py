@@ -2,6 +2,7 @@ from .models import ZentraReading
 from zentra.api import ZentraReadings, ZentraToken
 from datetime import timedelta, timezone, datetime
 from django.conf import settings
+from .models import ZentraDevice
 import math
 
 
@@ -17,6 +18,7 @@ def zentraReader(backTime, stationSN):
     :return none
 
     """
+
 
     # obtain start time ( 30 days before) and device's SN
     startTime = datetime.now() - timedelta(days=backTime)
@@ -96,6 +98,8 @@ def zentraReader(backTime, stationSN):
             rh = 0
 
         RH.append(rh)
+
+    zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
 
     # import data into DB
     for i in range(len(convertedDate)):
