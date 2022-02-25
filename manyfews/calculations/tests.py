@@ -25,3 +25,11 @@ class WeatherImportTests(TestCase):
         # Check that they all relate to our device
         for reading in readings:
             assert reading.device == zentraDevice
+
+    def test_fetch_from_GEFS(self):
+        # Check that the prepareGEFS task can run and adds some records to the db
+        prepareGEFS()
+
+        # Check that there are readings in the database
+        readings = NoaaForecast.objects.all()
+        assert len(readings) > 63
