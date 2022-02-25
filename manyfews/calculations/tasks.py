@@ -40,10 +40,11 @@ def prepareZentra():
     into Database for running the River Flows model
     """
 
-    # prepare Zentra Cloud data
+    # get serial number
     stationSN = settings.STATION_SN
 
     # save into Data base
     backTime = float(settings.ZENTRA_BACKTIME)
 
+    # prepare Zentra Cloud data
     zentraReader(backTime=backTime, stationSN=stationSN)
