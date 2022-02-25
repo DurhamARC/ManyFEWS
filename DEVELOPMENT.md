@@ -35,19 +35,37 @@ Make sure you have the following installed:
    Enter it again: manyfews
    $ createdb manyfews -O manyfews
    $ psql manyfews
+   > ALTER ROLE manyfews CREATEDB SUPERUSER NOCREATEROLE;
    > CREATE EXTENSION postgis;
    ```
 
    Exit the postgresql shell using Ctrl-D or typing `\q`.
 
-7. Run the django database migrations to set up the database:
+
+6. Register a Zentra Cloud account.
+   1. Sign up for an account on: `https://zentracloud.com/accounts/login/`;
+   2. Then contact the administrator for your Zentra Cloud organisation to add your user account to the organisation.
+
+
+7. Set up environment variables in Django.  
+   ```bash
+   $ cd manyfews
+   $ vi .env.CI
+   > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
+   > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
+   > Save and quit.
+   $ cp .env.CI .env
+   $ cd ..
+   ```
+
+8. Run the django database migrations to set up the database:
 
    ```bash
    cd manyfews
    python manage.py migrate
    ```
 
-8. Create an admin user (still in the `manyfews` directory):
+9. Create an admin user (still in the `manyfews` directory):
 
    ```bash
    python manage.py createsuperuser
@@ -55,23 +73,23 @@ Make sure you have the following installed:
 
    (Follow the prompts to add a username, email and password.)
 
-9. Run the django app in development mode (still in the `manyfews` directory):
+10. Run the django app in development mode (still in the `manyfews` directory):
 
-   ```bash
-   python manage.py runserver
-   ```
+    ```bash
+    python manage.py runserver
+    ```
 
-   Go to http://127.0.0.1:8000/ and check that the app works.
+    Go to http://127.0.0.1:8000/ and check that the app works.
 
-10. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
+11. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
 
     ```bash
     celery -A manyfews worker -B -l DEBUG --scheduler django_celery_beat.schedulers:DatabaseScheduler
     ```
 
-11. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
+12. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
 
-12. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
+13. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
 
 
 ## Making model changes

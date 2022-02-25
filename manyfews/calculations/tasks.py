@@ -1,6 +1,10 @@
 from celery import Celery, shared_task
 from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from .zentra import zentraReader
+from .gefs import dataBaseWriter
+from django.conf import settings
+
 
 app = Celery()
 
@@ -15,3 +19,32 @@ def hello_celery():
     This is an example of a task that can be scheduled via celery.
     """
     logger.info("Hello logging from celery!")
+
+
+@shared_task(name="calculations.prepareGEFS")
+def prepareGEFS():
+    """
+    This function is developed to extract necessary GEFS forecast data sets
+    into Database for running the River Flows model
+    """
+    # prepare GEFS data
+    dt = float(settings.GEFS_TIME_STEP)
+    forecastDays = int(settings.GEFS_FORECAST_DAYS)
+    dataBaseWriter(dt=dt, forecastDays=forecastDays)
+
+
+@shared_task(name="calculations.prepareZentra")
+def prepareZentra():
+    """
+    This function is developed to extract necessary Zentra cloud observation data sets
+    into Database for running the River Flows model
+    """
+
+    # get serial number
+    stationSN = settings.STATION_SN
+
+    # save into Data base
+    backTime = float(settings.ZENTRA_BACKTIME)
+
+    # prepare Zentra Cloud data
+    zentraReader(backTime=backTime, stationSN=stationSN)

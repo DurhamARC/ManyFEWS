@@ -44,8 +44,13 @@ jobs:
         run: |
           pytest ./test_manyFEMS/unit/test_GeneraterRiverFlow/test_GenerateRiverFlows.py
       - name: Run Django migrations
-        run: python manage.py migrate
+        run: |
+          cp ./manyfews/.env.CI ./manyfews/.env
+          python manage.py migrate
         working-directory: manyfews
       - name: Run Django tests
+        env:
+          zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
+          zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
         run: python manage.py test
         working-directory: manyfews
