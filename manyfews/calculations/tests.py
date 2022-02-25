@@ -5,6 +5,8 @@ from django.test import TestCase
 from .models import ZentraDevice
 from .models import ZentraReading
 from .tasks import prepareZentra
+from .tasks import prepareGEFS
+from .models import NoaaForecast
 
 from django.test import TestCase
 
