@@ -34,4 +34,4 @@ class WeatherImportTests(TestCase):
 
         # Check that there are readings in the database
         readings = NoaaForecast.objects.all()
-        assert len(readings) > 63
+        assert len(readings) == 64
