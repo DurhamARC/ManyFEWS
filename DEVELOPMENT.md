@@ -35,6 +35,7 @@ Make sure you have the following installed:
    Enter it again: manyfews
    $ createdb manyfews -O manyfews
    $ psql manyfews
+   > ALTER ROLE manyfews CREATEDB SUPERUSER NOCREATEROLE;
    > CREATE EXTENSION postgis;
    ```
 
@@ -49,8 +50,8 @@ Make sure you have the following installed:
 7. Set up environment variables in Django.  
    ```bash
    $ cd manyfews
-   $ vi .env.CI 
-   > replace 'zentraCloudUserName' with your user name of your Zentra cloud account. 
+   $ vi .env.CI
+   > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
    > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
    > Save and quit.
    $ cp .env.CI .env
