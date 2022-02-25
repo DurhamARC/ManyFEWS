@@ -2,11 +2,8 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 # Create your tests here.
-from .models import ZentraDevice
-from .models import ZentraReading
-from .tasks import prepareZentra
-from .tasks import prepareGEFS
-from .models import NoaaForecast
+from .models import ZentraDevice, ZentraReading, NoaaForecast
+from .tasks import prepareZentra, prepareGEFS
 
 from django.test import TestCase
 
