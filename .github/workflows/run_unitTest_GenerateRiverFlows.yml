@@ -50,6 +50,7 @@ jobs:
         working-directory: manyfews
       - name: Run the django app in development mode
         run: python manage.py runserver
+        working-directory: manyfews
       - name: Run Django tests
         env:
           zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
