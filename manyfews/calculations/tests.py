@@ -32,3 +32,8 @@ class WeatherImportTests(TestCase):
         # Check that there are readings in the database
         readings = NoaaForecast.objects.all()
         assert len(readings) == 64
+
+
+# class ModelCalculationTests(TestCase):
+# def test_calculation_GenerateRiverFlow(self):
+# Check that the accuracy of river flow model
