@@ -31,4 +31,9 @@ class NoaaForecast(models.Model):
     relative_humidity = models.FloatField(default=0)
 
 
-# Should we convert Noaa/Zentra data to the same format before storing?
+class InitialCondition(models.Model):
+    date = models.DateTimeField()
+    location = models.PointField(default=Point(0, 0))
+    storage_level = models.FloatField()
+    slow_flow_rate = models.FloatField()
+    fast_flow_rate = models.FloatField()
