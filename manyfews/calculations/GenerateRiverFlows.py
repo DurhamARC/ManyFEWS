@@ -1,10 +1,9 @@
 import os
 import xlrd
 import numpy as np
-from datetime import datetime, timedelta, timezone
 from django.contrib.gis.geos import Point
-from .models import NoaaForecast
-from .models import InitialCondition
+from datetime import datetime, timedelta, timezone
+from .models import NoaaForecast, InitialCondition
 
 
 def excel_to_matrix(path, sheetNum):
@@ -53,7 +52,7 @@ def prepare_test_GEFS():
             wind_v=gefsData[i, 4],
             precipitation=gefsData[i, 5],
         )
-    testGefsData.save()
+        testGefsData.save()
 
 
 def prepare_test_initialCondition():
@@ -88,6 +87,9 @@ def prepare_test_initialCondition():
 
 
 # prepare testing GEFS data for model.
+prepare_test_GEFS()
 
 # prepare initial conditions for model.
+prepare_test_initialCondition()
+
 # import parameters for model.
