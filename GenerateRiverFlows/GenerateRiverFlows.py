@@ -229,6 +229,7 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     beginDate = date(2010, 1, 1)
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
     J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
+    # J = beginDateNum + np.arange(0, 16, dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
     dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
@@ -394,9 +395,6 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     CatArea = 212.2640  # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
-    # currentPath = os.getcwd()
-    # parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
-
     X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
