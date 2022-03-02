@@ -404,10 +404,17 @@ def excel_to_matrix(path, sheetNum):
     return datamatrix
 
 
-def prepare_test_GEFS():
+def prepare_test_Data():
     """
-    This function is used to import test GEFS data into database.
-    It will read data from GEFS xlrd file.
+    This function is used to import test GEFS and initial condition data into database.
+
+    1. For GEFS: It will read data from GEFS xlrd file (GEFSdata) in Data directory.
+    2. For initial condition: It will read data from csv file ( 'RainfallRunoffModelInitialConditions.csv')
+    in Data directory.
+
+    return: a tuple of test information, which includes: test date and test location.
+            [0]: test date
+            [1]: test location
     """
 
     projectPath = os.path.abspath(
@@ -416,17 +423,28 @@ def prepare_test_GEFS():
 
     dataFileDirPath = os.path.join(projectPath, "Data")
     GefsDataFile = os.path.join(dataFileDirPath, "GEFSdata.xlsx")
-    sheetNum = 16
-    gefsData = excel_to_matrix(GefsDataFile, sheetNum)
+    InitialConditionFile = os.path.join(
+        dataFileDirPath, "RainfallRunoffModelInitialConditions.csv"
+    )
+
+    # prepare test date information
     testDate = datetime(
         year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
     )
     date = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
 
+    # prepare test location information (fake)
+    testLocation = Point(0, 0)
+
+    # prepare test GEFS data
+    sheetNum = 16
+    gefsData = excel_to_matrix(GefsDataFile, sheetNum)
+
+    # save into DB ( 'calculations_noaaforecast' table)
     for i in range(len(gefsData[:, 0])):
         testGefsData = NoaaForecast(
             date=date,
-            location=Point(0, 0),
+            location=testLocation,
             relative_humidity=gefsData[i, 0],
             min_temperature=gefsData[i, 2],
             max_temperature=gefsData[i, 1],
@@ -436,30 +454,14 @@ def prepare_test_GEFS():
         )
         testGefsData.save()
 
-
-def prepare_test_initialCondition():
-    """
-    This function is used to import test initial condition data into database.
-    It will read data from 'RainfallRunoffModelInitialConditions' file.
-    """
-
-    projectPath = os.path.abspath(
-        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
-    )
-    dataFileDirPath = os.path.join(projectPath, "Data")
-    InitialConditionFile = os.path.join(
-        dataFileDirPath, "RainfallRunoffModelInitialConditions.csv"
-    )
+    # prepare initial condition data
     F0 = np.loadtxt(open(InitialConditionFile), delimiter=",", usecols=range(3))
-    testDate = datetime(
-        year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
-    )
-    date = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
 
+    # save into DB ( 'calculations_initialcondition' table)
     for i in range(len(F0[:, 0])):
         testInitialCondition = InitialCondition(
             date=date,
-            location=Point(0, 0),
+            location=testLocation,
             storage_level=F0[i, 0],
             slow_flow_rate=F0[i, 1],
             fast_flow_rate=F0[i, 2],
@@ -467,65 +469,79 @@ def prepare_test_initialCondition():
 
         testInitialCondition.save()
 
-
-# prepare initial conditions for model.
-initialConditions = InitialCondition.objects.filter(date__year=2010).filter(
-    location=Point(0, 0)
-)
-
-slowFlowRate = list(initialConditions.values("slow_flow_rate"))
-fastFlowRate = list(initialConditions.values("fast_flow_rate"))
-storageLevel = list(initialConditions.values("storage_level"))
-
-slowFlowRateList = []
-fastFlowRateList = []
-storageLevelList = []
-
-for i in range(len(initialConditions)):
-    slowFlowRateList.append(slowFlowRate[i]["slow_flow_rate"])
-    fastFlowRateList.append(fastFlowRate[i]["fast_flow_rate"])
-    storageLevelList.append(storageLevel[i]["storage_level"])
-
-initialConditionsList = list(zip(slowFlowRateList, fastFlowRateList, storageLevelList))
-intialConditionData = np.array(initialConditionsList)
+    return testDate, testLocation
 
 
-# prepare testing GEFS data for model.
-gefs = NoaaForecast.objects.filter(date__year=2010).filter(location=Point(0, 0))
-
-RH = list(gefs.values("relative_humidity"))
-minTemperature = list(gefs.values("min_temperature"))
-maxTemperature = list(gefs.values("max_temperature"))
-uWind = list(gefs.values("wind_u"))
-vWind = list(gefs.values("wind_v"))
-precipitation = list(gefs.values("precipitation"))
-
-RHList = []
-minTemperaturelist = []
-maxTemperatureList = []
-uWindList = []
-vWindList = []
-precipitationList = []
-
-for i in range(len(gefs)):
-    RHList.append(RH[i]["relative_humidity"])
-    minTemperaturelist.append(minTemperature[i]["min_temperature"])
-    maxTemperatureList.append(maxTemperature[i]["max_temperature"])
-    uWindList.append(uWind[i]["wind_u"])
-    vWindList.append(vWind[i]["wind_v"])
-    precipitationList.append(precipitation[i]["precipitation"])
-
-gefsList = list(
-    zip(
-        RHList,
-        maxTemperatureList,
-        minTemperaturelist,
-        uWindList,
-        vWindList,
-        precipitationList,
+def prepareInitialCondition(date, location):
+    # prepare initial conditions for model.
+    initialConditions = InitialCondition.objects.filter(date=date).filter(
+        location=location
     )
-)
-gefsData = np.array(gefsList)
+
+    slowFlowRate = list(initialConditions.values("slow_flow_rate"))
+    fastFlowRate = list(initialConditions.values("fast_flow_rate"))
+    storageLevel = list(initialConditions.values("storage_level"))
+
+    slowFlowRateList = []
+    fastFlowRateList = []
+    storageLevelList = []
+
+    for i in range(len(initialConditions)):
+        slowFlowRateList.append(slowFlowRate[i]["slow_flow_rate"])
+        fastFlowRateList.append(fastFlowRate[i]["fast_flow_rate"])
+        storageLevelList.append(storageLevel[i]["storage_level"])
+
+    initialConditionsList = list(
+        zip(slowFlowRateList, fastFlowRateList, storageLevelList)
+    )
+    intialConditionData = np.array(initialConditionsList)
+
+    return intialConditionData
+
+
+def prepareGEFSdata(date, location):
+    # prepare testing GEFS data for model.
+    gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
+
+    RH = list(gefs.values("relative_humidity"))
+    minTemperature = list(gefs.values("min_temperature"))
+    maxTemperature = list(gefs.values("max_temperature"))
+    uWind = list(gefs.values("wind_u"))
+    vWind = list(gefs.values("wind_v"))
+    precipitation = list(gefs.values("precipitation"))
+
+    RHList = []
+    minTemperaturelist = []
+    maxTemperatureList = []
+    uWindList = []
+    vWindList = []
+    precipitationList = []
+
+    for i in range(len(gefs)):
+        RHList.append(RH[i]["relative_humidity"])
+        minTemperaturelist.append(minTemperature[i]["min_temperature"])
+        maxTemperatureList.append(maxTemperature[i]["max_temperature"])
+        uWindList.append(uWind[i]["wind_u"])
+        vWindList.append(vWind[i]["wind_v"])
+        precipitationList.append(precipitation[i]["precipitation"])
+
+    gefsList = list(
+        zip(
+            RHList,
+            maxTemperatureList,
+            minTemperaturelist,
+            uWindList,
+            vWindList,
+            precipitationList,
+        )
+    )
+    gefsData = np.array(gefsList)
+
+    return gefsData
+
+
+testDate = prepare_test_Data()[0]
+testLocation = prepare_test_Data()[1]
 
 projectPath = os.path.abspath(
     os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
@@ -535,7 +551,10 @@ dataFileDirPath = os.path.join(projectPath, "Data")
 parametersFilePath = os.path.join(dataFileDirPath, "RainfallRunoffModelParameters.csv")
 
 
-t0 = date.toordinal(date(2010, 1, 1)) + 366
+# t0 = date.toordinal(date(2010, 1, 1)) + 366
+
+gefsData = prepareGEFSdata(date=testDate, location=testLocation)
+intialConditionData = prepareInitialCondition(date=testDate, location=testLocation)
 
 riverFlowsData = GenerateRiverFlows(
     t0=t0,
@@ -543,3 +562,8 @@ riverFlowsData = GenerateRiverFlows(
     F0=intialConditionData,
     parametersFilePath=parametersFilePath,
 )
+
+print(riverFlowsData[0])
+
+
+# testInfo = prepare_test_Data()
