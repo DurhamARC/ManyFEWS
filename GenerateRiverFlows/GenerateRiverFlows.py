@@ -229,7 +229,7 @@ def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
     beginDate = date(2010, 1, 1)
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
     # J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
-    J = beginDateNum + np.arange(0, 16, dt)
+    J = beginDateNum + np.arange(0, ((np.size(Tmax[:])) / 4), dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
     dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
@@ -346,9 +346,6 @@ def GenerateRiverFlows(gefsData, F0, parametersFilePath):
 
     # Determine number of data points
     N = np.size(gefsData[:, 1])
-
-    # Specify date number
-    # t = t0 + np.arange(0, N / 4, dt)
 
     # Get relative humidity (%)
     RH = gefsData[:, 0]
