@@ -551,7 +551,7 @@ dataFileDirPath = os.path.join(projectPath, "Data")
 parametersFilePath = os.path.join(dataFileDirPath, "RainfallRunoffModelParameters.csv")
 
 
-# t0 = date.toordinal(date(2010, 1, 1)) + 366
+t0 = date.toordinal(date(2010, 1, 1)) + 366
 
 gefsData = prepareGEFSdata(date=testDate, location=testLocation)
 intialConditionData = prepareInitialCondition(date=testDate, location=testLocation)
