@@ -24,9 +24,7 @@ InitialConditionFilePath = os.path.join(
 )
 parametersFilePath = os.path.join(dataFileDirPath, "RainfallRunoffModelParameters.csv")
 F0 = np.loadtxt(open(InitialConditionFilePath), delimiter=",", usecols=range(3))
-riverFlowsData = GenerateRiverFlows.GenerateRiverFlows(
-    t0, gefsData, F0, parametersFilePath
-)
+riverFlowsData = GenerateRiverFlows.GenerateRiverFlows(gefsData, F0, parametersFilePath)
 
 # "riverFlowsData" is a data tuple, which:
 # riverFlowsData[0] ====> Q

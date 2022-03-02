@@ -169,7 +169,7 @@ def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
     return qro, qd, Ea, S
 
 
-def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
+def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Ensure Tmax > Tmin
     Tmax = np.maximum(Tmax, Tmin)
@@ -228,8 +228,8 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     # Determine day of the year as a number from 1 to 365
     beginDate = date(2010, 1, 1)
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
-    J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
-    # J = beginDateNum + np.arange(0, 16, dt)
+    # J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
+    J = beginDateNum + np.arange(0, 16, dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
     dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
@@ -315,7 +315,7 @@ def excel_to_matrix(path, sheetNum):
     return datamatrix
 
 
-def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
+def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
@@ -348,7 +348,7 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     N = np.size(gefsData[:, 1])
 
     # Specify date number
-    t = t0 + np.arange(0, N / 4, dt)
+    # t = t0 + np.arange(0, N / 4, dt)
 
     # Get relative humidity (%)
     RH = gefsData[:, 0]
@@ -398,7 +398,7 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
-    fa056OutputData = FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH)
+    fa056OutputData = FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH)
 
     # "fa056OutputData" is a data tuple, which:
     # fa056OutputData[0] ====> Ep
@@ -415,4 +415,4 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     Q = modelfunOutputData[0]
     F0 = modelfunOutputData[1]
 
-    return Q, t, qp, Ep
+    return Q, qp, Ep
