@@ -1,5 +1,5 @@
 import os
-import xlrd
+
 import math
 import numpy as np
 from django.contrib.gis.geos import Point

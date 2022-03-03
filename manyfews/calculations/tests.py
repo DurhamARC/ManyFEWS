@@ -7,6 +7,7 @@ from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
 
 from django.test import TestCase
 import numpy as np
+import xlrd
 import os
 
 
