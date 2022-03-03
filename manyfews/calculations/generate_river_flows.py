@@ -448,13 +448,21 @@ def prepareGEFSdata(date, location):
     vWindList = []
     precipitationList = []
 
-    for i in range(len(gefs)):
-        RHList.append(RH[i]["relative_humidity"])
-        minTemperaturelist.append(minTemperature[i]["min_temperature"])
-        maxTemperatureList.append(maxTemperature[i]["max_temperature"])
-        uWindList.append(uWind[i]["wind_u"])
-        vWindList.append(vWind[i]["wind_v"])
-        precipitationList.append(precipitation[i]["precipitation"])
+    #    for i in range(len(gefs)):
+    #        RHList.append(RH[i]["relative_humidity"])
+    #        minTemperaturelist.append(minTemperature[i]["min_temperature"])
+    #        maxTemperatureList.append(maxTemperature[i]["max_temperature"])
+    #        uWindList.append(uWind[i]["wind_u"])
+    #        vWindList.append(vWind[i]["wind_v"])
+    #        precipitationList.append(precipitation[i]["precipitation"])
+
+    for forecast in gefs:
+        RHList.append(forecast.relative_humidity)
+        minTemperatureList.append(forecast.min_temperature)
+        maxTemperatureList.append(forecast.max_temperature)
+        uWindList.append(forecast.wind_u)
+        vWindList.append(forecast.wind_v)
+        precipitationList.append(forecast.precipitation)
 
     gefsList = list(
         zip(
