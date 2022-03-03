@@ -386,6 +386,14 @@ def GenerateRiverFlows(gefsData, F0, parametersFilePath):
 
 
 def excel_to_matrix(path, sheetNum):
+    """
+    This function is used to convert data form from excel (.xlsx) into a Numpy array.
+
+    :param path: the absolute path of the excel file.
+    :param sheetNum: the sheet number of the table in the excel file.
+
+    """
+
     table = xlrd.open_workbook(path).sheets()[sheetNum]
     row = table.nrows
     col = table.ncols
