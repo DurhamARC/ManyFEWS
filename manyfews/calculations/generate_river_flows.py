@@ -399,19 +399,23 @@ def prepareInitialCondition(date, location):
         location=location
     )
 
-    slowFlowRate = list(initialConditions.values("slow_flow_rate"))
-    fastFlowRate = list(initialConditions.values("fast_flow_rate"))
-    storageLevel = list(initialConditions.values("storage_level"))
+    #    slowFlowRate = list(initialConditions.values("slow_flow_rate"))
+    #    fastFlowRate = list(initialConditions.values("fast_flow_rate"))
+    #    storageLevel = list(initialConditions.values("storage_level"))
 
     slowFlowRateList = []
     fastFlowRateList = []
     storageLevelList = []
 
-    for i in range(len(initialConditions)):
-        slowFlowRateList.append(slowFlowRate[i]["slow_flow_rate"])
-        fastFlowRateList.append(fastFlowRate[i]["fast_flow_rate"])
-        storageLevelList.append(storageLevel[i]["storage_level"])
+    #    for i in range(len(initialConditions)):
+    #        slowFlowRateList.append(slowFlowRate[i]["slow_flow_rate"])
+    #        fastFlowRateList.append(fastFlowRate[i]["fast_flow_rate"])
+    #        storageLevelList.append(storageLevel[i]["storage_level"])
 
+    for data in initialConditions:
+        slowFlowRateList.append(data.slow_flow_rate)
+        fastFlowRateList.append(data.fast_flow_rate)
+        storageLevelList.append(data.storage_level)
     initialConditionsList = list(
         zip(storageLevelList, slowFlowRateList, fastFlowRateList)
     )
@@ -434,12 +438,12 @@ def prepareGEFSdata(date, location):
     # prepare testing GEFS data for model.
     gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
 
-    RH = list(gefs.values("relative_humidity"))
-    minTemperature = list(gefs.values("min_temperature"))
-    maxTemperature = list(gefs.values("max_temperature"))
-    uWind = list(gefs.values("wind_u"))
-    vWind = list(gefs.values("wind_v"))
-    precipitation = list(gefs.values("precipitation"))
+    #    RH = list(gefs.values("relative_humidity"))
+    #    minTemperature = list(gefs.values("min_temperature"))
+    #    maxTemperature = list(gefs.values("max_temperature"))
+    #    uWind = list(gefs.values("wind_u"))
+    #    vWind = list(gefs.values("wind_v"))
+    #    precipitation = list(gefs.values("precipitation"))
 
     RHList = []
     minTemperatureList = []
