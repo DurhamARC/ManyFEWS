@@ -4,7 +4,7 @@ from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
 from django.conf import settings
-from .GenerateRiverFlows import (
+from .generate_river_flows import (
     prepareGEFSdata,
     prepareInitialCondition,
     GenerateRiverFlows,
