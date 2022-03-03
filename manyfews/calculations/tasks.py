@@ -82,10 +82,10 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
     )
 
     gefsData = prepareGEFSdata(date=dataDate, location=dataLocation)
-    intialConditionData = prepareInitialCondition(date=dataDate, location=dataLocation)
+    initialConditionData = prepareInitialCondition(date=dataDate, location=dataLocation)
     riverFlowsData = GenerateRiverFlows(
         gefsData=gefsData,
-        F0=intialConditionData,
+        F0=initialConditionData,
         parametersFilePath=parametersFilePath,
     )
 
