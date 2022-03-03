@@ -6,6 +6,7 @@ from .models import ZentraDevice, ZentraReading, NoaaForecast
 from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
 from .GenerateRiverFlows import prepare_test_Data
 from django.test import TestCase
+import numpy as np
 import os
 
 
