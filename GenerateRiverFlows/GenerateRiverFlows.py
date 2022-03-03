@@ -298,23 +298,6 @@ def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
     return ETo, E0
 
 
-# Import GEFS weather data. (please notice here, the start sheet‘s number is "0")
-def excel_to_matrix(path, sheetNum):
-    table = xlrd.open_workbook(path).sheets()[sheetNum]
-    row = table.nrows
-    col = table.ncols
-    datamatrix = np.zeros((row, col))  # ignore the first title row.
-    for x in range(1, row):
-        #        row = np.matrix(table.row_values(x))
-        #        print(type(row))
-        row = np.array(table.row_values(x))
-        datamatrix[x, :] = row
-    datamatrix = np.delete(
-        datamatrix, 0, axis=0
-    )  # Delete the first blank line.(Its elements are all zero)
-    return datamatrix
-
-
 def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
@@ -413,3 +396,20 @@ def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     F0 = modelfunOutputData[1]
 
     return Q, qp, Ep
+
+
+# Import GEFS weather data. (please notice here, the start sheet‘s number is "0")
+def excel_to_matrix(path, sheetNum):
+    table = xlrd.open_workbook(path).sheets()[sheetNum]
+    row = table.nrows
+    col = table.ncols
+    datamatrix = np.zeros((row, col))  # ignore the first title row.
+    for x in range(1, row):
+        #        row = np.matrix(table.row_values(x))
+        #        print(type(row))
+        row = np.array(table.row_values(x))
+        datamatrix[x, :] = row
+    datamatrix = np.delete(
+        datamatrix, 0, axis=0
+    )  # Delete the first blank line.(Its elements are all zero)
+    return datamatrix

@@ -156,7 +156,7 @@ def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
     return qro, qd, Ea, S
 
 
-def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
+def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Ensure Tmax > Tmin
     Tmax = np.maximum(Tmax, Tmin)
@@ -215,8 +215,8 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     # Determine day of the year as a number from 1 to 365
     beginDate = date(2010, 1, 1)
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
-    J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
-    # J = beginDateNum + np.arange(0, 16, dt)
+    # J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
+    J = beginDateNum + np.arange(0, ((np.size(Tmax[:])) / 4), dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
     dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
@@ -285,7 +285,7 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     return ETo, E0
 
 
-def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
+def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
@@ -316,9 +316,6 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
 
     # Determine number of data points
     N = np.size(gefsData[:, 1])
-
-    # Specify date number
-    t = t0 + np.arange(0, N / 4, dt)
 
     # Get relative humidity (%)
     RH = gefsData[:, 0]
@@ -368,7 +365,7 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
-    fa056OutputData = FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH)
+    fa056OutputData = FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH)
 
     # "fa056OutputData" is a data tuple, which:
     # fa056OutputData[0] ====> Ep
@@ -385,7 +382,7 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     Q = modelfunOutputData[0]
     F0 = modelfunOutputData[1]
 
-    return Q, t, qp, Ep
+    return Q, qp, Ep
 
 
 def excel_to_matrix(path, sheetNum):
@@ -538,32 +535,3 @@ def prepareGEFSdata(date, location):
     gefsData = np.array(gefsList)
 
     return gefsData
-
-
-testDate = prepare_test_Data()[0]
-testLocation = prepare_test_Data()[1]
-
-projectPath = os.path.abspath(
-    os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
-)
-
-dataFileDirPath = os.path.join(projectPath, "Data")
-parametersFilePath = os.path.join(dataFileDirPath, "RainfallRunoffModelParameters.csv")
-
-
-t0 = date.toordinal(date(2010, 1, 1)) + 366
-
-gefsData = prepareGEFSdata(date=testDate, location=testLocation)
-intialConditionData = prepareInitialCondition(date=testDate, location=testLocation)
-
-riverFlowsData = GenerateRiverFlows(
-    t0=t0,
-    gefsData=gefsData,
-    F0=intialConditionData,
-    parametersFilePath=parametersFilePath,
-)
-
-print(riverFlowsData[0])
-
-
-# testInfo = prepare_test_Data()
