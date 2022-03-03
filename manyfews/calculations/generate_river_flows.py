@@ -399,18 +399,9 @@ def prepareInitialCondition(date, location):
         location=location
     )
 
-    #    slowFlowRate = list(initialConditions.values("slow_flow_rate"))
-    #    fastFlowRate = list(initialConditions.values("fast_flow_rate"))
-    #    storageLevel = list(initialConditions.values("storage_level"))
-
     slowFlowRateList = []
     fastFlowRateList = []
     storageLevelList = []
-
-    #    for i in range(len(initialConditions)):
-    #        slowFlowRateList.append(slowFlowRate[i]["slow_flow_rate"])
-    #        fastFlowRateList.append(fastFlowRate[i]["fast_flow_rate"])
-    #        storageLevelList.append(storageLevel[i]["storage_level"])
 
     for data in initialConditions:
         slowFlowRateList.append(data.slow_flow_rate)
@@ -438,27 +429,12 @@ def prepareGEFSdata(date, location):
     # prepare testing GEFS data for model.
     gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
 
-    #    RH = list(gefs.values("relative_humidity"))
-    #    minTemperature = list(gefs.values("min_temperature"))
-    #    maxTemperature = list(gefs.values("max_temperature"))
-    #    uWind = list(gefs.values("wind_u"))
-    #    vWind = list(gefs.values("wind_v"))
-    #    precipitation = list(gefs.values("precipitation"))
-
     RHList = []
     minTemperatureList = []
     maxTemperatureList = []
     uWindList = []
     vWindList = []
     precipitationList = []
-
-    #    for i in range(len(gefs)):
-    #        RHList.append(RH[i]["relative_humidity"])
-    #        minTemperaturelist.append(minTemperature[i]["min_temperature"])
-    #        maxTemperatureList.append(maxTemperature[i]["max_temperature"])
-    #        uWindList.append(uWind[i]["wind_u"])
-    #        vWindList.append(vWind[i]["wind_v"])
-    #        precipitationList.append(precipitation[i]["precipitation"])
 
     for forecast in gefs:
         RHList.append(forecast.relative_humidity)
