@@ -89,7 +89,6 @@ class ModelCalculationTests(TestCase):
         assert (np.max(epErr) < 0.0001).all()
         assert (np.max(F0Err) < 0.0001).all()
 
-    def test_save_nextDayInitialCondition(self):
         # Check that the initial conditions (2 days: today and tomorrow)
         # have been added to the db
         readings = InitialCondition.objects.all()
