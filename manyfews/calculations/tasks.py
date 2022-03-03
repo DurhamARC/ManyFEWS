@@ -80,13 +80,10 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
         dataFileDirPath, "RainfallRunoffModelParameters.csv"
     )
 
-    t0 = date.toordinal(date(2010, 1, 1)) + 366
-
     gefsData = prepareGEFSdata(date=dataDate, location=dataLocation)
     intialConditionData = prepareInitialCondition(date=dataDate, location=dataLocation)
 
     riverFlowsData = GenerateRiverFlows(
-        t0=t0,
         gefsData=gefsData,
         F0=intialConditionData,
         parametersFilePath=parametersFilePath,
