@@ -17,6 +17,7 @@ def test_GenerateRiverFlows():
     Q = riverFlowsData[0]
     qp = riverFlowsData[1]
     Ep = riverFlowsData[2]
+    F0 = riverFlowsData[3]
 
     # import benchmark result of 'GenerateRiverFlows.m' matlab code.
     Qbenchmark = np.loadtxt(
@@ -24,10 +25,8 @@ def test_GenerateRiverFlows():
         delimiter=",",
         usecols=range(100),
     )
-    tbenchmark = np.loadtxt(
-        open(os.path.join(dataFileDirPath, "t_Benchmark.csv")),
-        delimiter=",",
-        usecols=range(1),
+    F0benchmark = np.loadtxt(
+        open(os.path.join(dataFileDirPath, "F0_Benchmark.csv")), usecols=range(3),
     )
     qpbenchmark = np.loadtxt(
         open(os.path.join(dataFileDirPath, "qp_Benchmark.csv")),
@@ -44,7 +43,9 @@ def test_GenerateRiverFlows():
     aerr = np.absolute((Q - Qbenchmark) / Qbenchmark)
     qpErr = np.absolute(qp - qpbenchmark)
     epErr = np.absolute((Ep - Eqbenchmark) / Eqbenchmark)
+    F0Err = np.absolute((F0 - F0benchmark) / F0benchmark)
 
     assert (np.max(aerr) < 0.0001).all()
     assert (np.max(qpErr) < 0.0001).all()
     assert (np.max(epErr) < 0.0001).all()
+    assert (np.max(F0Err) < 0.0001).all()

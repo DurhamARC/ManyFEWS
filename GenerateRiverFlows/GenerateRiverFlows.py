@@ -395,7 +395,7 @@ def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     Q = modelfunOutputData[0]
     F0 = modelfunOutputData[1]
 
-    return Q, qp, Ep
+    return Q, qp, Ep, F0
 
 
 # Import GEFS weather data. (please notice here, the start sheet‘s number is "0")

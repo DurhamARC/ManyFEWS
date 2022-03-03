@@ -382,7 +382,7 @@ def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     Q = modelfunOutputData[0]
     F0 = modelfunOutputData[1]
 
-    return Q, qp, Ep
+    return Q, qp, Ep, F0
 
 
 def excel_to_matrix(path, sheetNum):

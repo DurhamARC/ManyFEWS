@@ -31,5 +31,3 @@ riverFlowsData = GenerateRiverFlows.GenerateRiverFlows(gefsData, F0, parametersF
 # riverFlowsData[1] ====> t
 # riverFlowsData[2] ====> qp
 # riverFlowsData[3] ====> Ep
-
-# print(riverFlowsData[0])

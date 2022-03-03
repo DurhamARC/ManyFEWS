@@ -65,10 +65,10 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
     :param dataDate: the date information of input data
     :param dataLocation: the location information of input data
     :return riverFlowData: it is a data tuple, which:
-            riverFlowsData[0] ====> Q
-            riverFlowsData[1] ====> t
-            riverFlowsData[2] ====> qp
-            riverFlowsData[3] ====> Ep
+            riverFlowsData[0] ====> Q: River flow (m3/s).
+            riverFlowsData[1] ====> qp: Rainfall (mm/day).
+            riverFlowsData[2] ====> Ep: Potential evapotranspiration (mm/day).
+            riverFlowsData[3] ====> F0: intial condition data for next day.
     """
     projectPath = os.path.abspath(
         os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
@@ -88,6 +88,8 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
         parametersFilePath=parametersFilePath,
     )
 
+    # import the next day's initial condition data into DB.
+
     return riverFlowsData
 
 
@@ -96,3 +98,5 @@ testLocation = prepare_test_Data()[1]
 
 runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
 output = runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
+
+print(output[3])
