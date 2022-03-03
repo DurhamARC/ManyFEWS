@@ -442,7 +442,7 @@ def prepareGEFSdata(date, location):
     precipitation = list(gefs.values("precipitation"))
 
     RHList = []
-    minTemperaturelist = []
+    minTemperatureList = []
     maxTemperatureList = []
     uWindList = []
     vWindList = []
@@ -468,7 +468,7 @@ def prepareGEFSdata(date, location):
         zip(
             RHList,
             maxTemperatureList,
-            minTemperaturelist,
+            minTemperatureList,
             uWindList,
             vWindList,
             precipitationList,
