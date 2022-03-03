@@ -508,7 +508,7 @@ def prepareInitialCondition(date, location):
         storageLevelList.append(storageLevel[i]["storage_level"])
 
     initialConditionsList = list(
-        zip(slowFlowRateList, fastFlowRateList, storageLevelList)
+        zip(storageLevelList, slowFlowRateList, fastFlowRateList)
     )
     intialConditionData = np.array(initialConditionsList)
 

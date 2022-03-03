@@ -10,6 +10,8 @@ from .GenerateRiverFlows import (
     GenerateRiverFlows,
     prepare_test_Data,
 )
+from .models import InitialCondition
+from datetime import timedelta
 import os
 
 
@@ -81,7 +83,6 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
 
     gefsData = prepareGEFSdata(date=dataDate, location=dataLocation)
     intialConditionData = prepareInitialCondition(date=dataDate, location=dataLocation)
-
     riverFlowsData = GenerateRiverFlows(
         gefsData=gefsData,
         F0=intialConditionData,
@@ -89,12 +90,24 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
     )
 
     # import the next day's initial condition data into DB.
+    # save into DB ( 'calculations_initialcondition' table)
+    F0 = riverFlowsData[3]  # next day's initial condition
+    tomorrow = dataDate + timedelta(days=1)
 
+    for i in range(len(F0[:, 0])):
+        nextDayInitialCondition = InitialCondition(
+            date=tomorrow,
+            location=dataLocation,
+            storage_level=F0[i, 0],
+            slow_flow_rate=F0[i, 1],
+            fast_flow_rate=F0[i, 2],
+        )
+        nextDayInitialCondition.save()
     return riverFlowsData
 
 
-testDate = prepare_test_Data()[0]
-testLocation = prepare_test_Data()[1]
+testInfo = prepare_test_Data()  # get test data and location
+testDate = testInfo[0]
+testLocation = testInfo[1]
 
-runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
 output = runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
