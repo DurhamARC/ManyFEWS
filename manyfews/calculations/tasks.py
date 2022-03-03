@@ -62,7 +62,8 @@ def prepareZentra():
 @shared_task(name="calculations.runningGenerateRiverFlows")
 def runningGenerateRiverFlows(dataDate, dataLocation):
     """
-    This function is developed to prepare data and running models for generating river flows.
+    This function is developed to prepare data and running models for generating river flows,
+    and save the next day's initial condition into DB.
 
     :param dataDate: the date information of input data
     :param dataLocation: the location information of input data
