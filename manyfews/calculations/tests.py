@@ -7,6 +7,8 @@ from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
 
 from django.test import TestCase
 import numpy as np
+from django.contrib.gis.geos import Point
+from datetime import datetime, timedelta, timezone
 import xlrd
 import os
 
