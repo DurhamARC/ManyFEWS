@@ -4,6 +4,14 @@ from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
 from django.conf import settings
+from .generate_river_flows import (
+    prepareGEFSdata,
+    prepareInitialCondition,
+    GenerateRiverFlows,
+)
+from .models import InitialCondition
+from datetime import timedelta
+import os
 
 
 app = Celery()
@@ -48,3 +56,51 @@ def prepareZentra():
 
     # prepare Zentra Cloud data
     zentraReader(backTime=backTime, stationSN=stationSN)
+
+
+@shared_task(name="calculations.runningGenerateRiverFlows")
+def runningGenerateRiverFlows(dataDate, dataLocation):
+    """
+    This function is developed to prepare data and running models for generating river flows,
+    and save the next day's initial condition into DB.
+
+    :param dataDate: the date information of input data
+    :param dataLocation: the location information of input data
+    :return riverFlowData: it is a data tuple, which:
+            riverFlowsData[0] ====> Q: River flow (m3/s).
+            riverFlowsData[1] ====> qp: Rainfall (mm/day).
+            riverFlowsData[2] ====> Ep: Potential evapotranspiration (mm/day).
+            riverFlowsData[3] ====> F0: intial condition data for next day.
+    """
+    projectPath = os.path.abspath(
+        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+    )
+
+    dataFileDirPath = os.path.join(projectPath, "Data")
+    parametersFilePath = os.path.join(
+        dataFileDirPath, "RainfallRunoffModelParameters.csv"
+    )
+
+    gefsData = prepareGEFSdata(date=dataDate, location=dataLocation)
+    initialConditionData = prepareInitialCondition(date=dataDate, location=dataLocation)
+    riverFlowsData = GenerateRiverFlows(
+        gefsData=gefsData,
+        F0=initialConditionData,
+        parametersFilePath=parametersFilePath,
+    )
+
+    # import the next day's initial condition data into DB.
+    # save into DB ( 'calculations_initialcondition' table)
+    F0 = riverFlowsData[3]  # next day's initial condition
+    tomorrow = dataDate + timedelta(days=1)
+
+    for i in range(len(F0[:, 0])):
+        nextDayInitialCondition = InitialCondition(
+            date=tomorrow,
+            location=dataLocation,
+            storage_level=F0[i, 0],
+            slow_flow_rate=F0[i, 1],
+            fast_flow_rate=F0[i, 2],
+        )
+        nextDayInitialCondition.save()
+    return riverFlowsData

@@ -2,10 +2,107 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 # Create your tests here.
-from .models import ZentraDevice, ZentraReading, NoaaForecast
-from .tasks import prepareZentra, prepareGEFS
+from .models import ZentraDevice, ZentraReading, NoaaForecast, InitialCondition
+from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
 
 from django.test import TestCase
+import numpy as np
+from django.contrib.gis.geos import Point
+from datetime import datetime, timedelta, timezone
+import xlrd
+import os
+
+
+def excel_to_matrix(path, sheetNum):
+    """
+    This function is used to convert data form from excel (.xlsx) into a Numpy array.
+
+    :param path: the absolute path of the excel file.
+    :param sheetNum: the sheet number of the table in the excel file.
+
+    """
+
+    table = xlrd.open_workbook(path).sheets()[sheetNum]
+    row = table.nrows
+    col = table.ncols
+    datamatrix = np.zeros((row, col))  # ignore the first title row.
+    for x in range(1, row):
+        #        row = np.matrix(table.row_values(x))
+        #        print(type(row))
+        row = np.array(table.row_values(x))
+        datamatrix[x, :] = row
+    datamatrix = np.delete(
+        datamatrix, 0, axis=0
+    )  # Delete the first blank line.(Its elements are all zero)
+    return datamatrix
+
+
+def prepare_test_Data():
+    """
+    This function is used to import test GEFS and initial condition data into database.
+
+    1. For GEFS: It will read data from GEFS xlrd file (GEFSdata) in Data directory.
+    2. For initial condition: It will read data from csv file ( 'RainfallRunoffModelInitialConditions.csv')
+    in Data directory.
+
+    return: a tuple of test information, which includes: test date and test location.
+            [0]: test date
+            [1]: test location
+    """
+
+    projectPath = os.path.abspath(
+        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+    )
+
+    dataFileDirPath = os.path.join(projectPath, "Data")
+    GefsDataFile = os.path.join(dataFileDirPath, "GEFSdata.xlsx")
+    InitialConditionFile = os.path.join(
+        dataFileDirPath, "RainfallRunoffModelInitialConditions.csv"
+    )
+
+    # prepare test date information
+    testDate = datetime(
+        year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+    )
+    date = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+
+    # prepare test location information (fake)
+    testLocation = Point(0, 0)
+
+    # prepare test GEFS data
+    sheetNum = 16
+    gefsData = excel_to_matrix(GefsDataFile, sheetNum)
+
+    # save into DB ( 'calculations_noaaforecast' table)
+    for i in range(len(gefsData[:, 0])):
+        testGefsData = NoaaForecast(
+            date=date,
+            location=testLocation,
+            relative_humidity=gefsData[i, 0],
+            min_temperature=gefsData[i, 2],
+            max_temperature=gefsData[i, 1],
+            wind_u=gefsData[i, 3],
+            wind_v=gefsData[i, 4],
+            precipitation=gefsData[i, 5],
+        )
+        testGefsData.save()
+
+    # prepare initial condition data
+    F0 = np.loadtxt(open(InitialConditionFile), delimiter=",", usecols=range(3))
+
+    # save into DB ( 'calculations_initialcondition' table)
+    for i in range(len(F0[:, 0])):
+        testInitialCondition = InitialCondition(
+            date=date,
+            location=testLocation,
+            storage_level=F0[i, 0],
+            slow_flow_rate=F0[i, 1],
+            fast_flow_rate=F0[i, 2],
+        )
+
+        testInitialCondition.save()
+
+    return testDate, testLocation
 
 
 class WeatherImportTests(TestCase):
@@ -32,3 +129,62 @@ class WeatherImportTests(TestCase):
         # Check that there are readings in the database
         readings = NoaaForecast.objects.all()
         assert len(readings) == 64
+
+
+class ModelCalculationTests(TestCase):
+    def test_calculation_GenerateRiverFlow(self):
+        testInfo = prepare_test_Data()  # get test data and location
+        testDate = testInfo[0]  # date
+        testLocation = testInfo[1]  # location
+        riverFlowsData = runningGenerateRiverFlows(
+            dataDate=testDate, dataLocation=testLocation
+        )
+
+        # extract output of river flows model.
+        Q = riverFlowsData[0]
+        qp = riverFlowsData[1]
+        Ep = riverFlowsData[2]
+        F0 = riverFlowsData[3]
+
+        # get the reference results
+        projectPath = os.path.abspath(
+            os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+        )
+
+        dataFileDirPath = os.path.join(projectPath, "Data")
+
+        Qbenchmark = np.loadtxt(
+            open(os.path.join(dataFileDirPath, "Q_Benchmark.csv")),
+            delimiter=",",
+            usecols=range(100),
+        )
+        F0benchmark = np.loadtxt(
+            open(os.path.join(dataFileDirPath, "F0_Benchmark.csv")), usecols=range(3),
+        )
+        qpbenchmark = np.loadtxt(
+            open(os.path.join(dataFileDirPath, "qp_Benchmark.csv")),
+            delimiter=",",
+            usecols=range(1),
+        )
+        Eqbenchmark = np.loadtxt(
+            open(os.path.join(dataFileDirPath, "Eq_Benchmark.csv")),
+            delimiter=",",
+            usecols=range(1),
+        )
+
+        # calculate error between output and benchmark result, which below 0.01% is pass.
+        aerr = np.absolute((Q - Qbenchmark) / Qbenchmark)
+        qpErr = np.absolute(qp - qpbenchmark)
+        epErr = np.absolute((Ep - Eqbenchmark) / Eqbenchmark)
+        F0Err = np.absolute((F0 - F0benchmark) / F0benchmark)
+
+        # Check that the accuracy of river flow model
+        assert (np.max(aerr) < 0.0001).all()
+        assert (np.max(qpErr) < 0.0001).all()
+        assert (np.max(epErr) < 0.0001).all()
+        assert (np.max(F0Err) < 0.0001).all()
+
+        # Check that the initial conditions (2 days: today and tomorrow)
+        # have been added to the db
+        readings = InitialCondition.objects.all()
+        assert len(readings) == 200

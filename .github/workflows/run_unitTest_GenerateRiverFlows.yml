@@ -40,9 +40,6 @@ jobs:
       - run: |
           conda info
           conda list
-      - name: run test script 'test_GenerateRiverFlows.py'
-        run: |
-          pytest ./test_manyFEMS/unit/test_GeneraterRiverFlow/test_GenerateRiverFlows.py
       - name: Run Django migrations
         run: |
           cp ./manyfews/.env.CI ./manyfews/.env

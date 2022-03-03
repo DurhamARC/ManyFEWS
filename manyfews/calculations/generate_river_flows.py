@@ -1,23 +1,7 @@
-"""
-This python script is converted from Professor Simon Mathias(Professor of Environmental Engineering)'s
-script, which is used to generate river flows.
-                                                            Created by Jiada Tu
-                                                            13/01/2022
-"""
-
-
-# WARNING： The latest version of xlrd only supports .xls files.
-# Installing the older version 1.2.0 worked for me to open .xlsx files.
-
-import numpy as np
-import xlrd
-from datetime import date
 import math
-import os
-
-
-# here is converted from part of "GenerateRiverFlowsExample.m", which is used to read data from csv and xlsx files.
-# Specify start time
+import numpy as np
+from datetime import date
+from .models import NoaaForecast, InitialCondition
 
 
 def ModelFun(qp, Ep, dt, CatArea, X, F0):
@@ -169,7 +153,7 @@ def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
     return qro, qd, Ea, S
 
 
-def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
+def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Ensure Tmax > Tmin
     Tmax = np.maximum(Tmax, Tmin)
@@ -228,7 +212,8 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     # Determine day of the year as a number from 1 to 365
     beginDate = date(2010, 1, 1)
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
-    J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
+    # J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
+    J = beginDateNum + np.arange(0, ((np.size(Tmax[:])) / 4), dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
     dr = 1 + (0.033 * np.cos(((2 * math.pi) / 365) * J))
@@ -297,24 +282,7 @@ def FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH):
     return ETo, E0
 
 
-# Import GEFS weather data. (please notice here, the start sheet‘s number is "0")
-def excel_to_matrix(path, sheetNum):
-    table = xlrd.open_workbook(path).sheets()[sheetNum]
-    row = table.nrows
-    col = table.ncols
-    datamatrix = np.zeros((row, col))  # ignore the first title row.
-    for x in range(1, row):
-        #        row = np.matrix(table.row_values(x))
-        #        print(type(row))
-        row = np.array(table.row_values(x))
-        datamatrix[x, :] = row
-    datamatrix = np.delete(
-        datamatrix, 0, axis=0
-    )  # Delete the first blank line.(Its elements are all zero)
-    return datamatrix
-
-
-def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
+def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
@@ -345,9 +313,6 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
 
     # Determine number of data points
     N = np.size(gefsData[:, 1])
-
-    # Specify date number
-    t = t0 + np.arange(0, N / 4, dt)
 
     # Get relative humidity (%)
     RH = gefsData[:, 0]
@@ -394,13 +359,10 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     CatArea = 212.2640  # Catchment area (km2)
 
     # Get model parameters for Majalaya catchment
-    # currentPath = os.getcwd()
-    # parametersFile = os.path.join(currentPath, "RainfallRunoffModelParameters.csv")
-
     X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
-    fa056OutputData = FAO56(t, dt, Tmin, Tmax, alt, lat, T, u2, RH)
+    fa056OutputData = FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH)
 
     # "fa056OutputData" is a data tuple, which:
     # fa056OutputData[0] ====> Ep
@@ -417,4 +379,81 @@ def GenerateRiverFlows(t0, gefsData, F0, parametersFilePath):
     Q = modelfunOutputData[0]
     F0 = modelfunOutputData[1]
 
-    return Q, t, qp, Ep
+    return Q, qp, Ep, F0
+
+
+def prepareInitialCondition(date, location):
+    """
+
+    This function is for extracting initial condition data with specific dates and locations from DB,
+    and returning data into a NumPy array.
+
+    :param date: date information.
+    :param location: location information.
+    :return intialConditionData: a numpy array contains initial condition data.
+
+    """
+
+    # prepare initial conditions for model.
+    initialConditions = InitialCondition.objects.filter(date=date).filter(
+        location=location
+    )
+
+    slowFlowRateList = []
+    fastFlowRateList = []
+    storageLevelList = []
+
+    for data in initialConditions:
+        slowFlowRateList.append(data.slow_flow_rate)
+        fastFlowRateList.append(data.fast_flow_rate)
+        storageLevelList.append(data.storage_level)
+    initialConditionsList = list(
+        zip(storageLevelList, slowFlowRateList, fastFlowRateList)
+    )
+    intialConditionData = np.array(initialConditionsList)
+
+    return intialConditionData
+
+
+def prepareGEFSdata(date, location):
+    """
+
+    This function is for extracting GEFS data with specific dates and locations from DB,
+    and returning data into a NumPy array.
+
+    :param date: date information.
+    :param location: location information.
+    :return gefsData: a numpy array contains GEFS data.
+
+    """
+    # prepare testing GEFS data for model.
+    gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
+
+    RHList = []
+    minTemperatureList = []
+    maxTemperatureList = []
+    uWindList = []
+    vWindList = []
+    precipitationList = []
+
+    for forecast in gefs:
+        RHList.append(forecast.relative_humidity)
+        minTemperatureList.append(forecast.min_temperature)
+        maxTemperatureList.append(forecast.max_temperature)
+        uWindList.append(forecast.wind_u)
+        vWindList.append(forecast.wind_v)
+        precipitationList.append(forecast.precipitation)
+
+    gefsList = list(
+        zip(
+            RHList,
+            maxTemperatureList,
+            minTemperatureList,
+            uWindList,
+            vWindList,
+            precipitationList,
+        )
+    )
+    gefsData = np.array(gefsList)
+
+    return gefsData
