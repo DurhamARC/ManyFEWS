@@ -105,10 +105,3 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
         )
         nextDayInitialCondition.save()
     return riverFlowsData
-
-
-testInfo = prepare_test_Data()  # get test data and location
-testDate = testInfo[0]
-testLocation = testInfo[1]
-
-output = runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
