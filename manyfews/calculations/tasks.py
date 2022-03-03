@@ -8,9 +8,8 @@ from .GenerateRiverFlows import (
     prepareGEFSdata,
     prepareInitialCondition,
     GenerateRiverFlows,
+    prepare_test_Data,
 )
-from django.contrib.gis.geos import Point
-from datetime import datetime, timedelta, timezone, date
 import os
 
 
@@ -92,9 +91,8 @@ def runningGenerateRiverFlows(dataDate, dataLocation):
     return riverFlowsData
 
 
-testDate = datetime(
-    year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
-)
-testLocation = Point(0, 0)
+testDate = prepare_test_Data()[0]
+testLocation = prepare_test_Data()[1]
 
+runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
 output = runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
