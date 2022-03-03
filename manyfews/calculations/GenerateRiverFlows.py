@@ -470,6 +470,17 @@ def prepare_test_Data():
 
 
 def prepareInitialCondition(date, location):
+    """
+
+    This function is for extracting initial condition data with specific dates and locations from DB,
+    and returning data into a NumPy array.
+
+    :param date: date information.
+    :param location: location information.
+    :return intialConditionData: a numpy array contains initial condition data.
+
+    """
+
     # prepare initial conditions for model.
     initialConditions = InitialCondition.objects.filter(date=date).filter(
         location=location
@@ -497,6 +508,16 @@ def prepareInitialCondition(date, location):
 
 
 def prepareGEFSdata(date, location):
+    """
+
+    This function is for extracting GEFS data with specific dates and locations from DB,
+    and returning data into a NumPy array.
+
+    :param date: date information.
+    :param location: location information.
+    :return gefsData: a numpy array contains GEFS data.
+
+    """
     # prepare testing GEFS data for model.
     gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
 
