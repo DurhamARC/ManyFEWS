@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 # Create your tests here.
-from .models import ZentraDevice, ZentraReading, NoaaForecast
+from .models import ZentraDevice, ZentraReading, NoaaForecast, InitialCondition
 from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
 from .GenerateRiverFlows import prepare_test_Data
 from django.test import TestCase
@@ -88,3 +88,9 @@ class ModelCalculationTests(TestCase):
         assert (np.max(qpErr) < 0.0001).all()
         assert (np.max(epErr) < 0.0001).all()
         assert (np.max(F0Err) < 0.0001).all()
+
+    def test_save_nextDayInitialCondition(self):
+        # Check that the initial conditions (2 days: today and tomorrow)
+        # have been added to the db
+        readings = InitialCondition.objects.all()
+        assert len(readings) == 200
