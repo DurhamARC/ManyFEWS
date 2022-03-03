@@ -98,5 +98,3 @@ testLocation = prepare_test_Data()[1]
 
 runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
 output = runningGenerateRiverFlows(dataDate=testDate, dataLocation=testLocation)
-
-print(output[3])
