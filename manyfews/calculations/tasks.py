@@ -15,9 +15,8 @@ from .generate_river_flows import (
     GenerateRiverFlows,
 )
 from datetime import datetime, timedelta, timezone
-import numpy as np
 import os
-from django.contrib.gis.geos import Point
+
 
 app = Celery()
 

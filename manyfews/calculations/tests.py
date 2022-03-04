@@ -1,7 +1,6 @@
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 
-# Create your tests here.
 from .models import (
     ZentraDevice,
     ZentraReading,
@@ -142,6 +141,7 @@ class ModelCalculationTests(TestCase):
         testInfo = prepare_test_Data()  # get test data and location
         testDate = testInfo[0]  # date
         testLocation = testInfo[1]  # location
+        nextDay = testDate + timedelta(days=1)
         riverFlowsData = runningGenerateRiverFlows(
             dt=0.25, beginDate=testDate, dataLocation=testLocation
         )
@@ -149,10 +149,15 @@ class ModelCalculationTests(TestCase):
         # extract result from data base.
         RainAndEvapotranspirationData = RainAndEvapotranspiration.objects.all()
         PotentialRiverFlowsData = PotentialRiverFlows.objects.all()
-
+        initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
+            location=location
+        )
         qpList = []
         EpList = []
         QList = []
+        slowFlowRateList = []
+        fastFlowRateList = []
+        storageLevelList = []
 
         for data in RainAndEvapotranspirationData:
             qpList.append(data.rain_fall)
@@ -169,8 +174,15 @@ class ModelCalculationTests(TestCase):
         Q = np.array(QList)
         Q.resize((64, 100))
 
-        # extract output of river flows model.
-        F0 = riverFlowsData[3]
+        # extract output initial condition of river flows model.
+        for data in initialConditions:
+            slowFlowRateList.append(data.slow_flow_rate)
+            fastFlowRateList.append(data.fast_flow_rate)
+            storageLevelList.append(data.storage_level)
+        initialConditionsList = list(
+            zip(storageLevelList, slowFlowRateList, fastFlowRateList)
+        )
+        F0 = np.array(initialConditionsList)
 
         # get the reference results
         projectPath = os.path.abspath(
