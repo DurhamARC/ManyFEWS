@@ -2,9 +2,15 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 # Create your tests here.
-from .models import ZentraDevice, ZentraReading, NoaaForecast, InitialCondition
+from .models import (
+    ZentraDevice,
+    ZentraReading,
+    NoaaForecast,
+    InitialCondition,
+    RainAndEvapotranspiration,
+    PotentialRiverFlows,
+)
 from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
-
 from django.test import TestCase
 import numpy as np
 from django.contrib.gis.geos import Point
@@ -140,10 +146,30 @@ class ModelCalculationTests(TestCase):
             dt=0.25, beginDate=testDate, dataLocation=testLocation
         )
 
+        # extract result from data base.
+        RainAndEvapotranspirationData = RainAndEvapotranspiration.objects.all()
+        PotentialRiverFlowsData = PotentialRiverFlows.objects.all()
+
+        qpList = []
+        EpList = []
+        QList = []
+
+        for data in RainAndEvapotranspirationData:
+            qpList.append(data.rain_fall)
+            EpList.append(data.potential_evapotranspiration)
+
+        # reform data into a Numpy array.
+        qp = np.array(qpList)
+        Ep = np.array(EpList)
+
+        for data in PotentialRiverFlowsData:
+            QList.append(data.river_flows)
+
+        # reform data into a Numpy array.
+        Q = np.array(QList)
+        Q.resize((64, 100))
+
         # extract output of river flows model.
-        Q = riverFlowsData[0]
-        qp = riverFlowsData[1]
-        Ep = riverFlowsData[2]
         F0 = riverFlowsData[3]
 
         # get the reference results
