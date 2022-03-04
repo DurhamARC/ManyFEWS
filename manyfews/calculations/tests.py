@@ -137,7 +137,7 @@ class ModelCalculationTests(TestCase):
         testDate = testInfo[0]  # date
         testLocation = testInfo[1]  # location
         riverFlowsData = runningGenerateRiverFlows(
-            dataDate=testDate, dataLocation=testLocation
+            dt=0.25, beginDate=testDate, dataLocation=testLocation
         )
 
         # extract output of river flows model.
