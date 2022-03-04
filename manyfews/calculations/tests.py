@@ -150,8 +150,9 @@ class ModelCalculationTests(TestCase):
         RainAndEvapotranspirationData = RainAndEvapotranspiration.objects.all()
         PotentialRiverFlowsData = PotentialRiverFlows.objects.all()
         initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
-            location=location
+            location=testLocation
         )
+
         qpList = []
         EpList = []
         QList = []
