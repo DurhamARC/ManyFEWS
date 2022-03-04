@@ -17,7 +17,6 @@ from .generate_river_flows import (
 from datetime import datetime, timedelta, timezone
 import os
 
-
 app = Celery()
 
 import logging
@@ -128,12 +127,13 @@ def runningGenerateRiverFlows(dt, beginDate, dataLocation):
     for i in range(qp.shape[0]):
         # save qp and Eq and into DB.
         # ( 'calculations_rainandevapotranspiration' table)
-        dataDate = beginDate + timedelta(dt * i)
+        forecastHour = int(i * 24 * dt)
         RainAndEvapotranspirationData = RainAndEvapotranspiration(
-            date=dataDate,
+            date=beginDate,
             location=dataLocation,
             rain_fall=qp[i],
             potential_evapotranspiration=Ep[i],
+            forecast_hour=forecastHour,
         )
         RainAndEvapotranspirationData.save()
 
@@ -141,6 +141,9 @@ def runningGenerateRiverFlows(dt, beginDate, dataLocation):
         # ('calculations_potentialriverflows' table)
         for j in range(riverFlows.shape[1]):
             PotentialRiverFlowsData = PotentialRiverFlows(
-                date=dataDate, location=dataLocation, river_flows=riverFlows[i, j],
+                date=beginDate,
+                location=dataLocation,
+                river_flows=riverFlows[i, j],
+                forecast_hour=forecastHour,
             )
             PotentialRiverFlowsData.save()
