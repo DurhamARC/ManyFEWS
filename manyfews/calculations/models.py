@@ -42,6 +42,7 @@ class InitialCondition(models.Model):
 class RainAndEvapotranspiration(models.Model):
     date = models.DateTimeField()
     location = models.PointField(default=Point(0, 0))
+    forecast_hour = models.IntegerField(default=int(0))
     rain_fall = models.FloatField()
     potential_evapotranspiration = models.FloatField()
 
@@ -49,4 +50,5 @@ class RainAndEvapotranspiration(models.Model):
 class PotentialRiverFlows(models.Model):
     date = models.DateTimeField()
     location = models.PointField(default=Point(0, 0))
+    forecast_hour = models.IntegerField(default=int(0))
     river_flows = models.FloatField()
