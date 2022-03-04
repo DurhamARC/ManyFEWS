@@ -141,6 +141,9 @@ class ModelCalculationTests(TestCase):
         testInfo = prepare_test_Data()  # get test data and location
         testDate = testInfo[0]  # date
         testLocation = testInfo[1]  # location
+
+        # plus time zone information
+        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
         nextDay = testDate + timedelta(days=1)
         runningGenerateRiverFlows(
             dt=0.25, beginDate=testDate, dataLocation=testLocation
