@@ -142,7 +142,7 @@ class ModelCalculationTests(TestCase):
         testDate = testInfo[0]  # date
         testLocation = testInfo[1]  # location
         nextDay = testDate + timedelta(days=1)
-        riverFlowsData = runningGenerateRiverFlows(
+        runningGenerateRiverFlows(
             dt=0.25, beginDate=testDate, dataLocation=testLocation
         )
 
