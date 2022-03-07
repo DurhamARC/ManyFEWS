@@ -6,8 +6,8 @@ from .gefs import dataBaseWriter
 from django.conf import settings
 from .models import (
     InitialCondition,
-    RainAndEvapotranspiration,
-    PotentialRiverFlows,
+    RiverFlowCalculationOutput,
+    RiverFlowPrediction,
 )
 from .generate_river_flows import (
     prepareGEFSdata,
@@ -62,7 +62,7 @@ def prepareZentra():
 
 
 @shared_task(name="calculations.runningGenerateRiverFlows")
-def runningGenerateRiverFlows(dt, beginDate, dataLocation):
+def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
     """
     This function is developed to prepare data and running models for generating river flows,
     and save the next day's initial condition, River flow, Rainfall, and potential evapotranspiration
@@ -83,14 +83,16 @@ def runningGenerateRiverFlows(dt, beginDate, dataLocation):
     )
 
     # plus time zone information
-    beginDate = datetime.astimezone(beginDate, tz=timezone(timedelta(hours=0)))
+    predictionDate = datetime.astimezone(
+        predictionDate, tz=timezone(timedelta(hours=0))
+    )
 
     # prepare GEFS data for model.
-    gefsData = prepareGEFSdata(date=beginDate, location=dataLocation)
+    gefsData = prepareGEFSdata(date=predictionDate, location=dataLocation)
 
     # prepare initial condition data for model.
     initialConditionData = prepareInitialCondition(
-        date=beginDate, location=dataLocation
+        date=predictionDate, location=dataLocation
     )
 
     # run model.
@@ -113,7 +115,8 @@ def runningGenerateRiverFlows(dt, beginDate, dataLocation):
 
     # import the next day's initial condition data F0 into DB.
     # ('calculations_initialcondition' table)
-    nextDay = beginDate + timedelta(days=1)
+    nextDay = predictionDate + timedelta(days=1)
+
     for i in range(len(F0[:, 0])):
         nextDayInitialCondition = InitialCondition(
             date=nextDay,
@@ -126,24 +129,23 @@ def runningGenerateRiverFlows(dt, beginDate, dataLocation):
 
     for i in range(qp.shape[0]):
         # save qp and Eq and into DB.
-        # ( 'calculations_rainandevapotranspiration' table)
-        forecastHour = int(i * 24 * dt)
-        RainAndEvapotranspirationData = RainAndEvapotranspiration(
-            date=beginDate,
+        # ( 'calculations_riverflowcalculationoutput' table)
+        forecastTime = predictionDate + timedelta(days=i * dt)
+        RiverFlowCalculationOutputData = RiverFlowCalculationOutput(
+            prediction_date=predictionDate,
+            forecast_time=forecastTime,
             location=dataLocation,
             rain_fall=qp[i],
             potential_evapotranspiration=Ep[i],
-            forecast_hour=forecastHour,
         )
-        RainAndEvapotranspirationData.save()
+        RiverFlowCalculationOutputData.save()
 
         # save Q into DB.
-        # ('calculations_potentialriverflows' table)
+        # ('calculations_riverflowprediction' table)
         for j in range(riverFlows.shape[1]):
-            PotentialRiverFlowsData = PotentialRiverFlows(
-                date=beginDate,
-                location=dataLocation,
-                river_flows=riverFlows[i, j],
-                forecast_hour=forecastHour,
+            RiverFlowPredictionData = RiverFlowPrediction(
+                prediction_index=j,
+                calculation_output=RiverFlowCalculationOutputData,
+                river_flow=riverFlows[i, j],
             )
-            PotentialRiverFlowsData.save()
+            RiverFlowPredictionData.save()
