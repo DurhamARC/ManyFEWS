@@ -247,5 +247,4 @@ class ModelCalculationTests(TestCase):
         for data in riverFlowCalculationOutputData:
             id = data.id
             assert data.prediction_date == testDate
-            assert data.forecast_time == testDate + timedelta(days=id * 0.25)
             assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
