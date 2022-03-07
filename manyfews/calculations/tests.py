@@ -231,8 +231,21 @@ class ModelCalculationTests(TestCase):
         readings = InitialCondition.objects.all()
         assert len(readings) == 200
 
-        # forecast times in the DB are as we expect.
+    def test_calculation_dbTime(self):
+        """
+        test the forecast times in the DB (table:'calculations_riverflowcalculationoutput')
+        are as we expect.
+        """
+        testInfo = prepare_test_Data()  # get test data and location
+        testDate = testInfo[0]  # date
+
+        # plus time zone information
+        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+
+        # check forecast times and prediction time are as we expect
+        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
         for data in riverFlowCalculationOutputData:
             id = data.id
             assert data.prediction_date == testDate
+            assert data.forecast_time == testDate + timedelta(days=id * 0.25)
             assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
