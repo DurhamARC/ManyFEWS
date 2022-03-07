@@ -231,24 +231,7 @@ class ModelCalculationTests(TestCase):
         readings = InitialCondition.objects.all()
         assert len(readings) == 200
 
-    def test_calculation_dbTime(self):
-        """
-        test the forecast times in the DB (table:'calculations_riverflowcalculationoutput')
-        are as we expect.
-        """
-
-        testInfo = prepare_test_Data()  # get test data and location
-        testDate = testInfo[0]  # date
-        testLocation = testInfo[1]  # location
-
-        # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
-        runningGenerateRiverFlows(
-            dt=0.25, predictionDate=testDate, dataLocation=testLocation
-        )
-
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
-
+        # forecast times in the DB are as we expect.
         for data in riverFlowCalculationOutputData:
             id = data.id
             assert data.prediction_date == testDate
