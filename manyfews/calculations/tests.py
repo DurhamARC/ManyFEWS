@@ -6,8 +6,8 @@ from .models import (
     ZentraReading,
     NoaaForecast,
     InitialCondition,
-    RainAndEvapotranspiration,
-    PotentialRiverFlows,
+    RiverFlowCalculationOutput,
+    RiverFlowPrediction,
 )
 from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
 from django.test import TestCase
@@ -146,12 +146,12 @@ class ModelCalculationTests(TestCase):
         testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
         nextDay = testDate + timedelta(days=1)
         runningGenerateRiverFlows(
-            dt=0.25, beginDate=testDate, dataLocation=testLocation
+            dt=0.25, predictionDate=testDate, dataLocation=testLocation
         )
 
         # extract result from data base.
-        RainAndEvapotranspirationData = RainAndEvapotranspiration.objects.all()
-        PotentialRiverFlowsData = PotentialRiverFlows.objects.all()
+        RiverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
+        RiverFlowPredictionData = RiverFlowPrediction.objects.all()
         initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
             location=testLocation
         )
@@ -163,7 +163,7 @@ class ModelCalculationTests(TestCase):
         fastFlowRateList = []
         storageLevelList = []
 
-        for data in RainAndEvapotranspirationData:
+        for data in RiverFlowCalculationOutputData:
             qpList.append(data.rain_fall)
             EpList.append(data.potential_evapotranspiration)
 
@@ -171,8 +171,8 @@ class ModelCalculationTests(TestCase):
         qp = np.array(qpList)
         Ep = np.array(EpList)
 
-        for data in PotentialRiverFlowsData:
-            QList.append(data.river_flows)
+        for data in RiverFlowPredictionData:
+            QList.append(data.river_flow)
 
         # reform data into a Numpy array.
         Q = np.array(QList)
