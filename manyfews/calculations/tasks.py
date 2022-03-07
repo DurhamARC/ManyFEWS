@@ -131,21 +131,21 @@ def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
         # save qp and Eq and into DB.
         # ( 'calculations_riverflowcalculationoutput' table)
         forecastTime = predictionDate + timedelta(days=i * dt)
-        RiverFlowCalculationOutputData = RiverFlowCalculationOutput(
+        riverFlowCalculationOutputData = RiverFlowCalculationOutput(
             prediction_date=predictionDate,
             forecast_time=forecastTime,
             location=dataLocation,
             rain_fall=qp[i],
             potential_evapotranspiration=Ep[i],
         )
-        RiverFlowCalculationOutputData.save()
+        riverFlowCalculationOutputData.save()
 
         # save Q into DB.
         # ('calculations_riverflowprediction' table)
         for j in range(riverFlows.shape[1]):
-            RiverFlowPredictionData = RiverFlowPrediction(
+            riverFlowPredictionData = RiverFlowPrediction(
                 prediction_index=j,
-                calculation_output=RiverFlowCalculationOutputData,
+                calculation_output=riverFlowCalculationOutputData,
                 river_flow=riverFlows[i, j],
             )
-            RiverFlowPredictionData.save()
+            riverFlowPredictionData.save()

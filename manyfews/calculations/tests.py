@@ -150,8 +150,8 @@ class ModelCalculationTests(TestCase):
         )
 
         # extract result from data base.
-        RiverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
-        RiverFlowPredictionData = RiverFlowPrediction.objects.all()
+        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
+        riverFlowPredictionData = RiverFlowPrediction.objects.all()
         initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
             location=testLocation
         )
@@ -163,7 +163,7 @@ class ModelCalculationTests(TestCase):
         fastFlowRateList = []
         storageLevelList = []
 
-        for data in RiverFlowCalculationOutputData:
+        for data in riverFlowCalculationOutputData:
             qpList.append(data.rain_fall)
             EpList.append(data.potential_evapotranspiration)
 
@@ -171,7 +171,7 @@ class ModelCalculationTests(TestCase):
         qp = np.array(qpList)
         Ep = np.array(EpList)
 
-        for data in RiverFlowPredictionData:
+        for data in riverFlowPredictionData:
             QList.append(data.river_flow)
 
         # reform data into a Numpy array.
