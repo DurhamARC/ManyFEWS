@@ -105,7 +105,7 @@ def zentraReader(backTime, stationSN):
     RH = list(map(strNoneToNone, RH))
     airTem = list(map(strNoneToNone, airTem))
     wSpeed = list(map(strNoneToNone, wSpeed))
-    wDirection = list(map(strNoneToNone, wSpeed))
+    wDirection = list(map(strNoneToNone, wDirection))
 
     # import data into DB
     for i in range(len(convertedDate)):
