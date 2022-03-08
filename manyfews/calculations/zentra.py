@@ -100,6 +100,13 @@ def zentraReader(backTime, stationSN):
 
     zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
 
+    # converting string 'None' to None by strNoneToNone method.
+    precip = list(map(strNoneToNone, precip))
+    RH = list(map(strNoneToNone, RH))
+    airTem = list(map(strNoneToNone, airTem))
+    wSpeed = list(map(strNoneToNone, wSpeed))
+    wDirection = list(map(strNoneToNone, wSpeed))
+
     # import data into DB
     for i in range(len(convertedDate)):
         zentraData = ZentraReading(
@@ -113,3 +120,14 @@ def zentraReader(backTime, stationSN):
         )
 
         zentraData.save()
+
+
+def strNoneToNone(x):
+    """
+    create a method for converting string type to None Type
+    """
+
+    if type(x) == str:
+        x = None
+
+    return x
