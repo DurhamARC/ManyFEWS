@@ -37,3 +37,19 @@ class InitialCondition(models.Model):
     storage_level = models.FloatField()
     slow_flow_rate = models.FloatField()
     fast_flow_rate = models.FloatField()
+
+
+class RiverFlowCalculationOutput(models.Model):
+    prediction_date = models.DateTimeField()
+    forecast_time = models.DateTimeField()
+    location = models.PointField(default=Point(0, 0))
+    rain_fall = models.FloatField()
+    potential_evapotranspiration = models.FloatField()
+
+
+class RiverFlowPrediction(models.Model):
+    prediction_index = models.IntegerField(default=int(0))
+    calculation_output = models.ForeignKey(
+        RiverFlowCalculationOutput, on_delete=models.CASCADE
+    )
+    river_flow = models.FloatField()

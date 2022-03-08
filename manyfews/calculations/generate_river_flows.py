@@ -282,19 +282,18 @@ def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
     return ETo, E0
 
 
-def GenerateRiverFlows(gefsData, F0, parametersFilePath):
+def GenerateRiverFlows(dt, gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
     Outputs:
     Q - River flow (m3/s)
     F0 - Updated initial conditions for next time-sequence
-    t - Times (days)
     qp - Rainfall (mm/day)
     Ep - Potential evapotranspiration (mm/day)
-    t0 - Start time of GEFS data (day)
 
     Inputs:
+    dt - time step(unit:day)
     GEFSdata - Contains one realisation of GEFS data
     F0 - Initial conditions for state variables
 
@@ -307,10 +306,6 @@ def GenerateRiverFlows(gefsData, F0, parametersFilePath):
     Column 6 precip (mm)
     Column 7 energy (J/kg)
     """
-
-    # Specify time-step in days
-    dt = 0.25
-
     # Determine number of data points
     N = np.size(gefsData[:, 1])
 

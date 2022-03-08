@@ -1,10 +1,15 @@
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 
-# Create your tests here.
-from .models import ZentraDevice, ZentraReading, NoaaForecast, InitialCondition
+from .models import (
+    ZentraDevice,
+    ZentraReading,
+    NoaaForecast,
+    InitialCondition,
+    RiverFlowCalculationOutput,
+    RiverFlowPrediction,
+)
 from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
-
 from django.test import TestCase
 import numpy as np
 from django.contrib.gis.geos import Point
@@ -136,15 +141,52 @@ class ModelCalculationTests(TestCase):
         testInfo = prepare_test_Data()  # get test data and location
         testDate = testInfo[0]  # date
         testLocation = testInfo[1]  # location
-        riverFlowsData = runningGenerateRiverFlows(
-            dataDate=testDate, dataLocation=testLocation
+
+        # plus time zone information
+        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+        nextDay = testDate + timedelta(days=1)
+        runningGenerateRiverFlows(
+            dt=0.25, predictionDate=testDate, dataLocation=testLocation
         )
 
-        # extract output of river flows model.
-        Q = riverFlowsData[0]
-        qp = riverFlowsData[1]
-        Ep = riverFlowsData[2]
-        F0 = riverFlowsData[3]
+        # extract result from data base.
+        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
+        riverFlowPredictionData = RiverFlowPrediction.objects.all()
+        initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
+            location=testLocation
+        )
+
+        qpList = []
+        EpList = []
+        QList = []
+        slowFlowRateList = []
+        fastFlowRateList = []
+        storageLevelList = []
+
+        for data in riverFlowCalculationOutputData:
+            qpList.append(data.rain_fall)
+            EpList.append(data.potential_evapotranspiration)
+
+        # reform data into a Numpy array.
+        qp = np.array(qpList)
+        Ep = np.array(EpList)
+
+        for data in riverFlowPredictionData:
+            QList.append(data.river_flow)
+
+        # reform data into a Numpy array.
+        Q = np.array(QList)
+        Q.resize((64, 100))
+
+        # extract output initial condition of river flows model.
+        for data in initialConditions:
+            slowFlowRateList.append(data.slow_flow_rate)
+            fastFlowRateList.append(data.fast_flow_rate)
+            storageLevelList.append(data.storage_level)
+        initialConditionsList = list(
+            zip(storageLevelList, slowFlowRateList, fastFlowRateList)
+        )
+        F0 = np.array(initialConditionsList)
 
         # get the reference results
         projectPath = os.path.abspath(
@@ -188,3 +230,21 @@ class ModelCalculationTests(TestCase):
         # have been added to the db
         readings = InitialCondition.objects.all()
         assert len(readings) == 200
+
+    def test_calculation_dbTime(self):
+        """
+        test the forecast times in the DB (table:'calculations_riverflowcalculationoutput')
+        are as we expect.
+        """
+        testInfo = prepare_test_Data()  # get test data and location
+        testDate = testInfo[0]  # date
+
+        # plus time zone information
+        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+
+        # check forecast times and prediction time are as we expect
+        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
+        for data in riverFlowCalculationOutputData:
+            id = data.id
+            assert data.prediction_date == testDate
+            assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
