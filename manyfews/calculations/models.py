@@ -53,3 +53,12 @@ class RiverFlowPrediction(models.Model):
         RiverFlowCalculationOutput, on_delete=models.CASCADE
     )
     river_flow = models.FloatField()
+
+
+class AggregatedDepthPrediction(models.Model):
+    prediction_date = models.DateTimeField()
+    lower_bound = models.PointField(default=Point(0, 0))
+    upper_bound = models.PointField(default=Point(0, 0))
+    median_depth = models.FloatField()
+    centile_25 = models.FloatField()
+    centile_75 = models.FloatField()

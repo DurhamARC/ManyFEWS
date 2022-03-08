@@ -142,9 +142,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": (-7.052115, 107.755514),
-    "DEFAULT_ZOOM": 10,
-    "MIN_ZOOM": 3,
-    "MAX_ZOOM": 18,
+    "DEFAULT_ZOOM": 16,
+    "MIN_ZOOM": 10,
+    "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,
 }
 
