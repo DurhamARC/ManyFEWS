@@ -17,10 +17,9 @@ class ZentraReading(models.Model):
     air_temperature = models.FloatField(null=True)
     wind_speed = models.FloatField(null=True)
     wind_direction = models.FloatField(null=True)
-    # energy?
 
 
-class NoaaForecast(models.Model):
+class WeatherReading(models.Model):
     date = models.DateTimeField()
     location = models.PointField(default=Point(0, 0))
     precipitation = models.FloatField()
@@ -28,7 +27,18 @@ class NoaaForecast(models.Model):
     max_temperature = models.FloatField()
     wind_u = models.FloatField()
     wind_v = models.FloatField()
-    relative_humidity = models.FloatField()
+    relative_humidity = models.FloatField(default=0)
+
+    class Meta:
+        abstract = True
+
+
+class NoaaForecast(WeatherReading):
+    pass
+
+
+class AggregatedZentraReading(WeatherReading):
+    pass
 
 
 class InitialCondition(models.Model):
