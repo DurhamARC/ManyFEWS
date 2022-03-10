@@ -175,6 +175,3 @@ def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
                 river_flow=riverFlows[i, j],
             )
             riverFlowPredictionData.save()
-
-
-prepareZentra()
