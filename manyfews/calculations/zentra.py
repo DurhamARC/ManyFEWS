@@ -6,28 +6,28 @@ from .models import ZentraDevice
 import math
 
 
-def zentraReader(backTime, stationSN):
+def zentraReader(startTime, endTime, stationSN):
 
     """
     This function is used to extract observation climate data from ZENTRA cloud: https://zentracloud.com/,
     and output data sets into Database ( calculations_zentrareading table)
 
-    :param backTime: the back days number you want to extract (unit: day).
+    :param startTime: the start time you want to extract (unit: day).
+    :param endTime: the end time you want to extract (unit: day).
     :param stationSN: the serial number of meter station.
     :param token: authentication token.
     :return none
 
     """
-
-    # obtain start time ( 30 days before) and device's SN
-    startTime = datetime.now() - timedelta(days=backTime)
-
     # return authentication token for the Zentra cloud
     token = ZentraToken(username=settings.ZENTRA_UN, password=settings.ZENTRA_PW)
 
     # Get the readings for a device
     readings = ZentraReadings().get(
-        sn=stationSN, token=token, start_time=int(startTime.timestamp()),
+        sn=stationSN,
+        token=token,
+        start_time=int(startTime.timestamp()),
+        end_time=int(endTime.timestamp()),
     )
     zentraData = readings.response
 
