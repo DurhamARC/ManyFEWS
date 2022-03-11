@@ -1,4 +1,6 @@
-from django.contrib.gis.geos import Point, Polygon
+from datetime import date, timedelta
+import random
+
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
@@ -7,7 +9,29 @@ from calculations.models import AggregatedDepthPrediction
 
 def index(request):
     template = loader.get_template("webapp/index.html")
-    return HttpResponse(template.render({}, request))
+    today = date.today()
+    daily_risks = []
+    for i in range(7):
+        risk = random.randint(0, 100)
+        risk_level = 0
+        if risk > 75:
+            risk_level = 4
+        elif risk > 50:
+            risk_level = 3
+        elif risk > 25:
+            risk_level = 2
+        elif risk > 0:
+            risk_level = 1
+
+        daily_risks.append(
+            {
+                "date": today + timedelta(days=i),
+                "risk_percentage": risk,
+                "risk_level": risk_level,
+            }
+        )
+
+    return HttpResponse(template.render({"daily_risks": daily_risks}, request))
 
 
 def depth_predictions(request, day, bounding_box):

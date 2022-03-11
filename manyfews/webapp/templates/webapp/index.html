@@ -12,10 +12,22 @@
 </head>
 
 <body>
-    <div class="header container-fluid">
-      <h1 class="align-middle">ManyFEWS</h1>
+    <div class="header container-fluid row">
+        <div class="col-4 align-self-center">
+            <h1 class="row">ManyFEWS</h1>
+            <h3 class="row">Flood warnings for Majalaya</h3>
+        </div>
+        {% for d in daily_risks %}
+            <div class="col align-middle">
+                <div class="daily-risk risk{{ d.risk_level }}">
+                    <p class="day">{{ d.date|date:"l" }}</p>
+                    <p class="date">{{ d.date|date:"M j" }}</p>
+                    <p class="risk">{{ d.risk_percentage }}%</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
     <div class="map">
-    {% leaflet_map "map" %}
+        {% leaflet_map "map" %}
     </div>
 </body>
