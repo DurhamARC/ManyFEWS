@@ -45,19 +45,17 @@ def prepareGEFS():
 
 
 @shared_task(name="calculations.prepareZentra")
-def prepareZentra():
+def prepareZentra(backDay=1):
     """
     This function is developed to extract daily necessary Zentra cloud observation data sets
     into Database for running the River Flows model.
 
+    :param backDay: the number of previous days you want to extract from zentra cloud. (default = 1)
     For each day: the data is from 00:00 ---> 23:55
     """
 
     # get serial number
     stationSN = settings.STATION_SN
-
-    # save into Data base
-    backDay = float(settings.ZENTRA_BACKTIME)
 
     # prepare start_time and end_time
     startDate = datetime.now() - timedelta(days=backDay)
@@ -180,7 +178,11 @@ def runningGenerateRiverFlows(predictionDate, dataLocation):
 @shared_task(name="calculations.initialModelSetUp")
 def initialModelSetUp():
 
-    print("set up intial model")
+    backDays = int(settings.INITIAL_BACKTIME)
+    # Prepare Zentra data from 365 days ago
+    for back in range(backDays, 0, -1):
+        print(back)
+        prepareZentra(back)
 
 
 @shared_task(name="calculations.dailyModelUpdate")
