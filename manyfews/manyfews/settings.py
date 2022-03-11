@@ -25,6 +25,7 @@ ZENTRA_BACKTIME = env("zentra_backtime")
 STATION_SN = env("station_SN")
 GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
+MODEL_TIMESTEP = env("model_timestep")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
