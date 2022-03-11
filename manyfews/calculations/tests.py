@@ -121,7 +121,7 @@ class WeatherImportTests(TestCase):
 
         # Check that there are readings in the database
         readings = ZentraReading.objects.all()
-        assert len(readings) > 100
+        assert len(readings) == 288
 
         # Check that they all relate to our device
         for reading in readings:

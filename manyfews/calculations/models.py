@@ -12,15 +12,14 @@ class ZentraDevice(models.Model):
 class ZentraReading(models.Model):
     date = models.DateTimeField()
     device = models.ForeignKey(ZentraDevice, on_delete=models.CASCADE)
-    relative_humidity = models.FloatField()
-    precipitation = models.FloatField()
-    air_temperature = models.FloatField()
-    wind_speed = models.FloatField()
-    wind_direction = models.FloatField()
-    # energy?
+    relative_humidity = models.FloatField(null=True)
+    precipitation = models.FloatField(null=True)
+    air_temperature = models.FloatField(null=True)
+    wind_speed = models.FloatField(null=True)
+    wind_direction = models.FloatField(null=True)
 
 
-class NoaaForecast(models.Model):
+class WeatherReading(models.Model):
     date = models.DateTimeField()
     location = models.PointField(default=Point(0, 0))
     precipitation = models.FloatField()
@@ -29,6 +28,17 @@ class NoaaForecast(models.Model):
     wind_u = models.FloatField()
     wind_v = models.FloatField()
     relative_humidity = models.FloatField(default=0)
+
+    class Meta:
+        abstract = True
+
+
+class NoaaForecast(WeatherReading):
+    pass
+
+
+class AggregatedZentraReading(WeatherReading):
+    pass
 
 
 class InitialCondition(models.Model):
