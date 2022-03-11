@@ -145,9 +145,7 @@ class ModelCalculationTests(TestCase):
         # plus time zone information
         testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
         nextDay = testDate + timedelta(days=1)
-        runningGenerateRiverFlows(
-            dt=0.25, predictionDate=testDate, dataLocation=testLocation
-        )
+        runningGenerateRiverFlows(predictionDate=testDate, dataLocation=testLocation)
 
         # extract result from data base.
         riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
