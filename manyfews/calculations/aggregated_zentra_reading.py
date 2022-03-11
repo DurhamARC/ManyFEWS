@@ -32,6 +32,8 @@ sn = "06-02047"
 
 
 def aggregateZentraData(stationSN, beginTime, endTime):
+
+    # extract data from DB and export data into a Numpy array.
     zentraReadingData = ZentraReading.objects.filter(
         date__range=(beginTime, endTime)
     ).filter(device_id=stationSN)
@@ -112,7 +114,6 @@ def aggregateZentraData(stationSN, beginTime, endTime):
             wind_v=aggregatedData[i, 4],
             precipitation=aggregatedData[i, 5],
         )
-
         aggregatedZentraData.save()
 
 
