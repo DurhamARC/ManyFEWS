@@ -122,8 +122,9 @@ def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
     )
 
     # run model.
+    dt = float(settings.MODEL_TIMESTEP)
     riverFlowsData = GenerateRiverFlows(
-        dt=0.25,
+        dt=dt,
         gefsData=gefsData,
         F0=initialConditionData,
         parametersFilePath=parametersFilePath,
