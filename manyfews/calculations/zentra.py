@@ -123,11 +123,11 @@ def zentraReader(startTime, endTime, stationSN):
         zentraData.save()
 
 
-def aggregateZentraData(stationSN, beginTime, endTime):
+def aggregateZentraData(startTime, endTime, stationSN):
 
     # extract data from DB and export data into a Numpy array.
     zentraReadingData = ZentraReading.objects.filter(
-        date__range=(beginTime, endTime)
+        date__range=(startTime, endTime)
     ).filter(device_id=stationSN)
 
     precipList = []
