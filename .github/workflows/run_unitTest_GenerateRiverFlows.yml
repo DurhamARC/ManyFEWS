@@ -40,6 +40,10 @@ jobs:
       - run: |
           conda info
           conda list
+      - name: Install npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
       - name: Run Django migrations
         run: |
           cp ./manyfews/.env.CI ./manyfews/.env
@@ -50,4 +54,18 @@ jobs:
           zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
           zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
         run: python manage.py test
+        working-directory: manyfews
+      - name: Check npm and webpack
+        run: |
+          npm install
+          npm run build
+        working-directory: manyfews
+      - name: Check built assets are up-to-date
+        run: |
+          if [[ `git status --porcelain manyfews/webapp/static` ]]; then
+            echo "Static files are not up to date:"
+            git status --porcelain manyfews/webapp/static
+            echo "Run 'npm run build' from the 'manyfews' directory and commit the changes."
+            exit 1
+          fi
         working-directory: manyfews

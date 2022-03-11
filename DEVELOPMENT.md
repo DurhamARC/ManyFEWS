@@ -9,6 +9,7 @@ Make sure you have the following installed:
  * conda (e.g. [miniconda](https://docs.conda.io/en/latest/miniconda.html) if you don't already have conda installed)
  * [RabbitMQ](https://www.rabbitmq.com/download.html)
  * [PostgreSQL](https://www.postgresql.org/download/) and [PostGIS](https://postgis.net/docs/manual-3.2/postgis_installation.html) - see (see https://docs.djangoproject.com/en/3.2/ref/contrib/gis/install/postgis/)
+ * [Node.js (and npm)](https://nodejs.org/en/)
 
 ## Setup
 
@@ -73,6 +74,14 @@ Make sure you have the following installed:
 
    (Follow the prompts to add a username, email and password.)
 
+10. Build the web assets using npm:
+
+    ```bash
+    npm run build
+    ```
+
+    (For development purposes you can run `npm run dev` to build the files on-the-fly whilst editing the JavaScript, but you should run `npm run build` before committing.)
+
 10. Run the django app in development mode (still in the `manyfews` directory):
 
     ```bash
@@ -81,15 +90,15 @@ Make sure you have the following installed:
 
     Go to http://127.0.0.1:8000/ and check that the app works.
 
-11. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
+12. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
 
     ```bash
     celery -A manyfews worker -B -l DEBUG --scheduler django_celery_beat.schedulers:DatabaseScheduler
     ```
 
-12. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
+13. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
 
-13. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
+14. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
 
 
 ## Making model changes
