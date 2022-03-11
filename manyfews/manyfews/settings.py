@@ -23,7 +23,6 @@ LAT_VALUE = env("latValue")
 LON_VALUE = env("lonValue")
 ZENTRA_BACKTIME = env("zentra_backtime")
 STATION_SN = env("station_SN")
-GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
 MODEL_TIMESTEP = env("model_timestep")
 

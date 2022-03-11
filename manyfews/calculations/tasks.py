@@ -39,7 +39,7 @@ def prepareGEFS():
     into Database for running the River Flows model
     """
     # prepare GEFS data
-    dt = float(settings.GEFS_TIME_STEP)
+    dt = float(settings.MODEL_TIMESTEP)
     forecastDays = int(settings.GEFS_FORECAST_DAYS)
     dataBaseWriter(dt=dt, forecastDays=forecastDays)
 
