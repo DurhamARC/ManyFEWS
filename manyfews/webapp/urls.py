@@ -1,8 +1,12 @@
-from django.urls import path
+from django.urls import path, register_converter
 
-from . import views
+from . import views, converters
+
+register_converter(converters.BoundingBoxUrlParameterConverter, "bbox")
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("depths", views.depth_predictions, name="depths"),
+    path(
+        "depths/<int:day>/<bbox:bounding_box>", views.depth_predictions, name="depths"
+    ),
 ]

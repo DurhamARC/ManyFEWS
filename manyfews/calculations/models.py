@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, Polygon
 
 
 class ZentraDevice(models.Model):
@@ -57,8 +57,7 @@ class RiverFlowPrediction(models.Model):
 
 class AggregatedDepthPrediction(models.Model):
     prediction_date = models.DateTimeField()
-    lower_bound = models.PointField(default=Point(0, 0))
-    upper_bound = models.PointField(default=Point(0, 0))
+    bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
     median_depth = models.FloatField()
     centile_25 = models.FloatField()
     centile_75 = models.FloatField()

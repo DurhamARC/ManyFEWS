@@ -1,7 +1,7 @@
 import datetime
 import random
 
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, Polygon
 from django.utils import timezone
 
 from calculations.models import ZentraDevice, AggregatedDepthPrediction
@@ -18,22 +18,26 @@ start_location = Point(-7.065, 107.735)
 date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 grid_size = 0.0005
 
-for i in range(50):
-    for j in range(100):
-        lower_bound = Point(
-            start_location.x + grid_size * i, start_location.y + grid_size * j,
-        )
-        upper_bound = Point(
-            start_location.x + grid_size * (i + 1),
-            start_location.y + grid_size * (j + 1),
-        )
-        median_depth = random.random()
-        prediction = AggregatedDepthPrediction(
-            prediction_date=date,
-            lower_bound=lower_bound,
-            upper_bound=upper_bound,
-            median_depth=median_depth,
-            centile_25=median_depth - random.random() * median_depth,
-            centile_75=median_depth + random.random() * 0.5,
-        )
-        prediction.save()
+for d in range(5):
+    for i in range(100):
+        for j in range(150):
+            # Generate data for 1 point in 3
+            if random.random() < 0.33:
+                bounding_box = Polygon.from_bbox(
+                    (
+                        start_location.x + grid_size * i,
+                        start_location.y + grid_size * j,
+                        start_location.x + grid_size * (i + 1),
+                        start_location.y + grid_size * (j + 1),
+                    )
+                )
+                median_depth = random.random()
+                prediction = AggregatedDepthPrediction(
+                    prediction_date=date,
+                    bounding_box=bounding_box,
+                    median_depth=median_depth,
+                    centile_25=median_depth - random.random() * median_depth,
+                    centile_75=median_depth + random.random() * 0.5,
+                )
+                prediction.save()
+    date += datetime.timedelta(days=1)
