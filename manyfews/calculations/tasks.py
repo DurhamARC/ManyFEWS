@@ -165,29 +165,6 @@ def initialModelSetUp():
     stationSN = settings.STATION_SN
     backDays = int(settings.INITIAL_BACKTIME)
 
-    startDate = datetime.now() - timedelta(days=backDay)
-    startTime = datetime(
-        year=startDate.year,
-        month=startDate.month,
-        day=startDate.day,
-        hour=0,
-        minute=0,
-        second=0,
-        microsecond=0,
-        tzinfo=timezone(timedelta(hours=0)),
-    )  # Offset start time to 00:00
-
-    endTime = datetime(
-        year=startDate.year,
-        month=startDate.month,
-        day=startDate.day,
-        hour=23,
-        minute=55,
-        second=0,
-        microsecond=0,
-        tzinfo=timezone(timedelta(hours=0)),
-    )  # Offset start time to 23:55
-
     # Prepare Zentra data from 365 days ago
     for back in range(backDays, 0, -1):
         print(back)
