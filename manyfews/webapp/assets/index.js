@@ -1,3 +1,5 @@
+import './sass/main.scss';
+
 var floodOverlayLayerGroup = L.layerGroup();
 
 function getFloodOverlays(map) {

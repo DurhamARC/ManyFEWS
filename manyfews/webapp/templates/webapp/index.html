@@ -2,14 +2,20 @@
 {% load leaflet_tags %}
 
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'webapp/map.css' %}" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     {% leaflet_js %}
     {% leaflet_css %}
     <script src="{% static 'index-bundle.js' %}"></script>
+    <title>ManyFEWS</title>
 </head>
 
 <body>
-    <h1>ManyFEWS</h1>
+    <div class="header container-fluid">
+      <h1 class="align-middle">ManyFEWS</h1>
+    </div>
+    <div class="map">
     {% leaflet_map "map" %}
+    </div>
 </body>
