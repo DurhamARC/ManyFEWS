@@ -58,7 +58,7 @@ def prepareZentra(backDay=1):
     stationSN = settings.STATION_SN
 
     # prepare start_time and end_time
-    timeInfo = offsetTime(backDay=backDay)
+    timeInfo = offsetTime(backDays=backDay)
     startTime = timeInfo[0]
     endTime = timeInfo[1]
 
