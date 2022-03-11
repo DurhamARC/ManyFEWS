@@ -1,0 +1,1 @@
+window.addEventListener("map:init",(function(n){var o=n.detail;fetch("/depths").then((function(n){return n.json()})).then((function(n){console.log(n),n.items.forEach((n=>{L.rectangle(n.bounds,{color:null,fillColor:"CornflowerBlue",fillOpacity:.5*n.depth}).addTo(o.map)}))}))}),!1);

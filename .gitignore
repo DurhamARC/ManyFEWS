@@ -143,5 +143,7 @@ dmypy.json
 # Make sure the .env file is not committed
 /manyfews/manyfews/.env
 
+# node_modules dir
+manyfews/node_modules
 
-
+.DS_Store
