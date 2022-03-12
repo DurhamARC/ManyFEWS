@@ -6,6 +6,7 @@ from .models import NoaaForecast
 from django.contrib.gis.geos import Point
 from retrying import retry
 from django.conf import settings
+from tqdm import trange
 
 # if report error, retrying 72 times (6 hours), sleep 300 seconds (5 minutes) between attempts
 @retry(stop_max_attempt_number=72, wait_fixed=300)
@@ -169,10 +170,8 @@ def dataBaseWriter(dt, forecastDays):
     latValue = float(settings.LAT_VALUE)
     lonValue = float(settings.LON_VALUE)
 
-    for i in range(loopRange):
+    for i in trange(loopRange):
         forceastHour = deltaHour + i * deltaHour
-
-        print("forceastHour:", forceastHour)
 
         gefsData = GEFSdownloader(
             fileDate=fileDate,
