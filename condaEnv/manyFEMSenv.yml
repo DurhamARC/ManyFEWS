@@ -21,4 +21,5 @@ dependencies:
     - django-environ
     - git+https://github.com/mt-climate-office/Zentra-API
     - pygrib
+    - tqdm
 prefix: /usr/local/Caskroom/miniconda/base/envs/ManyFEWS
