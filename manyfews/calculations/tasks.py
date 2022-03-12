@@ -1,7 +1,7 @@
 from celery import Celery, shared_task
 from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
-from .zentra import zentraReader, offsetTime
+from .zentra import zentraReader, offsetTime, aggregateZentraData
 from .gefs import dataBaseWriter
 from django.conf import settings
 from .models import (
@@ -48,7 +48,7 @@ def prepareGEFS():
 def prepareZentra(backDay=1):
     """
     This function is developed to extract daily necessary Zentra cloud observation data sets
-    into Database for running the River Flows model.
+    into Database and aggregate data for running the River Flows model.
 
     :param backDay: the number of previous days you want to extract from zentra cloud. (default = 1)
     For each day: the data is from 00:00 ---> 23:55
@@ -64,6 +64,9 @@ def prepareZentra(backDay=1):
 
     # prepare Zentra Cloud data
     zentraReader(startTime=startTime, endTime=endTime, stationSN=stationSN)
+
+    # aggregate zentra data
+    aggregateZentraData(startTime=startTime, endTime=endTime, stationSN=stationSN)
 
 
 @shared_task(name="calculations.runningGenerateRiverFlows")
@@ -166,13 +169,17 @@ def initialModelSetUp():
     backDays = int(settings.INITIAL_BACKTIME)
 
     # Prepare Zentra data from 365 days ago
-    for back in range(backDays, 0, -1):
-        print(back)
+    for back in range(backDays, 349, -1):
 
-        prepareZentra(back)
+        print(back)
+        # prepare zentra data and aggregate them
+        # prepareZentra(back) ------------------> it is not a comment.
 
 
 @shared_task(name="calculations.dailyModelUpdate")
 def dailyModelUpdate():
 
     print("set up daily model update")
+
+
+initialModelSetUp()
