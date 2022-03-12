@@ -2,7 +2,7 @@ from .models import ZentraReading
 from zentra.api import ZentraReadings, ZentraToken
 from datetime import timedelta, timezone, datetime
 from django.conf import settings
-from .models import ZentraDevice
+from .models import ZentraDevice, AggregatedZentraReading
 import numpy as np
 import math
 
@@ -143,15 +143,22 @@ def aggregateZentraData(startTime, endTime, stationSN):
         wSpeedList.append(data.wind_speed)
         wDirectionList.append(data.wind_direction)
 
+    ##############################################
+    #  filter the wrong data (Temporary solution)
+    #############################################
+    wSpeedList = [
+        1 if i == None else i for i in wSpeedList
+    ]  # for None data, set it to default (1)
+    wDirectionList = [
+        1 if i == None else i for i in wDirectionList
+    ]  # for None data, set it to default (1)
+    ###############################################
+
     zentraReadingList = list(
         zip(RHList, precipList, airTemList, wSpeedList, wDirectionList)
     )
 
     zentraData = np.array(zentraReadingList)
-
-    #
-    #  filter the wrong data
-    #
 
     # Convert wind speed and wind direction into Uwind and Vwind
     wSpeed = zentraData[:, 3]
@@ -159,6 +166,7 @@ def aggregateZentraData(startTime, endTime, stationSN):
 
     # calculation of Uwind and Vwind
     wDirection = (wDirection * (math.pi)) / 180  # Convert angle to magnitude
+
     uWind = (np.cos(wDirection)) * wSpeed
     vWind = (np.sin(wDirection)) * wSpeed
     zentraData[:, 3] = uWind
@@ -195,7 +203,7 @@ def aggregateZentraData(startTime, endTime, stationSN):
     location = Point(0, 0)
 
     for i in range(len(aggregatedData)):
-        date = beginTime + timedelta(days=(dt * i))
+        date = startTime + timedelta(days=(dt * i))
         aggregatedZentraData = AggregatedZentraReading(
             date=date,
             location=location,
