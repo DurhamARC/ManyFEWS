@@ -143,6 +143,9 @@ def aggregateZentraData(startTime, endTime, stationSN):
         wSpeedList.append(data.wind_speed)
         wDirectionList.append(data.wind_direction)
 
+    # convert temperature Unit from °C to ℉
+    airTemList = [i + 273.15 for i in airTemList]
+
     ##############################################
     #  filter the wrong data (Temporary solution)
     #############################################
