@@ -9,14 +9,15 @@ from .models import (
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
-from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
+from .tasks import prepareZentra, prepareGEFS
 from django.test import TestCase
 import numpy as np
 from django.contrib.gis.geos import Point
 from datetime import datetime, timedelta, timezone
 from .generate_river_flows import (
-    prepareGEFSdata,
     prepareInitialCondition,
+    prepareWeatherForecastData,
+    runningGenerateRiverFlows,
 )
 import xlrd
 import os
@@ -150,7 +151,9 @@ class ModelCalculationTests(TestCase):
         testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
         nextDay = testDate + timedelta(days=1)
 
-        gefsData = prepareGEFSdata(date=testDate, location=testLocation)
+        weatherForecaseData = prepareWeatherForecastData(
+            date=testDate, location=testLocation
+        )
 
         # prepare initial condition data for model.
         initialConditionData = prepareInitialCondition(
@@ -159,7 +162,7 @@ class ModelCalculationTests(TestCase):
         runningGenerateRiverFlows(
             predictionDate=testDate,
             dataLocation=testLocation,
-            weatherForecast=gefsData,
+            weatherForecast=weatherForecaseData,
             initialData=initialConditionData,
         )
 

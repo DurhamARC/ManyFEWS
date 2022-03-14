@@ -4,17 +4,7 @@ from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from .zentra import zentraReader, offsetTime, aggregateZentraData
 from .gefs import dataBaseWriter
 from django.conf import settings
-from .models import (
-    InitialCondition,
-    RiverFlowCalculationOutput,
-    RiverFlowPrediction,
-    AggregatedZentraReading,
-)
-from .generate_river_flows import (
-    prepareGEFSdata,
-    prepareInitialCondition,
-    GenerateRiverFlows,
-)
+from .models import AggregatedZentraReading
 from datetime import datetime, timedelta, timezone
 import os
 from tqdm import trange
@@ -70,91 +60,6 @@ def prepareZentra(backDay=1):
 
     # aggregate zentra data
     aggregateZentraData(startTime=startTime, endTime=endTime, stationSN=stationSN)
-
-
-@shared_task(name="calculations.runningGenerateRiverFlows")
-def runningGenerateRiverFlows(
-    predictionDate, dataLocation, weatherForecast, initialData
-):
-    """
-    This function is developed to prepare data and running models for generating river flows,
-    and save the next day's initial condition, River flow, Rainfall, and potential evapotranspiration
-    into DB.
-
-    :param beginDate: the date information of input data.
-    :param dataLocation: the location information of input data
-    :return none.
-    """
-    projectPath = os.path.abspath(
-        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
-    )
-
-    dataFileDirPath = os.path.join(projectPath, "Data")
-    parametersFilePath = os.path.join(
-        dataFileDirPath, "RainfallRunoffModelParameters.csv"
-    )
-
-    # plus time zone information
-    predictionDate = datetime.astimezone(
-        predictionDate, tz=timezone(timedelta(hours=0))
-    )
-
-    # run model.
-    dt = float(settings.MODEL_TIMESTEP)
-    riverFlowsData = GenerateRiverFlows(
-        dt=dt,
-        predictionDate=predictionDate,
-        gefsData=weatherForecast,
-        F0=initialData,
-        parametersFilePath=parametersFilePath,
-    )
-
-    # riverFlowsData[0] ====> Q: River flow (m3/s).
-    # riverFlowsData[1] ====> qp: Rainfall (mm/day).
-    # riverFlowsData[2] ====> Ep: Potential evapotranspiration (mm/day).
-    # riverFlowsData[3] ====> F0: intial condition data for next day.
-
-    riverFlows = riverFlowsData[0]
-    qp = riverFlowsData[1]
-    Ep = riverFlowsData[2]
-    F0 = riverFlowsData[3]  # next day's initial condition
-
-    # import the next day's initial condition data F0 into DB.
-    # ('calculations_initialcondition' table)
-    nextDay = predictionDate + timedelta(days=1)
-
-    for i in range(len(F0[:, 0])):
-        nextDayInitialCondition = InitialCondition(
-            date=nextDay,
-            location=dataLocation,
-            storage_level=F0[i, 0],
-            slow_flow_rate=F0[i, 1],
-            fast_flow_rate=F0[i, 2],
-        )
-        nextDayInitialCondition.save()
-
-    for i in range(qp.shape[0]):
-        # save qp and Eq and into DB.
-        # ( 'calculations_riverflowcalculationoutput' table)
-        forecastTime = predictionDate + timedelta(days=i * dt)
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput(
-            prediction_date=predictionDate,
-            forecast_time=forecastTime,
-            location=dataLocation,
-            rain_fall=qp[i],
-            potential_evapotranspiration=Ep[i],
-        )
-        riverFlowCalculationOutputData.save()
-
-        # save Q into DB.
-        # ('calculations_riverflowprediction' table)
-        for j in range(riverFlows.shape[1]):
-            riverFlowPredictionData = RiverFlowPrediction(
-                prediction_index=j,
-                calculation_output=riverFlowCalculationOutputData,
-                river_flow=riverFlows[i, j],
-            )
-            riverFlowPredictionData.save()
 
 
 @shared_task(name="calculations.initialModelSetUp")
