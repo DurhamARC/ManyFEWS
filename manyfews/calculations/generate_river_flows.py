@@ -1,6 +1,7 @@
 import math
 import os
 import numpy as np
+from django.conf import settings
 from datetime import date, datetime, timedelta, timezone
 from .models import (
     NoaaForecast,
