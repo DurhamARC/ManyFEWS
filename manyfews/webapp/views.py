@@ -25,6 +25,7 @@ def index(request):
 
         daily_risks.append(
             {
+                "day_number": i,
                 "date": today + timedelta(days=i),
                 "risk_percentage": risk,
                 "risk_level": risk_level,
@@ -35,9 +36,10 @@ def index(request):
 
 
 def depth_predictions(request, day, bounding_box):
-    # TODO: get latest values not all
+    # Get the depth predictions for this bounding box and day days ahead
     predictions = AggregatedDepthPrediction.objects.filter(
-        bounding_box__intersects=bounding_box
+        prediction_date=date.today() + timedelta(days=day),
+        bounding_box__intersects=bounding_box,
     )
     items = []
     for p in predictions:

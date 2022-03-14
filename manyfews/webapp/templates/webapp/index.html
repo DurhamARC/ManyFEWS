@@ -19,7 +19,7 @@
         </div>
         {% for d in daily_risks %}
             <div class="col align-middle">
-                <div class="daily-risk btn risk{{ d.risk_level }}">
+                <div class="daily-risk btn risk{{ d.risk_level }}" data-day="{{ d.day_number }}">
                     <p class="day">{{ d.date|date:"l" }}</p>
                     <p class="date">{{ d.date|date:"M j" }}</p>
                     <p class="risk">{{ d.risk_percentage }}%</p>

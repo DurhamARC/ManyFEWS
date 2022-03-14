@@ -33,6 +33,21 @@ body {
       &.risk4 {
         background-color: $riskColor4;
       }
+      &.current {
+        border: 3px solid black;
+        position: relative;
+
+        &:after {
+          content: " ";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -13px;
+          border-width: 13px;
+          border-style: solid;
+          border-color: $black transparent transparent transparent;
+        }
+      }
 
       p {
         text-align: center;
