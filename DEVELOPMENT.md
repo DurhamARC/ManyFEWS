@@ -46,6 +46,7 @@ Make sure you have the following installed:
 6. Register a Zentra Cloud account.
    1. Sign up for an account on: `https://zentracloud.com/accounts/login/`;
    2. Then contact the administrator for your Zentra Cloud organisation to add your user account to the organisation.
+   Also (for now) create a [MapBox](https://www.mapbox.com/) account and get your API key.
 
 
 7. Set up environment variables in Django.  
@@ -54,6 +55,7 @@ Make sure you have the following installed:
    $ vi .env.CI
    > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
    > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
+   > replace 'mapbox_api_token' with your MapBox API token.
    > Save and quit.
    $ cp .env.CI .env
    $ cd ..
@@ -99,6 +101,12 @@ Make sure you have the following installed:
 13. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
 
 14. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
+
+15. (Temporarily, for development.) To load some dummy data into the AggregatedDepthPrediction table, run:
+
+   ```bash
+   python manage.py shell < webapp/load.py
+   ```
 
 
 ## Making model changes
