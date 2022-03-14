@@ -25,6 +25,8 @@ ZENTRA_BACKTIME = env("zentra_backtime")
 STATION_SN = env("station_SN")
 GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
+MAPBOX_API_TOKEN = env("mapbox_api_token")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,6 +148,7 @@ LEAFLET_CONFIG = {
     "MIN_ZOOM": 10,
     "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,
+    "TILES": f"https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{{z}}/{{x}}/{{y}}?access_token={MAPBOX_API_TOKEN}",
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
