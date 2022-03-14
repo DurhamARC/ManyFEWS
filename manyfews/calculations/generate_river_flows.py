@@ -210,10 +210,8 @@ def FAO56(dt, predictionDate, Tmin, Tmax, alt, lat, T, u2, RH):
     varphi = (lat * math.pi) / 180
 
     # Determine day of the year as a number from 1 to 365
-    # beginDate = date(2010, 1, 1)
     beginDate = predictionDate.date()
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
-    # J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
     J = beginDateNum + np.arange(0, ((np.size(Tmax[:])) / 4), dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
