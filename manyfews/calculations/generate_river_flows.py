@@ -1,7 +1,7 @@
 import math
 import os
 import numpy as np
-from datetime import date
+from datetime import date, datetime
 from .models import (
     NoaaForecast,
     InitialCondition,
