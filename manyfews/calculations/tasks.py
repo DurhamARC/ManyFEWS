@@ -73,7 +73,9 @@ def prepareZentra(backDay=1):
 
 
 @shared_task(name="calculations.runningGenerateRiverFlows")
-def runningGenerateRiverFlows(predictionDate, dataLocation):
+def runningGenerateRiverFlows(
+    predictionDate, dataLocation, weatherForecast, initialData
+):
     """
     This function is developed to prepare data and running models for generating river flows,
     and save the next day's initial condition, River flow, Rainfall, and potential evapotranspiration
@@ -95,14 +97,6 @@ def runningGenerateRiverFlows(predictionDate, dataLocation):
     # plus time zone information
     predictionDate = datetime.astimezone(
         predictionDate, tz=timezone(timedelta(hours=0))
-    )
-
-    # prepare GEFS data for model.
-    gefsData = prepareGEFSdata(date=predictionDate, location=dataLocation)
-
-    # prepare initial condition data for model.
-    initialConditionData = prepareInitialCondition(
-        date=predictionDate, location=dataLocation
     )
 
     # run model.
@@ -192,11 +186,16 @@ def initialModelSetUp():
     # plus time zone information
 
     # prepare Zentra data for model.
-    startTime = datetime(year=2021, month=3, day=13, hour=0, minute=0, second=0)
+    startTime = datetime(
+        year=2021, month=3, day=14, hour=0, minute=0, second=0
+    ).astimezone(tz=timezone(timedelta(hours=0)))
+
+    # startTime = datetime.astimezone(startTime, tz=timezone(timedelta(hours=0)))
+
     endTime = startTime + timedelta(days=15.75)
 
-    startTime = datetime.astimezone(startTime, tz=timezone(timedelta(hours=0)))
-    endTime = datetime.astimezone(endTime, tz=timezone(timedelta(hours=0)))
+    # startTime = datetime.astimezone(startTime, tz=timezone(timedelta(hours=0)))
+    # endTime = datetime.astimezone(endTime, tz=timezone(timedelta(hours=0)))
 
     aggregatedZentraData = AggregatedZentraReading.objects.filter(
         date__range=(startTime, endTime)
@@ -230,12 +229,11 @@ def initialModelSetUp():
 
     aggregatedZentra = np.array(aggregatedZentraDataList)
 
-    print(np.shape(aggregatedZentra))
-
     dt = float(settings.MODEL_TIMESTEP)
 
     riverFlowsData = GenerateRiverFlows(
         dt=dt,
+        predictionDate=startTime,
         gefsData=aggregatedZentra,
         F0=initialConditionData,
         parametersFilePath=parametersFilePath,
@@ -243,8 +241,8 @@ def initialModelSetUp():
 
     F0 = riverFlowsData[3]
 
-    for i in range(len(aggregatedZentra)):
-        print(aggregatedZentra[i, :])
+    # for i in range(len(aggregatedZentra)):
+    #    print(aggregatedZentra[i, :])
 
     print(F0[0, :])
 
