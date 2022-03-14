@@ -9,7 +9,7 @@ from .models import (
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
-from .tasks import prepareZentra
+from .zentra import prepareZentra
 from .gefs import prepareGEFS
 from django.test import TestCase
 import numpy as np

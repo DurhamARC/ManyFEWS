@@ -24,31 +24,6 @@ def hello_celery():
     logger.info("Hello logging from celery!")
 
 
-@shared_task(name="calculations.prepareZentra")
-def prepareZentra(backDay=1):
-    """
-    This function is developed to extract daily necessary Zentra cloud observation data sets
-    into Database and aggregate data for running the River Flows model.
-
-    :param backDay: the number of previous days you want to extract from zentra cloud. (default = 1)
-    For each day: the data is from 00:00 ---> 23:55
-    """
-
-    # get serial number
-    stationSN = settings.STATION_SN
-
-    # prepare start_time and end_time
-    timeInfo = offsetTime(backDays=backDay)
-    startTime = timeInfo[0]
-    endTime = timeInfo[1]
-
-    # prepare Zentra Cloud data
-    zentraReader(startTime=startTime, endTime=endTime, stationSN=stationSN)
-
-    # aggregate zentra data
-    aggregateZentraData(startTime=startTime, endTime=endTime, stationSN=stationSN)
-
-
 @shared_task(name="calculations.initialModelSetUp")
 def initialModelSetUp():
     """ """
