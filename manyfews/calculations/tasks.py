@@ -2,7 +2,6 @@ from celery import Celery, shared_task
 from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from .zentra import zentraReader, offsetTime, aggregateZentraData
-from .gefs import dataBaseWriter
 from django.conf import settings
 from .models import AggregatedZentraReading
 from datetime import datetime, timedelta, timezone
@@ -23,18 +22,6 @@ def hello_celery():
     This is an example of a task that can be scheduled via celery.
     """
     logger.info("Hello logging from celery!")
-
-
-@shared_task(name="calculations.prepareGEFS")
-def prepareGEFS():
-    """
-    This function is developed to extract necessary GEFS forecast data sets
-    into Database for running the River Flows model
-    """
-    # prepare GEFS data
-    dt = float(settings.MODEL_TIMESTEP)
-    forecastDays = int(settings.GEFS_FORECAST_DAYS)
-    dataBaseWriter(dt=dt, forecastDays=forecastDays)
 
 
 @shared_task(name="calculations.prepareZentra")

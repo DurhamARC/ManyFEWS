@@ -142,14 +142,10 @@ def cellIndexFinder(latitudeInfo, longitudeInfo, latValue, lonValue):
     return index
 
 
-def dataBaseWriter(dt, forecastDays):
+def prepareGEFS():
     """
     This function is used to save data from gefs file into Database.
     ( calculations_noaaforecast table).
-
-    :param dt: Specify time-step in days. ( the interval is every 0.125 day(3 hours))
-    :param forecastDays: Number of Days into the future that the forecast is for.
-    :return: none
     """
 
     # calculate the number of time steps
@@ -158,6 +154,11 @@ def dataBaseWriter(dt, forecastDays):
     #              16 days = 4 * 16 = 64 loop steps.
     #  Therefore, the gefs files are:
     #  geavg.t00z.pgrb2a.0p50.f006 ---> geavg.t00z.pgrb2a.0p50.f384
+
+    dt = float(settings.MODEL_TIMESTEP)  # time-step in days.
+    forecastDays = int(
+        settings.GEFS_FORECAST_DAYS
+    )  # Number of Days into the future that the forecast is for
 
     loopRange = int(forecastDays / dt)
     deltaHour = int(24 * dt)
