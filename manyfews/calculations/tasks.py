@@ -8,6 +8,7 @@ from .models import (
     InitialCondition,
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
+    AggregatedZentraReading,
 )
 from .generate_river_flows import (
     prepareGEFSdata,
@@ -16,6 +17,8 @@ from .generate_river_flows import (
 )
 from datetime import datetime, timedelta, timezone
 import os
+from tqdm import trange
+import numpy as np
 
 app = Celery()
 
@@ -106,6 +109,7 @@ def runningGenerateRiverFlows(predictionDate, dataLocation):
     dt = float(settings.MODEL_TIMESTEP)
     riverFlowsData = GenerateRiverFlows(
         dt=dt,
+        predictionDate=predictionDate,
         gefsData=gefsData,
         F0=initialConditionData,
         parametersFilePath=parametersFilePath,
@@ -161,19 +165,88 @@ def runningGenerateRiverFlows(predictionDate, dataLocation):
 
 @shared_task(name="calculations.initialModelSetUp")
 def initialModelSetUp():
-    """
-
-
-    """
+    """ """
     stationSN = settings.STATION_SN
     backDays = int(settings.INITIAL_BACKTIME)
 
     # Prepare Zentra data from 365 days ago
-    for back in range(backDays, 349, -1):
+    # for back in trange(backDays, 0, -1):
+    # prepare zentra data and aggregate them
+    # prepareZentra(back)
 
-        print(back)
-        # prepare zentra data and aggregate them
-        # prepareZentra(back) ------------------> it is not a comment.
+    projectPath = os.path.abspath(
+        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+    )
+
+    dataFileDirPath = os.path.join(projectPath, "Data")
+    parametersFilePath = os.path.join(
+        dataFileDirPath, "RainfallRunoffModelParameters.csv"
+    )
+    InitialConditionFile = os.path.join(
+        dataFileDirPath, "RainfallRunoffModelInitialConditions.csv"
+    )
+    initialConditionData = np.loadtxt(
+        open(InitialConditionFile), delimiter=",", usecols=range(3)
+    )
+
+    # plus time zone information
+
+    # prepare Zentra data for model.
+    startTime = datetime(year=2021, month=3, day=13, hour=0, minute=0, second=0)
+    endTime = startTime + timedelta(days=15.75)
+
+    startTime = datetime.astimezone(startTime, tz=timezone(timedelta(hours=0)))
+    endTime = datetime.astimezone(endTime, tz=timezone(timedelta(hours=0)))
+
+    aggregatedZentraData = AggregatedZentraReading.objects.filter(
+        date__range=(startTime, endTime)
+    )
+
+    RHList = []
+    minTemperatureList = []
+    maxTemperatureList = []
+    uWindList = []
+    vWindList = []
+    precipitationList = []
+
+    for data in aggregatedZentraData:
+        RHList.append(data.relative_humidity)
+        minTemperatureList.append(data.min_temperature)
+        maxTemperatureList.append(data.max_temperature)
+        uWindList.append(data.wind_u)
+        vWindList.append(data.wind_v)
+        precipitationList.append(data.precipitation)
+
+    aggregatedZentraDataList = list(
+        zip(
+            RHList,
+            maxTemperatureList,
+            minTemperatureList,
+            uWindList,
+            vWindList,
+            precipitationList,
+        )
+    )
+
+    aggregatedZentra = np.array(aggregatedZentraDataList)
+
+    print(np.shape(aggregatedZentra))
+
+    dt = float(settings.MODEL_TIMESTEP)
+
+    riverFlowsData = GenerateRiverFlows(
+        dt=dt,
+        gefsData=aggregatedZentra,
+        F0=initialConditionData,
+        parametersFilePath=parametersFilePath,
+    )
+
+    F0 = riverFlowsData[3]
+
+    for i in range(len(aggregatedZentra)):
+        print(aggregatedZentra[i, :])
+
+    print(F0[0, :])
 
 
 @shared_task(name="calculations.dailyModelUpdate")
@@ -183,3 +256,5 @@ def dailyModelUpdate():
 
 
 initialModelSetUp()
+
+# prepareGEFS()
