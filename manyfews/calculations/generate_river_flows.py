@@ -425,6 +425,9 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
 
     :param date: date information.
     :param location: location information.
+    :param dataSource: the data source of weather forecasting data.
+                       1: 'gefs': from Noaa Forecast data. (default)
+                       2. 'zentra': from Zentra data. (it is usually used in the initial model set up.)
     :return gefsData: a numpy array contains GEFS data.
 
     """
