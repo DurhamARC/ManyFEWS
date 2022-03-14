@@ -158,7 +158,7 @@ class ModelCalculationTests(TestCase):
         )
         runningGenerateRiverFlows(
             predictionDate=testDate,
-            dataLocation=testDate,
+            dataLocation=testLocation,
             weatherForecast=gefsData,
             initialData=initialConditionData,
         )
