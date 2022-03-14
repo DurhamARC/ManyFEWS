@@ -255,6 +255,6 @@ def dailyModelUpdate():
     print("set up daily model update")
 
 
-initialModelSetUp()
+# initialModelSetUp()
 
 # prepareGEFS()
