@@ -155,7 +155,7 @@ def dataBaseWriter(dt, forecastDays):
     # calculate the number of time steps
     # For example: update interval: 0.25 day = 6 h.
     #              Number of Days into the future that the forecast is for
-    #              16 days = 4 * 16 = 65 loop steps.
+    #              16 days = 4 * 16 = 64 loop steps.
     #  Therefore, the gefs files are:
     #  geavg.t00z.pgrb2a.0p50.f006 ---> geavg.t00z.pgrb2a.0p50.f384
 
