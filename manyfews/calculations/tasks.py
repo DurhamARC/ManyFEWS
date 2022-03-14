@@ -104,8 +104,8 @@ def runningGenerateRiverFlows(
     riverFlowsData = GenerateRiverFlows(
         dt=dt,
         predictionDate=predictionDate,
-        gefsData=gefsData,
-        F0=initialConditionData,
+        gefsData=weatherForecast,
+        F0=initialData,
         parametersFilePath=parametersFilePath,
     )
 
