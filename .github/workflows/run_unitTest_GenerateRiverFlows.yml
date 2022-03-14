@@ -30,7 +30,9 @@ jobs:
           version: "19.10b0"
       - name: Install dependencies
         run: |
-          sudo apt-get install binutils libproj-dev gdal-bin
+          sudo apt-get install binutils libproj-dev gdal-bin google-chrome
+      - name: Install chromedriver
+        uses: nanasess/setup-chromedriver
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: anaconda-client-env
