@@ -8,6 +8,7 @@ from .models import (
     InitialCondition,
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
+    AggregatedZentraReading,
 )
 
 
@@ -416,19 +417,30 @@ def prepareInitialCondition(date, location):
     return intialConditionData
 
 
-def prepareWeatherForecastData(date, location):
+def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
     """
 
     This function is for extracting GEFS data with specific dates and locations from DB,
-    and returning data into a NumPy array.
+    and returning data into a Numpy array.
 
     :param date: date information.
     :param location: location information.
     :return gefsData: a numpy array contains GEFS data.
 
     """
-    # prepare testing GEFS data for model.
-    gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
+    # plus time zone information.
+    startTime = datetime.astimezone(predictionDate, tz=timezone(timedelta(hours=0)))
+
+    # prepare weather forecast data for model.
+    if dataSource == "gefs":
+        weatherData = NoaaForecast.objects.filter(date=predictionDate).filter(
+            location=location
+        )
+    elif dataSource == "zentra":
+        endTime = startTime + timedelta(days=15.75)
+        weatherData = AggregatedZentraReading.objects.filter(
+            date__range=(startTime, endTime)
+        ).filter(location=location)
 
     RHList = []
     minTemperatureList = []
@@ -437,15 +449,15 @@ def prepareWeatherForecastData(date, location):
     vWindList = []
     precipitationList = []
 
-    for forecast in gefs:
-        RHList.append(forecast.relative_humidity)
-        minTemperatureList.append(forecast.min_temperature)
-        maxTemperatureList.append(forecast.max_temperature)
-        uWindList.append(forecast.wind_u)
-        vWindList.append(forecast.wind_v)
-        precipitationList.append(forecast.precipitation)
+    for data in weatherData:
+        RHList.append(data.relative_humidity)
+        minTemperatureList.append(data.min_temperature)
+        maxTemperatureList.append(data.max_temperature)
+        uWindList.append(data.wind_u)
+        vWindList.append(data.wind_v)
+        precipitationList.append(data.precipitation)
 
-    gefsList = list(
+    dataList = list(
         zip(
             RHList,
             maxTemperatureList,
@@ -455,9 +467,9 @@ def prepareWeatherForecastData(date, location):
             precipitationList,
         )
     )
-    gefsData = np.array(gefsList)
+    weatherForecastData = np.array(dataList)
 
-    return gefsData
+    return weatherForecastData
 
 
 def runningGenerateRiverFlows(
