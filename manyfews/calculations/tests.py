@@ -153,7 +153,7 @@ class ModelCalculationTests(TestCase):
         nextDay = testDate + timedelta(days=1)
 
         weatherForecaseData = prepareWeatherForecastData(
-            date=testDate, location=testLocation
+            predictionDate=testDate, location=testLocation
         )
 
         # prepare initial condition data for model.
