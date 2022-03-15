@@ -51,16 +51,15 @@ jobs:
           cp ./manyfews/.env.CI ./manyfews/.env
           python manage.py migrate
         working-directory: manyfews
-      - name: Start chromedriver
+      - name: Start XVFB
         run: |
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
       - name: Run Django tests
         env:
           zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
           zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
           mapbox_api_token: ${{ secrets.MAPBOX_API_TOKEN }}
+          DISPLAY: :99
         run: python manage.py test
         working-directory: manyfews
       - name: Check npm and webpack
