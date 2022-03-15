@@ -432,7 +432,7 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
 
     """
     # plus time zone information.
-    startTime = datetime.astimezone(predictionDate, tz=timezone(timedelta(hours=0)))
+    startTime = datetime.astimezone(predictionDate, tz=timezone.utc)
 
     # prepare weather forecast data for model.
     if dataSource == "gefs":
@@ -502,9 +502,7 @@ def runningGenerateRiverFlows(
     )
 
     # plus time zone information
-    predictionDate = datetime.astimezone(
-        predictionDate, tz=timezone(timedelta(hours=0))
-    )
+    predictionDate = datetime.astimezone(predictionDate, tz=timezone.utc)
 
     # run model.
     dt = float(settings.MODEL_TIMESTEP)

@@ -207,6 +207,10 @@ def aggregateZentraData(startTime, endTime, stationSN):
 
     for i in range(len(aggregatedData)):
         date = startTime + timedelta(days=(dt * i))
+
+        # plus time zone information
+        date = date.astimezone(tz=timezone.utc)
+
         aggregatedZentraData = AggregatedZentraReading(
             date=date,
             location=location,
@@ -248,7 +252,7 @@ def offsetTime(backDays):
         minute=0,
         second=0,
         microsecond=0,
-        tzinfo=timezone(timedelta(hours=0)),
+        tzinfo=timezone.utc,
     )  # Offset start time to 00:00
 
     endTime = datetime(
@@ -259,7 +263,7 @@ def offsetTime(backDays):
         minute=55,
         second=0,
         microsecond=0,
-        tzinfo=timezone(timedelta(hours=0)),
+        tzinfo=timezone.utc,
     )  # Offset start time to 23:55
 
     return startTime, endTime

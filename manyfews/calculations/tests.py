@@ -74,7 +74,7 @@ def prepare_test_Data():
     testDate = datetime(
         year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
     )
-    date = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+    date = datetime.astimezone(testDate, tz=timezone.utc)
 
     # prepare test location information (fake)
     testLocation = Point(0, 0)
@@ -148,7 +148,7 @@ class ModelCalculationTests(TestCase):
         testLocation = testInfo[1]  # location
 
         # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+        testDate = datetime.astimezone(testDate, tz=timezone.utc)
         nextDay = testDate + timedelta(days=1)
 
         weatherForecaseData = prepareWeatherForecastData(
@@ -259,7 +259,7 @@ class ModelCalculationTests(TestCase):
         testDate = testInfo[0]  # date
 
         # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+        testDate = datetime.astimezone(testDate, tz=timezone.utc)
 
         # check forecast times and prediction time are as we expect
         riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
