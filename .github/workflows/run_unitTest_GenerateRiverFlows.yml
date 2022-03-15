@@ -58,7 +58,7 @@ jobs:
         env:
           zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
           zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
-          mapbox_api_token: ${{ secrets.MAPBOX_API_TOKEN }}
+          map_api_token: ${{ secrets.MAP_API_TOKEN }}
           DISPLAY: :99
         run: python manage.py test
         working-directory: manyfews

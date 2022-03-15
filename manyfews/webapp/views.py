@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 import random
 
+from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
@@ -32,7 +33,11 @@ def index(request):
             }
         )
 
-    return HttpResponse(template.render({"daily_risks": daily_risks}, request))
+    return HttpResponse(
+        template.render(
+            {"daily_risks": daily_risks, "mapApiKey": settings.MAP_API_TOKEN}, request
+        )
+    )
 
 
 def depth_predictions(request, day, bounding_box):

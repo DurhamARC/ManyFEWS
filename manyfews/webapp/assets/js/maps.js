@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import './bing.js';
 
 var floodOverlayLayerGroup = L.layerGroup();
 var currentDay = 0;
@@ -33,6 +34,9 @@ function getFloodOverlays(map, day) {
 
 window.addEventListener("map:init", function (e) {
   var detail = e.detail;
+  var mapApiKey = $('#mapApiKey').val();
+  var bing = new L.BingLayer(mapApiKey);
+  detail.map.addLayer(bing);
   getFloodOverlays(detail.map, currentDay);
   detail.map.on('moveend', function() {
     getFloodOverlays(detail.map, currentDay);
@@ -44,5 +48,4 @@ window.addEventListener("map:init", function (e) {
     $(this).addClass('current');
   });
   $('.daily-risk').first().addClass('current');
-
 });
