@@ -39,7 +39,6 @@ def excel_to_matrix(path, sheetNum):
     datamatrix = np.zeros((row, col))  # ignore the first title row.
     for x in range(1, row):
         #        row = np.matrix(table.row_values(x))
-        #        print(type(row))
         row = np.array(table.row_values(x))
         datamatrix[x, :] = row
     datamatrix = np.delete(
@@ -158,7 +157,7 @@ class ModelCalculationTests(TestCase):
 
         # prepare initial condition data for model.
         initialConditionData = prepareInitialCondition(
-            date=testDate, location=testLocation
+            predictionDate=testDate, location=testLocation
         )
         runningGenerateRiverFlows(
             predictionDate=testDate,
