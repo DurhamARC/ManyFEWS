@@ -46,7 +46,7 @@ Make sure you have the following installed:
 6. Register a Zentra Cloud account.
    1. Sign up for an account on: `https://zentracloud.com/accounts/login/`;
    2. Then contact the administrator for your Zentra Cloud organisation to add your user account to the organisation.
-   Also (for now) create a [MapBox](https://www.mapbox.com/) account and get your API key.
+   Also create a [Bing Maps](https://www.bingmapsportal.com) developer account, and create a basic API key.
 
 
 7. Set up environment variables in Django.  
@@ -55,7 +55,7 @@ Make sure you have the following installed:
    $ vi .env.CI
    > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
    > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
-   > replace 'mapbox_api_token' with your MapBox API token.
+   > replace 'map_api_token' with your Bing Maps API token.
    > Save and quit.
    $ cp .env.CI .env
    $ cd ..
