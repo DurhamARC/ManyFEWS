@@ -384,20 +384,20 @@ def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
     return Q, qp, Ep, F0
 
 
-def prepareInitialCondition(date, location):
+def prepareInitialCondition(predictionDate, location):
     """
 
     This function is for extracting initial condition data with specific dates and locations from DB,
     and returning data into a NumPy array.
 
-    :param date: date information.
+    :param predictionDate: date information.
     :param location: location information.
     :return intialConditionData: a numpy array contains initial condition data.
 
     """
 
     # prepare initial conditions for model.
-    initialConditions = InitialCondition.objects.filter(date=date).filter(
+    initialConditions = InitialCondition.objects.filter(date=predictionDate).filter(
         location=location
     )
 
@@ -439,8 +439,10 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
         weatherData = NoaaForecast.objects.filter(date=predictionDate).filter(
             location=location
         )
+        print(startTime)
     elif dataSource == "zentra":
         endTime = startTime + timedelta(days=15.75)
+        print(startTime, endTime)
         weatherData = AggregatedZentraReading.objects.filter(
             date__range=(startTime, endTime)
         ).filter(location=location)
