@@ -3,7 +3,7 @@ import re
 from django.contrib.gis.geos import Polygon
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase, LiveServerTestCase
-from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium import webdriver
 from .converters import BoundingBoxUrlParameterConverter
 
 
@@ -36,7 +36,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = WebDriver()
+        options = webdriver.ChromeOptions()
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        cls.selenium = webdriver.Chrome(options=options)
         cls.selenium.implicitly_wait(10)
 
     @classmethod
