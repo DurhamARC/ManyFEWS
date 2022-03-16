@@ -7,6 +7,8 @@ register_converter(converters.BoundingBoxUrlParameterConverter, "bbox")
 urlpatterns = [
     path("", views.index, name="index"),
     path(
-        "depths/<int:day>/<bbox:bounding_box>", views.depth_predictions, name="depths"
+        "depths/<int:day>/<int:hour>/<bbox:bounding_box>",
+        views.depth_predictions,
+        name="depths",
     ),
 ]

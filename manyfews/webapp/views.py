@@ -13,24 +13,34 @@ def index(request):
     template = loader.get_template("webapp/index.html")
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     daily_risks = []
-    for i in range(7):
-        risk = random.randint(0, 100)
-        risk_level = 0
-        if risk > 75:
-            risk_level = 4
-        elif risk > 50:
-            risk_level = 3
-        elif risk > 25:
-            risk_level = 2
-        elif risk > 0:
-            risk_level = 1
+    risk = random.randint(0, 100)
+    for i in range(10):
+        six_hour_risks = []
+        for j in range(4):
+            risk += random.randint(-10, 10)
+            if risk < 0:
+                risk = 0
+            if risk > 100:
+                risk = 100
+            risk_level = 0
+            if risk > 75:
+                risk_level = 4
+            elif risk > 50:
+                risk_level = 3
+            elif risk > 25:
+                risk_level = 2
+            elif risk > 0:
+                risk_level = 1
+
+            six_hour_risks.append(
+                {"hour": j * 6, "risk_percentage": risk, "risk_level": risk_level}
+            )
 
         daily_risks.append(
             {
                 "day_number": i,
                 "date": today + timedelta(days=i),
-                "risk_percentage": risk,
-                "risk_level": risk_level,
+                "risks": six_hour_risks,
             }
         )
 
@@ -41,7 +51,7 @@ def index(request):
     )
 
 
-def depth_predictions(request, day, bounding_box):
+def depth_predictions(request, day, hour, bounding_box):
     # Get the depth predictions for this bounding box and day days ahead
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     predictions = AggregatedDepthPrediction.objects.filter(

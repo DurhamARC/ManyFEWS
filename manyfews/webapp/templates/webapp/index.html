@@ -19,11 +19,17 @@
             <h3 class="row">Flood warnings for Majalaya</h3>
         </div>
         {% for d in daily_risks %}
-            <div class="col align-middle">
-                <div class="daily-risk btn risk{{ d.risk_level }}" data-day="{{ d.day_number }}">
-                    <p class="day">{{ d.date|date:"l" }}</p>
+            <div class="daily-risk col align-middle">
+                <div class="date row">
+                    <p class="day">{{ d.date|date:"D" }}</p>
                     <p class="date">{{ d.date|date:"M j" }}</p>
-                    <p class="risk">{{ d.risk_percentage }}%</p>
+                </div>
+                <div class="hourly-risk row">
+                  {% for h in d.risks %}
+                    <div class="btn col-3 risk{{ h.risk_level }} risk" data-day="{{ d.day_number }}" data-hour="{{ h.hour }}">
+                      {{ h.hour|stringformat:"02d" }}
+                    </div>
+                  {% endfor %}
                 </div>
             </div>
         {% endfor %}

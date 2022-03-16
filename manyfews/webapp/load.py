@@ -18,7 +18,7 @@ start_location = Point(-7.065, 107.735)
 date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 grid_size = 0.0005
 
-for d in range(7):
+for d in range(40):
     prediction_count = AggregatedDepthPrediction.objects.filter(
         prediction_date=date
     ).count()
@@ -45,4 +45,4 @@ for d in range(7):
                     )
                     prediction.save()
 
-    date += datetime.timedelta(days=1)
+    date += datetime.timedelta(hours=6)
