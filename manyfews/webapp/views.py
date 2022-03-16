@@ -4,13 +4,14 @@ import random
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+from django.utils import timezone
 
 from calculations.models import AggregatedDepthPrediction
 
 
 def index(request):
     template = loader.get_template("webapp/index.html")
-    today = date.today()
+    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     daily_risks = []
     for i in range(7):
         risk = random.randint(0, 100)
@@ -42,8 +43,9 @@ def index(request):
 
 def depth_predictions(request, day, bounding_box):
     # Get the depth predictions for this bounding box and day days ahead
+    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     predictions = AggregatedDepthPrediction.objects.filter(
-        prediction_date=date.today() + timedelta(days=day),
+        prediction_date=today + timedelta(days=day),
         bounding_box__intersects=bounding_box,
     )
     items = []
