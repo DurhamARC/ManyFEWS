@@ -155,6 +155,15 @@ def aggregateZentraData(startTime, endTime, stationSN):
     wDirectionList = [
         1 if i == None else i for i in wDirectionList
     ]  # for None data, set it to default (1)
+    airTemList = [
+        1 if i == None else i for i in wDirectionList
+    ]  # for None data, set it to default (1)
+    precipList = [
+        1 if i == None else i for i in wDirectionList
+    ]  # for None data, set it to default (1)
+    RHList = [
+        1 if i == None else i for i in wDirectionList
+    ]  # for None data, set it to default (1)
     ###############################################
 
     zentraReadingList = list(
@@ -242,7 +251,7 @@ def offsetTime(backDays):
 
     """
 
-    startDate = datetime.now() - timedelta(days=backDays)
+    startDate = datetime.utcnow() - timedelta(days=backDays)
 
     startTime = datetime(
         year=startDate.year,
