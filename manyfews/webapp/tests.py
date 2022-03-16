@@ -69,3 +69,31 @@ class WebAppTestCase(StaticLiveServerTestCase):
         assert len(log) == 0, "Errors in browser log:\n" + "\n".join(
             [f"{line['level']}: {line['message']}" for line in log]
         )
+
+    def test_users(self):
+        # Add a user, log in, log out
+        self.selenium.get("%s%s" % (self.live_server_url, "/accounts/signup/"))
+
+        # Check top-right buttons are "Login" and "Sign up"
+        buttons = self.selenium.find_elements_by_css_selector(".header .col-2 .btn")
+        assert len(buttons) == 2
+        assert buttons[0].text == "Login"
+        assert buttons[1].text == "Sign Up"
+
+        self.selenium.find_element_by_id("id_username").send_keys("myuser")
+        self.selenium.find_element_by_id("id_password1").send_keys("al25ns5235")
+        self.selenium.find_element_by_id("id_password2").send_keys("al25ns5235")
+        self.selenium.find_element_by_id("signup-submit").click()
+
+        assert self.selenium.current_url == "%s%s" % (
+            self.live_server_url,
+            "/accounts/login/",
+        )
+        self.selenium.find_element_by_id("id_username").send_keys("myuser")
+        self.selenium.find_element_by_id("id_password").send_keys("al25ns5235")
+        self.selenium.find_element_by_id("login-submit").click()
+
+        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/")
+        buttons = self.selenium.find_elements_by_css_selector(".header .col-2 .btn")
+        assert len(buttons) == 1
+        assert buttons[0].text == "Log Out"
