@@ -156,13 +156,13 @@ def aggregateZentraData(startTime, endTime, stationSN):
         1 if i == None else i for i in wDirectionList
     ]  # for None data, set it to default (1)
     airTemList = [
-        1 if i == None else i for i in wDirectionList
+        1 if i == None else i for i in airTemList
     ]  # for None data, set it to default (1)
     precipList = [
-        1 if i == None else i for i in wDirectionList
+        1 if i == None else i for i in precipList
     ]  # for None data, set it to default (1)
     RHList = [
-        1 if i == None else i for i in wDirectionList
+        1 if i == None else i for i in RHList
     ]  # for None data, set it to default (1)
     ###############################################
 
