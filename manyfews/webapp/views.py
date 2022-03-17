@@ -55,7 +55,7 @@ def depth_predictions(request, day, hour, bounding_box):
     # Get the depth predictions for this bounding box and day days ahead
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     predictions = AggregatedDepthPrediction.objects.filter(
-        prediction_date=today + timedelta(days=day),
+        prediction_date=today + timedelta(days=day, hours=hour),
         bounding_box__intersects=bounding_box,
     )
     items = []
