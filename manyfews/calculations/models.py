@@ -69,5 +69,5 @@ class AggregatedDepthPrediction(models.Model):
     prediction_date = models.DateTimeField()
     bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
     median_depth = models.FloatField()
-    centile_25 = models.FloatField()
-    centile_75 = models.FloatField()
+    lower_centile = models.FloatField()
+    upper_centile = models.FloatField()

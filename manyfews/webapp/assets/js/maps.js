@@ -5,6 +5,10 @@ var floodOverlayLayerGroup = L.layerGroup();
 var currentDay = 0;
 var currentHour = 0;
 
+function proportionToColor(proportion, maxHue = 240, minHue = 120) {
+  const hue = proportion * (maxHue - minHue) + minHue;
+  return `hsl(${hue}, 50%, 30%)`;
+}
 
 function getFloodOverlays(map, day, hour) {
   currentDay = day;
@@ -18,17 +22,19 @@ function getFloodOverlays(map, day, hour) {
     })
     .then(function(data) {
       floodOverlayLayerGroup.clearLayers();
-      console.log(data);
       data["items"].forEach(i => {
-        floodOverlayLayerGroup.addLayer(
-          L.rectangle(i.bounds,
-            {
-              color: null,
-              fillColor: 'CornflowerBlue',
-              fillOpacity: i.depth * 0.5
-            }
-          )
+        var layer = L.rectangle(i.bounds,
+          {
+            color: null,
+            fillColor: proportionToColor(i.depth/data["max_depth"]),
+            fillOpacity: 1 - (i.upper_centile - i.lower_centile)/data["max_depth"]
+          }
         );
+        layer.bindTooltip(
+          "Depth: " + i.depth.toFixed(2) + "m<br>Lower centile: " + i.lower_centile.toFixed(2) +
+              "m<br>Upper centile: " + i.upper_centile.toFixed(2) + "m"
+        );
+        floodOverlayLayerGroup.addLayer(layer);
       });
       floodOverlayLayerGroup.addTo(map);
     });

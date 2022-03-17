@@ -40,8 +40,8 @@ for d in range(40):
                         prediction_date=date,
                         bounding_box=bounding_box,
                         median_depth=median_depth,
-                        centile_25=median_depth - random.random() * median_depth,
-                        centile_75=median_depth + random.random() * 0.5,
+                        lower_centile=median_depth - random.random() * median_depth,
+                        upper_centile=median_depth + random.random() * 0.5,
                     )
                     prediction.save()
 

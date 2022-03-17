@@ -65,6 +65,8 @@ def depth_predictions(request, day, hour, bounding_box):
             {
                 "bounds": [[bb_extent[0], bb_extent[1]], [bb_extent[2], bb_extent[3]]],
                 "depth": p.median_depth,
+                "lower_centile": p.lower_centile,
+                "upper_centile": p.upper_centile,
             }
         )
-    return JsonResponse({"items": items})
+    return JsonResponse({"items": items, "max_depth": 1})

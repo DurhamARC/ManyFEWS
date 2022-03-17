@@ -1,9 +1,11 @@
 import re
+from time import sleep
 
 from django.contrib.gis.geos import Polygon
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase, LiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from .converters import BoundingBoxUrlParameterConverter
 
 
@@ -51,10 +53,17 @@ class WebAppTestCase(StaticLiveServerTestCase):
         # Simple test that the home page loads without errors
         self.selenium.get("%s%s" % (self.live_server_url, "/"))
 
-        risk_elements = self.selenium.find_elements_by_class_name("daily-risk")
-        assert len(risk_elements) == 7
+        # Should be 10 daily risk boxes
+        daily_risk_elements = self.selenium.find_elements(By.CLASS_NAME, "daily-risk")
+        assert len(daily_risk_elements) == 10
+        # Each should contain 4 hourly risk boxes
+        for el in daily_risk_elements:
+            hourly_risk_elements = el.find_elements(By.CLASS_NAME, "risk")
+            assert len(hourly_risk_elements) == 4
 
-        risk_elements[1].click()
+        # Click on an hourly risk to ensure no errors on loading new map layers
+        daily_risk_elements[1].find_element(By.CLASS_NAME, "risk").click()
+        sleep(1)
 
         log = self.selenium.get_log("browser")
         assert len(log) == 0, "Errors in browser log:\n" + "\n".join(
