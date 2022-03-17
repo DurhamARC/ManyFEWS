@@ -1,34 +1,7 @@
-{% load static %}
+{% extends 'webapp/base.html' %}
 {% load leaflet_tags %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-
-    {% leaflet_js %}
-    {% leaflet_css %}
-    <script src="{% static 'index-bundle.js' %}"></script>
-    <title>ManyFEWS</title>
-</head>
-
-<body>
-    <div class="header container-fluid row justify-content-between">
-        <div class="col-10 align-self-center">
-            <h1 class="row">ManyFEWS</h1>
-            <h3 class="row">Flood warnings for Majalaya</h3>
-        </div>
-        <div class="col-2 align-self-center right">
-          {% if user.is_authenticated %}
-            <div>Hi {{ user.username }}!</div>
-            <div><a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a></div>
-          {% else %}
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authModal">
-            Login
-          </button>
-          {% endif %}
-        </div>
-    </div>
+{% block content %}
     <div class="header container-fluid row">
         {% for d in daily_risks %}
             <div class="daily-risk col align-middle">
@@ -50,26 +23,4 @@
         <input type="hidden" id="mapApiKey" name="mapApiKey" value="{{ mapApiKey }}">
         {% leaflet_map "map" %}
     </div>
-    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <form method="post" action="/accounts/login/">
-            <div class="modal-header">
-              <h5 class="modal-title" uid="authModalLabel">Login</h5>
-              <button type="button" class="btn close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              {% csrf_token %}
-              {{ login_form.as_p }}
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Log In</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-</body>
+{% endblock content %}
