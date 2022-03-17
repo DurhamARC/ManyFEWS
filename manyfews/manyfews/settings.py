@@ -55,10 +55,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "django_celery_beat",
+    "crispy_forms",
     "djgeojson",
     "leaflet",
     "calculations",
     "webapp",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -145,6 +147,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": (-7.052115, 107.755514),

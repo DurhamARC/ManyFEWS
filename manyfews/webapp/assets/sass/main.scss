@@ -135,9 +135,12 @@ body {
     }
   }
 
-  .form-group.auth {
+  .account-form {
     max-width: 500px;
-    margin-bottom: 10px;
+
+    .form-group {
+      margin-bottom: 10px;
+    }
   }
 
 }
