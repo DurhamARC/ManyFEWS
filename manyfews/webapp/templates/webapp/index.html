@@ -13,11 +13,18 @@
 </head>
 
 <body>
-    <div class="header container-fluid row">
-        <div class="col-4 align-self-center">
+    <div class="header container-fluid row justify-content-between">
+        <div class="col-10 align-self-center">
             <h1 class="row">ManyFEWS</h1>
             <h3 class="row">Flood warnings for Majalaya</h3>
         </div>
+        <div class="col-1 align-self-center right">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authModal">
+            Login
+          </button>
+        </div>
+    </div>
+    <div class="header container-fluid row">
         {% for d in daily_risks %}
             <div class="daily-risk col align-middle">
                 <div class="date row">
@@ -37,5 +44,27 @@
     <div class="map">
         <input type="hidden" id="mapApiKey" name="mapApiKey" value="{{ mapApiKey }}">
         {% leaflet_map "map" %}
+    </div>
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form method="post">
+            <div class="modal-header">
+              <h5 class="modal-title" uid="authModalLabel">Login</h5>
+              <button type="button" class="btn close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {% csrf_token %}
+              {{ login_form.as_p }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" type="submit" class="btn btn-primary">Log In</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 </body>
