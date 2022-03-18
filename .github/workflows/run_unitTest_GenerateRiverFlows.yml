@@ -32,7 +32,7 @@ jobs:
         run: |
           sudo apt-get install binutils libproj-dev gdal-bin
       - name: Install chromedriver
-        uses: nanasess/setup-chromedriver@df42850
+        uses: nanasess/setup-chromedriver@df428506cbc5d79cc069d20a689094d634c79e3e
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: anaconda-client-env
