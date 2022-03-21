@@ -56,6 +56,7 @@ Make sure you have the following installed:
    > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
    > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
    > replace 'map_api_token' with your Bing Maps API token.
+   > replace the lines starting with 'email_' with your SMTP settings (either real settings, or using something like [mailcatcher](https://mailcatcher.me))
    > Save and quit.
    $ cp .env.CI .env
    $ cd ..

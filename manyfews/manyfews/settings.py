@@ -27,6 +27,12 @@ GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
 MAP_API_TOKEN = env("map_api_token")
 
+# Email settings
+EMAIL_HOST = env("email_host")
+EMAIL_PORT = env("email_port")
+EMAIL_HOST_USER = env("email_host_user")
+EMAIL_HOST_PASSWORD = env("email_host_password")
+EMAIL_USE_SSL = env("email_use_ssl")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -160,7 +166,3 @@ LEAFLET_CONFIG = {
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-
-# FIXME: move to env files so we can use a gmail account
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = str(BASE_DIR.joinpath("sent_emails"))
