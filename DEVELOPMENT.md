@@ -84,7 +84,7 @@ Make sure you have the following installed:
 
     (For development purposes you can run `npm run dev` to build the files on-the-fly whilst editing the JavaScript, but you should run `npm run build` before committing.)
 
-10. Run the django app in development mode (still in the `manyfews` directory):
+11. Run the django app in development mode (still in the `manyfews` directory):
 
     ```bash
     python manage.py runserver
