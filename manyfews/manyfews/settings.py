@@ -160,3 +160,7 @@ LEAFLET_CONFIG = {
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# FIXME: move to env files so we can use a gmail account
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = str(BASE_DIR.joinpath("sent_emails"))
