@@ -10,9 +10,13 @@ from calculations.models import AggregatedDepthPrediction
 
 
 def index(request):
+    # Prepare data for the home page
     template = loader.get_template("webapp/index.html")
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     daily_risks = []
+
+    # Currently we generate random data; this will eventually be calculated
+    # from the flood risk levels in the DB
     risk = random.randint(0, 100)
     for i in range(10):
         six_hour_risks = []
