@@ -2,13 +2,40 @@
 {% load leaflet_tags %}
 
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'webapp/map.css' %}" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
     {% leaflet_js %}
     {% leaflet_css %}
+    <script src="{% static 'index-bundle.js' %}"></script>
+    <title>ManyFEWS</title>
 </head>
 
 <body>
-    <h1>ManyFEWS</h1>
-    {% leaflet_map "map" %}
+    <div class="header container-fluid row">
+        <div class="col-4 align-self-center">
+            <h1 class="row">ManyFEWS</h1>
+            <h3 class="row">Flood warnings for Majalaya</h3>
+        </div>
+        {% for d in daily_risks %}
+            <div class="daily-risk col align-middle">
+                <div class="date row">
+                    <p class="day">{{ d.date|date:"D" }}</p>
+                    <p class="date">{{ d.date|date:"M j" }}</p>
+                </div>
+                <div class="hourly-risk row">
+                  {% for h in d.risks %}
+                    <div class="btn col-3 risk{{ h.risk_level }} risk" data-day="{{ d.day_number }}" data-hour="{{ h.hour }}">
+                      {{ h.hour|stringformat:"02d" }}
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="map">
+        <input type="hidden" id="mapApiKey" name="mapApiKey" value="{{ mapApiKey }}">
+        {% leaflet_map "map" %}
+    </div>
 </body>

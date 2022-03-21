@@ -1,0 +1,130 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+$riskColor0: #FFF;
+$riskColor1: #00FFFF;
+$riskColor2: #FFFF00;
+$riskColor3: #FFD700;
+$riskColor4: #FF0000;
+
+body {
+  height: 100%;
+  margin: 0;
+
+  .header {
+    .daily-risk {
+      margin-bottom: 10px;
+      padding: 0;
+      background: white;
+      min-width: 92px;
+
+      .row {
+        width: 100%;
+        margin: 0;
+        border: 1px solid gray;
+        padding: 10px;
+
+        &.hourly-risk {
+          padding: 0;
+        }
+      }
+
+      .date {
+        border-top-width: 2px;
+        border-bottom-width: 0;
+      }
+
+      &:nth-child(2){
+        .date {
+          border-left-width: 2px;
+        }
+        .risk:first-child:not(.current) {
+          border-left-width: 1px;
+        }
+      }
+      &:last-child {
+        .date {
+          border-right-width: 2px;
+        }
+        .risk:last-child:not(.current) {
+          border-right-width: 1px;
+        }
+      }
+
+      .risk0 {
+        background-color: $riskColor0;
+      }
+      .risk1 {
+        background-color: $riskColor1;
+      }
+      .risk2 {
+        background-color: $riskColor2;
+      }
+      .risk3 {
+        background-color: $riskColor3;
+      }
+      .risk4 {
+        background-color: $riskColor4;
+      }
+      .risk {
+        width: 25%;
+        height: 50px;
+        padding: 0;
+        border: 1px solid gray;
+        border-radius: 0;
+        line-height: 45px;
+        font-size: 15px;
+
+        &:last-child {
+          border-right-width: 0;
+        }
+
+        &:first-child {
+          border-left-width: 0;
+        }
+
+        &.current {
+          border: 3px solid black;
+          position: relative;
+          width: 25%;
+          line-height: 41px;
+
+          .rotated {
+            padding-right: 2px;
+          }
+
+          &:after {
+            content: " ";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: $black transparent transparent transparent;
+          }
+        }
+      }
+
+      p {
+        text-align: center;
+        margin-bottom: 0;
+        font-size: smaller;
+
+        &.risk {
+          font-weight: bold;
+          font-size: x-large;
+        }
+      }
+    }
+  }
+
+  .map {
+    height: calc(100vh - 120px);
+    padding: 0;
+
+    #map {
+      height: 100%;
+    }
+  }
+
+}

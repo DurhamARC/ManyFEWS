@@ -25,6 +25,8 @@ ZENTRA_BACKTIME = env("zentra_backtime")
 STATION_SN = env("station_SN")
 GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
+MAP_API_TOKEN = env("map_api_token")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -142,10 +144,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": (-7.052115, 107.755514),
-    "DEFAULT_ZOOM": 10,
-    "MIN_ZOOM": 3,
-    "MAX_ZOOM": 18,
+    "DEFAULT_ZOOM": 16,
+    "MIN_ZOOM": 10,
+    "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,
+    "TILES": [],
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
