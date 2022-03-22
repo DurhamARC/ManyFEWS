@@ -1,4 +1,4 @@
-from django.urls import path, register_converter
+from django.urls import path, re_path, register_converter
 
 from . import views, converters
 
@@ -11,5 +11,9 @@ urlpatterns = [
         views.depth_predictions,
         name="depths",
     ),
-    path("alerts", views.alerts, name="alerts"),
+    re_path(
+        r"^alerts/?((?P<action>(delete)|(edit))/(?P<id>[0-9]+))?$",
+        views.alerts,
+        name="alerts",
+    ),
 ]

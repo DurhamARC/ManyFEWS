@@ -149,4 +149,8 @@ body {
     }
   }
 
+  .django-leaflet-raw-textarea ~ .invalid-feedback {
+    display: block;
+  }
+
 }

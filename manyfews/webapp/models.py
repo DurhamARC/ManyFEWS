@@ -32,7 +32,3 @@ class UserAlert(models.Model):
         UserPhoneNumber, blank=True, on_delete=models.CASCADE
     )
     location = models.PolygonField()
-
-    def get_alert_type():
-        # Get value from choices enum
-        return AlertType[self.alert_type]

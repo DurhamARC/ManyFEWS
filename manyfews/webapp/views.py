@@ -82,15 +82,56 @@ def depth_predictions(request, day, hour, bounding_box):
 
 
 @login_required
-def alerts(request):
+def alerts(request, action=None, id=None):
+    current_alert = None
+    edit_mode = False
     if request.method == "POST":
-        form = UserAlertForm(request.POST, user=request.user)
+        if id:
+            current_alert = UserAlert.objects.get(user=request.user, id=id)
+        form = UserAlertForm(request.POST, user=request.user, instance=current_alert)
         if form.is_valid():
             form.save()
+            # Reset form if successful
+            form = UserAlertForm(user=request.user)
+            action = None
+        else:
+            edit_mode = True
+
     else:
-        form = UserAlertForm(user=request.user)
+        if id and action in ("edit", "delete"):
+            current_alert = UserAlert.objects.get(user=request.user, id=id)
+
+        if current_alert and action == "edit":
+            form = UserAlertForm(user=request.user, instance=current_alert)
+            edit_mode = True
+        else:
+            if current_alert and action == "delete":
+                current_alert.delete()
+
+            form = UserAlertForm(user=request.user)
+
+    alert_objs = UserAlert.objects.filter(user=request.user).all()
+    alerts = [
+        {
+            "id": a.id,
+            "alert_type": a.get_alert_type_display(),
+            "phone_number": a.phone_number,
+        }
+        for a in alert_objs
+    ]
+
+    if form.errors.get("location"):
+        form.errors["location"][0] += " Use the toolbox to select an area on the map."
 
     template = loader.get_template("webapp/alerts.html")
     return HttpResponse(
-        template.render({"form": form, "mapApiKey": settings.MAP_API_TOKEN}, request)
+        template.render(
+            {
+                "form": form,
+                "mapApiKey": settings.MAP_API_TOKEN,
+                "alerts": alerts,
+                "edit": edit_mode,
+            },
+            request,
+        )
     )
