@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "djgeojson",
     "leaflet",
+    "phonenumber_field",
     "calculations",
     "webapp",
     "accounts",

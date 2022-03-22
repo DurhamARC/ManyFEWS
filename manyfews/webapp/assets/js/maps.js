@@ -40,20 +40,26 @@ function getFloodOverlays(map, day, hour) {
     });
 }
 
+export function initialiseDepthMap() {
+  window.addEventListener("map:init", function (e) {
+    var detail = e.detail;
+    getFloodOverlays(detail.map, currentDay, currentHour);
+    detail.map.on('moveend', function() {
+      getFloodOverlays(detail.map, currentDay, currentHour);
+    });
+
+    $('.risk').click(function(e) {
+      getFloodOverlays(detail.map, $(this).attr('data-day'), $(this).attr('data-hour'));
+      $('.risk').removeClass('current');
+      $(this).addClass('current');
+    });
+    $('.risk').first().addClass('current');
+  });
+}
+
 window.addEventListener("map:init", function (e) {
   var detail = e.detail;
   var mapApiKey = $('#mapApiKey').val();
   var bing = new L.BingLayer(mapApiKey);
   detail.map.addLayer(bing);
-  getFloodOverlays(detail.map, currentDay, currentHour);
-  detail.map.on('moveend', function() {
-    getFloodOverlays(detail.map, currentDay, currentHour);
-  });
-
-  $('.risk').click(function(e) {
-    getFloodOverlays(detail.map, $(this).attr('data-day'), $(this).attr('data-hour'));
-    $('.risk').removeClass('current');
-    $(this).addClass('current');
-  });
-  $('.risk').first().addClass('current');
 });

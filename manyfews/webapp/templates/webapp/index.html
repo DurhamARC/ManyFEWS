@@ -20,7 +20,9 @@
         {% endfor %}
     </div>
     <div class="map">
-        <input type="hidden" id="mapApiKey" name="mapApiKey" value="{{ mapApiKey }}">
         {% leaflet_map "map" %}
     </div>
+    <script type="text/javascript">
+      window.initialiseDepthMap();
+    </script>
 {% endblock content %}

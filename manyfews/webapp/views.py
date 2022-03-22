@@ -2,11 +2,16 @@ from datetime import date, timedelta
 import random
 
 from django.conf import settings
+from django.forms import inlineformset_factory
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from calculations.models import AggregatedDepthPrediction
+from .forms import UserAlertForm
+from .models import UserAlert, UserPhoneNumber
 
 
 def index(request):
@@ -74,3 +79,18 @@ def depth_predictions(request, day, hour, bounding_box):
             }
         )
     return JsonResponse({"items": items, "max_depth": 1})
+
+
+@login_required
+def alerts(request):
+    if request.method == "POST":
+        form = UserAlertForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserAlertForm(user=request.user)
+
+    template = loader.get_template("webapp/alerts.html")
+    return HttpResponse(
+        template.render({"form": form, "mapApiKey": settings.MAP_API_TOKEN}, request)
+    )

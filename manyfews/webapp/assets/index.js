@@ -1,3 +1,5 @@
 import { Modal } from 'bootstrap';
 import './sass/main.scss';
-import './js/maps.js';
+import { initialiseDepthMap } from './js/maps.js';
+
+window.initialiseDepthMap = initialiseDepthMap;

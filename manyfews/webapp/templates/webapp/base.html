@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
-    {% leaflet_js %}
-    {% leaflet_css %}
+    {% leaflet_js plugins="forms" %}
+    {% leaflet_css plugins="forms" %}
 
     <script src="{% static 'index-bundle.js' %}"></script>
     <title>ManyFEWS</title>
@@ -20,6 +20,7 @@
         </div>
         <div class="col-2 align-self-center right">
           {% if user.is_authenticated %}
+            <div class="col"><a href="{% url 'alerts' %}" class="btn btn-primary">Alerts</a></div>
             <div class="col"><a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a></div>
           {% else %}
             <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
@@ -29,4 +30,5 @@
     </div>
     {% block content %}
     {% endblock %}
+    <input type="hidden" id="mapApiKey" name="mapApiKey" value="{{ mapApiKey }}">
 </body>

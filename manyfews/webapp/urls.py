@@ -11,4 +11,5 @@ urlpatterns = [
         views.depth_predictions,
         name="depths",
     ),
+    path("alerts", views.alerts, name="alerts"),
 ]
