@@ -20,8 +20,8 @@
         </div>
         <div class="col-2 align-self-center right">
           {% if user.is_authenticated %}
-            <div class="col"><a href="{% url 'alerts' %}" class="btn btn-primary">Alerts</a></div>
-            <div class="col"><a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a></div>
+            <a href="{% url 'alerts' %}" class="btn btn-primary">Alerts</a>
+            <a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a>
           {% else %}
             <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
             <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>

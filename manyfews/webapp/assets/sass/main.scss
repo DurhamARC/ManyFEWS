@@ -135,17 +135,21 @@ body {
     }
   }
 
-  .accounts {
+  .manyfews-forms {
     margin-top: 50px;
     padding: 20px;
     background-color: var(--bs-light);
 
     .account-form {
       max-width: 500px;
+    }
 
-      .form-group {
-        margin-bottom: 10px;
-      }
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .alert-form {
+      margin-top: 20px;
     }
   }
 

@@ -4,13 +4,13 @@
 
 {% block content %}
 
-<div class=container>
+<div class="container manyfews-forms">
+  <h3>Your Alerts</h3>
   <table class="table">
     <thead>
       <tr>
         <th scope="col">Alert Type</th>
         <th scope="col">Phone Number</th>
-        <th scope="col"></th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -21,8 +21,6 @@
           <td>{{ alert.phone_number.phone_number }}</td>
           <td>
             <a href="{% url 'alerts' %}/edit/{{ alert.id }}" class="btn btn-secondary">View/Edit</a>
-          </td>
-          <td>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" data-bs-delete-id="{{ alert.id }}">
               Delete
             </button>
@@ -31,12 +29,15 @@
       {% endfor %}
     </tbody>
   </table>
-  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#edit-alert" aria-expanded="false" aria-controls="editAlert">
-    Add new
-  </button>
+
+  {% if not edit %}
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#edit-alert" aria-expanded="false" aria-controls="editAlert">
+      Add new
+    </button>
+  {% endif %}
 
   <div {% if not edit %}class="collapse" {% endif %}id="edit-alert">
-    <form method="post">
+    <form method="post" class="alert-form">
       {% csrf_token %}
       {{ form|crispy }}
 
