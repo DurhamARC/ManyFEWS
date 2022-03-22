@@ -1,0 +1,32 @@
+{% load static %}
+{% load leaflet_tags %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
+    {% leaflet_js %}
+    {% leaflet_css %}
+
+    <script src="{% static 'index-bundle.js' %}"></script>
+    <title>ManyFEWS</title>
+</head>
+
+<body>
+    <div class="header container-fluid row justify-content-between">
+        <div class="col-10 align-self-center">
+            <h1 class="row">ManyFEWS</h1>
+            <h3 class="row">Flood warnings for Majalaya</h3>
+        </div>
+        <div class="col-2 align-self-center right">
+          {% if user.is_authenticated %}
+            <div class="col"><a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a></div>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>
+          {% endif %}
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>

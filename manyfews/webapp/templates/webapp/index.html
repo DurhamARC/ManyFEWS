@@ -1,23 +1,8 @@
-{% load static %}
+{% extends 'webapp/base.html' %}
 {% load leaflet_tags %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-
-    {% leaflet_js %}
-    {% leaflet_css %}
-    <script src="{% static 'index-bundle.js' %}"></script>
-    <title>ManyFEWS</title>
-</head>
-
-<body>
+{% block content %}
     <div class="header container-fluid row">
-        <div class="col-4 align-self-center">
-            <h1 class="row">ManyFEWS</h1>
-            <h3 class="row">Flood warnings for Majalaya</h3>
-        </div>
         {% for d in daily_risks %}
             <div class="daily-risk col align-middle">
                 <div class="date row">
@@ -38,4 +23,4 @@
         <input type="hidden" id="mapApiKey" name="mapApiKey" value="{{ mapApiKey }}">
         {% leaflet_map "map" %}
     </div>
-</body>
+{% endblock content %}

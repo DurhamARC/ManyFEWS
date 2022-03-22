@@ -27,6 +27,12 @@ GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
 MAP_API_TOKEN = env("map_api_token")
 
+# Email settings
+EMAIL_HOST = env("email_host")
+EMAIL_PORT = env("email_port")
+EMAIL_HOST_USER = env("email_host_user")
+EMAIL_HOST_PASSWORD = env("email_host_password")
+EMAIL_USE_SSL = env("email_use_ssl")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,10 +61,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "django_celery_beat",
+    "crispy_forms",
     "djgeojson",
     "leaflet",
     "calculations",
     "webapp",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +84,7 @@ ROOT_URLCONF = "manyfews.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [str(BASE_DIR.joinpath("templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -84,6 +92,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "webapp.context_processors.include_login_form",
             ],
         },
     },
@@ -119,6 +128,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -141,6 +153,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": (-7.052115, 107.755514),

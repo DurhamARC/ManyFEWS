@@ -10,6 +10,14 @@ body {
   height: 100%;
   margin: 0;
 
+  .center {
+    text-align: center;
+  }
+
+  .right {
+    text-align: right;
+  }
+
   .header {
     .daily-risk {
       margin-bottom: 10px;
@@ -124,6 +132,20 @@ body {
 
     #map {
       height: 100%;
+    }
+  }
+
+  .accounts {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: var(--bs-light);
+
+    .account-form {
+      max-width: 500px;
+
+      .form-group {
+        margin-bottom: 10px;
+      }
     }
   }
 
