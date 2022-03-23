@@ -6,6 +6,7 @@
 
 <div class="container manyfews-forms">
   <h3>Your Alerts</h3>
+  {% if alerts %}
   <table class="table">
     <thead>
       <tr>
@@ -29,6 +30,9 @@
       {% endfor %}
     </tbody>
   </table>
+  {% else %}
+    <p>You have no alerts set up. Click "Add New" to create one.</p>
+  {% endif %}
 
   {% if not edit %}
     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#edit-alert" aria-expanded="false" aria-controls="editAlert">
