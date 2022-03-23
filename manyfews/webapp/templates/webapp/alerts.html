@@ -5,6 +5,15 @@
 {% block content %}
 
 <div class="container manyfews-forms">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
   <h3>Your Alerts</h3>
   {% if alerts %}
   <table class="table">
@@ -12,6 +21,7 @@
       <tr>
         <th scope="col">Alert Type</th>
         <th scope="col">Phone Number</th>
+        <th scope="col">Verified</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -20,6 +30,16 @@
         <tr>
           <td>{{ alert.alert_type }}</td>
           <td>{{ alert.phone_number.phone_number }}</td>
+          <td>
+            {% if alert.verified %}
+              Yes
+            {% else %}
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verify-modal"
+                      data-bs-verify-id="{{ alert.id }}" data-bs-verify-number="{{ alert.phone_number.phone_number }}">
+                Verify
+              </button>
+            {% endif %}
+          </td>
           <td>
             <a href="{% url 'alerts' %}/edit/{{ alert.id }}" class="btn btn-secondary">View/Edit</a>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" data-bs-delete-id="{{ alert.id }}">
@@ -54,7 +74,7 @@
 
 </div>
 
-<!-- Modal -->
+<!-- Delete modal -->
 <div class="modal" id="delete-modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -72,13 +92,54 @@
     </div>
   </div>
 </div>
+
+<!-- Verify modal -->
+<div class="modal" id="verify-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Verify Phone Number</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" class="alert-form" action="{% url 'alerts' %}/verify">
+        {% csrf_token %}
+        <div class="modal-body">
+          <p>Verification code has been sent to <span id="verify_modal_phone_number"></span>. Enter it below.</p>
+          <input type="number" name="verification_code" class="textinput textInput form-control" id="id_verification_code"></input>
+          <input type="hidden" name="alert_id" class="textinput textInput form-control" id="id_alert_id" value=""></input>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" id="verify-link" class="btn btn-primary" value="Verify">
+            <a href="" class="btn btn-secondary" id="verify-resend">Resend Code</a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   var deleteModal = document.getElementById('delete-modal')
   deleteModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
-    var alert_id = button.getAttribute('data-bs-delete-id')
+    var alert_id = button.getAttribute('data-bs-delete-id');
     var deleteLink = deleteModal.querySelector('#delete-link');
     deleteLink.href = "{% url 'alerts' %}/delete/" + alert_id;
-  })
+  });
+
+  var verifyModal = document.getElementById('verify-modal')
+  verifyModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var phone_number = button.getAttribute('data-bs-verify-number');
+    var phone_number_span = verifyModal.querySelector('#verify_modal_phone_number');
+    phone_number_span.innerHTML = phone_number;
+
+    var alert_id = button.getAttribute('data-bs-verify-id');
+    var id_input = verifyModal.querySelector('#id_alert_id');
+    id_input.value = alert_id
+
+    var resend_link = verifyModal.querySelector('#verify-resend');
+    resend_link.href = "{% url 'alerts' %}/resend-verification/" + alert_id;
+  });
 </script>
 {% endblock content %}

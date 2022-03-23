@@ -12,6 +12,7 @@ dependencies:
   - celery
   - django-celery-beat
   - django-crispy-forms
+  - twilio
   # dev dependencies
   - black
   - pre-commit

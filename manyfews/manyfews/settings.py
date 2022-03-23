@@ -34,6 +34,12 @@ EMAIL_HOST_USER = env("email_host_user")
 EMAIL_HOST_PASSWORD = env("email_host_password")
 EMAIL_USE_SSL = env("email_use_ssl")
 
+# Twilio settings (for SMS/WhatsApp)
+TWILIO_ACCOUNT_SID = env("twilio_account_sid")
+TWILIO_AUTH_TOKEN = env("twilio_auth_token")
+TWILIO_PHONE_NUMBER = env("twilio_phone_number")
+TWILIO_VERIFICATION_SID = env("twilio_verification_sid")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

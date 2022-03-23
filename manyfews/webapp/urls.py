@@ -11,6 +11,10 @@ urlpatterns = [
         views.depth_predictions,
         name="depths",
     ),
+    path("alerts/verify", views.verify_alert, name="verify"),
+    path(
+        "alerts/resend-verification/<int:id>", views.resend_verification, name="verify"
+    ),
     re_path(
         r"^alerts/?((?P<action>(delete)|(edit))/(?P<id>[0-9]+))?$",
         views.alerts,
