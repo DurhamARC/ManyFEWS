@@ -4,6 +4,7 @@ import random
 from django.conf import settings
 from django.forms import inlineformset_factory
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.template import loader
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -91,9 +92,8 @@ def alerts(request, action=None, id=None):
         form = UserAlertForm(request.POST, user=request.user, instance=current_alert)
         if form.is_valid():
             form.save()
-            # Reset form if successful
-            form = UserAlertForm(user=request.user)
-            action = None
+            # Redirect to /alerts if successful
+            return redirect("alerts")
         else:
             edit_mode = True
 
@@ -101,13 +101,14 @@ def alerts(request, action=None, id=None):
         if id and action in ("edit", "delete"):
             current_alert = UserAlert.objects.get(user=request.user, id=id)
 
-        if current_alert and action == "edit":
-            form = UserAlertForm(user=request.user, instance=current_alert)
-            edit_mode = True
-        else:
-            if current_alert and action == "delete":
+        if current_alert:
+            if action == "edit":
+                form = UserAlertForm(user=request.user, instance=current_alert)
+                edit_mode = True
+            elif action == "delete":
                 current_alert.delete()
-
+                return redirect("alerts")
+        else:
             form = UserAlertForm(user=request.user)
 
     alert_objs = UserAlert.objects.filter(user=request.user).all()
