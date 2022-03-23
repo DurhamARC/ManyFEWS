@@ -14,11 +14,11 @@
 
 <body>
     <div class="header container-fluid row justify-content-between">
-        <div class="col-10 align-self-center">
+        <div class="col-8 align-self-center">
             <h1 class="row">ManyFEWS</h1>
             <h3 class="row">Flood warnings for Majalaya</h3>
         </div>
-        <div class="col-2 align-self-center right">
+        <div class="col-4 align-self-center right">
           {% if user.is_authenticated %}
             <a href="{% url 'alerts' %}" class="btn btn-primary">Alerts</a>
             <a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a>
