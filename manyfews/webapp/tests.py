@@ -80,7 +80,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.get("%s%s" % (self.live_server_url, "/accounts/signup/"))
 
         # Check top-right buttons are "Login" and "Sign up"
-        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-4 .btn")
         assert len(buttons) == 2
         assert buttons[0].text == "Login"
         assert buttons[1].text == "Sign Up"
@@ -108,7 +108,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
 
         # Should be redirected to homepage; top-right links should have changed
         assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/")
-        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-4 .btn")
         assert len(buttons) == 2
         assert buttons[0].text == "Alerts"
         assert buttons[1].text == "Log Out"
@@ -117,7 +117,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         buttons[1].click()
         # Should be redirected to homepage; top-right links should be "Login"/"Sign Up" again
         assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/")
-        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-4 .btn")
         assert len(buttons) == 2
         assert buttons[0].text == "Login"
         assert buttons[1].text == "Sign Up"
@@ -181,7 +181,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, "login-submit").click()
 
         # Find Alerts button and click
-        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-4 .btn")
         assert buttons[0].text == "Alerts"
         buttons[0].click()
 
