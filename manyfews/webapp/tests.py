@@ -6,7 +6,11 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import mail
 from django.test import TestCase, LiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from .converters import BoundingBoxUrlParameterConverter
 
 
@@ -76,18 +80,18 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.get("%s%s" % (self.live_server_url, "/accounts/signup/"))
 
         # Check top-right buttons are "Login" and "Sign up"
-        buttons = self.selenium.find_elements_by_css_selector(".header .col-2 .btn")
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
         assert len(buttons) == 2
         assert buttons[0].text == "Login"
         assert buttons[1].text == "Sign Up"
 
         # Create a new user
-        self.selenium.find_element_by_id("id_email").send_keys(
+        self.selenium.find_element(By.ID, "id_email").send_keys(
             "manyfews@mailinator.com"
         )
-        self.selenium.find_element_by_id("id_password1").send_keys("al25ns5235")
-        self.selenium.find_element_by_id("id_password2").send_keys("al25ns5235")
-        self.selenium.find_element_by_id("signup-submit").click()
+        self.selenium.find_element(By.ID, "id_password1").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "id_password2").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "signup-submit").click()
 
         # Should be redirected to login page
         assert self.selenium.current_url == "%s%s" % (
@@ -96,23 +100,24 @@ class WebAppTestCase(StaticLiveServerTestCase):
         )
 
         # Log in
-        self.selenium.find_element_by_id("id_username").send_keys(
+        self.selenium.find_element(By.ID, "id_username").send_keys(
             "manyfews@mailinator.com"
         )
-        self.selenium.find_element_by_id("id_password").send_keys("al25ns5235")
-        self.selenium.find_element_by_id("login-submit").click()
+        self.selenium.find_element(By.ID, "id_password").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "login-submit").click()
 
-        # Should be redirected to homepage; top-right links should now just be "Log Out"
+        # Should be redirected to homepage; top-right links should have changed
         assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/")
-        buttons = self.selenium.find_elements_by_css_selector(".header .col-2 .btn")
-        assert len(buttons) == 1
-        assert buttons[0].text == "Log Out"
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
+        assert len(buttons) == 2
+        assert buttons[0].text == "Alerts"
+        assert buttons[1].text == "Log Out"
 
         # Log out
-        buttons[0].click()
+        buttons[1].click()
         # Should be redirected to homepage; top-right links should be "Login"/"Sign Up" again
         assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/")
-        buttons = self.selenium.find_elements_by_css_selector(".header .col-2 .btn")
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
         assert len(buttons) == 2
         assert buttons[0].text == "Login"
         assert buttons[1].text == "Sign Up"
@@ -130,10 +135,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
             self.live_server_url,
             "/accounts/password_reset/",
         )
-        self.selenium.find_element_by_id("id_email").send_keys(
+        self.selenium.find_element(By.ID, "id_email").send_keys(
             "manyfews@mailinator.com"
         )
-        self.selenium.find_element_by_id("reset-password-submit").click()
+        self.selenium.find_element(By.ID, "reset-password-submit").click()
 
         # Check email outbox - should be a password reset email
         assert len(mail.outbox) == 1
@@ -148,14 +153,134 @@ class WebAppTestCase(StaticLiveServerTestCase):
 
         # Go to reset link and change password
         self.selenium.get(reset_link)
-        self.selenium.find_element_by_id("id_new_password1").send_keys("23sj4bds32")
-        self.selenium.find_element_by_id("id_new_password2").send_keys("23sj4bds32")
-        self.selenium.find_element_by_id("confirm-reset-password-submit").click()
+        self.selenium.find_element(By.ID, "id_new_password1").send_keys("23sj4bds32")
+        self.selenium.find_element(By.ID, "id_new_password2").send_keys("23sj4bds32")
+        self.selenium.find_element(By.ID, "confirm-reset-password-submit").click()
 
         # Go back to login page and log in with new password
         self.selenium.get("%s%s" % (self.live_server_url, "/accounts/login/"))
-        self.selenium.find_element_by_id("id_username").send_keys(
+        self.selenium.find_element(By.ID, "id_username").send_keys(
             "manyfews@mailinator.com"
         )
-        self.selenium.find_element_by_id("id_password").send_keys("23sj4bds32")
-        self.selenium.find_element_by_id("login-submit").click()
+        self.selenium.find_element(By.ID, "id_password").send_keys("23sj4bds32")
+        self.selenium.find_element(By.ID, "login-submit").click()
+
+    def test_alerts(self):
+        # Create a user and log in
+        self.selenium.get("%s%s" % (self.live_server_url, "/accounts/signup/"))
+        self.selenium.find_element(By.ID, "id_email").send_keys(
+            "manyfews@mailinator.com"
+        )
+        self.selenium.find_element(By.ID, "id_password1").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "id_password2").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "signup-submit").click()
+        self.selenium.find_element(By.ID, "id_username").send_keys(
+            "manyfews@mailinator.com"
+        )
+        self.selenium.find_element(By.ID, "id_password").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "login-submit").click()
+
+        # Find Alerts button and click
+        buttons = self.selenium.find_elements(By.CSS_SELECTOR, ".header .col-2 .btn")
+        assert buttons[0].text == "Alerts"
+        buttons[0].click()
+
+        # Check we're on alerts page
+        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/alerts",)
+
+        # Look for text
+        assert (
+            'You have no alerts set up. Click "Add New" to create one.'
+            in self.selenium.page_source
+        )
+
+        # Find "Add new" button and click
+        self.selenium.find_element(By.ID, "add-new").click()
+
+        # Wait for form to appear
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".collapse.show"))
+        )
+
+        # Scroll to bottom of page
+        self.selenium.find_element_by_tag_name("body").send_keys(Keys.END)
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "save-alert"))
+        )
+        sleep(1)
+
+        # Click "Save" without populating form - should give errors
+        save_btn = self.selenium.find_element(By.ID, "save-alert")
+        save_btn.click()
+
+        # Check for errors
+        form = self.selenium.find_element(By.CSS_SELECTOR, "form.alert-form")
+        assert "is-invalid" in form.find_element(
+            By.ID, "id_new_phone_number"
+        ).get_attribute("class")
+        assert (
+            "You must provide a new phone number or choose an existing one."
+            in form.text
+        )
+        assert (
+            "No geometry value provided. Use the toolbox to select an area on the map."
+            in form.text
+        )
+
+        # Fill in form this time
+        select = Select(self.selenium.find_element_by_id("id_alert_type"))
+        select.select_by_visible_text("SMS")
+        self.selenium.find_element(By.ID, "id_new_phone_number").send_keys(
+            "+441234567890"
+        )
+
+        # Scroll to bottom of page
+        self.selenium.find_element_by_tag_name("body").send_keys(Keys.END)
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "save-alert"))
+        )
+        sleep(1)
+
+        # Draw a rectangle on the map
+        rectangle_tool = self.selenium.find_element(
+            By.CLASS_NAME, "leaflet-draw-draw-rectangle"
+        )
+        rectangle_tool.click()
+        ActionChains(self.selenium).move_to_element(rectangle_tool).move_by_offset(
+            100, 0
+        ).click_and_hold().move_by_offset(20, 20).release().perform()
+
+        # Save
+        self.selenium.find_element(By.ID, "save-alert").click()
+
+        # Should now have a table under "Your Alerts"
+        table = self.selenium.find_element(By.TAG_NAME, "table")
+        rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
+        assert len(rows) == 1
+        assert rows[0].text == "SMS +441234567890 View/Edit Delete"
+
+        # Click edit - should reload page with form pre-populated
+        rows[0].find_element(By.CLASS_NAME, "btn-secondary").click()
+        assert self.selenium.current_url == "%s%s" % (
+            self.live_server_url,
+            "/alerts/edit/1",
+        )
+        type_select = Select(self.selenium.find_element_by_id("id_alert_type"))
+        assert type_select.first_selected_option.text == "SMS"
+        phone_select = Select(self.selenium.find_element_by_id("id_phone_number"))
+        assert phone_select.first_selected_option.text == "+441234567890"
+
+        # Click delete - should give confirmation dialog and then delete
+        self.selenium.find_element(By.CLASS_NAME, "btn-danger").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "delete-link"))
+        )
+        self.selenium.find_element(By.ID, "delete-link").click()
+
+        # Should be back on main alerts page
+        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/alerts",)
+        # Should be no alerts set up again
+        assert (
+            'You have no alerts set up. Click "Add New" to create one.'
+            in self.selenium.page_source
+        )
