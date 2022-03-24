@@ -169,9 +169,13 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, "login-submit").click()
 
     @mock.patch("webapp.forms.TwilioAlerts")
-    def test_alerts(self, mock):
-        instance = mock.return_value
-        instance.send_verification_mock.return_value = True
+    @mock.patch("webapp.views.TwilioAlerts")
+    def test_alerts(self, forms_mock, views_mock):
+        # Mock instances of TwilioAlerts in forms and views
+        forms_twilio_instance = forms_mock.return_value
+        forms_twilio_instance.send_verification_mock.return_value = True
+        views_twilio_instance = views_mock.return_value
+        views_twilio_instance.check_verification_code.return_value = True
 
         # Create a user and log in
         self.selenium.get("%s%s" % (self.live_server_url, "/accounts/signup/"))
@@ -265,6 +269,23 @@ class WebAppTestCase(StaticLiveServerTestCase):
         rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
         assert len(rows) == 1
         assert rows[0].text == "SMS +441234567890 Verify View/Edit Delete"
+
+        # Click Verify button - should load modal
+        self.selenium.find_element(
+            By.CSS_SELECTOR, ".btn-primary[data-bs-verify-id]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "verify-resend"))
+        )
+        self.selenium.find_element(By.ID, "id_verification_code").send_keys("123456")
+        self.selenium.find_element(By.ID, "verify-submit").click()
+
+        # Should be back on alerts page with alert now verified
+        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/alerts",)
+        table = self.selenium.find_element(By.TAG_NAME, "table")
+        rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
+        assert len(rows) == 1
+        assert rows[0].text == "SMS +441234567890 Yes View/Edit Delete"
 
         # Click edit - should reload page with form pre-populated
         rows[0].find_element(By.CLASS_NAME, "btn-secondary").click()
