@@ -1,5 +1,6 @@
 import re
 from time import sleep
+from unittest import mock
 
 from django.contrib.gis.geos import Polygon
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -11,6 +12,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
+
+from .alerts import TwilioAlerts
 from .converters import BoundingBoxUrlParameterConverter
 
 
@@ -165,7 +168,11 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, "id_password").send_keys("23sj4bds32")
         self.selenium.find_element(By.ID, "login-submit").click()
 
-    def test_alerts(self):
+    @mock.patch("webapp.forms.TwilioAlerts")
+    def test_alerts(self, mock):
+        instance = mock.return_value
+        instance.send_verification_mock.return_value = True
+
         # Create a user and log in
         self.selenium.get("%s%s" % (self.live_server_url, "/accounts/signup/"))
         self.selenium.find_element(By.ID, "id_email").send_keys(
@@ -257,7 +264,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         table = self.selenium.find_element(By.TAG_NAME, "table")
         rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
         assert len(rows) == 1
-        assert rows[0].text == "SMS +441234567890 View/Edit Delete"
+        assert rows[0].text == "SMS +441234567890 Verify View/Edit Delete"
 
         # Click edit - should reload page with form pre-populated
         rows[0].find_element(By.CLASS_NAME, "btn-secondary").click()
