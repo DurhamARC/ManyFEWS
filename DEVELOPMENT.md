@@ -125,3 +125,22 @@ python manage.py migrate
 ```
 
 This applies all changes from the `migrations` diretories for each app to your database.
+
+
+## GIS Coordinates
+
+A note on GIS coordinates in different places. The GeoDjango library, based on GEOS, uses (x, y) coordinates for Points,
+where x is longitude and y is latitude. LeafletJS used in the front end uses (lat, lon) pairs, i.e. the other way round.
+To check values in the database are correct you can use the `ST_AsLatLonText` function, e.g.:
+
+```sql
+select ST_AsLatLonText(ST_CENTROID(bounding_box)), ST_X(ST_CENTROID(bounding_box)), ST_Y(ST_CENTROID(bounding_box)) from calculations_aggregateddepthprediction where prediction_date > now();
+
+st_aslatlontext                |        st_x        |        st_y         
+-------------------------------+--------------------+---------------------
+7°3'53.100"S 107°44'6.900"E   | 107.73525000000001 |  -7.064750000000001
+7°3'51.300"S 107°44'6.900"E   | 107.73525000000001 |            -7.06425
+7°3'49.500"S 107°44'6.900"E   | 107.73525000000001 |  -7.063750000000001
+7°3'47.700"S 107°44'6.900"E   | 107.73525000000001 |  -7.063250000000001
+7°3'45.900"S 107°44'6.900"E   | 107.73525000000001 |            -7.06275
+```

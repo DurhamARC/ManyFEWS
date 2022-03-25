@@ -81,7 +81,8 @@ def depth_predictions(request, day, hour, bounding_box):
         bb_extent = p.bounding_box.extent
         items.append(
             {
-                "bounds": [[bb_extent[0], bb_extent[1]], [bb_extent[2], bb_extent[3]]],
+                # Bounding box is (xmin, ymin, xmax, ymax) but leaflet expects [[lat, lon], [lat, lon]]
+                "bounds": [[bb_extent[1], bb_extent[0]], [bb_extent[3], bb_extent[2]]],
                 "depth": p.median_depth,
                 "lower_centile": p.lower_centile,
                 "upper_centile": p.upper_centile,
