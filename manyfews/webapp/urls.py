@@ -1,4 +1,4 @@
-from django.urls import path, register_converter
+from django.urls import path, re_path, register_converter
 
 from . import views, converters
 
@@ -10,5 +10,10 @@ urlpatterns = [
         "depths/<int:day>/<int:hour>/<bbox:bounding_box>",
         views.depth_predictions,
         name="depths",
+    ),
+    re_path(
+        r"^alerts/?((?P<action>(delete)|(edit))/(?P<id>[0-9]+))?$",
+        views.alerts,
+        name="alerts",
     ),
 ]

@@ -2,11 +2,17 @@ from datetime import date, timedelta
 import random
 
 from django.conf import settings
+from django.forms import inlineformset_factory
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.template import loader
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from calculations.models import AggregatedDepthPrediction
+from .forms import UserAlertForm
+from .models import UserAlert, UserPhoneNumber
 
 
 def index(request):
@@ -74,3 +80,59 @@ def depth_predictions(request, day, hour, bounding_box):
             }
         )
     return JsonResponse({"items": items, "max_depth": 1})
+
+
+@login_required
+def alerts(request, action=None, id=None):
+    current_alert = None
+    edit_mode = False
+    if request.method == "POST":
+        if id:
+            current_alert = UserAlert.objects.get(user=request.user, id=id)
+        form = UserAlertForm(request.POST, user=request.user, instance=current_alert)
+        if form.is_valid():
+            form.save()
+            # Redirect to /alerts if successful
+            return redirect("alerts")
+        else:
+            edit_mode = True
+
+    else:
+        if id and action in ("edit", "delete"):
+            current_alert = UserAlert.objects.get(user=request.user, id=id)
+
+        if current_alert:
+            if action == "edit":
+                form = UserAlertForm(user=request.user, instance=current_alert)
+                edit_mode = True
+            elif action == "delete":
+                current_alert.delete()
+                return redirect("alerts")
+        else:
+            form = UserAlertForm(user=request.user)
+
+    alert_objs = UserAlert.objects.filter(user=request.user).all()
+    alerts = [
+        {
+            "id": a.id,
+            "alert_type": a.get_alert_type_display(),
+            "phone_number": a.phone_number,
+        }
+        for a in alert_objs
+    ]
+
+    if form.errors.get("location"):
+        form.errors["location"][0] += " Use the toolbox to select an area on the map."
+
+    template = loader.get_template("webapp/alerts.html")
+    return HttpResponse(
+        template.render(
+            {
+                "form": form,
+                "mapApiKey": settings.MAP_API_TOKEN,
+                "alerts": alerts,
+                "edit": edit_mode,
+            },
+            request,
+        )
+    )
