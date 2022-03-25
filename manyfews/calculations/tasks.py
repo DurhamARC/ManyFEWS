@@ -1,10 +1,19 @@
+from datetime import datetime, timedelta, timezone
+import os
+
 from celery import Celery, shared_task
 from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django.conf import settings
+from django.contrib.gis.db.models import Max, Min, Union
+from django.utils import timezone as django_timezone
+
+from webapp.alerts import TwilioAlerts
+from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
-from django.conf import settings
 from .models import (
+    AggregatedDepthPrediction,
     InitialCondition,
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
@@ -14,8 +23,6 @@ from .generate_river_flows import (
     prepareInitialCondition,
     GenerateRiverFlows,
 )
-from datetime import datetime, timedelta, timezone
-import os
 
 app = Celery()
 
@@ -175,3 +182,51 @@ def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
                 river_flow=riverFlows[i, j],
             )
             riverFlowPredictionData.save()
+
+
+@shared_task(name="Send user SMS alerts")
+def send_user_sms_alerts(user_id, phone_number_id):
+    user_sms_alerts = (
+        UserAlert.objects.filter(user_id=user_id, phone_number_id=phone_number_id)
+        .values("user", "phone_number")
+        .annotate(all_locations=Union("location"))
+    )
+
+    today = django_timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    twilio_alerts = TwilioAlerts()
+
+    for alert in user_sms_alerts:
+        try:
+            # Find values in AggregatedDepthPrediction in future which match this area
+            predictions = AggregatedDepthPrediction.objects.filter(
+                prediction_date__gte=today,
+                bounding_box__intersects=alert["all_locations"],
+                median_depth__gte=0.1,  # FIXME: what threshold?
+            ).aggregate(
+                Min("prediction_date"), Max("prediction_date"), Max("median_depth")
+            )
+            message = (
+                f"Floods up to {predictions['median_depth__max']:.1f}m predicted from {predictions['prediction_date__min']:%b %d} "
+                f"to {predictions['prediction_date__max']:%b %d}. See {settings.SITE_URL} for details."
+            )
+            phone_number = UserPhoneNumber.objects.get(id=alert["phone_number"])
+            twilio_alerts.send_alert_sms(str(phone_number.phone_number), message)
+        except Exception as e:
+            logging.error(
+                f"Unable to send message for phone number id {alert['phone_number']}: {e}"
+            )
+
+
+@shared_task(name="Send all alerts")
+def send_alerts():
+    # Get and send SMS alerts
+    # Group by user and phone number, so we can send alerts for multiple locations at once
+    sms_alerts = (
+        UserAlert.objects.filter(verified=True, alert_type=AlertType.SMS)
+        .values("user_id", "phone_number")
+        .distinct()
+    )
+    for alert_details in sms_alerts:
+        result = send_user_sms_alerts.delay(
+            alert_details["user_id"], alert_details["phone_number"]
+        )

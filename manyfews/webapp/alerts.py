@@ -23,18 +23,20 @@ class TwilioAlerts:
         ).verification_checks.create(to=phone_number, code=code)
         return verification_check.status
 
-    def send_alert_sms(self, phone_number):
-        self._send_alert_message(settings.TWILIO_PHONE_NUMBER, phone_number)
+    def send_alert_sms(self, phone_number, message):
+        self._send_alert_message(settings.TWILIO_PHONE_NUMBER, phone_number, message)
 
-    def send_alert_whatsapp(self, phone_number):
+    def send_alert_whatsapp(self, phone_number, message):
         self._send_alert_message(
-            f"whatsapp:{settings.TWILIO_PHONE_NUMBER}", f"whatsapp:{phone_number}"
+            f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
+            f"whatsapp:{phone_number}",
+            message,
         )
 
-    def _send_alert_message(self, from_number, to_number):
+    def _send_alert_message(self, from_number, to_number, message):
         try:
             message = self.client.messages.create(
-                body="Hello World from ManyFEWS!", from_=from_number, to=to_number
+                body=message, from_=from_number, to=to_number
             )
         except Exception as e:
             print(f"Unable to send message to {to_number}: {e}")

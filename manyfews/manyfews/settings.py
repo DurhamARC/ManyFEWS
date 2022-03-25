@@ -40,6 +40,9 @@ TWILIO_AUTH_TOKEN = env("twilio_auth_token")
 TWILIO_PHONE_NUMBER = env("twilio_phone_number")
 TWILIO_VERIFICATION_SID = env("twilio_verification_sid")
 
+# Site URL (or short URL) for use in messages
+SITE_URL = "http://localhost:8000"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
