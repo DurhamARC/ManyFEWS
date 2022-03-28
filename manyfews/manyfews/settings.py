@@ -41,7 +41,16 @@ TWILIO_PHONE_NUMBER = env("twilio_phone_number")
 TWILIO_VERIFICATION_SID = env("twilio_verification_sid")
 
 # Site URL (or short URL) for use in messages
-SITE_URL = "http://localhost:8000"
+SITE_URL = env.str("site_url", "http://localhost:8000")
+
+# Text to use in alerts. Will be populated with max_depth, start and end dates and SITE_URL
+ALERT_TEXT = env.str(
+    "alert_text",
+    "Floods up to {max_depth}m predicted from {start_date} to {end_date}. See {site_url} for details.",
+)
+# Date string to use in alerts: for formats see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+ALERT_DATE_FORMAT = env.str("alert_date_format", "%b %d")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
