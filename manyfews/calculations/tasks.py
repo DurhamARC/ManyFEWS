@@ -207,18 +207,19 @@ def send_user_sms_alerts(user_id, phone_number_id):
             ).aggregate(
                 Min("prediction_date"), Max("prediction_date"), Max("median_depth")
             )
-            message = settings.ALERT_TEXT.format(
-                max_depth=f"{predictions['median_depth__max']:.1f}",
-                start_date=predictions["prediction_date__min"].strftime(
-                    settings.ALERT_DATE_FORMAT
-                ),
-                end_date=predictions["prediction_date__max"].strftime(
-                    settings.ALERT_DATE_FORMAT
-                ),
-                site_url=settings.SITE_URL,
-            )
-            phone_number = UserPhoneNumber.objects.get(id=alert["phone_number"])
-            twilio_alerts.send_alert_sms(str(phone_number.phone_number), message)
+            if predictions["median_depth__max"]:
+                message = settings.ALERT_TEXT.format(
+                    max_depth=f"{predictions['median_depth__max']:.1f}",
+                    start_date=predictions["prediction_date__min"].strftime(
+                        settings.ALERT_DATE_FORMAT
+                    ),
+                    end_date=predictions["prediction_date__max"].strftime(
+                        settings.ALERT_DATE_FORMAT
+                    ),
+                    site_url=settings.SITE_URL,
+                )
+                phone_number = UserPhoneNumber.objects.get(id=alert["phone_number"])
+                twilio_alerts.send_alert_sms(str(phone_number.phone_number), message)
         except Exception as e:
             logging.error(
                 f"Unable to send message for phone number id {alert['phone_number']}: {e}"

@@ -10,6 +10,7 @@ import xlrd
 
 from webapp.models import UserAlert, UserPhoneNumber
 from .models import (
+    AggregatedDepthPrediction,
     ZentraDevice,
     ZentraReading,
     NoaaForecast,
@@ -17,7 +18,13 @@ from .models import (
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
-from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows, send_alerts
+from .tasks import (
+    prepareZentra,
+    prepareGEFS,
+    runningGenerateRiverFlows,
+    send_alerts,
+    send_user_sms_alerts,
+)
 
 
 def excel_to_matrix(path, sheetNum):
@@ -253,59 +260,101 @@ class ModelCalculationTests(TestCase):
 
 
 class UserAlertTests(TestCase):
+    def setUpAlerts(self):
+        # Add some user alerts to db
+        self.user = User(username="user1")
+        self.user.save()
+        self.phone_number1 = UserPhoneNumber(
+            user=self.user, phone_number="+441234567890"
+        )
+        self.phone_number1.save()
+        self.phone_number2 = UserPhoneNumber(
+            user=self.user, phone_number="+449876543210"
+        )
+        self.phone_number2.save()
+        self.alert1 = UserAlert(
+            user=self.user,
+            phone_number=self.phone_number1,
+            location=Polygon.from_bbox((0, 0, 10, 10)),
+        )
+        self.alert1.save()
+        self.alert2 = UserAlert(
+            user=self.user,
+            phone_number=self.phone_number1,
+            location=Polygon.from_bbox((0, 10, 10, 20)),
+        )
+        self.alert2.save()
+        self.alert3 = UserAlert(
+            user=self.user,
+            phone_number=self.phone_number2,
+            location=Polygon.from_bbox((10, 10, 20, 20)),
+        )
+        self.alert3.save()
+
     @mock.patch("calculations.tasks.send_user_sms_alerts")
     def test_send_alerts(self, mock):
         # Call send_alerts: mock should not be called as nothing in db
         send_alerts()
         mock.assert_not_called()
 
-        # Add some user alerts to db
-        user = User(username="user1")
-        user.save()
-        phone_number1 = UserPhoneNumber(user=user, phone_number="+441234567890")
-        phone_number1.save()
-        phone_number2 = UserPhoneNumber(user=user, phone_number="+449876543210")
-        phone_number2.save()
-        alert1 = UserAlert(
-            user=user,
-            phone_number=phone_number1,
-            location=Polygon.from_bbox((0, 0, 10, 10)),
-        )
-        alert1.save()
-        alert2 = UserAlert(
-            user=user,
-            phone_number=phone_number1,
-            location=Polygon.from_bbox((0, 10, 10, 20)),
-        )
-        alert2.save()
-        alert3 = UserAlert(
-            user=user,
-            phone_number=phone_number2,
-            location=Polygon.from_bbox((10, 10, 20, 20)),
-        )
-        alert3.save()
+        self.setUpAlerts()
 
         # Call send_alerts again. Should not call mock as alerts not verified.
         send_alerts()
         mock.assert_not_called()
 
         # Verify alerts 1 and 2
-        alert1.verified = True
-        alert1.save()
-        alert2.verified = True
-        alert2.save()
+        self.alert1.verified = True
+        self.alert1.save()
+        self.alert2.verified = True
+        self.alert2.save()
 
         # Call send_alerts again. Should call mock delay with user and phone number1 ids
         send_alerts()
-        mock.delay.assert_called_once_with(user.id, phone_number1.id)
+        mock.delay.assert_called_once_with(self.user.id, self.phone_number1.id)
 
         mock.reset_mock()
 
         # Verify alert 3
-        alert3.verified = True
-        alert3.save()
+        self.alert3.verified = True
+        self.alert3.save()
         # Call send_alerts again. Should call mock delay twice with both phone numbers
         send_alerts()
         mock.delay.assert_has_calls(
-            mock.call(user.id, phone_number1.id), mock.call(user.id, phone_number2.id)
+            mock.call(self.user.id, self.phone_number1.id),
+            mock.call(self.user.id, self.phone_number2.id),
         )
+
+    @mock.patch("calculations.tasks.TwilioAlerts.send_alert_sms")
+    def test_send_alerts(self, twilio_alerts_mock):
+        self.setUpAlerts()
+        # No depths in db so should not make any calls to Twilio apart from constructor
+        send_user_sms_alerts(1, 1)
+        twilio_alerts_mock.assert_not_called()
+
+        # Add an AggregatedDepthPrediction in a location crossing alert2 and alert3
+        prediction = AggregatedDepthPrediction(
+            prediction_date=datetime.utcnow().date() + timedelta(days=1),
+            bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
+            median_depth=1,
+            lower_centile=0.5,
+            upper_centile=1.5,
+        )
+        prediction.save()
+
+        # Call with user 1, phone number 1
+        send_user_sms_alerts(1, 1)
+        assert twilio_alerts_mock.call_count == 1
+        call_args = twilio_alerts_mock.call_args[0]
+        assert call_args[0] == "+441234567890"
+        assert call_args[1].startswith("Floods up to 1.0m predicted from ")
+        assert call_args[1].endswith("See http://localhost:8000 for details.")
+
+        twilio_alerts_mock.reset_mock()
+
+        # Call with user 1, phone number 2
+        send_user_sms_alerts(1, 2)
+        assert twilio_alerts_mock.call_count == 1
+        call_args2 = twilio_alerts_mock.call_args[0]
+        assert call_args2[0] == "+449876543210"
+        assert call_args2[1] == call_args[1]
