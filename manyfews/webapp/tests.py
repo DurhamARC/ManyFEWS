@@ -289,10 +289,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
 
         # Click edit - should reload page with form pre-populated
         rows[0].find_element(By.CLASS_NAME, "btn-secondary").click()
-        edit_url = "%s%s" % (self.live_server_url, "/alerts/edit/1",)
+        edit_url = "%s%s" % (self.live_server_url, "/alerts/edit/",)
         print(self.selenium.current_url)
-        WebDriverWait(self.selenium, 10).until(EC.url_to_be(edit_url))
-        assert self.selenium.current_url == edit_url
+        WebDriverWait(self.selenium, 10).until(EC.url_contains(edit_url))
+        assert self.selenium.current_url.startswith(edit_url)
         type_select = Select(self.selenium.find_element_by_id("id_alert_type"))
         assert type_select.first_selected_option.text == "SMS"
         phone_select = Select(self.selenium.find_element_by_id("id_phone_number"))
