@@ -50,7 +50,7 @@ ALERT_TEXT = env.str(
 )
 # Date string to use in alerts: for formats see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
 ALERT_DATE_FORMAT = env.str("alert_date_format", "%b %d")
-
+ALERT_DEPTH_THRESHOLD = env.float("alert_depth_threshold", 0.1)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

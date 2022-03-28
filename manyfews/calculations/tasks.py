@@ -193,6 +193,7 @@ def send_user_sms_alerts(user_id, phone_number_id):
     )
 
     today = django_timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    five_days_ahead = today + timedelta(days=5)
     twilio_alerts = TwilioAlerts()
 
     for alert in user_sms_alerts:
@@ -200,8 +201,9 @@ def send_user_sms_alerts(user_id, phone_number_id):
             # Find values in AggregatedDepthPrediction in future which match this area
             predictions = AggregatedDepthPrediction.objects.filter(
                 prediction_date__gte=today,
+                prediction_date__lte=five_days_ahead,
                 bounding_box__intersects=alert["all_locations"],
-                median_depth__gte=0.1,  # FIXME: what threshold?
+                median_depth__gte=settings.ALERT_DEPTH_THRESHOLD,
             ).aggregate(
                 Min("prediction_date"), Max("prediction_date"), Max("median_depth")
             )
