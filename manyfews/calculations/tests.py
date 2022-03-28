@@ -1,6 +1,14 @@
-from django.contrib.gis.geos import Point
-from django.test import TestCase
+from datetime import datetime, timedelta, timezone
+import os
+from unittest import mock
 
+from django.contrib.auth.models import User
+from django.contrib.gis.geos import Point, Polygon
+from django.test import TestCase
+import numpy as np
+import xlrd
+
+from webapp.models import UserAlert, UserPhoneNumber
 from .models import (
     ZentraDevice,
     ZentraReading,
@@ -9,13 +17,7 @@ from .models import (
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
-from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
-from django.test import TestCase
-import numpy as np
-from django.contrib.gis.geos import Point
-from datetime import datetime, timedelta, timezone
-import xlrd
-import os
+from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows, send_alerts
 
 
 def excel_to_matrix(path, sheetNum):
@@ -248,3 +250,62 @@ class ModelCalculationTests(TestCase):
             id = data.id
             assert data.prediction_date == testDate
             assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
+
+
+class UserAlertTests(TestCase):
+    @mock.patch("calculations.tasks.send_user_sms_alerts")
+    def test_send_alerts(self, mock):
+        # Call send_alerts: mock should not be called as nothing in db
+        send_alerts()
+        mock.assert_not_called()
+
+        # Add some user alerts to db
+        user = User(username="user1")
+        user.save()
+        phone_number1 = UserPhoneNumber(user=user, phone_number="+441234567890")
+        phone_number1.save()
+        phone_number2 = UserPhoneNumber(user=user, phone_number="+449876543210")
+        phone_number2.save()
+        alert1 = UserAlert(
+            user=user,
+            phone_number=phone_number1,
+            location=Polygon.from_bbox((0, 0, 10, 10)),
+        )
+        alert1.save()
+        alert2 = UserAlert(
+            user=user,
+            phone_number=phone_number1,
+            location=Polygon.from_bbox((0, 10, 10, 20)),
+        )
+        alert2.save()
+        alert3 = UserAlert(
+            user=user,
+            phone_number=phone_number2,
+            location=Polygon.from_bbox((10, 10, 20, 20)),
+        )
+        alert3.save()
+
+        # Call send_alerts again. Should not call mock as alerts not verified.
+        send_alerts()
+        mock.assert_not_called()
+
+        # Verify alerts 1 and 2
+        alert1.verified = True
+        alert1.save()
+        alert2.verified = True
+        alert2.save()
+
+        # Call send_alerts again. Should call mock delay with user and phone number1 ids
+        send_alerts()
+        mock.delay.assert_called_once_with(user.id, phone_number1.id)
+
+        mock.reset_mock()
+
+        # Verify alert 3
+        alert3.verified = True
+        alert3.save()
+        # Call send_alerts again. Should call mock delay twice with both phone numbers
+        send_alerts()
+        mock.delay.assert_has_calls(
+            mock.call(user.id, phone_number1.id), mock.call(user.id, phone_number2.id)
+        )
