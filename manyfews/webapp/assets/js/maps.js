@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import './bing.js';
 
 var floodOverlayLayerGroup = L.layerGroup();
 var currentDay = 0;
@@ -57,9 +56,18 @@ export function initialiseDepthMap() {
   });
 }
 
-window.addEventListener("map:init", function (e) {
+/*window.addEventListener("map:init", function (e) {
   var detail = e.detail;
-  var mapApiKey = $('#mapApiKey').val();
-  var bing = new L.BingLayer(mapApiKey);
-  detail.map.addLayer(bing);
+  getFloodOverlays(detail.map, $(this).attr('data-day'));
+  detail.map.on('moveend', function() {
+    getFloodOverlays(detail.map, $(this).attr('data-day'));
+  });
+
+  $('.daily-risk').click(function(e) {
+    getFloodOverlays(detail.map, $(this).attr('data-day'));
+    $('.daily-risk').removeClass('current');
+    $(this).addClass('current');
+  });
+  $('.daily-risk').first().addClass('current');
 });
+*/

@@ -62,11 +62,7 @@ def index(request):
             }
         )
 
-    return HttpResponse(
-        template.render(
-            {"daily_risks": daily_risks, "mapApiKey": settings.MAP_API_TOKEN}, request
-        )
-    )
+    return HttpResponse(template.render({"daily_risks": daily_risks}, request))
 
 
 def depth_predictions(request, day, hour, bounding_box):
@@ -149,7 +145,6 @@ def alerts(request, action=None, id=None):
         template.render(
             {
                 "form": form,
-                "mapApiKey": settings.MAP_API_TOKEN,
                 "alerts": alerts,
                 "edit": edit_mode,
             },
