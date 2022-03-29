@@ -25,7 +25,10 @@ ZENTRA_BACKTIME = env("zentra_backtime")
 STATION_SN = env("station_SN")
 GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
-MAP_API_TOKEN = env("map_api_token")
+# Leaflet map tiles URL (including API key if needed)
+MAP_URL = env.str(
+    "map_url", "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
+)
 
 # Email settings
 EMAIL_HOST = env("email_host")
@@ -187,7 +190,7 @@ LEAFLET_CONFIG = {
     "MIN_ZOOM": 10,
     "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,
-    "TILES": f"https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{{z}}/{{x}}/{{y}}?access_token={MAP_API_TOKEN}",
+    "TILES": MAP_URL,
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
