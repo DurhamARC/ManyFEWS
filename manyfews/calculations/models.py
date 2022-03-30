@@ -69,5 +69,14 @@ class AggregatedDepthPrediction(models.Model):
     prediction_date = models.DateTimeField()
     bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
     median_depth = models.FloatField()
+    # lower is 10th centile
     lower_centile = models.FloatField()
+    # mid_lower is 30th centile
+    mid_lower_centile = models.FloatField()
+    # upper is 90th centile
     upper_centile = models.FloatField()
+
+
+class PercentageFloodRisk(models.Model):
+    prediction_date = models.DateTimeField()
+    risk = models.FloatField()
