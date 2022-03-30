@@ -113,7 +113,7 @@ body {
   }
 
   .map {
-    height: calc(100vh - 230px);
+    height: calc(100vh - 250px);
     padding: 0;
 
     #map {
@@ -143,4 +143,13 @@ body {
     display: block;
   }
 
+  .modal-wide .modal-dialog {
+    max-width: 90vw;
+  }
+
+  .footer {
+    margin-top: 5px;
+    text-align: center;
+    font-size: smaller;
+  }
 }
