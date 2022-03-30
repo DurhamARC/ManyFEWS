@@ -284,7 +284,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, "verify-submit").click()
 
         # Should be back on alerts page with alert now verified
-        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/alerts",)
+        assert self.selenium.current_url == "%s%s" % (
+            self.live_server_url,
+            "/alerts",
+        )
         table = self.selenium.find_element(By.TAG_NAME, "table")
         rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
         assert len(rows) == 1
@@ -292,7 +295,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
 
         # Click edit - should reload page with form pre-populated
         rows[0].find_element(By.CLASS_NAME, "btn-secondary").click()
-        edit_url = "%s%s" % (self.live_server_url, "/alerts/edit/",)
+        edit_url = "%s%s" % (
+            self.live_server_url,
+            "/alerts/edit/",
+        )
         print(self.selenium.current_url)
         WebDriverWait(self.selenium, 10).until(EC.url_contains(edit_url))
         assert self.selenium.current_url.startswith(edit_url)
