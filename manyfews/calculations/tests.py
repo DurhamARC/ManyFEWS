@@ -337,6 +337,7 @@ class UserAlertTests(TestCase):
             bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
             median_depth=1,
             lower_centile=0.5,
+            mid_lower_centile=0.7,
             upper_centile=1.5,
         )
         prediction.save()
