@@ -14,7 +14,7 @@ dependencies:
   - django-crispy-forms
   - twilio
   # dev dependencies
-  - black
+  - black=22.3.0
   - pre-commit
   - pytest
   - retrying
