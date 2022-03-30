@@ -94,6 +94,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         )
         self.selenium.find_element(By.ID, "id_password1").send_keys("al25ns5235")
         self.selenium.find_element(By.ID, "id_password2").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "id_agree_privacy").click()
         self.selenium.find_element(By.ID, "signup-submit").click()
 
         # Should be redirected to login page
@@ -184,6 +185,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         )
         self.selenium.find_element(By.ID, "id_password1").send_keys("al25ns5235")
         self.selenium.find_element(By.ID, "id_password2").send_keys("al25ns5235")
+        self.selenium.find_element(By.ID, "id_agree_privacy").click()
         self.selenium.find_element(By.ID, "signup-submit").click()
         self.selenium.find_element(By.ID, "id_username").send_keys(
             "manyfews@mailinator.com"
