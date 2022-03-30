@@ -201,7 +201,8 @@ class ModelCalculationTests(TestCase):
             usecols=range(100),
         )
         F0benchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "F0_Benchmark.csv")), usecols=range(3),
+            open(os.path.join(dataFileDirPath, "F0_Benchmark.csv")),
+            usecols=range(3),
         )
         qpbenchmark = np.loadtxt(
             open(os.path.join(dataFileDirPath, "qp_Benchmark.csv")),

@@ -186,7 +186,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
         buttons[0].click()
 
         # Check we're on alerts page
-        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/alerts",)
+        assert self.selenium.current_url == "%s%s" % (
+            self.live_server_url,
+            "/alerts",
+        )
 
         # Look for text
         assert (
@@ -278,7 +281,10 @@ class WebAppTestCase(StaticLiveServerTestCase):
         self.selenium.find_element(By.ID, "delete-link").click()
 
         # Should be back on main alerts page
-        assert self.selenium.current_url == "%s%s" % (self.live_server_url, "/alerts",)
+        assert self.selenium.current_url == "%s%s" % (
+            self.live_server_url,
+            "/alerts",
+        )
         # Should be no alerts set up again
         assert (
             'You have no alerts set up. Click "Add New" to create one.'

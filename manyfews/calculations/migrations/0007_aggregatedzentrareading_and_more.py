@@ -38,7 +38,9 @@ class Migration(migrations.Migration):
                 ("wind_v", models.FloatField()),
                 ("relative_humidity", models.FloatField(default=0)),
             ],
-            options={"abstract": False,},
+            options={
+                "abstract": False,
+            },
         ),
         migrations.AlterField(
             model_name="noaaforecast",
