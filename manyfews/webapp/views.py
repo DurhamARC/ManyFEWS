@@ -48,7 +48,11 @@ def index(request):
             )
 
         daily_risks.append(
-            {"day_number": i, "date": date, "risks": six_hour_risks,}
+            {
+                "day_number": i,
+                "date": date,
+                "risks": six_hour_risks,
+            }
         )
 
     return HttpResponse(template.render({"daily_risks": daily_risks}, request))
@@ -131,7 +135,14 @@ def alerts(request, action=None, id=None):
 
     template = loader.get_template("webapp/alerts.html")
     return HttpResponse(
-        template.render({"form": form, "alerts": alerts, "edit": edit_mode,}, request,)
+        template.render(
+            {
+                "form": form,
+                "alerts": alerts,
+                "edit": edit_mode,
+            },
+            request,
+        )
     )
 
 

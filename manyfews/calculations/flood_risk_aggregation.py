@@ -9,7 +9,8 @@ def calculate_risk_percentages(from_date):
     # with non-zero median depth
     prediction_counts = (
         AggregatedDepthPrediction.objects.filter(
-            prediction_date__gte=from_date, median_depth__gte=0,
+            prediction_date__gte=from_date,
+            median_depth__gte=0,
         )
         .values("prediction_date")
         .annotate(non_zero_count=Count("median_depth"))
