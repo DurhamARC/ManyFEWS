@@ -1,7 +1,11 @@
+import logging
+
+from django.contrib import messages
 from django.forms import ModelChoiceField, ModelForm, ValidationError
 from leaflet.forms.fields import PolygonField
 from phonenumber_field.formfields import PhoneNumberField
 
+from .alerts import TwilioAlerts
 from .models import UserAlert, UserPhoneNumber
 
 
@@ -50,5 +54,19 @@ class UserAlertForm(ModelForm):
 
         if commit:
             user_alert.save()
-
+            if not user_alert.verified:
+                try:
+                    twilio_alerts = TwilioAlerts()
+                    twilio_alerts.send_verification_message(
+                        str(user_alert.phone_number.phone_number),
+                        channel=user_alert.alert_type,
+                    )
+                except Exception as e:
+                    logging.error(
+                        f"Error sending verification message for alert {user_alert.id} via Twilio.",
+                        e,
+                    )
+                    raise ValidationError(
+                        "Unable to verify phone number. Please check the number and try again."
+                    )
         return user_alert

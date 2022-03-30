@@ -14,8 +14,8 @@ function getFloodOverlays(map, day, hour) {
   currentDay = day;
   currentHour = hour;
   var bounding_box = map.getBounds();
-  var dataUrl = '/depths/' + currentDay + '/'  + currentHour + '/' + bounding_box.getSouth() + ',' + bounding_box.getWest() + ','
-    + bounding_box.getNorth() + ',' + bounding_box.getEast();
+  var dataUrl = '/depths/' + currentDay + '/'  + currentHour + '/' + bounding_box.getWest() + ',' + bounding_box.getSouth() + ','
+    + bounding_box.getEast() + ',' + bounding_box.getNorth();
   fetch(dataUrl)
     .then(function(resp) {
       return resp.json();

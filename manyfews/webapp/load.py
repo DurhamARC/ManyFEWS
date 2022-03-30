@@ -11,10 +11,10 @@ sn = "06-02047"
 
 zentraDevice = ZentraDevice.objects.filter(device_sn=sn).first()
 if not zentraDevice:
-    zentraDevice = ZentraDevice(device_sn=sn, location=Point(-7.052115, 107.755514))
+    zentraDevice = ZentraDevice(device_sn=sn, location=Point(107.735, -7.065))
     zentraDevice.save()
 
-start_location = Point(-7.065, 107.735)
+start_location = Point(107.735, -7.065)
 date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 grid_size = 0.0005
 

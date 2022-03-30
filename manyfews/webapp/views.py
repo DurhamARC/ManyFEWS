@@ -1,18 +1,26 @@
 from datetime import date, timedelta
+import logging
 import random
 
 from django.conf import settings
-from django.forms import inlineformset_factory
+from django.forms import ValidationError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template import loader
 from django.utils import timezone
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from calculations.models import AggregatedDepthPrediction
+from .alerts import TwilioAlerts
 from .forms import UserAlertForm
 from .models import UserAlert, UserPhoneNumber
+
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
 
 
 def index(request):
@@ -73,7 +81,8 @@ def depth_predictions(request, day, hour, bounding_box):
         bb_extent = p.bounding_box.extent
         items.append(
             {
-                "bounds": [[bb_extent[0], bb_extent[1]], [bb_extent[2], bb_extent[3]]],
+                # Bounding box is (xmin, ymin, xmax, ymax) but leaflet expects [[lat, lon], [lat, lon]]
+                "bounds": [[bb_extent[1], bb_extent[0]], [bb_extent[3], bb_extent[2]]],
                 "depth": p.median_depth,
                 "lower_centile": p.lower_centile,
                 "upper_centile": p.upper_centile,
@@ -91,9 +100,19 @@ def alerts(request, action=None, id=None):
             current_alert = UserAlert.objects.get(user=request.user, id=id)
         form = UserAlertForm(request.POST, user=request.user, instance=current_alert)
         if form.is_valid():
-            form.save()
-            # Redirect to /alerts if successful
-            return redirect("alerts")
+            try:
+                form.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Alert added. Please check your messages to verify it.",
+                )
+                # Redirect to /alerts if successful
+                return redirect("alerts")
+            except ValidationError as e:
+                messages.add_message(
+                    request, messages.ERROR, e.message, extra_tags="danger"
+                )
         else:
             edit_mode = True
 
@@ -117,6 +136,7 @@ def alerts(request, action=None, id=None):
             "id": a.id,
             "alert_type": a.get_alert_type_display(),
             "phone_number": a.phone_number,
+            "verified": a.verified,
         }
         for a in alert_objs
     ]
@@ -136,3 +156,78 @@ def alerts(request, action=None, id=None):
             request,
         )
     )
+
+
+@login_required
+def verify_alert(request):
+    try:
+        id = int(request.POST.get("alert_id"))
+        code = request.POST.get("verification_code")
+        if id and code:
+            user_alert = UserAlert.objects.get(user=request.user, id=id)
+            twilio_alerts = TwilioAlerts()
+            verified = twilio_alerts.check_verification_code(
+                str(user_alert.phone_number.phone_number), code
+            )
+            if verified:
+                user_alert.verified = True
+                user_alert.save()
+                messages.add_message(
+                    request, messages.SUCCESS, "Verification succeeded."
+                )
+            else:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Verification failed. Please try again.",
+                    extra_tags="danger",
+                )
+    except Exception as e:
+        logging.error(
+            f"Error when verifying message for alert {user_alert.id} via Twilio.", e
+        )
+        messages.add_message(
+            request,
+            messages.ERROR,
+            "Verification failed. Please try again.",
+            extra_tags="danger",
+        )
+
+    # Redirect to /alerts
+    return redirect("alerts")
+
+
+@login_required
+def resend_verification(request, id):
+    try:
+        user_alert = UserAlert.objects.get(user=request.user, id=id)
+        twilio_alerts = TwilioAlerts()
+        verification_sent = twilio_alerts.send_verification_message(
+            str(user_alert.phone_number.phone_number), user_alert.alert_type
+        )
+        if verification_sent:
+            messages.add_message(
+                request,
+                messages.INFO,
+                f"We have sent a verification code to {str(user_alert.phone_number.phone_number)}. Use the 'Verify' button to enter the code to verify your alert.",
+            )
+        else:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                f"Unable to send verification code to {str(user_alert.phone_number.phone_number)}. Please check the number and try again.",
+                extra_tags="danger",
+            )
+    except Exception as e:
+        logging.error(
+            f"Error sending verification for alert {user_alert.id} via Twilio. %s", e
+        )
+        messages.add_message(
+            request,
+            messages.ERROR,
+            f"Unable to send verification code to {str(user_alert.phone_number.phone_number)}. Please check the number and try again.",
+            extra_tags="danger",
+        )
+
+    # Redirect to /alerts
+    return redirect("alerts")

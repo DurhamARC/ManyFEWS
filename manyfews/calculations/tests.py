@@ -1,7 +1,17 @@
-from django.contrib.gis.geos import Point
-from django.test import TestCase
+from datetime import datetime, timedelta, timezone
+import os
+from unittest import mock
 
+from django.contrib.auth.models import User
+from django.contrib.gis.geos import Point, Polygon
+from django.test import TestCase
+import numpy as np
+import xlrd
+
+from webapp.models import UserAlert, UserPhoneNumber, AlertType
+from .alerts import send_phone_alerts_for_user
 from .models import (
+    AggregatedDepthPrediction,
     ZentraDevice,
     ZentraReading,
     NoaaForecast,
@@ -9,13 +19,7 @@ from .models import (
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
-from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows
-from django.test import TestCase
-import numpy as np
-from django.contrib.gis.geos import Point
-from datetime import datetime, timedelta, timezone
-import xlrd
-import os
+from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows, send_alerts
 
 
 def excel_to_matrix(path, sheetNum):
@@ -249,3 +253,107 @@ class ModelCalculationTests(TestCase):
             id = data.id
             assert data.prediction_date == testDate
             assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
+
+
+class UserAlertTests(TestCase):
+    def setUpAlerts(self):
+        # Add some user alerts to db
+        self.user = User(username="user1")
+        self.user.save()
+        self.phone_number1 = UserPhoneNumber(
+            user=self.user, phone_number="+441234567890"
+        )
+        self.phone_number1.save()
+        self.phone_number2 = UserPhoneNumber(
+            user=self.user, phone_number="+449876543210"
+        )
+        self.phone_number2.save()
+        self.alert1 = UserAlert(
+            user=self.user,
+            phone_number=self.phone_number1,
+            alert_type=AlertType.SMS,
+            location=Polygon.from_bbox((0, 0, 10, 10)),
+        )
+        self.alert1.save()
+        self.alert2 = UserAlert(
+            user=self.user,
+            phone_number=self.phone_number1,
+            alert_type=AlertType.SMS,
+            location=Polygon.from_bbox((0, 10, 10, 20)),
+        )
+        self.alert2.save()
+        self.alert3 = UserAlert(
+            user=self.user,
+            phone_number=self.phone_number2,
+            alert_type=AlertType.SMS,
+            location=Polygon.from_bbox((10, 10, 20, 20)),
+        )
+        self.alert3.save()
+
+    @mock.patch("calculations.tasks.send_user_sms_alerts")
+    def test_send_alerts(self, mock):
+        # Call send_alerts: mock should not be called as nothing in db
+        send_alerts()
+        mock.assert_not_called()
+
+        self.setUpAlerts()
+
+        # Call send_alerts again. Should not call mock as alerts not verified.
+        send_alerts()
+        mock.assert_not_called()
+
+        # Verify alerts 1 and 2
+        self.alert1.verified = True
+        self.alert1.save()
+        self.alert2.verified = True
+        self.alert2.save()
+
+        # Call send_alerts again. Should call mock delay with user and phone number1 ids
+        send_alerts()
+        mock.delay.assert_called_once_with(self.user.id, self.phone_number1.id)
+
+        mock.reset_mock()
+
+        # Verify alert 3
+        self.alert3.verified = True
+        self.alert3.save()
+        # Call send_alerts again. Should call mock delay twice with both phone numbers
+        send_alerts()
+        mock.delay.assert_has_calls(
+            mock.call(self.user.id, self.phone_number1.id),
+            mock.call(self.user.id, self.phone_number2.id),
+        )
+
+    @mock.patch("calculations.alerts.TwilioAlerts.send_alert_sms")
+    def test_send_sms_alerts(self, sms_mock):
+        self.setUpAlerts()
+        # No depths in db so should not make any calls to Twilio apart from constructor
+        send_phone_alerts_for_user(1, 1)
+        sms_mock.assert_not_called()
+
+        # Add an AggregatedDepthPrediction in a location crossing alert2 and alert3
+        prediction = AggregatedDepthPrediction(
+            prediction_date=datetime.utcnow().date() + timedelta(days=1),
+            bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
+            median_depth=1,
+            lower_centile=0.5,
+            upper_centile=1.5,
+        )
+        prediction.save()
+
+        # Call with user 1, phone number 1
+        send_phone_alerts_for_user(self.user.id, self.phone_number1.id)
+        assert sms_mock.call_count == 1
+        call_args = sms_mock.call_args[0]
+        assert call_args[0] == "+441234567890"
+        assert call_args[1].startswith("Floods up to 1.0m predicted from ")
+        assert call_args[1].endswith("See http://localhost:8000 for details.")
+
+        sms_mock.reset_mock()
+
+        # Call with user 1, phone number 2
+        send_phone_alerts_for_user(self.user.id, self.phone_number2.id)
+        assert sms_mock.call_count == 1
+        call_args2 = sms_mock.call_args[0]
+        assert call_args2[0] == "+449876543210"
+        assert call_args2[1] == call_args[1]

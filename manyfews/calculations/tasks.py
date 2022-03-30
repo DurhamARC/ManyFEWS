@@ -1,10 +1,18 @@
+from datetime import datetime, timedelta, timezone
+import os
+
 from celery import Celery, shared_task
 from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django.conf import settings
+
+from webapp.alerts import TwilioAlerts
+from webapp.models import UserAlert, UserPhoneNumber, AlertType
+from .alerts import send_phone_alerts_for_user
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
-from django.conf import settings
 from .models import (
+    AggregatedDepthPrediction,
     InitialCondition,
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
@@ -14,8 +22,6 @@ from .generate_river_flows import (
     prepareInitialCondition,
     GenerateRiverFlows,
 )
-from datetime import datetime, timedelta, timezone
-import os
 
 app = Celery()
 
@@ -175,3 +181,23 @@ def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
                 river_flow=riverFlows[i, j],
             )
             riverFlowPredictionData.save()
+
+
+@shared_task(name="Send user SMS alerts")
+def send_user_sms_alerts(user_id, phone_number_id):
+    send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SMS)
+
+
+@shared_task(name="Send all alerts")
+def send_alerts():
+    # Get and send SMS alerts
+    # Group by user and phone number, so we can send alerts for multiple locations at once
+    sms_alerts = (
+        UserAlert.objects.filter(verified=True, alert_type=AlertType.SMS)
+        .values("user_id", "phone_number")
+        .distinct()
+    )
+    for alert_details in sms_alerts:
+        result = send_user_sms_alerts.delay(
+            alert_details["user_id"], alert_details["phone_number"]
+        )

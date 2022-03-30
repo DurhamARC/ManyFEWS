@@ -6,8 +6,8 @@ class BoundingBoxUrlParameterConverter:
     Class to convert GIS coordinates representing a bounding box from a
     string in the URL into a GEOS Polygon object.
 
-    Expects the coordinates to be comma-separated values representing NW and
-    SE coordinates, e.g. -7.05,107.73,-7.044,107.77
+    Expects the coordinates to be comma-separated values representing SW and
+    NE (x, y) coordinates, e.g. 107.73,-7.05,107.77,-7.044,
     """
 
     regex = r"(\-?[0-9]+(\.?[0-9]+)?,){3}\-?[0-9]+(\.?[0-9]+)?"
