@@ -1,10 +1,6 @@
 @import 'node_modules/bootstrap/scss/bootstrap';
 
-$riskColor0: #FFF;
-$riskColor1: #00FFFF;
-$riskColor2: #FFFF00;
-$riskColor3: #FFD700;
-$riskColor4: #FF0000;
+$titleColor: #68246D;
 
 body {
   height: 100%;
@@ -19,6 +15,11 @@ body {
   }
 
   .header {
+    .title-block {
+        text-decoration: none;
+        color: $titleColor;
+    }
+
     .daily-risk {
       margin-bottom: 10px;
       padding: 0;
@@ -58,21 +59,6 @@ body {
         }
       }
 
-      .risk0 {
-        background-color: $riskColor0;
-      }
-      .risk1 {
-        background-color: $riskColor1;
-      }
-      .risk2 {
-        background-color: $riskColor2;
-      }
-      .risk3 {
-        background-color: $riskColor3;
-      }
-      .risk4 {
-        background-color: $riskColor4;
-      }
       .risk {
         width: 25%;
         height: 50px;
@@ -127,7 +113,7 @@ body {
   }
 
   .map {
-    height: calc(100vh - 120px);
+    height: calc(100vh - 230px);
     padding: 0;
 
     #map {

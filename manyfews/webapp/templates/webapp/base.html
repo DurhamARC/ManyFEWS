@@ -14,10 +14,10 @@
 
 <body>
     <div class="header container-fluid row justify-content-between">
-        <div class="col-8 align-self-center">
+        <a href="{% url 'index' %}" class="col-8 align-self-center title-block">
             <h1 class="row">ManyFEWS</h1>
             <h3 class="row">Flood warnings for Majalaya</h3>
-        </div>
+        </a>
         <div class="col-4 align-self-center right">
           {% if user.is_authenticated %}
             <a href="{% url 'alerts' %}" class="btn btn-primary">Alerts</a>
