@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from calculations.models import AggregatedDepthPrediction
+from calculations.models import AggregatedDepthPrediction, PercentageFloodRisk
 from .alerts import TwilioAlerts
 from .forms import UserAlertForm
 from .models import UserAlert, UserPhoneNumber
@@ -24,42 +24,31 @@ MESSAGE_TAGS = {
 
 
 def index(request):
-    # Prepare data for the home page
     template = loader.get_template("webapp/index.html")
+
+    # Prepare risk data for the home page
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     daily_risks = []
-
-    # Currently we generate random data; this will eventually be calculated
-    # from the flood risk levels in the DB
-    risk = random.randint(0, 100)
     for i in range(10):
         six_hour_risks = []
+        date = today + timedelta(days=i)
         for j in range(4):
-            risk += random.randint(-10, 10)
-            if risk < 0:
+
+            percentage_flood_risk = PercentageFloodRisk.objects.filter(
+                prediction_date=date + timedelta(hours=j * 6)
+            ).first()
+
+            if percentage_flood_risk:
+                risk = percentage_flood_risk.risk
+            else:
                 risk = 0
-            if risk > 100:
-                risk = 100
-            risk_level = 0
-            if risk > 75:
-                risk_level = 4
-            elif risk > 50:
-                risk_level = 3
-            elif risk > 25:
-                risk_level = 2
-            elif risk > 0:
-                risk_level = 1
 
             six_hour_risks.append(
-                {"hour": j * 6, "risk_percentage": risk, "risk_level": risk_level}
+                {"hour": j * 6, "risk": risk, "percentage_risk": risk * 100}
             )
 
         daily_risks.append(
-            {
-                "day_number": i,
-                "date": today + timedelta(days=i),
-                "risks": six_hour_risks,
-            }
+            {"day_number": i, "date": date, "risks": six_hour_risks,}
         )
 
     return HttpResponse(template.render({"daily_risks": daily_risks}, request))
@@ -142,14 +131,7 @@ def alerts(request, action=None, id=None):
 
     template = loader.get_template("webapp/alerts.html")
     return HttpResponse(
-        template.render(
-            {
-                "form": form,
-                "alerts": alerts,
-                "edit": edit_mode,
-            },
-            request,
-        )
+        template.render({"form": form, "alerts": alerts, "edit": edit_mode,}, request,)
     )
 
 

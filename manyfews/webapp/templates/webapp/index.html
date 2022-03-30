@@ -10,8 +10,10 @@
                     <p class="date">{{ d.date|date:"M j" }}</p>
                 </div>
                 <div class="hourly-risk row">
+                  <!-- Add tooltip with risk percentage -->
                   {% for h in d.risks %}
-                    <div class="btn col-3 risk{{ h.risk_level }} risk" data-day="{{ d.day_number }}" data-hour="{{ h.hour }}">
+                    <div class="btn col-3 risk" data-bs-toggle="tooltip" data-bs-placement="top" title="Flood risk {{ h.percentage_risk|floatformat:'0' }}%"
+                         data-risk="{{ h.risk }}" data-day="{{ d.day_number }}" data-hour="{{ h.hour }}">
                       {{ h.hour|stringformat:"02d" }}
                     </div>
                   {% endfor %}
@@ -24,5 +26,6 @@
     </div>
     <script type="text/javascript">
       window.initialiseDepthMap();
+      window.initialiseDailyRisks();
     </script>
 {% endblock content %}

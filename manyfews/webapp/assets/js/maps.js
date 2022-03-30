@@ -1,13 +1,9 @@
 import $ from 'jquery';
+import {interpolateYlGnBu} from 'd3-scale-chromatic';
 
 var floodOverlayLayerGroup = L.layerGroup();
 var currentDay = 0;
 var currentHour = 0;
-
-function proportionToColor(proportion, maxHue = 240, minHue = 120) {
-  const hue = proportion * (maxHue - minHue) + minHue;
-  return `hsl(${hue}, 50%, 30%)`;
-}
 
 function getFloodOverlays(map, day, hour) {
   currentDay = day;
@@ -25,7 +21,7 @@ function getFloodOverlays(map, day, hour) {
         var layer = L.rectangle(i.bounds,
           {
             color: null,
-            fillColor: proportionToColor(i.depth/data["max_depth"]),
+            fillColor: interpolateYlGnBu(i.depth/data["max_depth"]),
             fillOpacity: 1 - (i.upper_centile - i.lower_centile)/data["max_depth"]
           }
         );
@@ -55,19 +51,3 @@ export function initialiseDepthMap() {
     $('.risk').first().addClass('current');
   });
 }
-
-/*window.addEventListener("map:init", function (e) {
-  var detail = e.detail;
-  getFloodOverlays(detail.map, $(this).attr('data-day'));
-  detail.map.on('moveend', function() {
-    getFloodOverlays(detail.map, $(this).attr('data-day'));
-  });
-
-  $('.daily-risk').click(function(e) {
-    getFloodOverlays(detail.map, $(this).attr('data-day'));
-    $('.daily-risk').removeClass('current');
-    $(this).addClass('current');
-  });
-  $('.daily-risk').first().addClass('current');
-});
-*/

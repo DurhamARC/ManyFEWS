@@ -25,6 +25,13 @@ ZENTRA_BACKTIME = env("zentra_backtime")
 STATION_SN = env("station_SN")
 GEFS_TIME_STEP = env("gefs_timestep")
 GEFS_FORECAST_DAYS = env("gefs_forecastDays")
+
+# Thresholds for number of m^2 cells that count towards flood risk
+# CHANNEL_CELL_COUNT is number of cells in the river channel
+CHANNEL_CELL_COUNT = env.int("channel_cell_count", 93794)
+# LARGE_FLOOD_COUNT is number of cells that represent a large area of flooding
+LARGE_FLOOD_COUNT = env.int("large_flood_count", 1440811)
+
 # Leaflet map tiles URL (including API key if needed)
 MAP_URL = env.str(
     "map_url", "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
