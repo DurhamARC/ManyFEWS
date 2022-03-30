@@ -8,7 +8,8 @@ from django.test import TestCase
 import numpy as np
 import xlrd
 
-from webapp.models import UserAlert, UserPhoneNumber
+from webapp.models import UserAlert, UserPhoneNumber, AlertType
+from .alerts import send_phone_alerts_for_user
 from .models import (
     AggregatedDepthPrediction,
     ZentraDevice,
@@ -18,13 +19,7 @@ from .models import (
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
-from .tasks import (
-    prepareZentra,
-    prepareGEFS,
-    runningGenerateRiverFlows,
-    send_alerts,
-    send_user_sms_alerts,
-)
+from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows, send_alerts
 
 
 def excel_to_matrix(path, sheetNum):
@@ -275,18 +270,21 @@ class UserAlertTests(TestCase):
         self.alert1 = UserAlert(
             user=self.user,
             phone_number=self.phone_number1,
+            alert_type=AlertType.SMS,
             location=Polygon.from_bbox((0, 0, 10, 10)),
         )
         self.alert1.save()
         self.alert2 = UserAlert(
             user=self.user,
             phone_number=self.phone_number1,
+            alert_type=AlertType.SMS,
             location=Polygon.from_bbox((0, 10, 10, 20)),
         )
         self.alert2.save()
         self.alert3 = UserAlert(
             user=self.user,
             phone_number=self.phone_number2,
+            alert_type=AlertType.SMS,
             location=Polygon.from_bbox((10, 10, 20, 20)),
         )
         self.alert3.save()
@@ -325,12 +323,12 @@ class UserAlertTests(TestCase):
             mock.call(self.user.id, self.phone_number2.id),
         )
 
-    @mock.patch("calculations.tasks.TwilioAlerts.send_alert_sms")
-    def test_send_alerts(self, twilio_alerts_mock):
+    @mock.patch("calculations.alerts.TwilioAlerts.send_alert_sms")
+    def test_send_sms_alerts(self, sms_mock):
         self.setUpAlerts()
         # No depths in db so should not make any calls to Twilio apart from constructor
-        send_user_sms_alerts(1, 1)
-        twilio_alerts_mock.assert_not_called()
+        send_phone_alerts_for_user(1, 1)
+        sms_mock.assert_not_called()
 
         # Add an AggregatedDepthPrediction in a location crossing alert2 and alert3
         prediction = AggregatedDepthPrediction(
@@ -343,18 +341,18 @@ class UserAlertTests(TestCase):
         prediction.save()
 
         # Call with user 1, phone number 1
-        send_user_sms_alerts(1, 1)
-        assert twilio_alerts_mock.call_count == 1
-        call_args = twilio_alerts_mock.call_args[0]
+        send_phone_alerts_for_user(self.user.id, self.phone_number1.id)
+        assert sms_mock.call_count == 1
+        call_args = sms_mock.call_args[0]
         assert call_args[0] == "+441234567890"
         assert call_args[1].startswith("Floods up to 1.0m predicted from ")
         assert call_args[1].endswith("See http://localhost:8000 for details.")
 
-        twilio_alerts_mock.reset_mock()
+        sms_mock.reset_mock()
 
         # Call with user 1, phone number 2
-        send_user_sms_alerts(1, 2)
-        assert twilio_alerts_mock.call_count == 1
-        call_args2 = twilio_alerts_mock.call_args[0]
+        send_phone_alerts_for_user(self.user.id, self.phone_number2.id)
+        assert sms_mock.call_count == 1
+        call_args2 = sms_mock.call_args[0]
         assert call_args2[0] == "+449876543210"
         assert call_args2[1] == call_args[1]
