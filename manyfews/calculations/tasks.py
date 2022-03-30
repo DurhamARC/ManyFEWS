@@ -45,8 +45,8 @@ def prepareGEFS():
     into Database for running the River Flows model
     """
     # prepare GEFS data
-    dt = float(settings.GEFS_TIME_STEP)
-    forecastDays = int(settings.GEFS_FORECAST_DAYS)
+    dt = settings.GEFS_TIME_STEP
+    forecastDays = settings.GEFS_FORECAST_DAYS
     dataBaseWriter(dt=dt, forecastDays=forecastDays)
 
 
@@ -63,7 +63,7 @@ def prepareZentra():
     stationSN = settings.STATION_SN
 
     # save into Data base
-    backDay = float(settings.ZENTRA_BACKTIME)
+    backDay = settings.ZENTRA_BACKTIME
 
     # prepare start_time and end_time
     startDate = datetime.now() - timedelta(days=backDay)
