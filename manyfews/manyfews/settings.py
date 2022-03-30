@@ -36,6 +36,7 @@ LARGE_FLOOD_COUNT = env.int("large_flood_count", 1440811)
 MAP_URL = env.str(
     "map_url", "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
 )
+MAP_CENTER = env.tuple("map_center", float, (-7.050465729629079, 107.75813455787436))
 
 # Email settings
 EMAIL_HOST = env("email_host")
@@ -192,7 +193,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 LEAFLET_CONFIG = {
-    "DEFAULT_CENTER": (-7.052115, 107.755514),
+    "DEFAULT_CENTER": MAP_CENTER,
     "DEFAULT_ZOOM": 18,
     "MIN_ZOOM": 10,
     "MAX_ZOOM": 25,
