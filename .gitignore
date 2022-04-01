@@ -148,3 +148,6 @@ manyfews/node_modules
 
 # Ignore .DS_Store (created by Finder on Macs)
 .DS_Store
+
+# Ignore file uploads
+manyfews/files

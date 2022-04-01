@@ -37,7 +37,7 @@ STATION_SN = env.str("station_SN", "06-02047")
 # GEFS weather forecast details
 GEFS_TIME_STEP = env.float("gefs_timestep", 0.25)
 GEFS_FORECAST_DAYS = env.int("gefs_forecastDays", 16)
-LAT_VALUE = env.float("latValue", -80.5)
+LAT_VALUE = env.float("latValue", -7.05)
 LON_VALUE = env.float("lonValue", 175)
 
 # Thresholds for number of m^2 cells that count towards flood risk
@@ -45,6 +45,10 @@ LON_VALUE = env.float("lonValue", 175)
 CHANNEL_CELL_COUNT = env.int("channel_cell_count", 93794)
 # LARGE_FLOOD_COUNT is number of cells that represent a large area of flooding
 LARGE_FLOOD_COUNT = env.int("large_flood_count", 1440811)
+
+FLOOD_MODEL_PARAMETERS = env.tuple(
+    "flood_model_parameters", float, (1, 1, 0.12, 0.399, 0.00395, 0.00565)
+)
 
 # Leaflet map tiles URL (including API key if needed)
 MAP_URL = env.str(
@@ -76,6 +80,11 @@ ALERT_TEXT = env.str(
 # Date string to use in alerts: for formats see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
 ALERT_DATE_FORMAT = env.str("alert_date_format", "%b %d")
 ALERT_DEPTH_THRESHOLD = env.float("alert_depth_threshold", 0.1)
+
+# Location to store parameter files uploaded
+MEDIA_ROOT = env.str(
+    "media_root", Path(__file__).resolve().parent.parent.joinpath("files")
+)
 
 # =======================================================================================
 # End of user configurable settings
@@ -212,7 +221,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": MAP_CENTER,
-    "DEFAULT_ZOOM": 18,
+    "DEFAULT_ZOOM": 20,
     "MIN_ZOOM": 10,
     "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,

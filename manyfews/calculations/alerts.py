@@ -45,20 +45,16 @@ def send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SM
 def get_message(start_date, end_date, location):
     # Find values in AggregatedDepthPrediction in future which match this area
     predictions = AggregatedDepthPrediction.objects.filter(
-        prediction_date__gte=start_date,
-        prediction_date__lte=end_date,
+        date__gte=start_date,
+        date__lte=end_date,
         bounding_box__intersects=location,
         mid_lower_centile__gte=settings.ALERT_DEPTH_THRESHOLD,
-    ).aggregate(Min("prediction_date"), Max("prediction_date"), Max("median_depth"))
+    ).aggregate(Min("date"), Max("date"), Max("median_depth"))
     if predictions["median_depth__max"]:
         return settings.ALERT_TEXT.format(
             max_depth=f"{predictions['median_depth__max']:.1f}",
-            start_date=predictions["prediction_date__min"].strftime(
-                settings.ALERT_DATE_FORMAT
-            ),
-            end_date=predictions["prediction_date__max"].strftime(
-                settings.ALERT_DATE_FORMAT
-            ),
+            start_date=predictions["date__min"].strftime(settings.ALERT_DATE_FORMAT),
+            end_date=predictions["date__max"].strftime(settings.ALERT_DATE_FORMAT),
             site_url=settings.SITE_URL,
         )
     else:

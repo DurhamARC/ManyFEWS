@@ -19,9 +19,7 @@ date = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 grid_size = 0.00001
 
 for d in range(40):
-    prediction_count = AggregatedDepthPrediction.objects.filter(
-        prediction_date=date
-    ).count()
+    prediction_count = AggregatedDepthPrediction.objects.filter(date=date).count()
     if prediction_count == 0:
         for i in range(3000):
             for j in range(3000):
@@ -38,7 +36,7 @@ for d in range(40):
                     median_depth = random.random()
                     mid_lower_centile = median_depth - random.random() * median_depth
                     prediction = AggregatedDepthPrediction(
-                        prediction_date=date,
+                        date=date,
                         bounding_box=bounding_box,
                         median_depth=median_depth,
                         mid_lower_centile=mid_lower_centile,

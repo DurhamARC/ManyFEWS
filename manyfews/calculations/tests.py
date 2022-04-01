@@ -10,8 +10,10 @@ import xlrd
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
+from .flood_risk_aggregation import predict_aggregated_depth
 from .models import (
     AggregatedDepthPrediction,
+    FloodModelParameters,
     ZentraDevice,
     ZentraReading,
     NoaaForecast,
@@ -333,7 +335,7 @@ class UserAlertTests(TestCase):
 
         # Add an AggregatedDepthPrediction in a location crossing alert2 and alert3
         prediction = AggregatedDepthPrediction(
-            prediction_date=datetime.utcnow().date() + timedelta(days=1),
+            date=datetime.utcnow().date() + timedelta(days=1),
             bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
             median_depth=1,
             lower_centile=0.5,
@@ -358,3 +360,17 @@ class UserAlertTests(TestCase):
         call_args2 = sms_mock.call_args[0]
         assert call_args2[0] == "+449876543210"
         assert call_args2[1] == call_args[1]
+
+
+class FloodCalculationTests(TestCase):
+    def test_predict_aggregated_depth(self):
+        date = datetime.utcnow().date()
+        params = [1, 2, 3]
+        param = FloodModelParameters(beta0=1, beta1=2, beta2=3)
+        vals = np.array([[4, 5], [6, 7], [8, 9]])
+        stats = predict_aggregated_depth(vals, param)
+        assert stats == (26.0, 30.0, 34.0, 42.0)
+
+        vals = np.array([10, 20, 30, 40])
+        stats = predict_aggregated_depth(vals, param)
+        assert stats == (16.0, 22.0, 28.0, 40.0)
