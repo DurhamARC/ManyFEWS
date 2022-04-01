@@ -15,7 +15,7 @@ from .flood_risk_aggregation import run_all_flood_models
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
 from .models import (
-    AggregatedDepthPrediction,
+    DepthPrediction,
     FloodModelParameters,
     InitialCondition,
     ModelVersion,

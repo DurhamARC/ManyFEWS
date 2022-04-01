@@ -5,7 +5,7 @@ from django.utils import timezone
 from webapp.alerts import TwilioAlerts
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 
-from .models import AggregatedDepthPrediction
+from .models import DepthPrediction
 
 import logging
 
@@ -43,8 +43,8 @@ def send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SM
 
 
 def get_message(start_date, end_date, location):
-    # Find values in AggregatedDepthPrediction in future which match this area
-    predictions = AggregatedDepthPrediction.objects.filter(
+    # Find values in DepthPrediction in future which match this area
+    predictions = DepthPrediction.objects.filter(
         date__gte=start_date,
         date__lte=end_date,
         bounding_box__intersects=location,

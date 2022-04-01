@@ -2,10 +2,11 @@ from datetime import timedelta
 from celery import Celery, shared_task
 from django.conf import settings
 from django.db.models import Count, Max
+from django.utils import timezone
 import numpy as np
 
 from .models import (
-    AggregatedDepthPrediction,
+    DepthPrediction,
     FloodModelParameters,
     ModelVersion,
     PercentageFloodRisk,
@@ -68,12 +69,12 @@ def predict_depths(forecast_time, param_ids, flow_values):
         ) = predict_aggregated_depth(flow_values, param)
 
         # Replace current object if there is one
-        prediction = AggregatedDepthPrediction.objects.filter(
+        prediction = DepthPrediction.objects.filter(
             date=forecast_time, bounding_box=param.bounding_box
         ).first()
 
         if not prediction:
-            prediction = AggregatedDepthPrediction(
+            prediction = DepthPrediction(
                 date=forecast_time, bounding_box=param.bounding_box
             )
 
@@ -128,7 +129,7 @@ def calculate_risk_percentages(from_date):
     # Convert aggregated depths to % risk based on number of cells
     # with non-zero median depth
     prediction_counts = (
-        AggregatedDepthPrediction.objects.filter(
+        DepthPrediction.objects.filter(
             date__gte=from_date,
             median_depth__gte=0,
         )

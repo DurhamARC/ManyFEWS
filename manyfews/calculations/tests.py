@@ -12,7 +12,7 @@ from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
 from .flood_risk_aggregation import predict_aggregated_depth
 from .models import (
-    AggregatedDepthPrediction,
+    DepthPrediction,
     FloodModelParameters,
     ZentraDevice,
     ZentraReading,
@@ -333,8 +333,8 @@ class UserAlertTests(TestCase):
         send_phone_alerts_for_user(1, 1)
         sms_mock.assert_not_called()
 
-        # Add an AggregatedDepthPrediction in a location crossing alert2 and alert3
-        prediction = AggregatedDepthPrediction(
+        # Add an DepthPrediction in a location crossing alert2 and alert3
+        prediction = DepthPrediction(
             date=datetime.utcnow().date() + timedelta(days=1),
             bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
             median_depth=1,

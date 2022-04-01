@@ -130,7 +130,7 @@ class FloodModelParameters(models.Model):
     beta12 = models.FloatField(null=True)
 
 
-class AggregatedDepthPrediction(models.Model):
+class DepthPrediction(models.Model):
     date = models.DateTimeField()
     model_version = models.ForeignKey(ModelVersion, on_delete=models.CASCADE)
     bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
