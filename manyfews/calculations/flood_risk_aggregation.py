@@ -1,11 +1,14 @@
 from datetime import timedelta
 from celery import Celery, shared_task
 from django.conf import settings
-from django.db.models import Count, Max
+from django.contrib.gis.db.models import Extent
+from django.contrib.gis.geos import Polygon
+from django.db.models import Avg, Count, Max
 from django.utils import timezone
 import numpy as np
 
 from .models import (
+    AggregatedDepthPrediction,
     DepthPrediction,
     FloodModelParameters,
     ModelVersion,
@@ -121,8 +124,66 @@ def predict_single_depth(flows, params):
 
 
 @shared_task(name="aggregate_flood_models")
-def aggregate_flood_models_for_time(forecast_time):
-    print(f"Aggregating results at time {forecast_time}")
+def aggregate_flood_models():
+    print(f"Aggregating flood model results for responsive tiling")
+    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    extents = (
+        DepthPrediction.objects.filter(
+            date__gte=today,
+        )
+        .values("date", "model_version_id")
+        .annotate(Extent("bounding_box"))
+        .all()
+    )
+
+    for result in extents:
+        print(result)
+        date = result["date"]
+        extent = result["bounding_box__extent"]
+        model_version_id = result["model_version_id"]
+        for i in [32, 64, 128, 256]:
+            aggregate_flood_models_by_size(date, model_version_id, extent, i)
+
+
+def aggregate_flood_models_by_size(date, model_version_id, extent, i):
+    total_width = extent[2] - extent[0]
+    total_height = extent[3] - extent[1]
+    block_size = min(total_height, total_width) / i
+
+    x = extent[0]
+    y = extent[1]
+
+    while y < extent[3]:
+        while x < extent[2]:
+            x_max = x + block_size
+            y_max = y + block_size
+            new_bb = Polygon.from_bbox((x, y, x_max, y_max))
+
+            q = DepthPrediction.objects.filter(date=date, bounding_box__within=new_bb)
+            values = q.aggregate(
+                Avg("median_depth"),
+                Avg("lower_centile"),
+                Avg("mid_lower_centile"),
+                Avg("upper_centile"),
+            )
+
+            if values["median_depth__avg"]:
+                agg = AggregatedDepthPrediction(
+                    date=date,
+                    model_version_id=model_version_id,
+                    bounding_box=new_bb,
+                    median_depth=values["median_depth__avg"],
+                    lower_centile=values["lower_centile__avg"],
+                    mid_lower_centile=values["mid_lower_centile__avg"],
+                    upper_centile=values["upper_centile__avg"],
+                    aggregation_level=i,
+                )
+                agg.save()
+
+            x += block_size
+
+        x = extent[0]
+        y += block_size
 
 
 def calculate_risk_percentages(from_date):

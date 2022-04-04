@@ -130,7 +130,7 @@ class FloodModelParameters(models.Model):
     beta12 = models.FloatField(null=True)
 
 
-class DepthPrediction(models.Model):
+class AbstractDepthPrediction(models.Model):
     date = models.DateTimeField()
     model_version = models.ForeignKey(ModelVersion, on_delete=models.CASCADE)
     bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
@@ -141,6 +141,17 @@ class DepthPrediction(models.Model):
     mid_lower_centile = models.FloatField()
     # upper is 90th centile
     upper_centile = models.FloatField()
+
+    class Meta:
+        abstract = True
+
+
+class DepthPrediction(AbstractDepthPrediction):
+    pass
+
+
+class AggregatedDepthPrediction(AbstractDepthPrediction):
+    aggregation_level = models.IntegerField()
 
 
 class PercentageFloodRisk(models.Model):
