@@ -25,7 +25,6 @@ def send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SM
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     five_days_ahead = today + timezone.timedelta(days=5)
     twilio_alerts = TwilioAlerts()
-
     for alert in user_sms_alerts:
         try:
             message = get_message(today, five_days_ahead, alert["all_locations"])
@@ -49,7 +48,7 @@ def get_message(start_date, end_date, location):
         prediction_date__gte=start_date,
         prediction_date__lte=end_date,
         bounding_box__intersects=location,
-        median_depth__gte=settings.ALERT_DEPTH_THRESHOLD,  # FIXME once changes merged
+        mid_lower_centile__gte=settings.ALERT_DEPTH_THRESHOLD,
     ).aggregate(Min("prediction_date"), Max("prediction_date"), Max("median_depth"))
     if predictions["median_depth__max"]:
         return settings.ALERT_TEXT.format(
