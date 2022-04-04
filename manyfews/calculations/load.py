@@ -63,8 +63,8 @@ def load_dummy_params_from_tiff():
                     param.save()
                     writer.writerow(
                         {
-                            "x": coords[0],
-                            "y": coords[1],
+                            "lng": coords[0],
+                            "lat": coords[1],
                             "size": size_x,
                             "beta0": beta0,
                             "beta1": beta1,

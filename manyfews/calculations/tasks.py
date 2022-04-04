@@ -220,8 +220,8 @@ def load_params_from_csv(filename, model_version_id):
 
         for row in reader:
             size_to_add = float(row["size"]) / 2
-            x = float(row["x"])
-            y = float(row["y"])
+            x = float(row["lng"])
+            y = float(row["lat"])
             param = FloodModelParameters(
                 model_version_id=model_version_id,
                 bounding_box=Polygon.from_bbox(
