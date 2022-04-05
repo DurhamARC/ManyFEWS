@@ -12,7 +12,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from calculations.models import AggregatedDepthPrediction, PercentageFloodRisk
+from calculations.models import (
+    AggregatedDepthPrediction,
+    DepthPrediction,
+    PercentageFloodRisk,
+)
 from .alerts import TwilioAlerts
 from .forms import UserAlertForm
 from .models import UserAlert, UserPhoneNumber
@@ -35,7 +39,7 @@ def index(request):
         for j in range(4):
 
             percentage_flood_risk = PercentageFloodRisk.objects.filter(
-                prediction_date=date + timedelta(hours=j * 6)
+                date=date + timedelta(hours=j * 6)
             ).first()
 
             if percentage_flood_risk:
@@ -61,10 +65,33 @@ def index(request):
 def depth_predictions(request, day, hour, bounding_box):
     # Get the depth predictions for this bounding box and day days ahead
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    predictions = AggregatedDepthPrediction.objects.filter(
-        prediction_date=today + timedelta(days=day, hours=hour),
+
+    # Determine aggregation level by current extent
+    total_width = bounding_box.extent[2] - bounding_box.extent[0]
+    total_height = bounding_box.extent[3] - bounding_box.extent[1]
+
+    aggregation_level = 32
+    objects_to_fetch = AggregatedDepthPrediction
+
+    size = min(total_height, total_width)
+
+    if size < 0.001:
+        aggregation_level = -1
+        objects_to_fetch = DepthPrediction
+    elif size < 0.0025:
+        aggregation_level = 256
+    elif size < 0.005:
+        aggregation_level = 128
+    elif size < 0.01:
+        aggregation_level = 64
+
+    predictions = objects_to_fetch.objects.filter(
+        date=today + timedelta(days=day, hours=hour),
         bounding_box__intersects=bounding_box,
     )
+    if aggregation_level > 0:
+        predictions = predictions.filter(aggregation_level=aggregation_level)
+
     items = []
     for p in predictions:
         bb_extent = p.bounding_box.extent
@@ -77,7 +104,7 @@ def depth_predictions(request, day, hour, bounding_box):
                 "upper_centile": p.upper_centile,
             }
         )
-    return JsonResponse({"items": items, "max_depth": 1})
+    return JsonResponse({"items": items, "max_depth": 20})
 
 
 @login_required
