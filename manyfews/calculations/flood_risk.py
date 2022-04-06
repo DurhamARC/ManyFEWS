@@ -33,6 +33,7 @@ def run_all_flood_models():
         prediction_date=latest_prediction_date,
         forecast_time__lte=today + timedelta(days=16),
     )
+    print(f"Found {len(outputs_by_time)} sets of output data.")
     for output in outputs_by_time:
         run_flood_model_for_time.delay(latest_prediction_date, output.forecast_time)
 
@@ -138,18 +139,13 @@ def predict_single_depth(flows, params):
 def aggregate_flood_models(date):
     print(f"Aggregating flood model results for responsive tiling")
     current_model_version_id = ModelVersion.get_current_id()
-    extents = (
-        DepthPrediction.objects.filter(
-            date=date, model_version_id=current_model_version_id
-        )
-        .annotate(Extent("bounding_box"))
-        .all()
-    )
+    result = DepthPrediction.objects.filter(
+        date=date, model_version_id=current_model_version_id
+    ).aggregate(Extent("bounding_box"))
 
-    for result in extents:
-        extent = result["bounding_box__extent"]
-        for i in [32, 64, 128, 256]:
-            aggregate_flood_models_by_size(date, current_model_version_id, extent, i)
+    extent = result["bounding_box__extent"]
+    for i in [32, 64, 128, 256]:
+        aggregate_flood_models_by_size(date, current_model_version_id, extent, i)
 
 
 def aggregate_flood_models_by_size(date, model_version_id, extent, i):
