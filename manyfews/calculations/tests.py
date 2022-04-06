@@ -10,7 +10,7 @@ import xlrd
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
-from .flood_risk_aggregation import predict_depth
+from .flood_risk import predict_depth
 from .models import (
     DepthPrediction,
     FloodModelParameters,

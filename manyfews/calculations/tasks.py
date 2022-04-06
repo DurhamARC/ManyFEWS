@@ -11,7 +11,7 @@ from django.contrib.gis.geos import Polygon
 from webapp.alerts import TwilioAlerts
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
-from .flood_risk_aggregation import run_all_flood_models
+from .flood_risk import run_all_flood_models
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
 from .models import (
