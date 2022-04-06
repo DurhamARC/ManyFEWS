@@ -26,10 +26,12 @@ def run_all_flood_models():
     )
     latest_prediction_date = date_aggregation["prediction_date__max"]
 
-    # Next find all calculations with that date
+    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # Next find all calculations with that date, in the next 16 days
     outputs_by_time = RiverFlowCalculationOutput.objects.filter(
         prediction_date=latest_prediction_date,
-        forecast_time__lte=latest_prediction_date + timedelta(days=16),
+        forecast_time__lte=today + timedelta(days=16),
     )
     for output in outputs_by_time:
         run_flood_model_for_time.delay(latest_prediction_date, output.forecast_time)
@@ -50,26 +52,32 @@ def run_flood_model_for_time(prediction_date, forecast_time):
     latest_model_id = ModelVersion.get_current_id()
     params = FloodModelParameters.objects.filter(model_version_id=latest_model_id).all()
 
-    batch_size = 1000
-    i = 0
-
-    while i < len(params):
-        end = min(i + batch_size, len(params))
-        param_ids = [p.id for p in params[i:end]]
-        predict_depths.delay(forecast_time, param_ids, flow_values)
-        i += batch_size
+    # FIXME: this is slow (both with celery in batches of 1000, and running in series
+    # (took several hours for 1 time))
+    predict_depths(forecast_time, [p.id for p in params], flow_values)
+    aggregate_flood_models(forecast_time)
+    # batch_size = 1000
+    # i = 0
+    #
+    # while i < len(params):
+    #     end = min(i + batch_size, len(params))
+    #     param_ids = [p.id for p in params[i:end]]
+    #     predict_depths.delay(forecast_time, param_ids, flow_values)
+    #     i += batch_size
+    # TODO: join results to call aggregate_flood_models
 
 
 @shared_task(name="Predict depths for batch of cells")
 def predict_depths(forecast_time, param_ids, flow_values):
-    for param_id in param_ids:
+    for i, param_id in enumerate(param_ids):
         param = FloodModelParameters.objects.get(id=param_id)
+
         (
             lower_centile,
             mid_lower_centile,
             median,
             upper_centile,
-        ) = predict_aggregated_depth(flow_values, param)
+        ) = predict_depth(flow_values, param)
 
         # Replace current object if there is one
         prediction = DepthPrediction.objects.filter(
@@ -88,8 +96,11 @@ def predict_depths(forecast_time, param_ids, flow_values):
         prediction.upper_centile = upper_centile
         prediction.save()
 
+        if i % 1000 == 0:
+            print(f"Calculated {i} of {len(param_ids)} pixels")
 
-def predict_aggregated_depth(flow_values, param):
+
+def predict_depth(flow_values, param):
     beta_values = [getattr(param, f"beta{i}") for i in range(12)]
     beta_values = [b for b in beta_values if b is not None]
 
@@ -124,28 +135,25 @@ def predict_single_depth(flows, params):
 
 
 @shared_task(name="aggregate_flood_models")
-def aggregate_flood_models():
+def aggregate_flood_models(date):
     print(f"Aggregating flood model results for responsive tiling")
-    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    current_model_version_id = ModelVersion.get_current_id()
     extents = (
         DepthPrediction.objects.filter(
-            date__gte=today,
+            date=date, model_version_id=current_model_version_id
         )
-        .values("date", "model_version_id")
         .annotate(Extent("bounding_box"))
         .all()
     )
 
     for result in extents:
-        print(result)
-        date = result["date"]
         extent = result["bounding_box__extent"]
-        model_version_id = result["model_version_id"]
         for i in [32, 64, 128, 256]:
-            aggregate_flood_models_by_size(date, model_version_id, extent, i)
+            aggregate_flood_models_by_size(date, current_model_version_id, extent, i)
 
 
 def aggregate_flood_models_by_size(date, model_version_id, extent, i):
+    print(f"Aggregating for date {date} level {i}")
     total_width = extent[2] - extent[0]
     total_height = extent[3] - extent[1]
     block_size = min(total_height, total_width) / i
@@ -159,7 +167,11 @@ def aggregate_flood_models_by_size(date, model_version_id, extent, i):
             y_max = y + block_size
             new_bb = Polygon.from_bbox((x, y, x_max, y_max))
 
-            q = DepthPrediction.objects.filter(date=date, bounding_box__within=new_bb)
+            q = DepthPrediction.objects.filter(
+                date=date,
+                bounding_box__within=new_bb,
+                model_version_id=model_version_id,
+            )
             values = q.aggregate(
                 Avg("median_depth"),
                 Avg("lower_centile"),
@@ -168,16 +180,19 @@ def aggregate_flood_models_by_size(date, model_version_id, extent, i):
             )
 
             if values["median_depth__avg"]:
-                agg = AggregatedDepthPrediction(
-                    date=date,
-                    model_version_id=model_version_id,
-                    bounding_box=new_bb,
-                    median_depth=values["median_depth__avg"],
-                    lower_centile=values["lower_centile__avg"],
-                    mid_lower_centile=values["mid_lower_centile__avg"],
-                    upper_centile=values["upper_centile__avg"],
-                    aggregation_level=i,
-                )
+                agg = AggregatedDepthPrediction.objects.filter(
+                    date=date, bounding_box=new_bb
+                ).first()
+
+                if not agg:
+                    agg = AggregatedDepthPrediction(date=date, bounding_box=new_bb)
+
+                agg.model_version_id = model_version_id
+                agg.median_depth = values["median_depth__avg"]
+                agg.lower_centile = values["lower_centile__avg"]
+                agg.mid_lower_centile = values["mid_lower_centile__avg"]
+                agg.upper_centile = values["upper_centile__avg"]
+                agg.aggregation_level = i
                 agg.save()
 
             x += block_size

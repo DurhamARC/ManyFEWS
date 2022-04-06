@@ -18,7 +18,6 @@ class ModelVersion(models.Model):
         self.__original_is_current = self.is_current
 
     def save(self, *args, **kwargs):
-        print("modelversion save")
         super().save(*args, **kwargs)
 
         if self.is_current:
@@ -37,7 +36,6 @@ class ModelVersion(models.Model):
                 or not self.__original_is_current
             )
         ):
-            print("will load params")
             from .tasks import load_params_from_csv
 
             load_params_from_csv.delay(self.param_file.path, self.id)
