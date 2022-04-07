@@ -85,16 +85,24 @@ def depth_predictions(request, day, hour, bounding_box):
     elif size < 0.01:
         aggregation_level = 64
 
-    predictions = objects_to_fetch.objects.filter(
-        date=today + timedelta(days=day, hours=hour),
-        bounding_box__intersects=bounding_box,
-    )
     if aggregation_level > 0:
-        predictions = predictions.filter(aggregation_level=aggregation_level)
+        predictions = AggregatedDepthPrediction.objects.filter(
+            date=today + timedelta(days=day, hours=hour),
+            aggregation_level=aggregation_level,
+            bounding_box__intersects=bounding_box,
+        )
+    else:
+        predictions = DepthPrediction.objects.filter(
+            date=today + timedelta(days=day, hours=hour),
+            parameters__bounding_box__intersects=bounding_box,
+        )
 
     items = []
     for p in predictions:
-        bb_extent = p.bounding_box.extent
+        bounding_box = (
+            p.bounding_box if aggregation_level > 0 else p.parameters.bounding_box
+        )
+        bb_extent = bounding_box.extent
         items.append(
             {
                 # Bounding box is (xmin, ymin, xmax, ymax) but leaflet expects [[lat, lon], [lat, lon]]

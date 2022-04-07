@@ -82,13 +82,11 @@ def predict_depths(forecast_time, param_ids, flow_values):
 
         # Replace current object if there is one
         prediction = DepthPrediction.objects.filter(
-            date=forecast_time, bounding_box=param.bounding_box
+            date=forecast_time, parameters_id=param_id
         ).first()
 
         if not prediction:
-            prediction = DepthPrediction(
-                date=forecast_time, bounding_box=param.bounding_box
-            )
+            prediction = DepthPrediction(date=forecast_time, parameters_id=param_id)
 
         prediction.model_version = param.model_version
         prediction.median_depth = median
@@ -141,13 +139,14 @@ def aggregate_flood_models(date):
     current_model_version_id = ModelVersion.get_current_id()
     result = DepthPrediction.objects.filter(
         date=date, model_version_id=current_model_version_id
-    ).aggregate(Extent("bounding_box"))
+    ).aggregate(Extent("parameters__bounding_box"))
 
-    extent = result["bounding_box__extent"]
+    extent = result["parameters__bounding_box__extent"]
     for i in [32, 64, 128, 256]:
-        aggregate_flood_models_by_size(date, current_model_version_id, extent, i)
+        aggregate_flood_models_by_size.delay(date, current_model_version_id, extent, i)
 
 
+@shared_task(name="aggregate_flood_models_by_size")
 def aggregate_flood_models_by_size(date, model_version_id, extent, i):
     print(f"Aggregating for date {date} level {i}")
     total_width = extent[2] - extent[0]
@@ -165,7 +164,7 @@ def aggregate_flood_models_by_size(date, model_version_id, extent, i):
 
             q = DepthPrediction.objects.filter(
                 date=date,
-                bounding_box__within=new_bb,
+                parameters__bounding_box__within=new_bb,
                 model_version_id=model_version_id,
             )
             values = q.aggregate(

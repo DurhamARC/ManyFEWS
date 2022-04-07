@@ -131,7 +131,6 @@ class FloodModelParameters(models.Model):
 class AbstractDepthPrediction(models.Model):
     date = models.DateTimeField()
     model_version = models.ForeignKey(ModelVersion, on_delete=models.CASCADE)
-    bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
     median_depth = models.FloatField()
     # lower is 10th centile
     lower_centile = models.FloatField()
@@ -145,10 +144,11 @@ class AbstractDepthPrediction(models.Model):
 
 
 class DepthPrediction(AbstractDepthPrediction):
-    pass
+    parameters = models.ForeignKey(FloodModelParameters, on_delete=models.CASCADE)
 
 
 class AggregatedDepthPrediction(AbstractDepthPrediction):
+    bounding_box = models.PolygonField(default=Polygon.from_bbox((0, 0, 1, 1)))
     aggregation_level = models.IntegerField()
 
 
