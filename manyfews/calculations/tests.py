@@ -337,9 +337,15 @@ class UserAlertTests(TestCase):
         # Add an DepthPrediction in a location crossing alert2 and alert3
         model_version = ModelVersion(version_name="v1", is_current=True)
         model_version.save()
+        parameters = FloodModelParameters(
+            model_version=model_version,
+            bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
+            beta0=0,
+        )
+        parameters.save()
         prediction = DepthPrediction(
             date=datetime.utcnow().date() + timedelta(days=1),
-            bounding_box=Polygon.from_bbox((9, 9, 11, 11)),
+            parameters=parameters,
             median_depth=1,
             lower_centile=0.5,
             mid_lower_centile=0.7,

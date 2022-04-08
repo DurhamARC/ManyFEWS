@@ -47,7 +47,7 @@ def get_message(start_date, end_date, location):
     predictions = DepthPrediction.objects.filter(
         date__gte=start_date,
         date__lte=end_date,
-        bounding_box__intersects=location,
+        parameters__bounding_box__intersects=location,
         mid_lower_centile__gte=settings.ALERT_DEPTH_THRESHOLD,
     ).aggregate(Min("date"), Max("date"), Max("median_depth"))
     if predictions["median_depth__max"]:
