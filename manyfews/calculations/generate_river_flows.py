@@ -417,7 +417,8 @@ def prepareInitialCondition(predictionDate, location):
     return intialConditionData
 
 
-def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
+def prepareWeatherForecastData(predictionDate, location, dataSource="gefs", backDays=0):
+
     """
 
     This function is for extracting GEFS data with specific dates and locations from DB,
@@ -428,19 +429,21 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
     :param dataSource: the data source of weather forecasting data.
                        1: 'gefs': from Noaa Forecast data. (default)
                        2. 'zentra': from Zentra data. (it is usually used in the initial model set up.)
-    :return gefsData: a numpy array contains GEFS data.
+    :param backDays: the number of back days need to extract date. (default = 0).
+    :return gefsData: a numpy array contains GEFS or zentra data.
 
     """
+
     # plus time zone information.
     startTime = datetime.astimezone(predictionDate, tz=timezone.utc)
 
     # prepare weather forecast data for model.
     if dataSource == "gefs":
-        weatherData = NoaaForecast.objects.filter(date=predictionDate).filter(
-            location=location
-        )
+        endTime = startTime + timedelta(hours=23, minutes=59, seconds=59)
+        weatherData = NoaaForecast.objects.filter(date__range=(startTime, endTime))
+
     elif dataSource == "zentra":
-        endTime = startTime + timedelta(days=15.75)
+        endTime = startTime + timedelta(days=backDays)
         weatherData = AggregatedZentraReading.objects.filter(
             date__range=(startTime, endTime)
         ).filter(location=location)
@@ -476,7 +479,13 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs"):
 
 
 def runningGenerateRiverFlows(
-    predictionDate, dataLocation, weatherForecast, initialData, save=True
+    predictionDate,
+    dataLocation,
+    weatherForecast,
+    initialData,
+    riverFlowSave=True,
+    initialDataSave=True,
+    mode="daily",
 ):
     """
     This function is developed to prepare data and running models for generating river flows,
@@ -487,8 +496,10 @@ def runningGenerateRiverFlows(
     :param dataLocation: the location information of input data
     :param weatherForecast: the weather forecast data for model running.
     :param initialData: the initial condition data for model running.
-    :param save: option of saving model output. (default = True)
-    :return none.
+    :param riverFlowSave: option of saving model output. (default = True)
+    :param initialDataSave: option of saving output initial condition. (default =True)
+    :param mode: option of model ( initial & daily)
+    :return F0: the initial condition for the next days.
     """
     projectPath = os.path.abspath(
         os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
@@ -524,19 +535,24 @@ def runningGenerateRiverFlows(
 
     # import the next day's initial condition data F0 into DB.
     # ('calculations_initialcondition' table)
-    nextDay = predictionDate + timedelta(days=1)
 
-    for i in range(len(F0[:, 0])):
-        nextDayInitialCondition = InitialCondition(
-            date=nextDay,
-            location=dataLocation,
-            storage_level=F0[i, 0],
-            slow_flow_rate=F0[i, 1],
-            fast_flow_rate=F0[i, 2],
-        )
-        nextDayInitialCondition.save()
+    if mode == "inital":
+        nextDay = predictionDate + timedelta(days=365)
+    elif mode == "daily":
+        nextDay = predictionDate + timedelta(days=1)
 
-    if save == True:
+    if initialDataSave == True:
+        for i in range(len(F0[:, 0])):
+            nextDayInitialCondition = InitialCondition(
+                date=nextDay,
+                location=dataLocation,
+                storage_level=F0[i, 0],
+                slow_flow_rate=F0[i, 1],
+                fast_flow_rate=F0[i, 2],
+            )
+            nextDayInitialCondition.save()
+
+    if riverFlowSave == True:
         for i in range(qp.shape[0]):
             # save qp and Eq and into DB.
             # ( 'calculations_riverflowcalculationoutput' table)
@@ -559,3 +575,5 @@ def runningGenerateRiverFlows(
                     river_flow=riverFlows[i, j],
                 )
                 riverFlowPredictionData.save()
+
+    return F0
