@@ -128,3 +128,8 @@ class taskTest(TestCase):
 
         assert len(readings) == 105070
         assert len(aggregateReading) == 1460
+
+        # check that there are inidtial condition  in the database
+        initialcondition = InitialCondition.objects.all()
+
+        assert len(initialcondition) == 100
