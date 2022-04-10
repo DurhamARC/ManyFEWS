@@ -112,15 +112,16 @@ def prepare_test_Data():
 
 
 class taskTest(TestCase):
-    def test_initialModelSetUp(self):
+    def test_tasks(self):
         """
-        Test the inital Model SetUp task.
+        Test the inital Model SetUp and daily update tasks.
         """
         #  Check  the  initialModelSetUp task can run and adds some records to the db
         sn = "06-02047"
         zentraDevice = ZentraDevice(sn, location=Point(0, 0))
         zentraDevice.save()
 
+        # test initial model setup task.
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
@@ -142,11 +143,7 @@ class taskTest(TestCase):
 
         assert len(initialcondition) == 100
 
-
-"""
-
-    def test_dailyModelUpdate(self):
-
+        # test daily model update task.
         dailyModelUpdate()
 
         riverOutput = RiverFlowCalculationOutput.objects.all()
@@ -162,5 +159,3 @@ class taskTest(TestCase):
 
         # check that the new initial condition in the datebase
         assert len(initialCondition) == 200
-
-"""
