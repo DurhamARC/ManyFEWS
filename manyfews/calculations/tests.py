@@ -7,12 +7,14 @@ from .models import (
     NoaaForecast,
     InitialCondition,
     AggregatedZentraReading,
+    RiverFlowPrediction,
+    RiverFlowCalculationOutput,
 )
 from django.test import TestCase
 import numpy as np
 from django.contrib.gis.geos import Point
-from datetime import datetime, timezone
-from .tasks import initialModelSetUp
+from datetime import datetime, timezone, timedelta
+from .tasks import initialModelSetUp, dailyModelUpdate
 from .zentra import offsetTime
 import xlrd
 import os
@@ -125,7 +127,7 @@ class taskTest(TestCase):
 
         timeInfo = offsetTime(backDays=365)
         startTime = timeInfo[0]
-        endTime = timeInfo[1]
+        endTime = timeInfo[1] + timedelta(days=365)
 
         readings = ZentraReading.objects.filter(date__range=(startTime, endTime))
         aggregateReading = AggregatedZentraReading.objects.filter(
@@ -139,3 +141,21 @@ class taskTest(TestCase):
         initialcondition = InitialCondition.objects.all()
 
         assert len(initialcondition) == 100
+
+    def test_dailyModelUpdate(self):
+
+        """
+        Test the daily Model SetUp task.
+        """
+        dailyModelUpdate()
+
+        riverOutput = RiverFlowCalculationOutput.objects.all()
+        riverOutputPrediction = RiverFlowPrediction.objects.all()
+        initialCondition = InitialCondition.objects.all()
+
+        # check that there are output in the database
+        assert len(riverOutput) == 64
+        assert len(riverOutputPrediction) == 6400
+
+        # check that the new initial condition in the datebase
+        assert len(initialCondition) == 200
