@@ -113,6 +113,11 @@ class taskTest(TestCase):
         """
         Test the inital Model SetUp task.
         """
+        #  Check  the  initialModelSetUp task can run and adds some records to the db
+        sn = "06-02047"
+        zentraDevice = ZentraDevice(sn, location=Point(0, 0))
+        zentraDevice.save()
+
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
