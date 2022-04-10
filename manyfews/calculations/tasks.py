@@ -174,7 +174,3 @@ def dailyModelUpdate():
         initialDataSave=True,
         mode="daily",
     )
-
-
-# initialModelSetUp()
-# dailyModelUpdate()
