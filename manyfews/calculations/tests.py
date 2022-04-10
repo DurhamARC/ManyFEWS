@@ -142,20 +142,25 @@ class taskTest(TestCase):
 
         assert len(initialcondition) == 100
 
+
+"""
+
     def test_dailyModelUpdate(self):
 
-        """
-        Test the daily Model SetUp task.
-        """
         dailyModelUpdate()
 
         riverOutput = RiverFlowCalculationOutput.objects.all()
         riverOutputPrediction = RiverFlowPrediction.objects.all()
         initialCondition = InitialCondition.objects.all()
+        gefsReadings = NoaaForecast.objects.all()
 
+        # check the gefs data
+        assert len(gefsReadings) == 64
         # check that there are output in the database
         assert len(riverOutput) == 64
         assert len(riverOutputPrediction) == 6400
 
         # check that the new initial condition in the datebase
         assert len(initialCondition) == 200
+
+"""
