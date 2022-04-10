@@ -2,24 +2,17 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 from .models import (
-    ZentraDevice,
     ZentraReading,
     NoaaForecast,
     InitialCondition,
-    RiverFlowCalculationOutput,
-    RiverFlowPrediction,
+    AggregatedZentraReading,
 )
-from .zentra import prepareZentra
-from .gefs import prepareGEFS
 from django.test import TestCase
 import numpy as np
 from django.contrib.gis.geos import Point
-from datetime import datetime, timedelta, timezone
-from .generate_river_flows import (
-    prepareInitialCondition,
-    prepareWeatherForecastData,
-    runningGenerateRiverFlows,
-)
+from datetime import datetime, timezone
+from .tasks import initialModelSetUp
+from .zentra import offsetTime
 import xlrd
 import os
 
@@ -115,155 +108,23 @@ def prepare_test_Data():
     return testDate, testLocation
 
 
-class WeatherImportTests(TestCase):
-    def test_fetch_from_zentra(self):
-        # Check that the prepareZentra task can run and adds some records to the db
-        sn = "06-02047"
-        zentraDevice = ZentraDevice(sn, location=Point(0, 0))
-        zentraDevice.save()
-
-        prepareZentra()
-
-        # Check that there are readings in the database
-        readings = ZentraReading.objects.all()
-        assert len(readings) == 288
-
-        # Check that they all relate to our device
-        for reading in readings:
-            assert reading.device == zentraDevice
-
-    def test_fetch_from_GEFS(self):
-        # Check that the prepareGEFS task can run and adds some records to the db
-        prepareGEFS()
-
-        # Check that there are readings in the database
-        readings = NoaaForecast.objects.all()
-        assert len(readings) == 64
-
-
-class ModelCalculationTests(TestCase):
-    def test_calculation_GenerateRiverFlow(self):
-        testInfo = prepare_test_Data()  # get test data and location
-        testDate = testInfo[0]  # date
-        testLocation = testInfo[1]  # location
-
-        # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone.utc)
-        nextDay = testDate + timedelta(days=1)
-
-        weatherForecaseData = prepareWeatherForecastData(
-            predictionDate=testDate, location=testLocation
-        )
-
-        # prepare initial condition data for model.
-        initialConditionData = prepareInitialCondition(
-            predictionDate=testDate, location=testLocation
-        )
-        runningGenerateRiverFlows(
-            predictionDate=testDate,
-            dataLocation=testLocation,
-            weatherForecast=weatherForecaseData,
-            initialData=initialConditionData,
-        )
-
-        # runningGenerateRiverFlows(predictionDate=testDate, dataLocation=testLocation)
-
-        # extract result from data base.
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
-        riverFlowPredictionData = RiverFlowPrediction.objects.all()
-        initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
-            location=testLocation
-        )
-
-        qpList = []
-        EpList = []
-        QList = []
-        slowFlowRateList = []
-        fastFlowRateList = []
-        storageLevelList = []
-
-        for data in riverFlowCalculationOutputData:
-            qpList.append(data.rain_fall)
-            EpList.append(data.potential_evapotranspiration)
-
-        # reform data into a Numpy array.
-        qp = np.array(qpList)
-        Ep = np.array(EpList)
-
-        for data in riverFlowPredictionData:
-            QList.append(data.river_flow)
-
-        # reform data into a Numpy array.
-        Q = np.array(QList)
-        Q.resize((64, 100))
-
-        # extract output initial condition of river flows model.
-        for data in initialConditions:
-            slowFlowRateList.append(data.slow_flow_rate)
-            fastFlowRateList.append(data.fast_flow_rate)
-            storageLevelList.append(data.storage_level)
-        initialConditionsList = list(
-            zip(storageLevelList, slowFlowRateList, fastFlowRateList)
-        )
-        F0 = np.array(initialConditionsList)
-
-        # get the reference results
-        projectPath = os.path.abspath(
-            os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
-        )
-
-        dataFileDirPath = os.path.join(projectPath, "Data")
-
-        Qbenchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "Q_Benchmark.csv")),
-            delimiter=",",
-            usecols=range(100),
-        )
-        F0benchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "F0_Benchmark.csv")), usecols=range(3),
-        )
-        qpbenchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "qp_Benchmark.csv")),
-            delimiter=",",
-            usecols=range(1),
-        )
-        Eqbenchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "Eq_Benchmark.csv")),
-            delimiter=",",
-            usecols=range(1),
-        )
-
-        # calculate error between output and benchmark result, which below 0.01% is pass.
-        aerr = np.absolute((Q - Qbenchmark) / Qbenchmark)
-        qpErr = np.absolute(qp - qpbenchmark)
-        epErr = np.absolute((Ep - Eqbenchmark) / Eqbenchmark)
-        F0Err = np.absolute((F0 - F0benchmark) / F0benchmark)
-
-        # Check that the accuracy of river flow model
-        assert (np.max(aerr) < 0.0001).all()
-        assert (np.max(qpErr) < 0.0001).all()
-        assert (np.max(epErr) < 0.0001).all()
-        assert (np.max(F0Err) < 0.0001).all()
-
-        # Check that the initial conditions (2 days: today and tomorrow)
-        # have been added to the db
-        readings = InitialCondition.objects.all()
-        assert len(readings) == 200
-
-    def test_calculation_dbTime(self):
+class taskTest(TestCase):
+    def test_initialModelSetUp(self):
         """
-        test the forecast times in the DB (table:'calculations_riverflowcalculationoutput')
-        are as we expect.
+        Test the inital Model SetUp task.
         """
-        testInfo = prepare_test_Data()  # get test data and location
-        testDate = testInfo[0]  # date
+        initialModelSetUp()
 
-        # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone.utc)
+        # Check that there are readings (past 365 days) in the database
 
-        # check forecast times and prediction time are as we expect
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
-        for data in riverFlowCalculationOutputData:
-            id = data.id
-            assert data.prediction_date == testDate
-            assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
+        timeInfo = offsetTime(backDays=365)
+        startTime = timeInfo[0]
+        endTime = timeInfo[1]
+
+        readings = ZentraReading.objects.filter(date__range=(startTime, endTime))
+        aggregateReading = AggregatedZentraReading.objects.filter(
+            date__range=(startTime, endTime)
+        )
+
+        assert len(readings) == 105070
+        assert len(aggregateReading) == 1460
