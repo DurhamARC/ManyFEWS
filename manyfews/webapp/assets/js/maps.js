@@ -18,11 +18,13 @@ function getFloodOverlays(map, day, hour) {
     .then(function(data) {
       floodOverlayLayerGroup.clearLayers();
       data["items"].forEach(i => {
+        var colorVal = i.depth > data["max_depth"] ? 1 : i.depth/data["max_depth"];
+        var opacity = (i.upper_centile - i.lower_centile) > data["max_depth"] ? 0 : 1 - (i.upper_centile - i.lower_centile)/data["max_depth"];
         var layer = L.rectangle(i.bounds,
           {
             color: null,
-            fillColor: interpolateYlGnBu(i.depth/data["max_depth"]),
-            fillOpacity: 1 - (i.upper_centile - i.lower_centile)/data["max_depth"]
+            fillColor: interpolateYlGnBu(colorVal),
+            fillOpacity: opacity
           }
         );
         layer.bindTooltip(
