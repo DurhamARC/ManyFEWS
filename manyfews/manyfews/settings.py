@@ -34,6 +34,51 @@ ZENTRA_PW = env.str("zentra_pw")
 INITIAL_BACKTIME = env.int("initial_backTime", 365)
 STATION_SN = env.str("station_SN", "06-02047")
 
+# defaults value when zentra does not report a value.
+DEFAULT_RH = env.tuple(
+    "default_rh",
+    float,
+    (
+        98.14,
+        99.08,
+        99.00,
+        98.53,
+        97.11,
+        94.85,
+        90.10,
+        87.21,
+        81.10,
+        83.64,
+        91.50,
+        96.63,
+    ),
+)
+
+DEFAULT_AIR_TEMP = env.tuple(
+    "default_air_temp",
+    float,
+    (
+        23.83,
+        23.73,
+        23.83,
+        24.39,
+        24.79,
+        24.18,
+        23.73,
+        23.99,
+        24.58,
+        24.97,
+        24.61,
+        24.11,
+    ),
+)
+DEFAULT_PRECIP = env.tuple(
+    "default_precip",
+    float,
+    (11.98, 10.42, 13.08, 11.43, 4.94, 4.63, 0.09, 0.19, 0.37, 4.90, 6.63, 8.62),
+)
+
+
 # GEFS weather forecast details
 MODEL_TIMESTEP = env.float("model_timestep", 0.25)
 GEFS_FORECAST_DAYS = env.int("gefs_forecastDays", 16)
