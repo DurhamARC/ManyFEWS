@@ -10,6 +10,7 @@ Make sure you have the following installed:
  * [RabbitMQ](https://www.rabbitmq.com/download.html)
  * [PostgreSQL](https://www.postgresql.org/download/) and [PostGIS](https://postgis.net/docs/manual-3.2/postgis_installation.html) - see (see https://docs.djangoproject.com/en/3.2/ref/contrib/gis/install/postgis/)
  * [Node.js (and npm)](https://nodejs.org/en/)
+ * [Chrome](https://www.google.co.uk/chrome/) and a version of [ChromeDriver](https://chromedriver.chromium.org/downloads) which matches the major version of Chrome - ChromeDriver is used for automated browser testing.
 
 ## Setup
 
@@ -52,13 +53,13 @@ Make sure you have the following installed:
 7. Set up environment variables in Django.  
    ```bash
    $ cd manyfews
-   $ vi .env.CI
+   $ cp .env.CI .env
+   $ vi .env
    > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
    > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
    > replace 'map_api_token' with your Bing Maps API token.
    > replace the lines starting with 'email_' with your SMTP settings (either real settings, or using something like [mailcatcher](https://mailcatcher.me))
    > Save and quit.
-   $ cp .env.CI .env
    $ cd ..
    ```
 
@@ -77,15 +78,24 @@ Make sure you have the following installed:
 
    (Follow the prompts to add a username, email and password.)
 
-10. Build the web assets using npm:
+10. Build the web assets (JavaScript and CSS) using npm:
 
     ```bash
+    npm install
     npm run build
     ```
 
-    (For development purposes you can run `npm run dev` to build the files on-the-fly whilst editing the JavaScript, but you should run `npm run build` before committing.)
+    `npm install` only needs to be run once, or if a new JavaScript package is added. `npm run build` should be run whenever a JavaScript or Sass file is updated. For development purposes you can run `npm run dev` to build the files on-the-fly whilst editing the JavaScript/Sass, but you should run `npm run build` before committing.
 
-11. Run the django app in development mode (still in the `manyfews` directory):
+11. Run the tests to check things are installed correctly:
+
+    ```bash
+    python manage.py test
+    ```
+
+    Note that this will run the browser tests which will open up Chrome and automatically click through the tests.
+
+12. Run the django app in development mode (still in the `manyfews` directory):
 
     ```bash
     python manage.py runserver
@@ -93,21 +103,17 @@ Make sure you have the following installed:
 
     Go to http://127.0.0.1:8000/ and check that the app works.
 
-12. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
+13. In another terminal, run a celery worker and celery beat, to enable scheduled and asynchronous tasks to be run (using [django-celery-beat](https://django-celery-beat.readthedocs.io/en/latest/#)):
 
     ```bash
     celery -A manyfews worker -B -l DEBUG --scheduler django_celery_beat.schedulers:DatabaseScheduler
     ```
 
-13. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`.
+14. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`. See [SCHEDULING.md](SCHEDULING.md) for details of setting up all scheduled tasks to run the model daily. If you would like to see what tasks are queued, run `celery -A manyfews flower` which sets up a web interface at http://localhost:5555/ to let you see the queues.
 
-14. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra Devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
+15. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
 
-15. (Temporarily, for development.) To load some dummy data into the AggregatedDepthPrediction table, run:
-
-   ```bash
-   python manage.py shell < webapp/load.py
-   ```
+16. To load some (dummy) flood model parameters, go to http://127.0.0.1:8000/admin and go to **Model versions** (under Calculations). Create a new Model version using the file `Data/MajalayaFloodEmulatorParams-DUMMY-5pcSample.csv` as the parameter file. The parameters will be loaded into the database via a celery task.
 
 
 ## Making model changes
