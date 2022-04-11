@@ -301,7 +301,6 @@ class WebAppTestCase(StaticLiveServerTestCase):
             self.live_server_url,
             "/alerts/edit/",
         )
-        print(self.selenium.current_url)
         WebDriverWait(self.selenium, 10).until(EC.url_contains(edit_url))
         assert self.selenium.current_url.startswith(edit_url)
         type_select = Select(self.selenium.find_element_by_id("id_alert_type"))
