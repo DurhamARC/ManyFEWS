@@ -200,9 +200,7 @@ def aggregateZentraData(startTime, endTime, stationSN):
         aggregatedData[i, 0] = np.mean(intervalData[:, 0])  # mean result of RH
         aggregatedData[i, 3] = np.mean(intervalData[:, 3])  # mean result of uWind
         aggregatedData[i, 4] = np.mean(intervalData[:, 4])  # mean result of vWind
-        aggregatedData[i, 5] = np.mean(
-            intervalData[:, 1]
-        )  # mean result of precipitation
+        aggregatedData[i, 5] = np.sum(intervalData[:, 1])  # sum result of precipitation
         aggregatedData[i, 1] = np.max(
             intervalData[:, 2]
         )  # find the maximum temperature
