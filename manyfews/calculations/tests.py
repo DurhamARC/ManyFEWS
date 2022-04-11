@@ -3,7 +3,7 @@ import os
 from unittest import mock
 
 from django.contrib.auth.models import User
-from django.contrib.gis.geos import Point, Polygon
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import TestCase
 import numpy as np
 import xlrd
@@ -15,6 +15,7 @@ from .models import (
     DepthPrediction,
     FloodModelParameters,
     ModelVersion,
+    RiverChannel,
     ZentraDevice,
     ZentraReading,
     NoaaForecast,
@@ -365,6 +366,29 @@ class UserAlertTests(TestCase):
         sms_mock.reset_mock()
 
         # Call with user 1, phone number 2
+        send_phone_alerts_for_user(self.user.id, self.phone_number2.id)
+        assert sms_mock.call_count == 1
+        call_args2 = sms_mock.call_args[0]
+        assert call_args2[0] == "+449876543210"
+        assert call_args2[1] == call_args[1]
+
+        sms_mock.reset_mock()
+
+        # Add a RiverChannel which covers all of the depth prediction - should not send alert
+        channel = RiverChannel(
+            channel_location=MultiPolygon([Polygon.from_bbox((8, 8, 12, 12))])
+        )
+        channel.save()
+        send_phone_alerts_for_user(self.user.id, self.phone_number2.id)
+        assert sms_mock.call_count == 0
+
+        sms_mock.reset_mock()
+
+        # Modify river channel so it only covers part of the DepthPrediction and alert intersection - should send alert
+        channel.channel_location = MultiPolygon(
+            [Polygon.from_bbox((10, 10, 10.5, 10.5))]
+        )
+        channel.save()
         send_phone_alerts_for_user(self.user.id, self.phone_number2.id)
         assert sms_mock.call_count == 1
         call_args2 = sms_mock.call_args[0]

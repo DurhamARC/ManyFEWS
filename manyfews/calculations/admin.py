@@ -2,7 +2,7 @@ from django.contrib.gis import admin
 from django.forms import ModelForm, FileField
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import ZentraDevice, ModelVersion
+from .models import ZentraDevice, ModelVersion, RiverChannel
 
 
 @admin.register(ZentraDevice)
@@ -35,3 +35,8 @@ class ModelVersionAdmin(admin.ModelAdmin):
             if current:
                 current.is_current = True
                 current.save()
+
+
+@admin.register(RiverChannel)
+class RiverChannelAdmin(LeafletGeoAdmin):
+    display_raw = True

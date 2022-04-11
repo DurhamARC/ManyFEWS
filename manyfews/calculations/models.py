@@ -1,6 +1,6 @@
 from django.db.models import Max
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point, Polygon
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 
 
 class ModelVersion(models.Model):
@@ -126,6 +126,10 @@ class FloodModelParameters(models.Model):
     beta10 = models.FloatField(null=True)
     beta11 = models.FloatField(null=True)
     beta12 = models.FloatField(null=True)
+
+
+class RiverChannel(models.Model):
+    channel_location = models.MultiPolygonField(default=MultiPolygon())
 
 
 class AbstractDepthPrediction(models.Model):

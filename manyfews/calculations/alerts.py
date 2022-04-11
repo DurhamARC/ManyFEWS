@@ -5,7 +5,7 @@ from django.utils import timezone
 from webapp.alerts import TwilioAlerts
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 
-from .models import DepthPrediction
+from .models import DepthPrediction, RiverChannel
 
 import logging
 
@@ -44,12 +44,19 @@ def send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SM
 
 def get_message(start_date, end_date, location):
     # Find values in DepthPrediction in future which match this area
+    channel_data = RiverChannel.objects.all().aggregate(Union("channel_location"))
     predictions = DepthPrediction.objects.filter(
         date__gte=start_date,
         date__lte=end_date,
         parameters__bounding_box__intersects=location,
         mid_lower_centile__gte=settings.ALERT_DEPTH_THRESHOLD,
-    ).aggregate(Min("date"), Max("date"), Max("median_depth"))
+    )
+    if channel_data["channel_location__union"]:
+        predictions = predictions.exclude(
+            parameters__bounding_box__coveredby=channel_data["channel_location__union"]
+        )
+
+    predictions = predictions.aggregate(Min("date"), Max("date"), Max("median_depth"))
     if predictions["median_depth__max"]:
         return settings.ALERT_TEXT.format(
             max_depth=f"{predictions['median_depth__max']:.1f}",
