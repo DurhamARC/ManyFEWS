@@ -1,3 +1,4 @@
+import csv
 from datetime import datetime, timedelta, timezone
 import os
 
@@ -5,15 +6,19 @@ from celery import Celery, shared_task
 from celery.schedules import crontab
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from django.conf import settings
+from django.contrib.gis.geos import Polygon
 
 from webapp.alerts import TwilioAlerts
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
+from .flood_risk import run_all_flood_models
 from .zentra import zentraReader
 from .gefs import dataBaseWriter
 from .models import (
-    AggregatedDepthPrediction,
+    DepthPrediction,
+    FloodModelParameters,
     InitialCondition,
+    ModelVersion,
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
 )
@@ -183,6 +188,11 @@ def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
             riverFlowPredictionData.save()
 
 
+@shared_task(name="Run flood model")
+def run_flood_model():
+    run_all_flood_models()
+
+
 @shared_task(name="Send user SMS alerts")
 def send_user_sms_alerts(user_id, phone_number_id):
     send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SMS)
@@ -201,3 +211,33 @@ def send_alerts():
         result = send_user_sms_alerts.delay(
             alert_details["user_id"], alert_details["phone_number"]
         )
+
+
+@shared_task(name="Load parameters")
+def load_params_from_csv(filename, model_version_id):
+    with open(filename) as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        for row in reader:
+            size_to_add = float(row["size"]) / 2
+            x = float(row["lng"])
+            y = float(row["lat"])
+            param = FloodModelParameters(
+                model_version_id=model_version_id,
+                bounding_box=Polygon.from_bbox(
+                    (x - size_to_add, y - size_to_add, x + size_to_add, y + size_to_add)
+                ),
+            )
+            for i in range(12):
+                name = f"beta{i}"
+                if name in row:
+                    val = float(row[name])
+                    setattr(param, name, val)
+            param.save()
+    print("Saved model parameters.")
+
+    # Clean up old parameters from db
+    current_model_version_id = ModelVersion.get_current_id()
+    FloodModelParameters.objects.exclude(
+        model_version_id=current_model_version_id
+    ).delete()
