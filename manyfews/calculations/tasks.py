@@ -228,17 +228,24 @@ def load_params_from_csv(filename, model_version_id):
                     (x - size_to_add, y - size_to_add, x + size_to_add, y + size_to_add)
                 ),
             )
+            is_non_zero = False
             for i in range(12):
                 name = f"beta{i}"
                 if name in row:
                     val = float(row[name])
+                    if val:
+                        is_non_zero = True
                     setattr(param, name, val)
-            param.save()
+
+            # Only save param if it has at least 1 non-zero beta value
+            if is_non_zero:
+                param.save()
 
     logger.info("Saved model parameters.")
 
     # Clean up old parameters from db
     current_model_version_id = ModelVersion.get_current_id()
     FloodModelParameters.objects.exclude(
-        model_version_id=current_model_version_id
+        model_version_id=current_model_version_id, depthprediction=None
     ).delete()
+    logger.info("Deleted old model parameters")
