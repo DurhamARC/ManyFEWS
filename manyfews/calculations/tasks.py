@@ -1,16 +1,15 @@
 import csv
-from datetime import datetime, date, timedelta, timezone
-import os
 
 from celery import Celery, shared_task
-from celery.schedules import crontab
+
+
 from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
+
 import numpy as np
 from tqdm import trange
 
-from webapp.alerts import TwilioAlerts
+
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
 from .flood_risk import run_all_flood_models
@@ -18,20 +17,15 @@ from .gefs import prepareGEFS
 from .generate_river_flows import (
     prepareWeatherForecastData,
     runningGenerateRiverFlows,
-    prepareInitialCondition,
-    GenerateRiverFlows,
 )
 from .models import (
     AggregatedZentraReading,
-    DepthPrediction,
     FloodModelParameters,
     InitialCondition,
     ModelVersion,
     NoaaForecast,
-    RiverFlowCalculationOutput,
-    RiverFlowPrediction,
 )
-from .zentra import zentraReader, prepareZentra, offsetTime, aggregateZentraData
+from .zentra import prepareZentra, offsetTime
 
 
 app = Celery()
