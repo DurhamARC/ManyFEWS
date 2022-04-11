@@ -14,7 +14,7 @@ from webapp.alerts import TwilioAlerts
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
 from .flood_risk import run_all_flood_models
-from .gefs import dataBaseWriter, prepareGEFS
+from .gefs import prepareGEFS
 from .generate_river_flows import (
     prepareWeatherForecastData,
     runningGenerateRiverFlows,

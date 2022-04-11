@@ -143,8 +143,8 @@ class taskTest(TestCase):
             date__range=(startTime, endTime)
         )
 
-        assert len(readings) == 105070
-        assert len(aggregateReading) == 1460
+        assert len(readings) == 1440
+        assert len(aggregateReading) == 20
 
         # check that there are inidtial condition  in the database
         initialcondition = InitialCondition.objects.all()
@@ -160,10 +160,10 @@ class taskTest(TestCase):
         gefsReadings = NoaaForecast.objects.all()
 
         # check the gefs data
-        assert len(gefsReadings) == 64
+        assert len(gefsReadings) == 8
         # check that there are output in the database
-        assert len(riverOutput) == 64
-        assert len(riverOutputPrediction) == 6400
+        assert len(riverOutput) == 8
+        assert len(riverOutputPrediction) == 800
 
         # check that the new initial condition in the datebase
         assert len(initialCondition) == 200

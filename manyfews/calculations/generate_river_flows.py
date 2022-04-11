@@ -537,7 +537,7 @@ def runningGenerateRiverFlows(
     # ('calculations_initialcondition' table)
 
     if mode == "inital":
-        nextDay = predictionDate + timedelta(days=365)
+        nextDay = predictionDate + timedelta(days=settings.INITIAL_BACKTIME)
     elif mode == "daily":
         nextDay = predictionDate + timedelta(days=1)
 
