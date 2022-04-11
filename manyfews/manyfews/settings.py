@@ -17,14 +17,78 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-ZENTRA_UN = env("zentra_un")
-ZENTRA_PW = env("zentra_pw")
-LAT_VALUE = env("latValue")
-LON_VALUE = env("lonValue")
-INITIAL_BACKTIME = env("initial_backTime")
-STATION_SN = env("station_SN")
-GEFS_FORECAST_DAYS = env("gefs_forecastDays")
-MODEL_TIMESTEP = env("model_timestep")
+# =======================================================================================
+# These settings can be updated by setting environment variables or adding to a .env file
+# =======================================================================================
+
+# Database details
+DB_NAME = env.str("db_name", "manyfews")
+DB_USER = env.str("db_user", "manyfews")
+DB_PASSWORD = env.str("db_password", "manyfews")
+DB_HOST = env.str("db_host", "localhost")
+DB_PORT = env.int("db_port", 5432)
+
+# Zentra account and station details
+ZENTRA_UN = env.str("zentra_un")
+ZENTRA_PW = env.str("zentra_pw")
+INITIAL_BACKTIME = env.int("initial_backTime", 365)
+STATION_SN = env.str("station_SN", "06-02047")
+
+# GEFS weather forecast details
+MODEL_TIMESTEP = env.float("model_timestep", 0.25)
+GEFS_FORECAST_DAYS = env.int("gefs_forecastDays", 16)
+LAT_VALUE = env.float("latValue", -7.05)
+LON_VALUE = env.float("lonValue", 175)
+
+# Thresholds for number of m^2 cells that count towards flood risk
+# CHANNEL_CELL_COUNT is number of cells in the river channel
+CHANNEL_CELL_COUNT = env.int("channel_cell_count", 93794)
+# LARGE_FLOOD_COUNT is number of cells that represent a large area of flooding
+LARGE_FLOOD_COUNT = env.int("large_flood_count", 1440811)
+
+FLOOD_MODEL_PARAMETERS = env.tuple(
+    "flood_model_parameters", float, (1, 1, 0.12, 0.399, 0.00395, 0.00565)
+)
+
+# Leaflet map tiles URL (including API key if needed)
+MAP_URL = env.str(
+    "map_url", "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
+)
+MAP_CENTER = env.tuple("map_center", float, (-7.050465729629079, 107.75813455787436))
+
+# Email settings
+EMAIL_HOST = env.str("email_host", "smtp.gmail.com")
+EMAIL_PORT = env.int("email_port", 465)
+EMAIL_HOST_USER = env.str("email_host_user", "")
+EMAIL_HOST_PASSWORD = env.str("email_host_password", "")
+EMAIL_USE_SSL = env.bool("email_use_ssl", True)
+
+# Twilio settings (for SMS/WhatsApp)
+TWILIO_ACCOUNT_SID = env.str("twilio_account_sid", "")
+TWILIO_AUTH_TOKEN = env.str("twilio_auth_token", "")
+TWILIO_PHONE_NUMBER = env.str("twilio_phone_number", "")
+TWILIO_VERIFICATION_SID = env.str("twilio_verification_sid", "")
+
+# Site URL (or short URL) for use in messages
+SITE_URL = env.str("site_url", "http://localhost:8000")
+
+# Text to use in alerts. Will be populated with max_depth, start and end dates and SITE_URL
+ALERT_TEXT = env.str(
+    "alert_text",
+    "Floods up to {max_depth}m predicted from {start_date} to {end_date}. See {site_url} for details.",
+)
+# Date string to use in alerts: for formats see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+ALERT_DATE_FORMAT = env.str("alert_date_format", "%b %d")
+ALERT_DEPTH_THRESHOLD = env.float("alert_depth_threshold", 0.1)
+
+# Location to store parameter files uploaded
+MEDIA_ROOT = env.str(
+    "media_root", Path(__file__).resolve().parent.parent.joinpath("files")
+)
+
+# =======================================================================================
+# End of user configurable settings
+# =======================================================================================
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,10 +117,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "django_celery_beat",
+    "crispy_forms",
     "djgeojson",
     "leaflet",
+    "phonenumber_field",
     "calculations",
     "webapp",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -74,7 +141,7 @@ ROOT_URLCONF = "manyfews.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [str(BASE_DIR.joinpath("templates"))],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -82,6 +149,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "webapp.context_processors.include_login_form",
             ],
         },
     },
@@ -96,11 +164,11 @@ WSGI_APPLICATION = "manyfews.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "manyfews",
-        "USER": "manyfews",
-        "PASSWORD": "manyfews",
-        "HOST": "localhost",
-        "PORT": 5432,
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": DB_HOST,
+        "PORT": DB_PORT,
     }
 }
 
@@ -122,6 +190,9 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 
 # Internationalization
@@ -146,12 +217,15 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
 LEAFLET_CONFIG = {
-    "DEFAULT_CENTER": (-7.052115, 107.755514),
-    "DEFAULT_ZOOM": 10,
-    "MIN_ZOOM": 3,
-    "MAX_ZOOM": 18,
+    "DEFAULT_CENTER": MAP_CENTER,
+    "DEFAULT_ZOOM": 20,
+    "MIN_ZOOM": 10,
+    "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,
+    "TILES": MAP_URL,
 }
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

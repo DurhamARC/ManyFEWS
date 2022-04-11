@@ -143,5 +143,11 @@ dmypy.json
 # Make sure the .env file is not committed
 /manyfews/manyfews/.env
 
+# node_modules dir
+manyfews/node_modules
 
+# Ignore .DS_Store (created by Finder on Macs)
+.DS_Store
 
+# Ignore file uploads
+manyfews/files

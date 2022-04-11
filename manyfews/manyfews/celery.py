@@ -16,6 +16,11 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
+# Use pickle not json for serialisation, so it works with numpy arrays
+app.conf.task_serializer = "pickle"
+app.conf.result_serializer = "pickle"
+app.conf.accept_content = ["json", "pickle"]
+
 
 @app.task(bind=True)
 def debug_task(self):

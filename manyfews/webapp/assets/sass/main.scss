@@ -1,0 +1,155 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+$titleColor: #68246D;
+
+body {
+  height: 100%;
+  margin: 0;
+
+  .center {
+    text-align: center;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  .header {
+    .title-block {
+        text-decoration: none;
+        color: $titleColor;
+    }
+
+    .daily-risk {
+      margin-bottom: 10px;
+      padding: 0;
+      background: white;
+      min-width: 92px;
+
+      .row {
+        width: 100%;
+        margin: 0;
+        border: 1px solid gray;
+        padding: 10px;
+
+        &.hourly-risk {
+          padding: 0;
+        }
+      }
+
+      .date {
+        border-top-width: 2px;
+        border-bottom-width: 0;
+      }
+
+      &:nth-child(2){
+        .date {
+          border-left-width: 2px;
+        }
+        .risk:first-child:not(.current) {
+          border-left-width: 1px;
+        }
+      }
+      &:last-child {
+        .date {
+          border-right-width: 2px;
+        }
+        .risk:last-child:not(.current) {
+          border-right-width: 1px;
+        }
+      }
+
+      .risk {
+        width: 25%;
+        height: 50px;
+        padding: 0;
+        border: 1px solid gray;
+        border-radius: 0;
+        line-height: 45px;
+        font-size: 15px;
+
+        &:last-child {
+          border-right-width: 0;
+        }
+
+        &:first-child {
+          border-left-width: 0;
+        }
+
+        &.current {
+          border: 3px solid black;
+          position: relative;
+          width: 25%;
+          line-height: 41px;
+
+          .rotated {
+            padding-right: 2px;
+          }
+
+          &:after {
+            content: " ";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: $black transparent transparent transparent;
+          }
+        }
+      }
+
+      p {
+        text-align: center;
+        margin-bottom: 0;
+        font-size: smaller;
+
+        &.risk {
+          font-weight: bold;
+          font-size: x-large;
+        }
+      }
+    }
+  }
+
+  .map {
+    height: calc(100vh - 250px);
+    padding: 0;
+
+    #map {
+      height: 100%;
+    }
+  }
+
+  .manyfews-forms {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: var(--bs-light);
+
+    .account-form {
+      max-width: 500px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .alert-form {
+      margin-top: 20px;
+    }
+  }
+
+  .django-leaflet-raw-textarea ~ .invalid-feedback {
+    display: block;
+  }
+
+  .modal-wide .modal-dialog {
+    max-width: 90vw;
+  }
+
+  .footer {
+    margin-top: 5px;
+    text-align: center;
+    font-size: smaller;
+  }
+}

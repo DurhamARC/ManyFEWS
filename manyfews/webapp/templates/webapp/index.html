@@ -1,14 +1,31 @@
-{% load static %}
+{% extends 'webapp/base.html' %}
 {% load leaflet_tags %}
 
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'webapp/map.css' %}" />
-    {% leaflet_js %}
-    {% leaflet_css %}
-</head>
-
-<body>
-    <h1>ManyFEWS</h1>
-    {% leaflet_map "map" %}
-</body>
+{% block content %}
+    <div class="header container-fluid row">
+        {% for d in daily_risks %}
+            <div class="daily-risk col align-middle">
+                <div class="date row">
+                    <p class="day">{{ d.date|date:"D" }}</p>
+                    <p class="date">{{ d.date|date:"M j" }}</p>
+                </div>
+                <div class="hourly-risk row">
+                  <!-- Add tooltip with risk percentage -->
+                  {% for h in d.risks %}
+                    <div class="btn col-3 risk" data-bs-toggle="tooltip" data-bs-placement="top" title="Flood risk {{ h.percentage_risk|floatformat:'0' }}%"
+                         data-risk="{{ h.risk }}" data-day="{{ d.day_number }}" data-hour="{{ h.hour }}">
+                      {{ h.hour|stringformat:"02d" }}
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="map">
+        {% leaflet_map "map" %}
+    </div>
+    <script type="text/javascript">
+      window.initialiseDepthMap();
+      window.initialiseDailyRisks();
+    </script>
+{% endblock content %}

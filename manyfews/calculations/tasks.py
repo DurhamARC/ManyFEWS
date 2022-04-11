@@ -1,23 +1,38 @@
+import csv
+from datetime import datetime, date, timedelta, timezone
+import os
+
 from celery import Celery, shared_task
 from celery.schedules import crontab
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
-from .zentra import zentraReader, offsetTime, aggregateZentraData
 from django.conf import settings
-from .models import AggregatedZentraReading, InitialCondition, NoaaForecast
+from django.contrib.gis.geos import Point, Polygon
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+import numpy as np
+from tqdm import trange
+
+from webapp.alerts import TwilioAlerts
+from webapp.models import UserAlert, UserPhoneNumber, AlertType
+from .alerts import send_phone_alerts_for_user
+from .flood_risk import run_all_flood_models
+from .gefs import dataBaseWriter, prepareGEFS
 from .generate_river_flows import (
     prepareWeatherForecastData,
     runningGenerateRiverFlows,
     prepareInitialCondition,
     GenerateRiverFlows,
 )
-from django.contrib.gis.geos import Point
-from .zentra import prepareZentra, offsetTime
-from .gefs import prepareGEFS
-from datetime import datetime, date, timedelta, timezone
-import os
-from tqdm import trange
-from datetime import timedelta
-import numpy as np
+from .models import (
+    AggregatedZentraReading,
+    DepthPrediction,
+    FloodModelParameters,
+    InitialCondition,
+    ModelVersion,
+    NoaaForecast,
+    RiverFlowCalculationOutput,
+    RiverFlowPrediction,
+)
+from .zentra import zentraReader, prepareZentra, offsetTime, aggregateZentraData
+
 
 app = Celery()
 
@@ -45,10 +60,9 @@ def initialModelSetUp():
     3. Run the model for this dataset
     4. The model will write out the initial conditions for each of the model parameter sets.
        This is the file that we will use for the next day in the processing.
-
     """
 
-    backDays = int(settings.INITIAL_BACKTIME)
+    backDays = settings.INITIAL_BACKTIME
     timeInfo = offsetTime(backDays=backDays)
     location = Point(0, 0)
 
@@ -83,7 +97,6 @@ def initialModelSetUp():
 
 @shared_task(name="calculations.dailyModelUpdate")
 def dailyModelUpdate():
-
     """
     On the daily updates, there are two steps that we need to do.
     1, update the model’s initial conditions based on the previous day’s weather.
@@ -174,3 +187,58 @@ def dailyModelUpdate():
         initialDataSave=True,
         mode="daily",
     )
+
+
+@shared_task(name="Run flood model")
+def run_flood_model():
+    run_all_flood_models()
+
+
+@shared_task(name="Send user SMS alerts")
+def send_user_sms_alerts(user_id, phone_number_id):
+    send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SMS)
+
+
+@shared_task(name="Send all alerts")
+def send_alerts():
+    # Get and send SMS alerts
+    # Group by user and phone number, so we can send alerts for multiple locations at once
+    sms_alerts = (
+        UserAlert.objects.filter(verified=True, alert_type=AlertType.SMS)
+        .values("user_id", "phone_number")
+        .distinct()
+    )
+    for alert_details in sms_alerts:
+        result = send_user_sms_alerts.delay(
+            alert_details["user_id"], alert_details["phone_number"]
+        )
+
+
+@shared_task(name="Load parameters")
+def load_params_from_csv(filename, model_version_id):
+    with open(filename) as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        for row in reader:
+            size_to_add = float(row["size"]) / 2
+            x = float(row["lng"])
+            y = float(row["lat"])
+            param = FloodModelParameters(
+                model_version_id=model_version_id,
+                bounding_box=Polygon.from_bbox(
+                    (x - size_to_add, y - size_to_add, x + size_to_add, y + size_to_add)
+                ),
+            )
+            for i in range(12):
+                name = f"beta{i}"
+                if name in row:
+                    val = float(row[name])
+                    setattr(param, name, val)
+            param.save()
+    print("Saved model parameters.")
+
+    # Clean up old parameters from db
+    current_model_version_id = ModelVersion.get_current_id()
+    FloodModelParameters.objects.exclude(
+        model_version_id=current_model_version_id
+    ).delete()

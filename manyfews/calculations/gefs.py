@@ -168,8 +168,8 @@ def prepareGEFS():
     date = datetime.astimezone(downloadDate, tz=timezone(timedelta(hours=0)))
 
     # get the lat & lon value of studying cell
-    latValue = float(settings.LAT_VALUE)
-    lonValue = float(settings.LON_VALUE)
+    latValue = settings.LAT_VALUE
+    lonValue = settings.LON_VALUE
 
     for i in trange(loopRange):
         forceastHour = deltaHour + i * deltaHour
