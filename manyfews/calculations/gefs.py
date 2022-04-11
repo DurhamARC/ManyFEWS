@@ -6,6 +6,7 @@ from .models import NoaaForecast
 from django.contrib.gis.geos import Point
 from retrying import retry
 from django.conf import settings
+from tqdm import trange
 
 # if report error, retrying 72 times (6 hours), sleep 300 seconds (5 minutes) between attempts
 @retry(stop_max_attempt_number=72, wait_fixed=300)
@@ -141,22 +142,23 @@ def cellIndexFinder(latitudeInfo, longitudeInfo, latValue, lonValue):
     return index
 
 
-def dataBaseWriter(dt, forecastDays):
+def prepareGEFS():
     """
     This function is used to save data from gefs file into Database.
     ( calculations_noaaforecast table).
-
-    :param dt: Specify time-step in days. ( the interval is every 0.125 day(3 hours))
-    :param forecastDays: Number of Days into the future that the forecast is for.
-    :return: none
     """
 
     # calculate the number of time steps
     # For example: update interval: 0.25 day = 6 h.
     #              Number of Days into the future that the forecast is for
-    #              16 days = 4 * 16 = 65 loop steps.
+    #              16 days = 4 * 16 = 64 loop steps.
     #  Therefore, the gefs files are:
     #  geavg.t00z.pgrb2a.0p50.f006 ---> geavg.t00z.pgrb2a.0p50.f384
+
+    dt = float(settings.MODEL_TIMESTEP)  # time-step in days.
+    forecastDays = int(
+        settings.GEFS_FORECAST_DAYS
+    )  # Number of Days into the future that the forecast is for
 
     loopRange = int(forecastDays / dt)
     deltaHour = int(24 * dt)
@@ -169,10 +171,8 @@ def dataBaseWriter(dt, forecastDays):
     latValue = settings.LAT_VALUE
     lonValue = settings.LON_VALUE
 
-    for i in range(loopRange):
+    for i in trange(loopRange):
         forceastHour = deltaHour + i * deltaHour
-
-        print("forceastHour:", forceastHour)
 
         gefsData = GEFSdownloader(
             fileDate=fileDate,

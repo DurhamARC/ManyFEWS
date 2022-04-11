@@ -1,32 +1,32 @@
 import csv
-from datetime import datetime, timedelta, timezone
-import os
 
 from celery import Celery, shared_task
-from celery.schedules import crontab
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
-from django.conf import settings
-from django.contrib.gis.geos import Polygon
 
-from webapp.alerts import TwilioAlerts
+
+from django.conf import settings
+from django.contrib.gis.geos import Point, Polygon
+
+import numpy as np
+from tqdm import trange
+
+
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
 from .flood_risk import run_all_flood_models
-from .zentra import zentraReader
-from .gefs import dataBaseWriter
+from .gefs import prepareGEFS
+from .generate_river_flows import (
+    prepareWeatherForecastData,
+    runningGenerateRiverFlows,
+)
 from .models import (
-    DepthPrediction,
+    AggregatedZentraReading,
     FloodModelParameters,
     InitialCondition,
     ModelVersion,
-    RiverFlowCalculationOutput,
-    RiverFlowPrediction,
+    NoaaForecast,
 )
-from .generate_river_flows import (
-    prepareGEFSdata,
-    prepareInitialCondition,
-    GenerateRiverFlows,
-)
+from .zentra import prepareZentra, offsetTime
+
 
 app = Celery()
 
@@ -43,149 +43,144 @@ def hello_celery():
     logger.info("Hello logging from celery!")
 
 
-@shared_task(name="calculations.prepareGEFS")
-def prepareGEFS():
+@shared_task(name="calculations.initialModelSetUp")
+def initialModelSetUp():
     """
-    This function is developed to extract necessary GEFS forecast data sets
-    into Database for running the River Flows model
-    """
-    # prepare GEFS data
-    dt = settings.GEFS_TIME_STEP
-    forecastDays = settings.GEFS_FORECAST_DAYS
-    dataBaseWriter(dt=dt, forecastDays=forecastDays)
+    Initial model set up
+    This is part is only run once when the application is just installed.
 
-
-@shared_task(name="calculations.prepareZentra")
-def prepareZentra():
-    """
-    This function is developed to extract daily necessary Zentra cloud observation data sets
-    into Database for running the River Flows model.
-
-    For each day: the data is from 00:00 ---> 23:55
+    1. Start with all parameters at their default values. These are the default value that Simon passed to you.
+    2. Get the last 365 days of data from the catchment via Zentra
+    3. Run the model for this dataset
+    4. The model will write out the initial conditions for each of the model parameter sets.
+       This is the file that we will use for the next day in the processing.
     """
 
-    # get serial number
-    stationSN = settings.STATION_SN
+    backDays = settings.INITIAL_BACKTIME
+    timeInfo = offsetTime(backDays=backDays)
+    location = Point(0, 0)
 
-    # save into Data base
-    backDay = settings.ZENTRA_BACKTIME
+    # prepare the time point for getting zentra data.
+    # For initial model setup, it needs 365 days zentra data.
+    for backDay in trange(backDays, 0, -1):
+        prepareZentra(backDay=backDay)
 
-    # prepare start_time and end_time
-    startDate = datetime.now() - timedelta(days=backDay)
-    startTime = datetime(
-        year=startDate.year,
-        month=startDate.month,
-        day=startDate.day,
-        hour=0,
-        minute=0,
-        second=0,
-        microsecond=0,
-        tzinfo=timezone(timedelta(hours=0)),
-    )  # Offset start time to 00:00
-
-    endTime = datetime(
-        year=startDate.year,
-        month=startDate.month,
-        day=startDate.day,
-        hour=23,
-        minute=55,
-        second=0,
-        microsecond=0,
-        tzinfo=timezone(timedelta(hours=0)),
-    )  # Offset start time to 23:55
-
-    # prepare Zentra Cloud data
-    zentraReader(startTime=startTime, endTime=endTime, stationSN=stationSN)
-
-
-@shared_task(name="calculations.runningGenerateRiverFlows")
-def runningGenerateRiverFlows(dt, predictionDate, dataLocation):
-    """
-    This function is developed to prepare data and running models for generating river flows,
-    and save the next day's initial condition, River flow, Rainfall, and potential evapotranspiration
-    into DB.
-
-    :param dt: time step(unit:day)
-    :param beginDate: the date information of input data.
-    :param dataLocation: the location information of input data
-    :return none.
-    """
-    projectPath = os.path.abspath(
-        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+    # prepare weather data (from Zentra).
+    weatherForecastData = prepareWeatherForecastData(
+        predictionDate=timeInfo[0], location=location, dataSource="zentra", backDays=365
     )
 
-    dataFileDirPath = os.path.join(projectPath, "Data")
-    parametersFilePath = os.path.join(
-        dataFileDirPath, "RainfallRunoffModelParameters.csv"
+    # Set up an initial value for model running.
+    # Here use the mean value of the reference data as its initial value,
+    # Because through previous 365 days' iteration with zentra data,
+    # it will be pulled back to the real.
+
+    initialConditionData = np.tile((np.array([20.556992, 3.86579, 1.862992])), (100, 1))
+
+    # run model
+    runningGenerateRiverFlows(
+        predictionDate=timeInfo[0],
+        dataLocation=location,
+        weatherForecast=weatherForecastData,
+        initialData=initialConditionData,
+        riverFlowSave=False,
+        initialDataSave=True,
+        mode="inital",
     )
 
-    # plus time zone information
-    predictionDate = datetime.astimezone(
-        predictionDate, tz=timezone(timedelta(hours=0))
+
+@shared_task(name="calculations.dailyModelUpdate")
+def dailyModelUpdate():
+    """
+    On the daily updates, there are two steps that we need to do.
+    1, update the model’s initial conditions based on the previous day’s weather.
+    2, run the GEFS weather forecast data.
+
+    Part 1:
+    1. Get the last day’s data from Zentra
+    2. Read in the initial conditions from the previous day
+    3. Run the model for one day with the new data
+    4. Write the new initial conditions for today.
+    Part 2
+    1. Put together all of the time series from GEFS – there are 21 in total.
+    2. Run the model with the new initial conditions (from step 4 directly above) for each of the weather
+       forecast time series from step one above
+    3. We now have a set of ca. 2100 time series of river flow forecast for the next 16 days.
+
+    """
+
+    ## Part 1
+    # prepare time and location info
+    location = Point(0, 0)
+    yday = offsetTime(backDays=1)
+    today = offsetTime(backDays=0)
+
+    # Check whether zentra data has been downloaded
+    aggregateData = AggregatedZentraReading.objects.filter(
+        date__range=(yday[0], yday[1])
+    ).filter(location=location)
+
+    if len(aggregateData) == 0:
+        # Get the last day’s data from Zentra
+        prepareZentra(backDay=1)
+
+    ydayZentra = prepareWeatherForecastData(
+        predictionDate=yday[0], location=location, dataSource="zentra", backDays=1
     )
 
-    # prepare GEFS data for model.
-    gefsData = prepareGEFSdata(date=predictionDate, location=dataLocation)
-
-    # prepare initial condition data for model.
-    initialConditionData = prepareInitialCondition(
-        date=predictionDate, location=dataLocation
+    # Read in the initial conditions from the previous day
+    initialConditions = InitialCondition.objects.filter(date=today[0]).filter(
+        location=location
     )
 
-    # run model.
-    riverFlowsData = GenerateRiverFlows(
-        dt=0.25,
-        gefsData=gefsData,
-        F0=initialConditionData,
-        parametersFilePath=parametersFilePath,
+    slowFlowRateList = []
+    fastFlowRateList = []
+    storageLevelList = []
+
+    # extract output initial condition of river flows model.
+    for data in initialConditions:
+        slowFlowRateList.append(data.slow_flow_rate)
+        fastFlowRateList.append(data.fast_flow_rate)
+        storageLevelList.append(data.storage_level)
+
+    initialConditionsList = list(
+        zip(storageLevelList, slowFlowRateList, fastFlowRateList)
+    )
+    F0 = np.array(initialConditionsList)
+
+    # Run the model for one day with the new data
+    updateInitialData = runningGenerateRiverFlows(
+        predictionDate=today[0],
+        dataLocation=location,
+        weatherForecast=ydayZentra,
+        initialData=F0,
+        riverFlowSave=False,
+        initialDataSave=False,
+        mode="daily",
     )
 
-    # riverFlowsData[0] ====> Q: River flow (m3/s).
-    # riverFlowsData[1] ====> qp: Rainfall (mm/day).
-    # riverFlowsData[2] ====> Ep: Potential evapotranspiration (mm/day).
-    # riverFlowsData[3] ====> F0: intial condition data for next day.
+    ## part 2
+    # Put together all of the time series from GEFS
+    gefsData = NoaaForecast.objects.filter(date__range=(today[0], today[1]))
 
-    riverFlows = riverFlowsData[0]
-    qp = riverFlowsData[1]
-    Ep = riverFlowsData[2]
-    F0 = riverFlowsData[3]  # next day's initial condition
+    if len(gefsData) == 0:
+        # Check whether GEFS data has been downloaded
+        prepareGEFS()
 
-    # import the next day's initial condition data F0 into DB.
-    # ('calculations_initialcondition' table)
-    nextDay = predictionDate + timedelta(days=1)
+    weatherForecastData = prepareWeatherForecastData(
+        predictionDate=today[0], location=location, dataSource="gefs"
+    )
 
-    for i in range(len(F0[:, 0])):
-        nextDayInitialCondition = InitialCondition(
-            date=nextDay,
-            location=dataLocation,
-            storage_level=F0[i, 0],
-            slow_flow_rate=F0[i, 1],
-            fast_flow_rate=F0[i, 2],
-        )
-        nextDayInitialCondition.save()
-
-    for i in range(qp.shape[0]):
-        # save qp and Eq and into DB.
-        # ( 'calculations_riverflowcalculationoutput' table)
-        forecastTime = predictionDate + timedelta(days=i * dt)
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput(
-            prediction_date=predictionDate,
-            forecast_time=forecastTime,
-            location=dataLocation,
-            rain_fall=qp[i],
-            potential_evapotranspiration=Ep[i],
-        )
-        riverFlowCalculationOutputData.save()
-
-        # save Q into DB.
-        # ('calculations_riverflowprediction' table)
-        for j in range(riverFlows.shape[1]):
-            riverFlowPredictionData = RiverFlowPrediction(
-                prediction_index=j,
-                calculation_output=riverFlowCalculationOutputData,
-                river_flow=riverFlows[i, j],
-            )
-            riverFlowPredictionData.save()
+    # Run the model with the new initial conditions
+    runningGenerateRiverFlows(
+        predictionDate=today[0],
+        dataLocation=location,
+        weatherForecast=weatherForecastData,
+        initialData=F0,
+        riverFlowSave=True,
+        initialDataSave=True,
+        mode="daily",
+    )
 
 
 @shared_task(name="Run flood model")

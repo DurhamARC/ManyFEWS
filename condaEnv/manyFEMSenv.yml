@@ -25,4 +25,5 @@ dependencies:
     - django-phonenumber-field[phonenumberslite]
     - git+https://github.com/mt-climate-office/Zentra-API
     - pygrib
+    - tqdm
 prefix: /usr/local/Caskroom/miniconda/base/envs/ManyFEWS

@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta, timezone
 import os
-from unittest import mock
 
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import TestCase
 import numpy as np
 import xlrd
+from unittest import mock
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
@@ -20,10 +20,12 @@ from .models import (
     ZentraReading,
     NoaaForecast,
     InitialCondition,
-    RiverFlowCalculationOutput,
+    AggregatedZentraReading,
     RiverFlowPrediction,
+    RiverFlowCalculationOutput,
 )
-from .tasks import prepareZentra, prepareGEFS, runningGenerateRiverFlows, send_alerts
+from .tasks import initialModelSetUp, dailyModelUpdate, send_alerts
+from .zentra import offsetTime
 
 
 def excel_to_matrix(path, sheetNum):
@@ -41,7 +43,6 @@ def excel_to_matrix(path, sheetNum):
     datamatrix = np.zeros((row, col))  # ignore the first title row.
     for x in range(1, row):
         #        row = np.matrix(table.row_values(x))
-        #        print(type(row))
         row = np.array(table.row_values(x))
         datamatrix[x, :] = row
     datamatrix = np.delete(
@@ -77,7 +78,7 @@ def prepare_test_Data():
     testDate = datetime(
         year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
     )
-    date = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
+    date = datetime.astimezone(testDate, tz=timezone.utc)
 
     # prepare test location information (fake)
     testLocation = Point(0, 0)
@@ -118,145 +119,54 @@ def prepare_test_Data():
     return testDate, testLocation
 
 
-class WeatherImportTests(TestCase):
-    def test_fetch_from_zentra(self):
-        # Check that the prepareZentra task can run and adds some records to the db
+class taskTest(TestCase):
+    def test_tasks(self):
+        """
+        Test the inital Model SetUp and daily update tasks.
+        """
+        #  Check  the  initialModelSetUp task can run and adds some records to the db
         sn = "06-02047"
         zentraDevice = ZentraDevice(sn, location=Point(0, 0))
         zentraDevice.save()
 
-        prepareZentra()
+        # test initial model setup task.
+        initialModelSetUp()
 
-        # Check that there are readings in the database
-        readings = ZentraReading.objects.all()
-        assert len(readings) == 288
+        # Check that there are readings (past 365 days) in the database
 
-        # Check that they all relate to our device
-        for reading in readings:
-            assert reading.device == zentraDevice
+        timeInfo = offsetTime(backDays=365)
+        startTime = timeInfo[0]
+        endTime = timeInfo[1] + timedelta(days=365)
 
-    def test_fetch_from_GEFS(self):
-        # Check that the prepareGEFS task can run and adds some records to the db
-        prepareGEFS()
-
-        # Check that there are readings in the database
-        readings = NoaaForecast.objects.all()
-        assert len(readings) == 8
-
-
-class ModelCalculationTests(TestCase):
-    def test_calculation_GenerateRiverFlow(self):
-        testInfo = prepare_test_Data()  # get test data and location
-        testDate = testInfo[0]  # date
-        testLocation = testInfo[1]  # location
-
-        # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
-        nextDay = testDate + timedelta(days=1)
-        runningGenerateRiverFlows(
-            dt=0.25, predictionDate=testDate, dataLocation=testLocation
+        readings = ZentraReading.objects.filter(date__range=(startTime, endTime))
+        aggregateReading = AggregatedZentraReading.objects.filter(
+            date__range=(startTime, endTime)
         )
 
-        # extract result from data base.
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
-        riverFlowPredictionData = RiverFlowPrediction.objects.all()
-        initialConditions = InitialCondition.objects.filter(date=nextDay).filter(
-            location=testLocation
-        )
+        assert len(readings) == 1440
+        assert len(aggregateReading) == 20
 
-        qpList = []
-        EpList = []
-        QList = []
-        slowFlowRateList = []
-        fastFlowRateList = []
-        storageLevelList = []
+        # check that there are inidtial condition  in the database
+        initialcondition = InitialCondition.objects.all()
 
-        for data in riverFlowCalculationOutputData:
-            qpList.append(data.rain_fall)
-            EpList.append(data.potential_evapotranspiration)
+        assert len(initialcondition) == 100
 
-        # reform data into a Numpy array.
-        qp = np.array(qpList)
-        Ep = np.array(EpList)
+        # test daily model update task.
+        dailyModelUpdate()
 
-        for data in riverFlowPredictionData:
-            QList.append(data.river_flow)
+        riverOutput = RiverFlowCalculationOutput.objects.all()
+        riverOutputPrediction = RiverFlowPrediction.objects.all()
+        initialCondition = InitialCondition.objects.all()
+        gefsReadings = NoaaForecast.objects.all()
 
-        # reform data into a Numpy array.
-        Q = np.array(QList)
-        Q.resize((64, 100))
+        # check the gefs data
+        assert len(gefsReadings) == 8
+        # check that there are output in the database
+        assert len(riverOutput) == 8
+        assert len(riverOutputPrediction) == 800
 
-        # extract output initial condition of river flows model.
-        for data in initialConditions:
-            slowFlowRateList.append(data.slow_flow_rate)
-            fastFlowRateList.append(data.fast_flow_rate)
-            storageLevelList.append(data.storage_level)
-        initialConditionsList = list(
-            zip(storageLevelList, slowFlowRateList, fastFlowRateList)
-        )
-        F0 = np.array(initialConditionsList)
-
-        # get the reference results
-        projectPath = os.path.abspath(
-            os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
-        )
-
-        dataFileDirPath = os.path.join(projectPath, "Data")
-
-        Qbenchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "Q_Benchmark.csv")),
-            delimiter=",",
-            usecols=range(100),
-        )
-        F0benchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "F0_Benchmark.csv")),
-            usecols=range(3),
-        )
-        qpbenchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "qp_Benchmark.csv")),
-            delimiter=",",
-            usecols=range(1),
-        )
-        Eqbenchmark = np.loadtxt(
-            open(os.path.join(dataFileDirPath, "Eq_Benchmark.csv")),
-            delimiter=",",
-            usecols=range(1),
-        )
-
-        # calculate error between output and benchmark result, which below 0.01% is pass.
-        aerr = np.absolute((Q - Qbenchmark) / Qbenchmark)
-        qpErr = np.absolute(qp - qpbenchmark)
-        epErr = np.absolute((Ep - Eqbenchmark) / Eqbenchmark)
-        F0Err = np.absolute((F0 - F0benchmark) / F0benchmark)
-
-        # Check that the accuracy of river flow model
-        assert (np.max(aerr) < 0.0001).all()
-        assert (np.max(qpErr) < 0.0001).all()
-        assert (np.max(epErr) < 0.0001).all()
-        assert (np.max(F0Err) < 0.0001).all()
-
-        # Check that the initial conditions (2 days: today and tomorrow)
-        # have been added to the db
-        readings = InitialCondition.objects.all()
-        assert len(readings) == 200
-
-    def test_calculation_dbTime(self):
-        """
-        test the forecast times in the DB (table:'calculations_riverflowcalculationoutput')
-        are as we expect.
-        """
-        testInfo = prepare_test_Data()  # get test data and location
-        testDate = testInfo[0]  # date
-
-        # plus time zone information
-        testDate = datetime.astimezone(testDate, tz=timezone(timedelta(hours=0)))
-
-        # check forecast times and prediction time are as we expect
-        riverFlowCalculationOutputData = RiverFlowCalculationOutput.objects.all()
-        for data in riverFlowCalculationOutputData:
-            id = data.id
-            assert data.prediction_date == testDate
-            assert data.forecast_time == testDate + timedelta(days=(id - 1) * 0.25)
+        # check that the new initial condition in the datebase
+        assert len(initialCondition) == 200
 
 
 class UserAlertTests(TestCase):

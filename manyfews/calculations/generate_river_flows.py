@@ -1,7 +1,15 @@
 import math
+import os
 import numpy as np
-from datetime import date
-from .models import NoaaForecast, InitialCondition
+from django.conf import settings
+from datetime import date, datetime, timedelta, timezone
+from .models import (
+    NoaaForecast,
+    InitialCondition,
+    RiverFlowCalculationOutput,
+    RiverFlowPrediction,
+    AggregatedZentraReading,
+)
 
 
 def ModelFun(qp, Ep, dt, CatArea, X, F0):
@@ -153,7 +161,7 @@ def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
     return qro, qd, Ea, S
 
 
-def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
+def FAO56(dt, predictionDate, Tmin, Tmax, alt, lat, T, u2, RH):
 
     # Ensure Tmax > Tmin
     Tmax = np.maximum(Tmax, Tmin)
@@ -210,9 +218,8 @@ def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
     varphi = (lat * math.pi) / 180
 
     # Determine day of the year as a number from 1 to 365
-    beginDate = date(2010, 1, 1)
+    beginDate = predictionDate.date()
     beginDateNum = (beginDate - date(beginDate.year - 1, 12, 31)).days
-    # J = beginDateNum + np.arange(0, ((np.size(t[:])) / 4), dt)
     J = beginDateNum + np.arange(0, ((np.size(Tmax[:])) / 4), dt)
 
     # Inverse relative distance Earth-Sun from Eq. 23
@@ -282,7 +289,7 @@ def FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH):
     return ETo, E0
 
 
-def GenerateRiverFlows(dt, gefsData, F0, parametersFilePath):
+def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
     """
     Generates 100 river flow time-series for one realisation of GEFS weather data.
 
@@ -357,7 +364,7 @@ def GenerateRiverFlows(dt, gefsData, F0, parametersFilePath):
     X = np.loadtxt(open(parametersFilePath), delimiter=",", usecols=range(4))
 
     # Determine reference crop evapotranspiration (mm/day)
-    fa056OutputData = FAO56(dt, Tmin, Tmax, alt, lat, T, u2, RH)
+    fa056OutputData = FAO56(dt, predictionDate, Tmin, Tmax, alt, lat, T, u2, RH)
 
     # "fa056OutputData" is a data tuple, which:
     # fa056OutputData[0] ====> Ep
@@ -377,20 +384,20 @@ def GenerateRiverFlows(dt, gefsData, F0, parametersFilePath):
     return Q, qp, Ep, F0
 
 
-def prepareInitialCondition(date, location):
+def prepareInitialCondition(predictionDate, location):
     """
 
     This function is for extracting initial condition data with specific dates and locations from DB,
     and returning data into a NumPy array.
 
-    :param date: date information.
+    :param predictionDate: date information.
     :param location: location information.
     :return intialConditionData: a numpy array contains initial condition data.
 
     """
 
     # prepare initial conditions for model.
-    initialConditions = InitialCondition.objects.filter(date=date).filter(
+    initialConditions = InitialCondition.objects.filter(date=predictionDate).filter(
         location=location
     )
 
@@ -410,19 +417,36 @@ def prepareInitialCondition(date, location):
     return intialConditionData
 
 
-def prepareGEFSdata(date, location):
+def prepareWeatherForecastData(predictionDate, location, dataSource="gefs", backDays=0):
+
     """
 
     This function is for extracting GEFS data with specific dates and locations from DB,
-    and returning data into a NumPy array.
+    and returning data into a Numpy array.
 
     :param date: date information.
     :param location: location information.
-    :return gefsData: a numpy array contains GEFS data.
+    :param dataSource: the data source of weather forecasting data.
+                       1: 'gefs': from Noaa Forecast data. (default)
+                       2. 'zentra': from Zentra data. (it is usually used in the initial model set up.)
+    :param backDays: the number of back days need to extract date. (default = 0).
+    :return gefsData: a numpy array contains GEFS or zentra data.
 
     """
-    # prepare testing GEFS data for model.
-    gefs = NoaaForecast.objects.filter(date=date).filter(location=location)
+
+    # plus time zone information.
+    startTime = datetime.astimezone(predictionDate, tz=timezone.utc)
+
+    # prepare weather forecast data for model.
+    if dataSource == "gefs":
+        endTime = startTime + timedelta(hours=23, minutes=59, seconds=59)
+        weatherData = NoaaForecast.objects.filter(date__range=(startTime, endTime))
+
+    elif dataSource == "zentra":
+        endTime = startTime + timedelta(days=backDays)
+        weatherData = AggregatedZentraReading.objects.filter(
+            date__range=(startTime, endTime)
+        ).filter(location=location)
 
     RHList = []
     minTemperatureList = []
@@ -431,15 +455,15 @@ def prepareGEFSdata(date, location):
     vWindList = []
     precipitationList = []
 
-    for forecast in gefs:
-        RHList.append(forecast.relative_humidity)
-        minTemperatureList.append(forecast.min_temperature)
-        maxTemperatureList.append(forecast.max_temperature)
-        uWindList.append(forecast.wind_u)
-        vWindList.append(forecast.wind_v)
-        precipitationList.append(forecast.precipitation)
+    for data in weatherData:
+        RHList.append(data.relative_humidity)
+        minTemperatureList.append(data.min_temperature)
+        maxTemperatureList.append(data.max_temperature)
+        uWindList.append(data.wind_u)
+        vWindList.append(data.wind_v)
+        precipitationList.append(data.precipitation)
 
-    gefsList = list(
+    dataList = list(
         zip(
             RHList,
             maxTemperatureList,
@@ -449,6 +473,107 @@ def prepareGEFSdata(date, location):
             precipitationList,
         )
     )
-    gefsData = np.array(gefsList)
+    weatherForecastData = np.array(dataList)
 
-    return gefsData
+    return weatherForecastData
+
+
+def runningGenerateRiverFlows(
+    predictionDate,
+    dataLocation,
+    weatherForecast,
+    initialData,
+    riverFlowSave=True,
+    initialDataSave=True,
+    mode="daily",
+):
+    """
+    This function is developed to prepare data and running models for generating river flows,
+    and save the next day's initial condition, River flow, Rainfall, and potential evapotranspiration
+    into DB.
+
+    :param predictionDate: the date information of begin date.
+    :param dataLocation: the location information of input data
+    :param weatherForecast: the weather forecast data for model running.
+    :param initialData: the initial condition data for model running.
+    :param riverFlowSave: option of saving model output. (default = True)
+    :param initialDataSave: option of saving output initial condition. (default =True)
+    :param mode: option of model ( initial & daily)
+    :return F0: the initial condition for the next days.
+    """
+    projectPath = os.path.abspath(
+        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+    )
+
+    dataFileDirPath = os.path.join(projectPath, "Data")
+    parametersFilePath = os.path.join(
+        dataFileDirPath, "RainfallRunoffModelParameters.csv"
+    )
+
+    # plus time zone information
+    predictionDate = datetime.astimezone(predictionDate, tz=timezone.utc)
+
+    # run model.
+    dt = float(settings.MODEL_TIMESTEP)
+    riverFlowsData = GenerateRiverFlows(
+        dt=dt,
+        predictionDate=predictionDate,
+        gefsData=weatherForecast,
+        F0=initialData,
+        parametersFilePath=parametersFilePath,
+    )
+
+    # riverFlowsData[0] ====> Q: River flow (m3/s).
+    # riverFlowsData[1] ====> qp: Rainfall (mm/day).
+    # riverFlowsData[2] ====> Ep: Potential evapotranspiration (mm/day).
+    # riverFlowsData[3] ====> F0: intial condition data for next day.
+
+    riverFlows = riverFlowsData[0]
+    qp = riverFlowsData[1]
+    Ep = riverFlowsData[2]
+    F0 = riverFlowsData[3]  # next day's initial condition
+
+    # import the next day's initial condition data F0 into DB.
+    # ('calculations_initialcondition' table)
+
+    if mode == "inital":
+        nextDay = predictionDate + timedelta(days=settings.INITIAL_BACKTIME)
+    elif mode == "daily":
+        nextDay = predictionDate + timedelta(days=1)
+
+    if initialDataSave == True:
+        for i in range(len(F0[:, 0])):
+            nextDayInitialCondition = InitialCondition(
+                date=nextDay,
+                location=dataLocation,
+                storage_level=F0[i, 0],
+                slow_flow_rate=F0[i, 1],
+                fast_flow_rate=F0[i, 2],
+            )
+            nextDayInitialCondition.save()
+
+    if riverFlowSave == True:
+        for i in range(qp.shape[0]):
+            # save qp and Eq and into DB.
+            # ( 'calculations_riverflowcalculationoutput' table)
+            forecastTime = predictionDate + timedelta(days=i * dt)
+            riverFlowCalculationOutputData = RiverFlowCalculationOutput(
+                prediction_date=predictionDate,
+                forecast_time=forecastTime,
+                location=dataLocation,
+                rain_fall=qp[i],
+                potential_evapotranspiration=Ep[i],
+            )
+            riverFlowCalculationOutputData.save()
+
+            # save Q into DB.
+            # ('calculations_riverflowprediction' table)
+            for j in range(riverFlows.shape[1]):
+                riverFlowPredictionData = RiverFlowPrediction(
+                    prediction_index=j,
+                    calculation_output=riverFlowCalculationOutputData,
+                    river_flow=riverFlows[i, j],
+                )
+                riverFlowPredictionData.save()
+
+    return F0
