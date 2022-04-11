@@ -146,9 +146,21 @@ def aggregateZentraData(startTime, endTime, stationSN):
     # convert temperature Unit from °C to ℉
     airTemList = [i + 273.15 for i in airTemList]
 
-    ##############################################
-    #  filter the wrong data (Temporary solution)
-    #############################################
+    #  defaults value when zentra does not report a value
+    defaultsRH = settings.DEFAULT_RH
+    defaultsAirTemp = settings.DEFAULT_AIR_TEMP
+    defaultPrecip = settings.DEFAULT_PRECIP
+
+    # convert temperature Unit from °C to ℉
+    defaultsAirTemp = [i + 273.15 for i in defaultsAirTemp]
+
+    # get month info
+    monthNO = startTime.month
+
+    defaultsRHvalue = defaultsRH[monthNO - 1]  # start from 0
+    defaultPrecipVlue = defaultPrecip[monthNO - 1]
+    defaultsAirTempValue = defaultsAirTemp[monthNO - 1]
+
     wSpeedList = [
         1 if i == None else i for i in wSpeedList
     ]  # for None data, set it to default (1)
@@ -156,15 +168,14 @@ def aggregateZentraData(startTime, endTime, stationSN):
         1 if i == None else i for i in wDirectionList
     ]  # for None data, set it to default (1)
     airTemList = [
-        1 if i == None else i for i in airTemList
-    ]  # for None data, set it to default (1)
+        defaultsAirTempValue if i == None else i for i in airTemList
+    ]  # for None data, set it to defaults
     precipList = [
-        1 if i == None else i for i in precipList
-    ]  # for None data, set it to default (1)
+        defaultPrecipVlue if i == None else i for i in precipList
+    ]  # for None data, set it to defaults
     RHList = [
-        1 if i == None else i for i in RHList
-    ]  # for None data, set it to default (1)
-    ###############################################
+        defaultsRHvalue if i == None else i for i in RHList
+    ]  # for None data, set it to defaults
 
     zentraReadingList = list(
         zip(RHList, precipList, airTemList, wSpeedList, wDirectionList)
