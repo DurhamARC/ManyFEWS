@@ -219,9 +219,7 @@ def aggregateZentraData(startTime, endTime, stationSN):
             intervalData[:, 2]
         )  # find the minimum temperature
 
-    from django.contrib.gis.geos import Point
-
-    location = Point(0, 0)
+    location = zentraReadingData[0].device.location
 
     for i in range(len(aggregatedData)):
         date = startTime + timedelta(days=(dt * i))
