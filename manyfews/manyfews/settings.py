@@ -131,6 +131,9 @@ MEDIA_ROOT = env.str(
     "media_root", Path(__file__).resolve().parent.parent.joinpath("files")
 )
 
+# Maximum depth for floods in m (used to determine colour bands for flood depths)
+MAX_FLOOD_DEPTH = env.float("max_flood_depth", 2)
+
 # =======================================================================================
 # End of user configurable settings
 # =======================================================================================
@@ -266,7 +269,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 LEAFLET_CONFIG = {
     "DEFAULT_CENTER": MAP_CENTER,
-    "DEFAULT_ZOOM": 20,
+    "DEFAULT_ZOOM": 16,
     "MIN_ZOOM": 10,
     "MAX_ZOOM": 25,
     "DEFAULT_PRECISION": 6,

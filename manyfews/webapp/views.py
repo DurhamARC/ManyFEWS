@@ -112,7 +112,7 @@ def depth_predictions(request, day, hour, bounding_box):
                 "upper_centile": p.upper_centile,
             }
         )
-    return JsonResponse({"items": items, "max_depth": 20})
+    return JsonResponse({"items": items, "max_depth": settings.MAX_FLOOD_DEPTH})
 
 
 @login_required

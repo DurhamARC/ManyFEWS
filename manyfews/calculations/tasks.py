@@ -12,7 +12,7 @@ from tqdm import trange
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
-from .flood_risk import run_all_flood_models
+from .flood_risk import run_all_flood_models, calculate_risk_percentages
 from .gefs import prepareGEFS
 from .generate_river_flows import (
     prepareWeatherForecastData,
@@ -188,6 +188,11 @@ def run_flood_model():
     run_all_flood_models()
 
 
+@shared_task(name="Calculate percentage risks")
+def calculate_percentage_risk():
+    calculate_risk_percentages()
+
+
 @shared_task(name="Send user SMS alerts")
 def send_user_sms_alerts(user_id, phone_number_id):
     send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SMS)
@@ -223,16 +228,24 @@ def load_params_from_csv(filename, model_version_id):
                     (x - size_to_add, y - size_to_add, x + size_to_add, y + size_to_add)
                 ),
             )
+            is_non_zero = False
             for i in range(12):
                 name = f"beta{i}"
                 if name in row:
                     val = float(row[name])
+                    if val:
+                        is_non_zero = True
                     setattr(param, name, val)
-            param.save()
-    print("Saved model parameters.")
+
+            # Only save param if it has at least 1 non-zero beta value
+            if is_non_zero:
+                param.save()
+
+    logger.info("Saved model parameters.")
 
     # Clean up old parameters from db
     current_model_version_id = ModelVersion.get_current_id()
     FloodModelParameters.objects.exclude(
-        model_version_id=current_model_version_id
+        model_version_id=current_model_version_id, depthprediction=None
     ).delete()
+    logger.info("Deleted old model parameters")

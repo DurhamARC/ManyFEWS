@@ -1,7 +1,10 @@
+import logging
 import os
 
 from django.conf import settings
 from twilio.rest import Client
+
+logger = logging.getLogger(__name__)
 
 
 class TwilioAlerts:
@@ -39,7 +42,4 @@ class TwilioAlerts:
                 body=message, from_=from_number, to=to_number
             )
         except Exception as e:
-            print(f"Unable to send message to {to_number}: {e}")
-
-
-# Calculate alerts from flood depths
+            logger.error(f"Unable to send message to {to_number}: {e}")

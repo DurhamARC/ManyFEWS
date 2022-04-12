@@ -1,4 +1,6 @@
 from datetime import timedelta
+import logging
+
 from celery import Celery, shared_task
 from django.conf import settings
 from django.contrib.gis.db.models import Extent
@@ -17,6 +19,9 @@ from .models import (
 )
 
 
+logger = logging.getLogger(__name__)
+
+
 def run_all_flood_models():
     # Run flood model over latest outputs from river flow
 
@@ -33,14 +38,14 @@ def run_all_flood_models():
         prediction_date=latest_prediction_date,
         forecast_time__lte=today + timedelta(days=16),
     )
-    print(f"Found {len(outputs_by_time)} sets of output data.")
+    logger.info(f"Found {len(outputs_by_time)} sets of output data.")
     for output in outputs_by_time:
         run_flood_model_for_time.delay(latest_prediction_date, output.forecast_time)
 
 
 @shared_task(name="Run flood model for time")
 def run_flood_model_for_time(prediction_date, forecast_time):
-    print(f"Running flood model for {forecast_time}")
+    logger.info(f"Running flood model for {forecast_time}")
     output = RiverFlowCalculationOutput.objects.filter(
         prediction_date=prediction_date, forecast_time=forecast_time
     ).first()
@@ -48,7 +53,7 @@ def run_flood_model_for_time(prediction_date, forecast_time):
         "river_flow", flat=True
     )
     flow_values = np.fromiter(flow_values_iter, np.dtype("float_"))
-    print(f"Got river flow values: {flow_values}")
+    logger.info(f"Got river flow values: {flow_values}")
 
     latest_model_id = ModelVersion.get_current_id()
     params = FloodModelParameters.objects.filter(model_version_id=latest_model_id).all()
@@ -96,7 +101,7 @@ def predict_depths(forecast_time, param_ids, flow_values):
         prediction.save()
 
         if i % 1000 == 0:
-            print(f"Calculated {i} of {len(param_ids)} pixels")
+            logger.info(f"Calculated {i} of {len(param_ids)} pixels")
 
 
 def predict_depth(flow_values, param):
@@ -135,7 +140,7 @@ def predict_single_depth(flows, params):
 
 @shared_task(name="aggregate_flood_models")
 def aggregate_flood_models(date):
-    print(f"Aggregating flood model results for responsive tiling")
+    logger.info(f"Aggregating flood model results for responsive tiling")
     current_model_version_id = ModelVersion.get_current_id()
     result = DepthPrediction.objects.filter(
         date=date, model_version_id=current_model_version_id
@@ -148,7 +153,7 @@ def aggregate_flood_models(date):
 
 @shared_task(name="aggregate_flood_models_by_size")
 def aggregate_flood_models_by_size(date, model_version_id, extent, i):
-    print(f"Aggregating for date {date} level {i}")
+    logger.info(f"Aggregating for date {date} level {i}")
     total_width = extent[2] - extent[0]
     total_height = extent[3] - extent[1]
     block_size = min(total_height, total_width) / i
@@ -196,12 +201,14 @@ def aggregate_flood_models_by_size(date, model_version_id, extent, i):
         y += block_size
 
 
-def calculate_risk_percentages(from_date):
+@shared_task(name="calculate_risk_percentages")
+def calculate_risk_percentages():
     # Convert aggregated depths to % risk based on number of cells
     # with non-zero median depth
+    today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
     prediction_counts = (
         DepthPrediction.objects.filter(
-            date__gte=from_date,
+            date__gte=today,
             median_depth__gte=0,
         )
         .values("date")
