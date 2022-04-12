@@ -115,6 +115,8 @@ Make sure you have the following installed:
 
 16. To load some (dummy) flood model parameters, go to http://127.0.0.1:8000/admin and go to **Model versions** (under Calculations). Create a new Model version using the file `Data/MajalayaFloodEmulatorParams-DUMMY-5pcSample.csv` as the parameter file. The parameters will be loaded into the database via a celery task.
 
+17. To load the river channel into the database (to prevent sending alerts about depths in the channel), go to http://127.0.0.1:8000/admin again. Go to **River channels** (under Calculations), create new, and paste in the contents of `Data/channel.geojson` into the box beneath the map.
+
 
 ## Making model changes
 
