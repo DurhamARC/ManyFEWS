@@ -176,7 +176,7 @@ def dailyModelUpdate():
         predictionDate=today[0],
         dataLocation=location,
         weatherForecast=weatherForecastData,
-        initialData=F0,
+        initialData=updateInitialData,
         riverFlowSave=True,
         initialDataSave=True,
         mode="daily",
