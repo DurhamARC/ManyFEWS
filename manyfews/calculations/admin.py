@@ -2,7 +2,15 @@ from django.contrib.gis import admin
 from django.forms import ModelForm, FileField
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import ZentraDevice, ModelVersion, RiverChannel
+from .models import ZentraDevice, ModelVersion, RiverChannel, RiverFlowPrediction
+
+
+@admin.register(RiverFlowPrediction)
+class RiverFlowPredictionAdmin(admin.ModelAdmin):
+    list_display = ("prediction_index", "forecast_time", "river_flow")
+
+    def forecast_time(self, obj):
+        return obj.calculation_output.forecast_time
 
 
 @admin.register(ZentraDevice)
