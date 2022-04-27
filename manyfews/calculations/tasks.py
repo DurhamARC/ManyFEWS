@@ -68,7 +68,10 @@ def initialModelSetUp():
 
     # prepare weather data (from Zentra).
     weatherForecastData = prepareWeatherForecastData(
-        predictionDate=timeInfo[0], location=location, dataSource="zentra", backDays=365
+        predictionDate=timeInfo[0],
+        location=location,
+        dataSource="zentra",
+        backDays=backDays,
     )
 
     # Set up an initial value for model running.
