@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.gis.db.models import Max, Min, Union
+from django.db import connection
 from django.utils import timezone
 
 from webapp.alerts import TwilioAlerts
@@ -43,17 +44,23 @@ def send_phone_alerts_for_user(user_id, phone_number_id, alert_type=AlertType.SM
 
 
 def get_message(start_date, end_date, location):
-    # Find values in DepthPrediction in future which match this area
-    channel_data = RiverChannel.objects.all().aggregate(Union("channel_location"))
+    # Get river channel data to exclude
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT ST_Union(ST_Buffer(channel_location, 0)) FROM calculations_riverchannel"
+        )
+        channel_data = cursor.fetchone()[0]
+
+    # Find values in DepthPrediction in future which match the current location
     predictions = DepthPrediction.objects.filter(
         date__gte=start_date,
         date__lte=end_date,
         parameters__bounding_box__intersects=location,
         mid_lower_centile__gte=settings.ALERT_DEPTH_THRESHOLD,
     )
-    if channel_data["channel_location__union"]:
+    if channel_data:
         predictions = predictions.exclude(
-            parameters__bounding_box__coveredby=channel_data["channel_location__union"]
+            parameters__bounding_box__coveredby=channel_data
         )
 
     predictions = predictions.aggregate(Min("date"), Max("date"), Max("median_depth"))
