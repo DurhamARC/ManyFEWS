@@ -24,6 +24,7 @@ from .models import (
     InitialCondition,
     ModelVersion,
     NoaaForecast,
+    ZentraDevice,
 )
 from .zentra import prepareZentra, offsetTime
 
@@ -58,7 +59,7 @@ def initialModelSetUp():
 
     backDays = settings.INITIAL_BACKTIME
     timeInfo = offsetTime(backDays=backDays)
-    location = Point(0, 0)
+    location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
 
     # prepare the time point for getting zentra data.
     # For initial model setup, it needs 365 days zentra data.
@@ -67,7 +68,10 @@ def initialModelSetUp():
 
     # prepare weather data (from Zentra).
     weatherForecastData = prepareWeatherForecastData(
-        predictionDate=timeInfo[0], location=location, dataSource="zentra", backDays=365
+        predictionDate=timeInfo[0],
+        location=location,
+        dataSource="zentra",
+        backDays=backDays,
     )
 
     # Set up an initial value for model running.
@@ -111,7 +115,7 @@ def dailyModelUpdate():
 
     ## Part 1
     # prepare time and location info
-    location = Point(0, 0)
+    location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
     yday = offsetTime(backDays=1)
     today = offsetTime(backDays=0)
 
