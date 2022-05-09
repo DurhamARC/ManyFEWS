@@ -14,7 +14,6 @@ class ModelVersion(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__original_param_file = self.param_file
         self.__original_is_current = self.is_current
 
     def save(self, *args, **kwargs):
@@ -27,15 +26,8 @@ class ModelVersion(models.Model):
                 version.is_current = False
                 version.save()
 
-        # Load params into db if is_current and either param_file or is_current has changed
-        if (
-            self.param_file
-            and self.is_current
-            and (
-                self.param_file != self.__original_param_file
-                or not self.__original_is_current
-            )
-        ):
+        # Load params into db if is_current, and is_current was previously false
+        if self.param_file and self.is_current and not self.__original_is_current:
             from .tasks import load_params_from_csv
 
             load_params_from_csv.delay(self.param_file.path, self.id)
