@@ -223,6 +223,9 @@ def load_params_from_csv(filename, model_version_id):
         reader = csv.DictReader(csvfile)
 
         for row in reader:
+            if row["size"] == "":
+                continue
+
             size_to_add = float(row["size"]) / 2
             x = float(row["lng"])
             y = float(row["lat"])
