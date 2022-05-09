@@ -2,7 +2,18 @@ from django.contrib.gis import admin
 from django.forms import ModelForm, FileField
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import ZentraDevice, ModelVersion, RiverChannel, RiverFlowPrediction
+from .models import (
+    ZentraDevice,
+    ModelVersion,
+    RiverChannel,
+    RiverFlowPrediction,
+    FloodModelParameters,
+)
+
+
+@admin.register(FloodModelParameters)
+class FloodModelParametersAdmin(admin.ModelAdmin):
+    list_display = ["id", "model_version_id"] + [f"beta{i}" for i in range(12)]
 
 
 @admin.register(RiverFlowPrediction)
@@ -27,6 +38,15 @@ class ModelVersionAdmin(admin.ModelAdmin):
     list_display = ("version_name", "date_created", "is_current")
 
     actions = ["delete_model"]
+
+    def get_readonly_fields(self, request, obj=None):
+        # Disallow editing of param file
+        if obj:  # obj is not None, so this is an edit
+            return [
+                "param_file",
+            ]
+        else:  # This is an addition
+            return []
 
     def delete_queryset(self, request, queryset):
         queryset.delete()
