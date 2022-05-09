@@ -105,16 +105,11 @@ def predict_depths(forecast_time, param_ids, flow_values):
 
 
 def predict_depth(flow_values, param):
-    beta_values = [getattr(param, f"beta{i}") for i in range(12)]
-    beta_values = [b for b in beta_values if b is not None]
-
-    f = lambda x: predict_single_depth(x, beta_values)
-    if len(flow_values.shape) == 1:
-        # single array - apply to each
-        fv = np.vectorize(f)
-        depths = fv(flow_values)
-    else:
-        depths = np.apply_along_axis(f, -1, flow_values)
+    beta_values = [getattr(param, f"beta{i}", 0) for i in range(12)]
+    beta_values = [0 if b is None else b for b in beta_values]
+    polynomial = np.polynomial.Polynomial(beta_values)
+    depths = polynomial(flow_values)
+    depths[depths < 0] = 0
 
     # Get median and centiles
     median = np.median(depths)
@@ -123,19 +118,6 @@ def predict_depth(flow_values, param):
     upper_centile = np.percentile(depths, 90)
 
     return lower_centile, mid_lower_centile, median, upper_centile
-
-
-def predict_single_depth(flows, params):
-    """Expects an iterable of flow values (multiple inflows, same prediction) and an array of parameters.
-    params should have one more item than flows."""
-    val = params[0]
-    try:
-        for i in range(len(flows)):
-            val += flows[i] * params[i + 1]
-    except TypeError:  # flows may just be single val
-        val += flows + params[1]
-
-    return val
 
 
 @shared_task(name="aggregate_flood_models")

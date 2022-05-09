@@ -308,13 +308,20 @@ class UserAlertTests(TestCase):
 
 class FloodCalculationTests(TestCase):
     def test_predict_depth(self):
-        date = datetime.utcnow().date()
-        params = [1, 2, 3]
-        param = FloodModelParameters(beta0=1, beta1=2, beta2=3)
-        vals = np.array([[4, 5], [6, 7], [8, 9]])
-        stats = predict_depth(vals, param)
-        assert stats == (26.0, 30.0, 34.0, 42.0)
+        params = FloodModelParameters(beta0=1, beta1=2, beta2=3, beta3=4)
 
-        vals = np.array([10, 20, 30, 40])
-        stats = predict_depth(vals, param)
-        assert stats == (16.0, 22.0, 28.0, 40.0)
+        # Test with all the same flows so centiles and medians will be actual value
+        flows = np.array([2, 2, 2, 2])
+        stats = predict_depth(flows, params)
+        assert stats == (49, 49, 49, 49)
+
+        # Test with different flows
+        flows = np.array([0.1, 2, 1.5, 5])
+        stats = predict_depth(flows, params)
+        np.testing.assert_almost_equal(stats, (8.14, 21.95, 36.63, 424.90), 2)
+
+        # Test values below 0 are set to 0
+        params = FloodModelParameters(beta0=-1, beta1=-2, beta2=-3, beta3=-4)
+        flows = np.array([0.1, 2, 1.5, 5])
+        stats = predict_depth(flows, params)
+        assert stats == (0, 0, 0, 0)
