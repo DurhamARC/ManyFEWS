@@ -90,15 +90,19 @@ def predict_depths(forecast_time, param_ids, flow_values):
             date=forecast_time, parameters_id=param_id
         ).first()
 
-        if not prediction:
-            prediction = DepthPrediction(date=forecast_time, parameters_id=param_id)
+        if upper_centile > 0:
+            if not prediction:
+                prediction = DepthPrediction(date=forecast_time, parameters_id=param_id)
 
-        prediction.model_version = param.model_version
-        prediction.median_depth = median
-        prediction.lower_centile = lower_centile
-        prediction.mid_lower_centile = mid_lower_centile
-        prediction.upper_centile = upper_centile
-        prediction.save()
+            prediction.model_version = param.model_version
+            prediction.median_depth = median
+            prediction.lower_centile = lower_centile
+            prediction.mid_lower_centile = mid_lower_centile
+            prediction.upper_centile = upper_centile
+            prediction.save()
+        else:
+            if prediction:
+                prediction.delete()
 
         if i % 1000 == 0:
             logger.info(f"Calculated {i} of {len(param_ids)} pixels")
@@ -191,7 +195,7 @@ def calculate_risk_percentages():
     prediction_counts = (
         DepthPrediction.objects.filter(
             date__gte=today,
-            median_depth__gte=0,
+            median_depth__gt=0,
         )
         .values("date")
         .annotate(non_zero_count=Count("median_depth"))
