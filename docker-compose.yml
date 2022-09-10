@@ -1,0 +1,84 @@
+version: '3.6'
+
+services:
+
+  # RabbitMQ message queue service for Celery task broker
+  rabbitmq:
+    image: rabbitmq:3.10
+    container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: manyfews
+      RABBITMQ_DEFAULT_PASS: ${rabbitmq_password}
+    # ports:
+    #   - 5672:5672 # AMQP no TLS
+
+
+  # PostGIS server
+  postgres:
+    image: postgis/postgis:14-3.2
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    environment:
+      # must specify password for PG Docker container image, see: https://registry.hub.docker.com/_/postgres?tab=description&page=1&name=10
+      POSTGRES_DB: ${db_name}
+      POSTGRES_USER: ${db_user}
+      POSTGRES_PASSWORD: ${db_password}
+    ports:
+      - 5432:5432
+    # Needed because the postgres container does not provide a healthcheck
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # Celery container runs from the same image as the django container below
+  celery:
+    container_name: ${COMPOSE_PROJECT_NAME}_celery
+    build:
+      context: .
+    user: celery:celery
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
+    depends_on:
+      - "rabbitmq"
+    working_dir: /app/
+    command: celery -A manyfews worker --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+
+  # Django container
+  #
+  # Run commands within the running container using:
+  # docker exec -it <container_id> /bin/bash
+  # Use `docker ps` to find the <container_id>
+  django:
+    container_name: ${COMPOSE_PROJECT_NAME}_django
+    build:
+      context: .
+    # restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
+
+    depends_on:
+      - "postgres"
+      - "rabbitmq"
+      - "celery"
+    ports:
+      - 8000:8000
+
+    entrypoint:
+      [ "bash", "--login", "-c", 
+        "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+
+# You don't need this for production because the Dockerfile
+# does COPY . /app, but it can help for development!
+#    volumes:
+#      - "${PWD}/Data/:/app/Data"
+#      - "${PWD}/server/:/app/"
+
