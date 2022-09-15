@@ -132,7 +132,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
             self.live_server_url,
             "/accounts/login/",
         )
-        reset_button = self.selenium.find_element_by_class_name("btn-secondary")
+        reset_button = self.selenium.find_element(By.CLASS_NAME, "btn-secondary")
         reset_button.click()
 
         assert self.selenium.current_url == "%s%s" % (
@@ -219,7 +219,7 @@ class WebAppTestCase(StaticLiveServerTestCase):
         )
 
         # Scroll to bottom of page
-        self.selenium.find_element_by_tag_name("body").send_keys(Keys.END)
+        self.selenium.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.ID, "save-alert"))
         )
@@ -244,14 +244,14 @@ class WebAppTestCase(StaticLiveServerTestCase):
         )
 
         # Fill in form this time
-        select = Select(self.selenium.find_element_by_id("id_alert_type"))
+        select = Select(self.selenium.find_element(By.ID, "id_alert_type"))
         select.select_by_visible_text("SMS")
         self.selenium.find_element(By.ID, "id_new_phone_number").send_keys(
             "+441234567890"
         )
 
         # Scroll to bottom of page
-        self.selenium.find_element_by_tag_name("body").send_keys(Keys.END)
+        self.selenium.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.ID, "save-alert"))
         )
@@ -303,9 +303,9 @@ class WebAppTestCase(StaticLiveServerTestCase):
         )
         WebDriverWait(self.selenium, 10).until(EC.url_contains(edit_url))
         assert self.selenium.current_url.startswith(edit_url)
-        type_select = Select(self.selenium.find_element_by_id("id_alert_type"))
+        type_select = Select(self.selenium.find_element(By.ID, "id_alert_type"))
         assert type_select.first_selected_option.text == "SMS"
-        phone_select = Select(self.selenium.find_element_by_id("id_phone_number"))
+        phone_select = Select(self.selenium.find_element(By.ID, "id_phone_number"))
         assert phone_select.first_selected_option.text == "+441234567890"
 
         # Click delete - should give confirmation dialog and then delete
