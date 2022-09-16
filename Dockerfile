@@ -52,7 +52,7 @@ RUN python -c "import django"
 # The code to run when container is started:
 COPY entrypoint.sh ./
 COPY --from=build_node /app .
-COPY Data ./
+COPY Data /Data
 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
