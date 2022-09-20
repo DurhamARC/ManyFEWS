@@ -1,0 +1,90 @@
+version: '3.6'
+
+services:
+# Reverse proxy top-level container
+#
+  traefik:
+    container_name: ${COMPOSE_PROJECT_NAME}_traefik
+    depends_on:
+      - dockerproxy
+      - watchtower
+    image: traefik
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    expose:
+      - "8080"
+    restart: unless-stopped
+    volumes:
+      - ./conf/traefik/acme.json:/acme.json
+      - ./conf/traefik/traefik.toml:/traefik.toml
+      - ./conf/traefik/conf/:/conf/:ro
+      - traefik:/tmp
+    labels:
+# Uncomment to enable Traefik Dashboard on https://traefik.hostname/
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.api.entryPoints=https"
+#      - "traefik.http.routers.api.rule=Host(`traefik.${HOSTNAME}`)"
+#      - "traefik.http.routers.api.service=api@internal"
+#      - "traefik.http.routers.api.middlewares=auth"
+#      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$12$$6TYH11Sv7F3b55fceRXR0O7v7jEOu75a5Ltg4Ui1lF63qF5N8Eyey"
+#      - "traefik.http.routers.api.tls=true"
+#      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - default
+      - traefik
+
+  watchtower:
+    container_name: ${COMPOSE_PROJECT_NAME}_watchtower
+    command: --label-enable --cleanup --interval 300
+    image: containrrr/watchtower
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    network_mode: none
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  dockerproxy:
+    container_name: ${COMPOSE_PROJECT_NAME}_dockerproxy
+    depends_on:
+      - watchtower
+    image: tecnativa/docker-socket-proxy
+    restart: unless-stopped
+    environment:
+      CONTAINERS: 1
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - traefik
+    expose:
+      - "2375"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+ nginx:
+   labels:
+     - "traefik.enable=true"
+     - "traefik.docker.network=${COMPOSE_PROJECT_NAME}_traefik"
+     - "traefik.http.routers.web-http.entrypoints=http"
+     - "traefik.http.routers.web-http.rule=Host(`${HOSTNAME}`)"
+     - "traefik.http.routers.web-http.middlewares=httpsRedirect@file"
+     - "traefik.http.routers.web.entrypoints=https"
+     - "traefik.http.routers.web.rule=Host(`${HOSTNAME}`)"
+     - "traefik.http.routers.web.tls=true"
+     - "traefik.http.routers.web.tls.certresolver=letsencrypt"
+     - "traefik.http.routers.web.middlewares=secured@file"
+     - "traefik.http.services.web.loadbalancer.server.port=80"
+     - "com.centurylink.watchtower.enable=true"
+   networks:
+     - internal
+     - traefik
+
+  

@@ -1,0 +1,33 @@
+[log]
+  level = "INFO"
+
+[providers.docker]
+  exposedByDefault = false
+  endpoint = "tcp://dockerproxy:2375"
+  network = "traefik"
+
+[providers.file]
+  directory = "/conf/"
+
+#[metrics]
+#  [metrics.prometheus]
+#    addEntryPointsLabels = true
+#    addServicesLabels = true
+#    buckets = [0.1,0.3,1.2,5.0]
+
+[api]
+  dashboard = true
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.https]
+    address = ":443"
+
+[certificatesResolvers.letsencrypt.acme]
+  email = "samantha.finnigan@durham.ac.uk"
+  storage = "acme.json"
+#  caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+
+[certificatesResolvers.letsencrypt.acme.httpChallenge]
+  entryPoint = "http"
