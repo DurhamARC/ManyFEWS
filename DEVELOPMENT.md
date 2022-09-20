@@ -19,7 +19,7 @@ Make sure you have the following installed:
 3. Install and activate the ManyFEWS conda environment:
 
    ```bash
-   $ conda env create --file condaEnv/manyFEMSenv.yml
+   $ conda env create --file config/manyFEMSenv.yml
    $ conda activate ManyFEWS
    ```
 

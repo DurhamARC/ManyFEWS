@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------------
 # Build node / Frontend assets
 FROM node:alpine3.15 as build_node
+MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 
 # Based on https://cli.vuejs.org/guide/deployment.html#docker-nginx
 WORKDIR /app
@@ -19,8 +20,8 @@ RUN npm run build
 
 
 # ----------------------------------------------------------------------------
-# Deployment stage
-FROM continuumio/miniconda3:4.12.0 as deploy
+# Create a python docker container to run gunicorn and celery
+FROM continuumio/miniconda3:4.12.0 as manyfews
 MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 
 WORKDIR /app
@@ -38,7 +39,7 @@ RUN mkdir -p /var/log/celery/ /var/run/celery/ &&\
 
 # https://pythonspeed.com/articles/conda-docker-image-size/
 # Create the environment:
-COPY condaEnv/ .
+COPY ../config/manyFEMSenv.yml .
 RUN conda env create -f manyFEMSenv.yml
 
 # Make RUN commands use the new environment:
@@ -50,11 +51,23 @@ RUN echo "Make sure django is installed:"
 RUN python -c "import django"
 
 # The code to run when container is started:
-COPY entrypoint.sh ./
+COPY ../entrypoint.sh .
 COPY --from=build_node /app .
-COPY Data /Data
+COPY ../Data /Data
 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
-EXPOSE 8000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+# Export static files from Django for nginx
+ENV zentra_un=foo zentra_pw=bar STATIC_ROOT='/app/static'
+RUN mkdir static && \
+    python manage.py collectstatic --noinput
+
+EXPOSE 5000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:5000"]
+
+
+# ----------------------------------------------------------------------------
+# Deployment stage
+FROM nginx:stable-alpine as deploy
+COPY --from=manyfews /app/static /var/www/html/static
