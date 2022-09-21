@@ -25,7 +25,7 @@ FROM continuumio/miniconda3:4.12.0 as build_python
 
 # https://pythonspeed.com/articles/conda-docker-image-size/
 # Create the environment:
-COPY ../config/manyFEWSdocker.yml .
+COPY config/manyFEWSdocker.yml .
 RUN conda env create -f manyFEWSdocker.yml
 
 # Install conda-pack:
