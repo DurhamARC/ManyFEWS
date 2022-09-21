@@ -1,0 +1,30 @@
+[http.middlewares]
+  [http.middlewares.securityHeader.headers]
+	#frameDeny = true
+	customFrameOptionsValue = "SAMEORIGIN"
+	stsSeconds = 31536000
+    stsIncludeSubdomains = true
+    referrerPolicy = "no-referrer-when-downgrade"
+    contentTypeNosniff = true
+
+    [http.middlewares.securityHeader.headers.customResponseHeaders]
+      # Strip server identity if present
+      Server = ""
+
+  [http.middlewares.cacheHeader.headers]
+    accessControlMaxAge = 31536000
+
+  [http.middlewares.httpsRedirect.redirectscheme]
+    scheme = "https"
+    permanent = true
+
+  [http.middlewares.wwwRedirect.redirectregex]
+    permanent=true
+    regex="^https?://www.(.+)/(.*)"
+    replacement="https://${1}/${2}"
+
+  [http.middlewares.secured.chain]
+    middlewares = ["wwwRedirect", "securityHeader", "cacheHeader"]
+
+  [http.middlewares.headers.chain]
+    middlewares = ["securityHeader", "cacheHeader"]

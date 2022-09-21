@@ -36,7 +36,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: anaconda-client-env
-          environment-file: config/manyFEMSenv.yml
+          environment-file: config/manyFEWSenv.yml
           python-version: 3.9
           auto-activate-base: false
       - run: |
