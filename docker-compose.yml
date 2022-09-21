@@ -54,8 +54,12 @@ services:
       CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
     depends_on:
       - rabbitmq
-    working_dir: /app/
-    command: celery -A manyfews worker --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    entrypoint: [
+      "bash", "--login", "-c",
+      # We seem to need this running as user celery as .bashrc isn't picked up:
+      "source /venv/bin/activate && \
+       celery -A manyfews worker --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    ]
     networks:
       - backend
 
@@ -70,8 +74,6 @@ services:
     build:
       context: .
       target: manyfews
-      args:
-        zentra_un: $zentra_un
     restart: unless-stopped
     env_file:
       - .env
