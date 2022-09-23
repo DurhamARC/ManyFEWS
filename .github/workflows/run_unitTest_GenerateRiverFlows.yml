@@ -1,4 +1,4 @@
-name: set up python environment
+name: Unit Tests
 on: push
 
 jobs:
