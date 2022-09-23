@@ -44,7 +44,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           target: manyfews
-          tags: ${{ DOCKERHUB_REPO }}:platform-latest
+          tags: ${{ env.DOCKERHUB_REPO }}:platform-latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       -
@@ -55,7 +55,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           target: deploy
-          tags: ${{ DOCKERHUB_REPO }}:web-latest
+          tags: ${{ env.DOCKERHUB_REPO }}:web-latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       -
