@@ -6,7 +6,7 @@ services:
   rabbitmq:
     image: rabbitmq:3.10
     container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
-    restart: unless-stopped
+    restart: always
     environment:
       RABBITMQ_DEFAULT_USER: manyfews
       RABBITMQ_DEFAULT_PASS: ${rabbitmq_password}
@@ -20,7 +20,7 @@ services:
   postgres:
     image: postgis/postgis:14-3.2
     container_name: ${COMPOSE_PROJECT_NAME}_postgres
-    restart: unless-stopped
+    restart: always
     environment:
       # must specify password for PG Docker container image, see: https://registry.hub.docker.com/_/postgres?tab=description&page=1&name=10
       POSTGRES_DB: ${db_name}
@@ -47,7 +47,7 @@ services:
       context: .
       target: manyfews
     user: celery:celery
-    restart: unless-stopped
+    restart: always
     env_file:
       - .env
     environment:
@@ -74,7 +74,7 @@ services:
     build:
       context: .
       target: manyfews
-    restart: unless-stopped
+    restart: always
     env_file:
       - .env
     environment:
@@ -98,7 +98,7 @@ services:
       context: .
       target: deploy
     container_name: ${COMPOSE_PROJECT_NAME}_nginx
-    restart: unless-stopped
+    restart: always
     depends_on:
       - gunicorn
     volumes:

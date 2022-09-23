@@ -69,7 +69,15 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
 
+  gunicorn:
+    # "image" here overrides build: in docker-compose.yml, unless --build is passed :)
+    image: durhamarc/manyfews:platform-latest
+
+  celery:
+    image: durhamarc/manyfews:platform-latest
+
   nginx:
+    image: durhamarc/manyfews:web-latest
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${COMPOSE_PROJECT_NAME}_traefik"
