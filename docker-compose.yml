@@ -45,8 +45,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_celery
     build:
       context: .
-      target: manyfews
-    user: celery:celery
+      target: celery
     restart: always
     env_file:
       - .env
@@ -54,12 +53,6 @@ services:
       CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
     depends_on:
       - rabbitmq
-    entrypoint: [
-      "bash", "--login", "-c",
-      # We seem to need this running as user celery as .bashrc isn't picked up:
-      "source /venv/bin/activate && \
-       celery -A manyfews worker --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
-    ]
     networks:
       - backend
 
@@ -73,7 +66,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_gunicorn
     build:
       context: .
-      target: manyfews
+      target: gunicorn
     restart: always
     env_file:
       - .env
@@ -83,31 +76,24 @@ services:
       - postgres
       - rabbitmq
       - celery
-    entrypoint: [
-      "bash", "--login", "-c",
-      "python manage.py migrate && \
-      gunicorn --timeout=300 --log-file=- --bind=0.0.0.0:5000 manyfews.wsgi"
-    ]
     networks:
       - backend
 
 
   # Web server container
-  nginx:
+  web:
     build:
       context: .
-      target: deploy
+      target: web
     container_name: ${COMPOSE_PROJECT_NAME}_nginx
     restart: always
     depends_on:
       - gunicorn
-    volumes:
-      - "${PWD}/config/subsite.conf:/etc/nginx/conf.d/default.conf"
     networks:
       - backend
       - default
     ports:
-      - "80:80/tcp"
+      - "8000:80/tcp"
 
 
 # Define networks and volumes

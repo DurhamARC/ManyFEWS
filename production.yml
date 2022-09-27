@@ -71,13 +71,13 @@ services:
 
   gunicorn:
     # "image" here overrides build: in docker-compose.yml, unless --build is passed :)
-    image: durhamarc/manyfews:platform-latest
+    image: durhamarc/manyfews-gunicorn:latest
 
   celery:
-    image: durhamarc/manyfews:platform-latest
+    image: durhamarc/manyfews-celery:latest
 
-  nginx:
-    image: durhamarc/manyfews:web-latest
+  web:
+    image: durhamarc/manyfews-web:latest
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${COMPOSE_PROJECT_NAME}_traefik"
