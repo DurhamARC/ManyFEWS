@@ -15,7 +15,8 @@ COPY manyfews/package.json .
 RUN npm install
 
 # Copy files and build app
-COPY manyfews/ .
+COPY manyfews/webpack.config.js .
+COPY manyfews/webapp/assets webapp/assets
 RUN npm run build
 
 
@@ -53,7 +54,8 @@ FROM build_python as build_static
 # Set dummy variables for Zentra so that app doesn't error out
 # and the STATIC_ROOT var for the location to write static files
 ENV zentra_un=foo zentra_pw=bar STATIC_ROOT='/app/static'
-COPY --from=build_node /app .
+COPY manyfews/ .
+COPY --from=build_node /app/webapp/static/index-bundle.js /app/webapp/static/
 
 # Export static files from Django for nginx
 RUN source /venv/bin/activate && \
