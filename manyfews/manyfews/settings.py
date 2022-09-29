@@ -153,8 +153,11 @@ SECRET_KEY = env.str(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("debug", True)
 
+# Override these in production:
 ALLOWED_HOSTS = env.list("allowed_hosts", default=["localhost", "127.0.0.1"])
-
+CSRF_TRUSTED_ORIGINS = env.list(
+    "csrf_trusted_origins", default=["http://localhost:8000"]
+)
 
 # Application definition
 
