@@ -89,8 +89,8 @@ RUN echo "Make sure django is installed:" && \
 COPY manyfews/ .
 COPY Data /Data
 
-EXPOSE 5000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:5000"]
+CMD ["python manage.py migrate && \
+      python manage.py runserver 0.0.0.0:5000"]
 
 
 # ----------------------------------------------------------------------------
@@ -116,6 +116,8 @@ CMD ["celery -A manyfews worker --loglevel=INFO \
 # ----------------------------------------------------------------------------
 # Create gunicorn container
 FROM manyfews as gunicorn
+
+EXPOSE 5000
 CMD ["python manage.py migrate && \
       gunicorn --timeout=300 --log-file=- --bind=0.0.0.0:5000 manyfews.wsgi"]
 
