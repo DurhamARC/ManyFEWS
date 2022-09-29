@@ -151,3 +151,6 @@ manyfews/node_modules
 
 # Ignore file uploads
 manyfews/files
+
+# Ignore compose overrides used for development:
+/docker-compose.override.yml
