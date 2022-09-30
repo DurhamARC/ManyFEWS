@@ -53,6 +53,8 @@ services:
       CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
     depends_on:
       - rabbitmq
+    volumes:
+      - uploads:/app/files/params/
     networks:
       - backend
 
@@ -76,6 +78,8 @@ services:
       - postgres
       - rabbitmq
       - celery
+    volumes:
+      - uploads:/app/files/params/
     networks:
       - backend
 
@@ -103,3 +107,4 @@ networks:
 
 volumes:
   postgresql:
+  uploads:
