@@ -76,6 +76,9 @@ services:
   celery:
     image: durhamarc/manyfews-celery:latest
 
+  celery_beat:
+    image: durhamarc/manyfews-celery:latest
+
   web:
     image: durhamarc/manyfews-web:latest
     labels:

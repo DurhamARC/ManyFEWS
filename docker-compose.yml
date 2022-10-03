@@ -49,12 +49,28 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
     depends_on:
       - rabbitmq
     volumes:
       - uploads:/app/files/params/
+    networks:
+      - backend
+
+
+  # Handle scheduled tasks with Celery Beat
+  celery_beat:
+    build:
+      context: .
+      target: celery
+    restart: always
+    env_file:
+      - .env
+    command:
+      - "celery -A manyfews beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - ./project/:/usr/src/app/
+    depends_on:
+      - rabbitmq
     networks:
       - backend
 
@@ -72,8 +88,6 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      CELERY_BROKER_URL: "amqp://manyfews:${rabbitmq_password}@rabbitmq:5672/"
     depends_on:
       - postgres
       - rabbitmq
