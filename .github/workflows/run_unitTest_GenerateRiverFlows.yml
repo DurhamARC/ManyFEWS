@@ -28,33 +28,60 @@ jobs:
       - uses: psf/black@stable
         with:
           version: "22.3.0"
-      - name: Install dependencies
+
+      -
+        name: Install dependencies
         run: |
           sudo apt-get install binutils libproj-dev gdal-bin
-      - name: Install chromedriver
+
+      -
+        name: Cache Miniconda environment
+        uses: actions/cache@v3
+        with:
+          path: /usr/share/miniconda3/envs/anaconda-client-env
+          key: conda-${{ runner.os }}--${{ runner.arch }}--${{ steps.get-date.outputs.today }}-${{ hashFiles('config/manyFEWSenv.yml') }}-${{ env.CACHE_NUMBER }}
+        env:
+          # Increase this to manually invalidate the cache
+          CACHE_NUMBER: 0 +
+        id: cache
+
+      -
+        name: Install chromedriver
         uses: nanasess/setup-chromedriver@df428506cbc5d79cc069d20a689094d634c79e3e
       - uses: conda-incubator/setup-miniconda@v2
         with:
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
           activate-environment: anaconda-client-env
           environment-file: config/manyFEWSenv.yml
           python-version: 3.9
           auto-activate-base: false
+          use-mamba: true
+          use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
       - run: |
           conda info
           conda list
-      - name: Install npm
+
+      -
+        name: Install npm
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: Run Django migrations
+
+      -
+        name: Run Django migrations
         run: |
           cp ./manyfews/.env.CI ./manyfews/.env
           python manage.py migrate
         working-directory: manyfews
-      - name: Start XVFB
+
+      -
+        name: Start XVFB
         run: |
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-      - name: Run Django tests
+
+      -
+        name: Run Django tests
         env:
           zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
           zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
@@ -64,12 +91,16 @@ jobs:
           DISPLAY: :99
         run: python manage.py test
         working-directory: manyfews
-      - name: Check npm and webpack
+
+      -
+        name: Check npm and webpack
         run: |
           npm install
           npm run build
         working-directory: manyfews
-      - name: Check built assets are up-to-date
+
+      -
+        name: Check built assets are up-to-date
         run: |
           if [[ `git status --porcelain manyfews/webapp/static` ]]; then
             echo "Static files are not up to date:"
