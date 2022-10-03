@@ -73,9 +73,19 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV BASH_ENV "~/.bashrc"
+# Avoid <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)>
+ENV SSL_CERT_FILE /etc/ssl/certs/ca-certificates.crt
+
+# Replicate environment from miniconda image
+RUN apt-get update -q && \
+    apt-get install -q -y --no-install-recommends \
+        ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy /venv from the previous stage:
 COPY --from=build_python /venv /venv
+COPY --from=build_python /opt/conda/envs/ManyFEWS/share/eccodes/definitions /opt/conda/envs/ManyFEWS/share/eccodes/definitions
 ENV PATH /opt/conda/bin:$PATH
 
 # Make RUN commands use the new environment:
