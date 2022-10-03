@@ -170,6 +170,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "django_celery_beat",
+    "django_celery_results",
     "crispy_forms",
     "djgeojson",
     "leaflet",
@@ -253,7 +254,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = env.str("TIME_ZONE", "UTC")
 
 USE_I18N = True
 
@@ -282,4 +283,9 @@ LEAFLET_CONFIG = {
     "TILES": MAP_URL,
 }
 
+# Celery task configuration
+
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
+CELERY_RESULT_EXTENDED = True

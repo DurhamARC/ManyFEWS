@@ -122,7 +122,7 @@ USER celery
 RUN echo "source /venv/bin/activate" >> /home/celery/.bashrc
 
 CMD ["celery -A manyfews worker --loglevel=INFO \
-      --scheduler django_celery_beat.schedulers:DatabaseScheduler"]
+      --scheduler django_celery_beat.schedulers:DatabaseScheduler -E"]
 
 
 # ----------------------------------------------------------------------------
