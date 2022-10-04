@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
 
 import numpy as np
-from tqdm import trange
+from tqdm import tqdm, trange
 
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
@@ -103,7 +103,7 @@ def dailyModelUpdate():
     Part 1:
     1. Get the last day’s data from Zentra
     2. Read in the initial conditions from the previous day
-    3. Run the model for one day with the new data
+    3. Run the catchment model for one day with the new data
     4. Write the new initial conditions for today.
     Part 2
     1. Put together all of the time series from GEFS – there are 21 in total.
@@ -219,10 +219,14 @@ def send_alerts():
 
 @shared_task(name="Load parameters")
 def load_params_from_csv(filename, model_version_id):
-    with open(filename) as csvfile:
-        reader = csv.DictReader(csvfile)
 
-        for row in reader:
+    logger.info("Loading parameters from {}".format(filename))
+
+    total_rows = sum(1 for _ in open(filename))
+    logger.info("CSV file contains {} rows total".format(total_rows))
+
+    with open(filename) as csvfile:
+        for row in tqdm(csv.DictReader(csvfile), total=total_rows):
             if row["size"] == "":
                 continue
 

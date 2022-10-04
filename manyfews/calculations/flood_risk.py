@@ -202,6 +202,8 @@ def calculate_risk_percentages():
         .all()
     )
 
+    logger.info("Prediction counts total: {}".format(len(prediction_counts)))
+
     for p in prediction_counts:
         n = p["non_zero_count"]
         risk = 0
