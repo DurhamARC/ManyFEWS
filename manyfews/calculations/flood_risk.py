@@ -133,6 +133,13 @@ def aggregate_flood_models(date):
     ).aggregate(Extent("parameters__bounding_box"))
 
     extent = result["parameters__bounding_box__extent"]
+    logger.log(extent)
+
+    if extent is None:
+        raise Exception(
+            "Extent is None – no bounding box defined in Flood Model Parameters!"
+        )
+
     for i in [32, 64, 128, 256]:
         aggregate_flood_models_by_size.delay(date, current_model_version_id, extent, i)
 

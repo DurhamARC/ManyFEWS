@@ -120,11 +120,24 @@ def dailyModelUpdate():
     today = offsetTime(backDays=0)
 
     # Check whether zentra data has been downloaded
-    aggregateData = AggregatedZentraReading.objects.filter(
-        date__range=(yday[0], yday[1])
-    ).filter(location=location)
+    aggregateDataLength = len(
+        AggregatedZentraReading.objects.filter(date__range=(yday[0], yday[1])).filter(
+            location=location
+        )
+    )
 
-    if len(aggregateData) == 0:
+    logger.info(
+        """
+        ZentraDevice location: {}
+        Yesterday: {:%B %d, %Y}
+        Today: {:%B %d, %Y}
+        Zentra data records: {}
+    """.format(
+            location, yday[0], today[0], aggregateDataLength
+        )
+    )
+
+    if aggregateDataLength == 0:
         # Get the last day’s data from Zentra
         prepareZentra(backDay=1)
 
@@ -226,30 +239,40 @@ def load_params_from_csv(filename, model_version_id):
     logger.info("CSV file contains {} rows total".format(total_rows))
 
     with open(filename) as csvfile:
-        for row in tqdm(csv.DictReader(csvfile), total=total_rows):
+        for row in tqdm(csv.DictReader(csvfile), total=total_rows, mininterval=5):
             if row["size"] == "":
                 continue
 
             size_to_add = float(row["size"]) / 2
             x = float(row["lng"])
             y = float(row["lat"])
+
+            # Construct model object
             param = FloodModelParameters(
                 model_version_id=model_version_id,
                 bounding_box=Polygon.from_bbox(
                     (x - size_to_add, y - size_to_add, x + size_to_add, y + size_to_add)
                 ),
             )
-            is_non_zero = False
-            for i in range(12):
-                name = f"beta{i}"
-                if name in row:
-                    val = float(row[name])
-                    if val:
-                        is_non_zero = True
-                    setattr(param, name, val)
+
+            # Remove already used values from row data
+            [row.pop(i) for i in ["lng", "lat", "size"]]
+
+            # Check that the CSV file row isn't longer than we can insert into Model:
+            columns = len(row)
+            if columns > 12:
+                raise Exception(
+                    "More rows in the input CSV than columns in FloodModelParameters Model!"
+                )
+
+            # Insert other columns from CSV into beta parameters in Model
+            current = 0
+            for key in row:
+                setattr(param, "beta" + str(current), float(row[key]))
+                current += 1
 
             # Only save param if it has at least 1 non-zero beta value
-            if is_non_zero:
+            if columns > 0:
                 param.save()
 
     logger.info("Saved model parameters.")
