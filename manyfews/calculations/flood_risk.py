@@ -105,7 +105,9 @@ def predict_depths(forecast_time, param_ids, flow_values):
                 prediction.delete()
 
         if i % 1000 == 0:
-            logger.info(f"Calculated {i} of {len(param_ids)} pixels")
+            logger.info(
+                f"Calculated {i} of {len(param_ids)} pixels ({(i / len(param_ids)) * 100 :.1f}%)"
+            )
 
 
 def predict_depth(flow_values, param):
