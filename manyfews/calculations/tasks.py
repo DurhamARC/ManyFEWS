@@ -2,15 +2,15 @@ import csv
 
 from celery import Celery, shared_task
 
-
 from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
 
 import numpy as np
 from tqdm import tqdm, trange
 
-
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
+from zentra.api import ZentraToken
+
 from .alerts import send_phone_alerts_for_user
 from .flood_risk import run_all_flood_models, calculate_risk_percentages
 from .gefs import prepareGEFS
@@ -27,7 +27,7 @@ from .models import (
     ZentraDevice,
 )
 from .zentra import prepareZentra, offsetTime
-
+from .zentra_devices import ZentraDeviceMap
 
 app = Celery()
 
@@ -232,7 +232,6 @@ def send_alerts():
 
 @shared_task(name="Load parameters")
 def load_params_from_csv(filename, model_version_id):
-
     logger.info("Loading parameters from {}".format(filename))
 
     total_rows = sum(1 for _ in open(filename))
@@ -283,3 +282,10 @@ def load_params_from_csv(filename, model_version_id):
         model_version_id=current_model_version_id, depthprediction=None
     ).delete()
     logger.info("Deleted old model parameters")
+
+
+@shared_task(name="Import Zentra Devices")
+def import_zentra_devices():
+    token = ZentraToken(username=settings.ZENTRA_UN, password=settings.ZENTRA_PW)
+    device_map = ZentraDeviceMap(token=token)
+    device_map.save()
