@@ -28,6 +28,7 @@ services:
       POSTGRES_PASSWORD: ${db_password}
     ports:
       - 5432:5432
+    shm_size: 8g
     # Needed because the postgres container does not provide a healthcheck
     healthcheck:
       test: pg_isready
