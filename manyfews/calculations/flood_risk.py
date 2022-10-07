@@ -133,7 +133,6 @@ def aggregate_flood_models(date):
     ).aggregate(Extent("parameters__bounding_box"))
 
     extent = result["parameters__bounding_box__extent"]
-    logger.log(extent)
 
     if extent is None:
         raise Exception(
