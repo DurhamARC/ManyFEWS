@@ -289,3 +289,5 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "django-cache"
 CELERY_RESULT_EXTENDED = True
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 67108864  # 2^26 or ~ 64MB
