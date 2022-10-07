@@ -12,6 +12,7 @@ from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from zentra.api import ZentraToken
 
 from .alerts import send_phone_alerts_for_user
+from .bulk_create_manager import BulkCreateManager
 from .flood_risk import run_all_flood_models, calculate_risk_percentages
 from .gefs import prepareGEFS
 from .generate_river_flows import (
@@ -232,12 +233,17 @@ def send_alerts():
 
 @shared_task(name="Load parameters")
 def load_params_from_csv(filename, model_version_id):
-    logger.info("Loading parameters from {}".format(filename))
+    chunk_size = 10000
+    logger.info(f"Loading parameters from {filename}")
 
     total_rows = sum(1 for _ in open(filename))
-    logger.info("CSV file contains {} rows total".format(total_rows))
+    logger.info(
+        f"CSV file contains {total_rows} rows. Loading in chunks of {chunk_size}..."
+    )
 
     with open(filename) as csvfile:
+        bulk_mgr = BulkCreateManager(chunk_size=chunk_size)
+
         for row in tqdm(csv.DictReader(csvfile), total=total_rows, mininterval=5):
             if row["size"] == "":
                 continue
@@ -246,33 +252,40 @@ def load_params_from_csv(filename, model_version_id):
             x = float(row["lng"])
             y = float(row["lat"])
 
-            # Construct model object
-            param = FloodModelParameters(
-                model_version_id=model_version_id,
-                bounding_box=Polygon.from_bbox(
-                    (x - size_to_add, y - size_to_add, x + size_to_add, y + size_to_add)
-                ),
-            )
-
             # Remove already used values from row data
-            [row.pop(i) for i in ["lng", "lat", "size"]]
-
-            # Check that the CSV file row isn't longer than we can insert into Model:
-            columns = len(row)
-            if columns > 12:
-                raise Exception(
-                    "More rows in the input CSV than columns in FloodModelParameters Model!"
-                )
-
-            # Insert other columns from CSV into beta parameters in Model
-            current = 0
-            for key in row:
-                setattr(param, "beta" + str(current), float(row[key]))
-                current += 1
+            for i in ("lng", "lat", "size"):  # Use tuple O(1)
+                row.pop(i)
 
             # Only save param if it has at least 1 non-zero beta value
+            columns = len(row)
             if columns > 0:
-                param.save()
+                # Check that the CSV file row isn't longer than we can insert into Model:
+                if columns > 12:
+                    raise Exception(
+                        "More rows in the input CSV than columns in FloodModelParameters Model!"
+                    )
+
+                # Construct model object and add to database insert list
+                bulk_mgr.add(
+                    FloodModelParameters(
+                        model_version_id=model_version_id,
+                        bounding_box=Polygon.from_bbox(
+                            (
+                                x - size_to_add,
+                                y - size_to_add,
+                                x + size_to_add,
+                                y + size_to_add,
+                            )
+                        ),
+                        # Insert other columns from CSV into betaXX parameters in Model using variable expansion:
+                        **{
+                            f"beta{current}": float(row[key])
+                            for current, key in enumerate(row)
+                        },
+                    )
+                )
+
+        bulk_mgr.done()
 
     logger.info("Saved model parameters.")
 
