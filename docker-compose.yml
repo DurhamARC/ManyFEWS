@@ -122,4 +122,8 @@ networks:
 
 volumes:
   postgresql:
+    driver_opts:
+      type: none
+      device: ${PWD}/volumes/postgres
+      o: bind
   uploads:
