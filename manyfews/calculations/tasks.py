@@ -233,16 +233,15 @@ def send_alerts():
 
 @shared_task(name="Load parameters")
 def load_params_from_csv(filename, model_version_id):
-    chunk_size = 10000
     logger.info(f"Loading parameters from {filename}")
 
     total_rows = sum(1 for _ in open(filename))
     logger.info(
-        f"CSV file contains {total_rows} rows. Loading in chunks of {chunk_size}..."
+        f"CSV file contains {total_rows} rows. Loading in chunks of {settings.DATABASE_CHUNK_SIZE}..."
     )
 
     with open(filename) as csvfile:
-        bulk_mgr = BulkCreateManager(chunk_size=chunk_size)
+        bulk_mgr = BulkCreateManager(chunk_size=settings.DATABASE_CHUNK_SIZE)
 
         for row in tqdm(csv.DictReader(csvfile), total=total_rows, mininterval=5):
             if row["size"] == "":
