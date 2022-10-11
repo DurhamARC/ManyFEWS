@@ -1,0 +1,58 @@
+version: '3.6'
+
+services:
+
+  # RabbitMQ message queue service for Celery task broker
+  rabbitmq:
+    image: rabbitmq:3.10
+    container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: manyfews
+      RABBITMQ_DEFAULT_PASS: ${rabbitmq_password}
+    ports:
+       - "5672:5672" # AMQP, no TLS
+    networks:
+      - backend
+
+
+  # Gunicorn container running Django app with uWSGI
+  #
+  # Run commands within the running container using:
+  # docker exec -it <container_id> /bin/bash
+  # Use `docker ps` to find the <container_id>
+  gunicorn:
+    container_name: ${COMPOSE_PROJECT_NAME}_gunicorn
+    image: durhamarc/manyfews-gunicorn:azure-latest
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbitmq
+      - celery
+    volumes:
+      - uploads:/app/files/params/
+    networks:
+      - backend
+
+
+  # Web server container
+  web:
+    image: durhamarc/manyfews-web:azure-latest
+    container_name: ${COMPOSE_PROJECT_NAME}_web
+    restart: always
+    depends_on:
+      - gunicorn
+    networks:
+      - backend
+      - default
+
+
+# Define networks and volumes
+networks:
+  backend:
+  default:
+
+volumes:
+  uploads:

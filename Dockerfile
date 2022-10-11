@@ -3,12 +3,12 @@
 FROM node:alpine3.15 as build_node
 MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 
-# Based on https://cli.vuejs.org/guide/deployment.html#docker-nginx
-WORKDIR /app
-
 # Install Python (required for node-gyp)
 RUN apk add --update python3 make g++ && \
     rm -rf /var/cache/apk/*
+
+# Based on https://cli.vuejs.org/guide/deployment.html#docker-nginx
+WORKDIR /app
 
 # Install app dependencies
 COPY manyfews/package.json .

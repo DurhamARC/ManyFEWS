@@ -1,29 +1,180 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
+#
+# Durham ARC Azure Pipeline for ManyFEWS Docker images
+#
 trigger:
 - main
 
 resources:
 - repo: self
 
+# Configure variables used by the build stages
 variables:
-  tag: '$(Build.BuildId)'
+  tag: 'azure-$(Build.BuildId)'
+  dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+  dockerRegistryServiceConnection: 'DurhamARCDockerHub'
+  imageRepository: 'durhamarc/manyfews'
+  azureSubscriptionEndpoint: 'svc-con-awh'
 
 stages:
 - stage: Build
   displayName: Build image
   jobs:
-  - job: Build
-    displayName: Build
+  -
+    job: BuildAndPush
+    displayName: Build and Push ManyFEWS docker images
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: Docker@2
-      displayName: Build an image
+
+    #
+    # Log in to DockerHub:
+    -
+      task: Docker@2
+      displayName: Login to DockerHub
+      inputs:
+        command: login
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+
+    #
+    # Set up the cache for building Docker containers
+    # See: https://learn.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops#docker-images
+    -
+      task: Cache@2
+      displayName: Prepare Cache for Docker
+      inputs:
+        key: 'docker | "$(Agent.OS)" | cache'
+        path: $(Pipeline.Workspace)/docker
+        # Variable cacheHitVar will be set to 'true' when the cache is restored:
+        cacheHitVar: CACHE_RESTORED
+
+    -
+      script: |
+        docker load -i $(Pipeline.Workspace)/docker/cache.tar
+      displayName: Docker restore
+      condition: and(not(canceled()), eq(variables.CACHE_RESTORED, 'true'))
+
+    #
+    # Build the Docker image for the Gunicorn container
+    # This needs to be done in two steps as we cannot pass arguments
+    # into the Docker task with command 'buildAndPush'.
+    -
+      task: Docker@2
+      displayName: Build Gunicorn python image
+      env:
+        DOCKER_BUILDKIT: 1
       inputs:
         command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        arguments: '--target gunicorn'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)-gunicorn
+        dockerfile: $(dockerfile)
         tags: |
-          $(tag)
+          latest,azure-latest,$(tag)
+
+    #
+    # Push the Gunicorn image to DockerHub
+    -
+      task: Docker@2
+      displayName: Push Gunicorn python image
+      inputs:
+        command: push
+        repository: $(imageRepository)-gunicorn
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest,azure-latest,$(tag)
+
+    #
+    # Now do the same for the Celery container:
+    # Build the celery python image:
+    -
+      task: Docker@2
+      displayName: Build Celery python image
+      env:
+        DOCKER_BUILDKIT: 1
+      inputs:
+        command: build
+        arguments: '--target celery'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)-celery
+        dockerfile: $(dockerfile)
+        tags: |
+          latest,azure-latest,$(tag)
+
+    #
+    # Push the Celery image to DockerHub
+    -
+      task: Docker@2
+      displayName: Push Celery python image
+      inputs:
+        command: push
+        repository: $(imageRepository)-celery
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest,azure-latest,$(tag)
+
+    #
+    # And finally, for the web container:
+    # Build the web python image:
+    -
+      task: Docker@2
+      displayName: Build Web/Nginx python image
+      env:
+        DOCKER_BUILDKIT: 1
+      inputs:
+        command: build
+        arguments: '--target web'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)-web
+        dockerfile: $(dockerfile)
+        tags: |
+          latest,azure-latest,$(tag)
+
+    #
+    # Push the Celery image to DockerHub
+    -
+      task: Docker@2
+      displayName: Push Web/Nginx python image
+      inputs:
+        command: push
+        repository: $(imageRepository)-web
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest,azure-latest,$(tag)
+
+    #
+    # Save Cache for Docker images
+    -
+      script: |
+        mkdir -p $(Pipeline.Workspace)/docker
+        docker save -o $(Pipeline.Workspace)/docker/cache.tar \
+          $(imageRepository)-web:$(tag) \
+          $(imageRepository)-gunicorn:$(tag) \
+          $(imageRepository)-celery:$(tag)
+      displayName: Docker save
+      condition: and(not(canceled()), or(failed(), ne(variables.CACHE_RESTORED, 'true')))
+
+
+- stage: Deploy
+  displayName: Deploy stack to App Service environment
+  # Deploy to Azure App service environment with Docker Compose
+  jobs:
+  - job: Deploy
+    displayName: Deploy stack using docker-compose
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+    -
+      task: DockerCompose@0
+      displayName: Deploy ManyFEWS services on Azure ASE Endpoint
+      inputs:
+        action: Run services
+        containerregistrytype: Container Registry
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+        dockerComposeFile: docker-compose.azure.yml
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        buildImages: false
+        abortOnContainerExit: true
+        detached: false
