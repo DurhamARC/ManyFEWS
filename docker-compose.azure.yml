@@ -25,8 +25,48 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_gunicorn
     image: durhamarc/manyfews-gunicorn:azure-latest
     restart: always
-    env_file:
-      - .env
+    environment:
+      # Zentra acccount credentials
+      ZENTRA_UN: ${ZENTRA_UN}
+      ZENTRA_PW: ${ZENTRA_PW}
+      
+      MAP_URL: ${MAP_URL}
+      SITE_URL: ${SITE_URL}
+      
+      # Postgres database credentials
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      
+      # External mailer credentials
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      
+      # Twilio account credentials:
+      # see https://console.twilio.com/
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+      TWILIO_VERIFICATION_SID: ${TWILIO_VERIFICATION_SID}
+      
+      # Model values
+      LAT_VALUE: ${LAT_VALUE}
+      LON_VALUE: ${LON_VALUE}
+      INITIAL_BACKTIME: ${INITIAL_BACKTIME}
+      STATION_SN: ${STATION_SN}
+      GEFS_FORECAST_DAYS: ${GEFS_FORECAST_DAYS}
+
+      # Celery broker connection details
+      CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/
+
+      # Django deployment settings
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS}
+      DEBUG: "False"
     depends_on:
       - postgres
       - rabbitmq
