@@ -22,21 +22,21 @@ environ.Env.read_env()
 # =======================================================================================
 
 # Database details
-DB_NAME = env.str("db_name", "manyfews")
-DB_USER = env.str("db_user", "manyfews")
-DB_PASSWORD = env.str("db_password", "manyfews")
-DB_HOST = env.str("db_host", "localhost")
-DB_PORT = env.int("db_port", 5432)
+DB_NAME = env.str("DB_NAME", "manyfews")
+DB_USER = env.str("DB_USER", "manyfews")
+DB_PASSWORD = env.str("DB_PASSWORD", "manyfews")
+DB_HOST = env.str("DB_HOST", "localhost")
+DB_PORT = env.int("DB_PORT", 5432)
 
 # Zentra account and station details
-ZENTRA_UN = env.str("zentra_un")
-ZENTRA_PW = env.str("zentra_pw")
-INITIAL_BACKTIME = env.int("initial_backTime", 365)
-STATION_SN = env.str("station_SN", "06-02047")
+ZENTRA_UN = env.str("ZENTRA_UN")
+ZENTRA_PW = env.str("ZENTRA_PW")
+INITIAL_BACKTIME = env.int("INITIAL_BACKTIME", 365)
+STATION_SN = env.str("STATION_SN", "06-02047")
 
 # defaults value when zentra does not report a value.
 DEFAULT_RH = env.tuple(
-    "default_rh",
+    "DEFAULT_RH",
     float,
     (
         98.14,
@@ -55,7 +55,7 @@ DEFAULT_RH = env.tuple(
 )
 
 DEFAULT_AIR_TEMP = env.tuple(
-    "default_air_temp",
+    "DEFAULT_AIR_TEMP",
     float,
     (
         23.83,
@@ -73,66 +73,66 @@ DEFAULT_AIR_TEMP = env.tuple(
     ),
 )
 DEFAULT_PRECIP = env.tuple(
-    "default_precip",
+    "DEFAULT_PRECIP",
     float,
     (11.98, 10.42, 13.08, 11.43, 4.94, 4.63, 0.09, 0.19, 0.37, 4.90, 6.63, 8.62),
 )
 
 
 # GEFS weather forecast details
-MODEL_TIMESTEP = env.float("model_timestep", 0.25)
-GEFS_FORECAST_DAYS = env.int("gefs_forecastDays", 16)
-LAT_VALUE = env.float("latValue", -7.05)
-LON_VALUE = env.float("lonValue", 175)
+MODEL_TIMESTEP = env.float("MODEL_TIMESTEP", 0.25)
+GEFS_FORECAST_DAYS = env.int("GEFS_FORECAST_DAYS", 16)
+LAT_VALUE = env.float("LAT_VALUE", -7.05)
+LON_VALUE = env.float("LON_VALUE", 175)
 
 # Thresholds for number of m^2 cells that count towards flood risk
 # CHANNEL_CELL_COUNT is number of cells in the river channel
-CHANNEL_CELL_COUNT = env.int("channel_cell_count", 93794)
+CHANNEL_CELL_COUNT = env.int("CHANNEL_CELL_COUNT", 93794)
 # LARGE_FLOOD_COUNT is number of cells that represent a large area of flooding
-LARGE_FLOOD_COUNT = env.int("large_flood_count", 1440811)
+LARGE_FLOOD_COUNT = env.int("LARGE_FLOOD_COUNT", 1440811)
 
 FLOOD_MODEL_PARAMETERS = env.tuple(
-    "flood_model_parameters", float, (1, 1, 0.12, 0.399, 0.00395, 0.00565)
+    "FLOOD_MODEL_PARAMETERS", float, (1, 1, 0.12, 0.399, 0.00395, 0.00565)
 )
 
 # Leaflet map tiles URL (including API key if needed)
 MAP_URL = env.str(
-    "map_url", "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
+    "MAP_URL", "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"
 )
-MAP_CENTER = env.tuple("map_center", float, (-7.050465729629079, 107.75813455787436))
+MAP_CENTER = env.tuple("MAP_CENTER", float, (-7.050465729629079, 107.75813455787436))
 
 # Email settings
-EMAIL_HOST = env.str("email_host", "smtp.gmail.com")
-EMAIL_PORT = env.int("email_port", 465)
-EMAIL_HOST_USER = env.str("email_host_user", "")
-EMAIL_HOST_PASSWORD = env.str("email_host_password", "")
-EMAIL_USE_SSL = env.bool("email_use_ssl", True)
+EMAIL_HOST = env.str("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", 465)
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", True)
 
 # Twilio settings (for SMS/WhatsApp)
-TWILIO_ACCOUNT_SID = env.str("twilio_account_sid", "")
-TWILIO_AUTH_TOKEN = env.str("twilio_auth_token", "")
-TWILIO_PHONE_NUMBER = env.str("twilio_phone_number", "")
-TWILIO_VERIFICATION_SID = env.str("twilio_verification_sid", "")
+TWILIO_ACCOUNT_SID = env.str("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN = env.str("TWILIO_AUTH_TOKEN", "")
+TWILIO_PHONE_NUMBER = env.str("TWILIO_PHONE_NUMBER", "")
+TWILIO_VERIFICATION_SID = env.str("TWILIO_VERIFICATION_SID", "")
 
 # Site URL (or short URL) for use in messages
-SITE_URL = env.str("site_url", "http://localhost:8000")
+SITE_URL = env.str("SITE_URL", "http://localhost:8000")
 
 # Text to use in alerts. Will be populated with max_depth, start and end dates and SITE_URL
 ALERT_TEXT = env.str(
-    "alert_text",
+    "ALERT_TEXT",
     "Floods up to {max_depth}m predicted from {start_date} to {end_date}. See {site_url} for details.",
 )
 # Date string to use in alerts: for formats see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
-ALERT_DATE_FORMAT = env.str("alert_date_format", "%b %d")
-ALERT_DEPTH_THRESHOLD = env.float("alert_depth_threshold", 0.1)
+ALERT_DATE_FORMAT = env.str("ALERT_DATE_FORMAT", "%b %d")
+ALERT_DEPTH_THRESHOLD = env.float("ALERT_DEPTH_THRESHOLD", 0.1)
 
 # Location to store parameter files uploaded
 MEDIA_ROOT = env.str(
-    "media_root", Path(__file__).resolve().parent.parent.joinpath("files")
+    "MEDIA_ROOT", Path(__file__).resolve().parent.parent.joinpath("files")
 )
 
 # Maximum depth for floods in m (used to determine colour bands for flood depths)
-MAX_FLOOD_DEPTH = env.float("max_flood_depth", 2)
+MAX_FLOOD_DEPTH = env.float("MAX_FLOOD_DEPTH", 2)
 
 # =======================================================================================
 # End of user configurable settings
@@ -147,16 +147,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str(
-    "secret_key", "django-insecure-jau(^3c!z+wl6#zsz!%bu1$v7ks48dosj1#=l=^+58)r1y2n8b"
+    "SECRET_KEY", "django-insecure-jau(^3c!z+wl6#zsz!%bu1$v7ks48dosj1#=l=^+58)r1y2n8b"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("debug", True)
+DEBUG = env.bool("DEBUG", True)
 
 # Override these in production:
-ALLOWED_HOSTS = env.list("allowed_hosts", default=["localhost", "127.0.0.1"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 CSRF_TRUSTED_ORIGINS = env.list(
-    "csrf_trusted_origins", default=["http://localhost:8000"]
+    "CSRF_TRUSTED_ORIGINS", default=["http://localhost:8000"]
 )
 
 # Application definition

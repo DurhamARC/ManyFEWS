@@ -8,8 +8,8 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
     restart: always
     environment:
-      RABBITMQ_DEFAULT_USER: manyfews
-      RABBITMQ_DEFAULT_PASS: ${rabbitmq_password}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     # ports:
     #   - 5672:5672 # AMQP no TLS
     networks:
@@ -23,9 +23,10 @@ services:
     restart: always
     environment:
       # must specify password for PG Docker container image, see: https://registry.hub.docker.com/_/postgres?tab=description&page=1&name=10
-      POSTGRES_DB: ${db_name}
-      POSTGRES_USER: ${db_user}
-      POSTGRES_PASSWORD: ${db_password}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGUSER: ${DB_USER}
     ports:
       - 5432:5432
     shm_size: 8g

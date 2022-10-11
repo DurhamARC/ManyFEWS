@@ -83,11 +83,11 @@ jobs:
       -
         name: Run Django tests
         env:
-          zentra_un: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
-          zentra_pw: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
-          map_url: ${{ secrets.MAP_URL }}
-          email_host_user: ${{ secrets.EMAIL_HOST_USER }}
-          email_host_password: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          ZENTRA_UN: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
+          ZENTRA_PW: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
+          MAP_URL: ${{ secrets.MAP_URL }}
+          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
           DISPLAY: :99
         run: python manage.py test
         working-directory: manyfews
