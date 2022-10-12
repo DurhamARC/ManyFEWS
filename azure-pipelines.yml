@@ -2,7 +2,9 @@
 # Durham ARC Azure Pipeline for ManyFEWS Docker images
 #
 trigger:
-- main
+  branches:
+    include:
+    - release
 
 resources:
 - repo: self
