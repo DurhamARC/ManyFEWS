@@ -1,3 +1,31 @@
+#
+# Dockerfile: Build containers for the ManyFEWS application
+#
+# This is a multistage Dockerfile which produces a set of containers
+# for the application. The stages are as follows:
+#
+#  1. (build_node)   – Build Node.js assets for the front-end website
+#  2. (build_python) - Install python dependencies with conda and compress them
+#  3. (build_static) - Export all static resources from Django
+#
+# These three containers are discarded at runtime and only produce compressed
+# assets which are picked up by the following stages:
+#
+#  4. (manyfews)     - Create base image for the python containers
+#  5. (celery)       - Configure the manyfews base image for running Celery,
+#                        which provides a task queue to run jobs
+#  6. (gunicorn)     - Configure the manyfews base image for running Gunicorn,
+#                        used as a WSGI gateway for the Django app
+#  7. (web)          - Nginx container to serve static files for the application
+#                        and forward API requests to the WSGI server.
+#
+# Using a multistage Dockerfile increases the complexity of the build process,
+#  but results in a significantly smaller final image. This is important when
+#  we push the app up to a container repo, as excluding all the Conda and Node
+#  dependencies saves about ~1.7GB of space (final image ~300MB instead of 2G).
+#
+# See: https://docs.docker.com/build/building/multi-stage/ for more info.
+#
 # ----------------------------------------------------------------------------
 # Build node / Frontend assets
 FROM node:alpine3.15 as build_node
