@@ -10,12 +10,21 @@ resources:
 - repo: self
 
 # Configure variables used by the build stages
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups
 variables:
-  tag: 'azure-$(Build.BuildId)'
-  dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-  dockerRegistryServiceConnection: 'DurhamARCDockerHub'
-  imageRepository: 'durhamarc/manyfews'
-  azureSubscriptionEndpoint: 'svc-con-awh'
+- group: manyfews-deployment
+
+- name: tag
+  value: 'azure-$(Build.BuildId)'
+- name: dockerfile
+  value: '$(Build.SourcesDirectory)/Dockerfile'
+- name: dockerRegistryServiceConnection
+  value: 'DurhamARCDockerHub'
+- name: imageRepository
+  value: 'durhamarc/manyfews'
+- name: azureSubscriptionEndpoint
+  value: 'svc-con-awh'
+
 
 stages:
 - stage: Build
