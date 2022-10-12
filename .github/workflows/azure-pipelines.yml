@@ -220,7 +220,7 @@ stages:
         containerregistrytype: Container Registry
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-        dockerComposeFile: .github/pipelines/docker-compose.azure.yml
+        dockerComposeFile: .github/workflows/docker-compose.azure.yml
         dockerComposeCommand: 'up -d'
         projectName: $(Build.Repository.Name)
         qualifyImageNames: true
