@@ -142,6 +142,8 @@ dmypy.json
 
 # Make sure the .env file is not committed
 /manyfews/manyfews/.env
+.env
+.env.prod
 
 # node_modules dir
 manyfews/node_modules
@@ -154,3 +156,4 @@ manyfews/files
 
 # Ignore compose overrides used for development:
 /docker-compose.override.yml
+
