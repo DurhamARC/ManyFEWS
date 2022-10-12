@@ -53,7 +53,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 FROM build_python as build_static
 # Set dummy variables for Zentra so that app doesn't error out
 # and the STATIC_ROOT var for the location to write static files
-ENV zentra_un=foo zentra_pw=bar STATIC_ROOT='/app/static'
+ENV ZENTRA_UN=foo ZENTRA_PW=bar STATIC_ROOT='/app/static'
 COPY manyfews/ .
 COPY --from=build_node /app/webapp/static/index-bundle.js /app/webapp/static/
 
