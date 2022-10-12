@@ -165,11 +165,11 @@ stages:
       condition: and(not(canceled()), or(failed(), ne(variables.CACHE_RESTORED, 'true')))
 
 
-- stage: Deploy
-  displayName: Deploy stack to App Service environment
+- stage: Test
+  displayName: Test docker-compose configuration
   # Deploy to Azure App service environment with Docker Compose
   jobs:
-  - job: Deploy
+  - job: Test
     displayName: Deploy stack using docker-compose
     pool:
       vmImage: ubuntu-latest
@@ -224,12 +224,13 @@ stages:
         # Django deployment settings
         ALLOWED_HOSTS: $(ALLOWED_HOSTS)
         CSRF_TRUSTED_ORIGINS: $(CSRF_TRUSTED_ORIGINS)
+
       inputs:
         action: Run services
         containerregistrytype: Container Registry
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-        dockerComposeFile: .github/workflows/docker-compose.azure.yml
+        dockerComposeFile: .github/azure/docker-compose.azure.yml
         dockerComposeCommand: 'up -d'
         projectName: $(Build.Repository.Name)
         qualifyImageNames: true
