@@ -125,7 +125,7 @@ stages:
 
     #
     # And finally, for the web container:
-    # Build the web python image:
+    # Build the web image:
     -
       task: Docker@2
       displayName: Build Web/Nginx python image
@@ -141,7 +141,7 @@ stages:
           latest,azure-latest,$(tag)
 
     #
-    # Push the Celery image to DockerHub
+    # Push the Web image to DockerHub
     -
       task: Docker@2
       displayName: Push Web/Nginx python image
@@ -170,14 +170,14 @@ stages:
   # Deploy to Azure App service environment with Docker Compose
   jobs:
   - job: Test
-    displayName: Deploy stack using docker-compose
+    displayName: Test deployment using docker-compose
     pool:
       vmImage: ubuntu-latest
     steps:
 
     -
       task: DockerCompose@0
-      displayName: Deploy ManyFEWS services on Azure ASE Endpoint
+      displayName: Run docker-compose to check config is correct
       env:
         COMPOSE_PROJECT_NAME: $(COMPOSE_PROJECT_NAME)
 
