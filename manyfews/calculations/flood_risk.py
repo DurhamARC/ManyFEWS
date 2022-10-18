@@ -9,6 +9,7 @@ from django.db.models import Avg, Count, Max
 from django.utils import timezone
 import numpy as np
 
+from .bulk_create_manager import BulkCreateUpdateManager
 from .models import (
     AggregatedDepthPrediction,
     DepthPrediction,
@@ -17,7 +18,6 @@ from .models import (
     PercentageFloodRisk,
     RiverFlowCalculationOutput,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def run_all_flood_models():
     # Raise an error and stop the program if outputs_by_time is empty
     if len(outputs_by_time) == 0:
         raise Exception(
-            "sorry, no River Flow result, please check the task dailyModelUpdate run properly."
+            "No River Flow result found. Check the task dailyModelUpdate ran properly."
         )
 
     logger.info(f"Found {len(outputs_by_time)} sets of output data.")
@@ -86,6 +86,17 @@ def run_flood_model_for_time(prediction_date, forecast_time):
 
 @shared_task(name="Predict depths for batch of cells")
 def predict_depths(forecast_time, param_ids, flow_values):
+    bulk_mgr = BulkCreateUpdateManager(
+        chunk_size=settings.DATABASE_CHUNK_SIZE,
+        fields=(
+            "model_version",
+            "median_depth",
+            "lower_centile",
+            "mid_lower_centile",
+            "upper_centile",
+        ),
+    )
+
     for i, param_id in enumerate(param_ids):
         param = FloodModelParameters.objects.get(id=param_id)
 
@@ -101,24 +112,37 @@ def predict_depths(forecast_time, param_ids, flow_values):
             date=forecast_time, parameters_id=param_id
         ).first()
 
-        if upper_centile > 0:
-            if not prediction:
-                prediction = DepthPrediction(date=forecast_time, parameters_id=param_id)
-
-            prediction.model_version = param.model_version
-            prediction.median_depth = median
-            prediction.lower_centile = lower_centile
-            prediction.mid_lower_centile = mid_lower_centile
-            prediction.upper_centile = upper_centile
-            prediction.save()
-        else:
+        if upper_centile <= 0:
             if prediction:
                 prediction.delete()
+        else:
+            if not prediction:  # create:
+                bulk_mgr.add(
+                    DepthPrediction(
+                        date=forecast_time,
+                        parameters_id=param_id,
+                        model_version=param.model_version,
+                        median_depth=median,
+                        lower_centile=lower_centile,
+                        mid_lower_centile=mid_lower_centile,
+                        upper_centile=upper_centile,
+                    )
+                )
+
+            else:  # update:
+                prediction.model_version = param.model_version
+                prediction.median_depth = median
+                prediction.lower_centile = lower_centile
+                prediction.mid_lower_centile = mid_lower_centile
+                prediction.upper_centile = upper_centile
+                bulk_mgr.update(prediction)
 
         if i % 1000 == 0:
             logger.info(
                 f"Calculated {i} of {len(param_ids)} pixels ({(i / len(param_ids)) * 100 :.1f}%)"
             )
+
+    bulk_mgr.done()
 
 
 def predict_depth(flow_values, param):
@@ -172,6 +196,18 @@ def aggregate_flood_models(date):
 @shared_task(name="aggregate_flood_models_by_size")
 def aggregate_flood_models_by_size(date, model_version_id, extent, i):
     logger.info(f"Aggregating for date {date} level {i}")
+    bulk_mgr = BulkCreateUpdateManager(
+        chunk_size=settings.DATABASE_CHUNK_SIZE,
+        fields=(
+            "model_version_id",
+            "median_depth",
+            "lower_centile",
+            "mid_lower_centile",
+            "upper_centile",
+            "aggregation_level",
+        ),
+    )
+
     total_width = extent[2] - extent[0]
     total_height = extent[3] - extent[1]
     block_size = min(total_height, total_width) / i
@@ -203,20 +239,33 @@ def aggregate_flood_models_by_size(date, model_version_id, extent, i):
                 ).first()
 
                 if not agg:
-                    agg = AggregatedDepthPrediction(date=date, bounding_box=new_bb)
-
-                agg.model_version_id = model_version_id
-                agg.median_depth = values["median_depth__avg"]
-                agg.lower_centile = values["lower_centile__avg"]
-                agg.mid_lower_centile = values["mid_lower_centile__avg"]
-                agg.upper_centile = values["upper_centile__avg"]
-                agg.aggregation_level = i
-                agg.save()
+                    bulk_mgr.add(
+                        AggregatedDepthPrediction(
+                            date=date,
+                            bounding_box=new_bb,
+                            model_version_id=model_version_id,
+                            median_depth=values["median_depth__avg"],
+                            lower_centile=values["lower_centile__avg"],
+                            mid_lower_centile=values["mid_lower_centile__avg"],
+                            upper_centile=values["upper_centile__avg"],
+                            aggregation_level=i,
+                        )
+                    )
+                else:
+                    agg.model_version_id = model_version_id
+                    agg.median_depth = values["median_depth__avg"]
+                    agg.lower_centile = values["lower_centile__avg"]
+                    agg.mid_lower_centile = values["mid_lower_centile__avg"]
+                    agg.upper_centile = values["upper_centile__avg"]
+                    agg.aggregation_level = i
+                    bulk_mgr.update(agg)
 
             x += block_size
 
         x = extent[0]
         y += block_size
+
+    bulk_mgr.done()
 
 
 @shared_task(name="calculate_risk_percentages")
