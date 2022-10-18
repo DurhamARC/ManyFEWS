@@ -84,6 +84,15 @@ services:
       - backend
       - default
 
+  # Postgres container
+  postgres:
+    image: postgis/postgis:14-3.2
+    environment:
+      POSTGRES_DBNAME: ${DB_NAME}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
 
 # Define networks and volumes
 networks:
