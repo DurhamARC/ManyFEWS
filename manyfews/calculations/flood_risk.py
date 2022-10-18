@@ -18,6 +18,8 @@ from .models import (
     RiverFlowCalculationOutput,
 )
 
+from .bulk_create_manager import BulkCreateManager, BulkUpdateManager
+
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +77,20 @@ def run_flood_model_for_time(prediction_date, forecast_time):
 
 @shared_task(name="Predict depths for batch of cells")
 def predict_depths(forecast_time, param_ids, flow_values):
+    bulk_create_manager = BulkCreateManager(chunk_size=settings.DATABASE_CHUNK_SIZE)
+    bulk_update_manager = BulkUpdateManager(
+        chunk_size=settings.DATABASE_CHUNK_SIZE,
+        update_fields=[
+            "model_version",
+            "median_depth",
+            "lower_centile",
+            "mid_lower_centile",
+            "upper_centile",
+        ],
+    )
+    predictions_to_delete = DepthPrediction.objects.none()
+    # counter is better option compared to len() or count() in case of appending empty QS
+    delete_counter = 0
     for i, param_id in enumerate(param_ids):
         param = FloodModelParameters.objects.get(id=param_id)
 
@@ -99,15 +115,27 @@ def predict_depths(forecast_time, param_ids, flow_values):
             prediction.lower_centile = lower_centile
             prediction.mid_lower_centile = mid_lower_centile
             prediction.upper_centile = upper_centile
-            prediction.save()
+            
+            if not prediction.pk:
+                bulk_update_manager.add(prediction)
+            else:
+                bulk_create_manager.add(prediction)
+
         else:
             if prediction:
-                prediction.delete()
+                predictions_to_delete |= prediction
+                delete_counter += 1
+                if delete_counter > settings.DATABASE_CHUNK_SIZE:
+                    predictions_to_delete.delete()
+                    predictions_to_delete = DepthPrediction.objects.none()
 
         if i % 1000 == 0:
             logger.info(
                 f"Calculated {i} of {len(param_ids)} pixels ({(i / len(param_ids)) * 100 :.1f}%)"
             )
+    predictions_to_delete.delete()
+    bulk_update_manager.done()
+    bulk_create_manager.done()
 
 
 def predict_depth(flow_values, param):
