@@ -47,7 +47,7 @@ Make sure you have the following installed:
 6. Register a Zentra Cloud account.
    1. Sign up for an account on: `https://zentracloud.com/accounts/login/`;
    2. Then contact the administrator for your Zentra Cloud organisation to add your user account to the organisation.
-   Also create a [Bing Maps](https://www.bingmapsportal.com) developer account, and create a basic API key.
+   3. Also create a [Stadia Maps](https://stadiamaps.com/) developer account, and an API key.
 
 
 7. Set up environment variables in Django.  
@@ -55,10 +55,10 @@ Make sure you have the following installed:
    $ cd manyfews
    $ cp .env.CI .env
    $ vi .env
-   > replace 'zentraCloudUserName' with your user name of your Zentra cloud account.
-   > replace 'zentraCloudPassword' with your password of your Zentra cloud account.
-   > replace 'map_api_token' with your Bing Maps API token.
-   > replace the lines starting with 'email_' with your SMTP settings (either real settings, or using something like [mailcatcher](https://mailcatcher.me))
+   > Update 'ZENTRA_UN=zentraCloudUserName' with your user name of your Zentra cloud account.
+   > Update 'ZENTRA_PW=zentraCloudPassword' with your password of your Zentra cloud account.
+   > Add an API key parameter to end of MAP_URL as '?api_key=<...>', with your Stadia Maps API token.
+   > replace the lines starting with 'EMAIL_' with your SMTP settings (either real settings, or using something like [mailcatcher](https://mailcatcher.me))
    > Save and quit.
    $ cd ..
    ```
