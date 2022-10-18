@@ -38,6 +38,12 @@ def run_all_flood_models():
         prediction_date=latest_prediction_date,
         forecast_time__lte=today + timedelta(days=16),
     )
+    # Raise an error and stop the program if outputs_by_time is empty
+    if len(outputs_by_time) == 0:
+        raise Exception(
+            "sorry, no River Flow result, please check the task dailyModelUpdate run properly."
+        )
+
     logger.info(f"Found {len(outputs_by_time)} sets of output data.")
     for output in outputs_by_time:
         run_flood_model_for_time.delay(latest_prediction_date, output.forecast_time)
@@ -57,6 +63,11 @@ def run_flood_model_for_time(prediction_date, forecast_time):
 
     latest_model_id = ModelVersion.get_current_id()
     params = FloodModelParameters.objects.filter(model_version_id=latest_model_id).all()
+
+    if not len(params):
+        raise Exception(
+            "There are no catchment model parameters populated in the database"
+        )
 
     # FIXME: this is slow (both with celery in batches of 1000, and running in series
     # (took several hours for 1 time))
@@ -113,9 +124,22 @@ def predict_depths(forecast_time, param_ids, flow_values):
 def predict_depth(flow_values, param):
     beta_values = [getattr(param, f"beta{i}", 0) for i in range(12)]
     beta_values = [0 if b is None else b for b in beta_values]
-    polynomial = np.polynomial.Polynomial(beta_values)
-    depths = polynomial(flow_values)
+
+    if beta_values[3] > flow_values.all():
+        depths = 0
+        logger.info(
+            f"depths are set to Zero, stop higher-order polynomials create flood water at low flows."
+        )
+
+    else:
+        beta_values[3] = 0
+        polynomial = np.polynomial.Polynomial(beta_values)
+        depths = polynomial(flow_values)
     depths[depths < 0] = 0
+
+    # polynomial = np.polynomial.Polynomial(beta_values)
+    # depths = polynomial(flow_values)
+    # depths[depths < 0] = 0
 
     # Get median and centiles
     median = np.median(depths)
