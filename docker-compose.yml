@@ -11,7 +11,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     # ports:
-    #   - 5672:5672 # AMQP no TLS
+    #   - "5672:5672" # AMQP no TLS
     networks:
       - backend
 
@@ -28,7 +28,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGUSER: ${DB_USER}
     ports:
-      - 5432:5432
+      - "5432:5432"
     shm_size: 8g
     # Needed because the postgres container does not provide a healthcheck
     healthcheck:
