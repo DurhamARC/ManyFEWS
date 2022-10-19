@@ -238,7 +238,7 @@ stages:
   - job: Deploy
     displayName: Deploy using AzureWebAppContainer task
     pool:
-      vmImage: ubuntu-latest
+      name: Default
     steps:
 
     -
@@ -257,39 +257,31 @@ stages:
         multicontainerConfigFile: '.github/azure/docker-compose.azure.yml'
         appSettings:
           -COMPOSE_PROJECT_NAME "$(COMPOSE_PROJECT_NAME)"
-
           -ZENTRA_UN "$(ZENTRA_UN)"
           -ZENTRA_PW "$(ZENTRA_PW)"
-
           -MAP_URL "$(MAP_URL)"
           -SITE_URL "$(SITE_URL)"
-
           -DB_NAME "$(DB_NAME)"
           -DB_USER "$(DB_USER)"
           -DB_PASSWORD "$(DB_PASSWORD)"
           -DB_HOST "$(DB_HOST)"
           -DB_PORT "$(DB_PORT)"
-
           -EMAIL_HOST "$(EMAIL_HOST)"
           -EMAIL_PORT "$(EMAIL_PORT)"
           -EMAIL_HOST_USER "$(EMAIL_HOST_USER)"
           -EMAIL_HOST_PASSWORD "$(EMAIL_HOST_PASSWORD)"
-
           -TWILIO_ACCOUNT_SID "$(TWILIO_ACCOUNT_SID)"
           -TWILIO_AUTH_TOKEN "$(TWILIO_AUTH_TOKEN)"
           -TWILIO_PHONE_NUMBER "$(TWILIO_PHONE_NUMBER)"
           -TWILIO_VERIFICATION_SID "$(TWILIO_VERIFICATION_SID)"
-
           -LAT_VALUE "$(LAT_VALUE)"
           -LON_VALUE "$(LON_VALUE)"
           -INITIAL_BACKTIME "$(INITIAL_BACKTIME)"
           -STATION_SN "$(STATION_SN)"
           -GEFS_FORECAST_DAYS "$(GEFS_FORECAST_DAYS)"
-
           -RABBITMQ_DEFAULT_USER "$(RABBITMQ_DEFAULT_USER)"
           -RABBITMQ_DEFAULT_PASS "$(RABBITMQ_DEFAULT_PASS)"
           -RABBITMQ_HOST "$(RABBITMQ_HOST)"
           -RABBITMQ_PORT "$(RABBITMQ_PORT)"
-
           -ALLOWED_HOSTS "$(ALLOWED_HOSTS)"
           -CSRF_TRUSTED_ORIGINS "$(CSRF_TRUSTED_ORIGINS)"
