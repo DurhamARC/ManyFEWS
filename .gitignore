@@ -157,3 +157,5 @@ manyfews/files
 # Ignore compose overrides used for development:
 /docker-compose.override.yml
 
+# Ignore volumes
+/volumes
