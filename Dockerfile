@@ -159,6 +159,7 @@ FROM manyfews as gunicorn
 
 EXPOSE 5000
 CMD ["python manage.py migrate && \
+      python manage.py loaddata webapp/fixtures/initial_data.json && \
       gunicorn --timeout=300 --log-file=- --bind=0.0.0.0:5000 manyfews.wsgi"]
 
 
