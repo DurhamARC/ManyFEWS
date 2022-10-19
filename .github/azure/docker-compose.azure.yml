@@ -69,6 +69,9 @@ services:
       DEBUG: "False"
     volumes:
       - uploads:/app/files/params/
+    depends_on:
+      - postgres
+      - rabbitmq
     networks:
       - backend
 
@@ -94,6 +97,12 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
+    # Needed because the postgres container does not provide a healthcheck
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 # Define networks and volumes
 networks:
