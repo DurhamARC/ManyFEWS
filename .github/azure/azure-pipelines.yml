@@ -278,8 +278,17 @@ stages:
               "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
               "value": "$(DOCKER_REGISTRY_SERVER_PASSWORD)",
               "slotSetting": false
+            },
+            {
+              "name": "UPSTREAM_SERVER",
+              "value": "$(UPSTREAM_SERVER)",
+              "slotSetting": false
+            },
+            {
+              "name": "UPSTREAM_PORT",
+              "value": "$(UPSTREAM_PORT)",
+              "slotSetting": false
             }]
-
 
       # Azure App Service deploy v4
       # Deploy app to Azure App Service using Docker
