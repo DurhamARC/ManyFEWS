@@ -125,16 +125,14 @@ def predict_depth(flow_values, param):
     beta_values = [getattr(param, f"beta{i}", 0) for i in range(12)]
     beta_values = [0 if b is None else b for b in beta_values]
 
-    if beta_values[3] > flow_values.all():
-        depths = 0
-        logger.info(
-            f"depths are set to Zero, stop higher-order polynomials create flood water at low flows."
-        )
+    if np.all(flow_values < beta_values[4]):
+        depths = np.zeros_like(flow_values)
 
     else:
-        beta_values[3] = 0
+        beta_values[4] = 0
         polynomial = np.polynomial.Polynomial(beta_values)
         depths = polynomial(flow_values)
+
     depths[depths < 0] = 0
 
     # polynomial = np.polynomial.Polynomial(beta_values)
