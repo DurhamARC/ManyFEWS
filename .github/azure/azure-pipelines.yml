@@ -264,7 +264,7 @@ stages:
           appSettings: |
             [{
               "name": "DOCKER_REGISTRY_SERVER_URL",
-              "value": "$(containerRegistryName)",
+              "value": "$(DOCKER_REGISTRY_SERVER_URL)",
               "slotSetting": false
             },
             {
