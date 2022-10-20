@@ -151,6 +151,16 @@ def dailyModelUpdate():
         location=location
     )
 
+    # Check data input is correct
+    logger.debug(
+        f"InitialCondition records found: {len(initialConditions)} for location {location}"
+    )
+    if len(initialConditions) == 0:
+        raise Exception(
+            "No Initial Conditions for River Flow Prediction found for previous day! "
+            "Try running calculations.initialModelSetUp first."
+        )
+
     slowFlowRateList = []
     fastFlowRateList = []
     storageLevelList = []

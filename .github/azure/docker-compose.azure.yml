@@ -2,88 +2,107 @@ version: '3.6'
 
 services:
 
-  # RabbitMQ message queue service for Celery task broker
-  rabbitmq:
-    image: rabbitmq:3.10
-    container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
-    restart: always
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-    ports:
-       - "5672:5672" # AMQP, no TLS
-    networks:
-      - backend
-
-
-  # Gunicorn container running Django app with uWSGI
-  #
-  # Run commands within the running container using:
-  # docker exec -it <container_id> /bin/bash
-  # Use `docker ps` to find the <container_id>
-  gunicorn:
-    container_name: ${COMPOSE_PROJECT_NAME}_gunicorn
-    image: durhamarc/manyfews-gunicorn:azure-latest
-    restart: always
-    environment:
-      # Zentra acccount credentials
-      ZENTRA_UN: ${ZENTRA_UN}
-      ZENTRA_PW: ${ZENTRA_PW}
-      
-      MAP_URL: ${MAP_URL}
-      SITE_URL: ${SITE_URL}
-      
-      # Postgres database credentials
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      
-      # External mailer credentials
-      EMAIL_HOST: ${EMAIL_HOST}
-      EMAIL_PORT: ${EMAIL_PORT}
-      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
-      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
-      
-      # Twilio account credentials:
-      # see https://console.twilio.com/
-      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
-      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
-      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
-      TWILIO_VERIFICATION_SID: ${TWILIO_VERIFICATION_SID}
-      
-      # Model values
-      LAT_VALUE: ${LAT_VALUE}
-      LON_VALUE: ${LON_VALUE}
-      INITIAL_BACKTIME: ${INITIAL_BACKTIME}
-      STATION_SN: ${STATION_SN}
-      GEFS_FORECAST_DAYS: ${GEFS_FORECAST_DAYS}
-
-      # Celery broker connection details
-      CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/
-
-      # Django deployment settings
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
-      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS}
-      DEBUG: "False"
-    volumes:
-      - uploads:/app/files/params/
-    networks:
-      - backend
-
-
   # Web server container
   web:
     image: durhamarc/manyfews-web:azure-latest
     container_name: ${COMPOSE_PROJECT_NAME}_web
     restart: always
+    ports:
+      - "80:80"
     depends_on:
       - gunicorn
     networks:
       - backend
       - default
 
+  # Gunicorn container running Django app with uWSGI
+  #
+  # Run commands within the running container using:
+  # docker exec -it <container_id> /bin/bash
+  # Use `docker ps` to find the <container_id>
+#  gunicorn:
+#    container_name: ${COMPOSE_PROJECT_NAME}_gunicorn
+#    image: durhamarc/manyfews-gunicorn:azure-latest
+#    restart: always
+#    environment:
+#      # Zentra acccount credentials
+#      ZENTRA_UN: ${ZENTRA_UN}
+#      ZENTRA_PW: ${ZENTRA_PW}
+#
+#      MAP_URL: ${MAP_URL}
+#      SITE_URL: ${SITE_URL}
+#
+#      # Postgres database credentials
+#      DB_NAME: ${DB_NAME}
+#      DB_USER: ${DB_USER}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#      DB_HOST: ${DB_HOST}
+#      DB_PORT: ${DB_PORT}
+#
+#      # External mailer credentials
+#      EMAIL_HOST: ${EMAIL_HOST}
+#      EMAIL_PORT: ${EMAIL_PORT}
+#      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+#      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+#
+#      # Twilio account credentials:
+#      # see https://console.twilio.com/
+#      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+#      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+#      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+#      TWILIO_VERIFICATION_SID: ${TWILIO_VERIFICATION_SID}
+#
+#      # Model values
+#      LAT_VALUE: ${LAT_VALUE}
+#      LON_VALUE: ${LON_VALUE}
+#      INITIAL_BACKTIME: ${INITIAL_BACKTIME}
+#      STATION_SN: ${STATION_SN}
+#      GEFS_FORECAST_DAYS: ${GEFS_FORECAST_DAYS}
+#
+#      # Celery broker connection details
+#      CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/
+#
+#      # Django deployment settings
+#      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+#      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS}
+#      DEBUG: "False"
+#    volumes:
+#      - uploads:/app/files/params/
+#    depends_on:
+#      - postgres
+#      - rabbitmq
+#    networks:
+#      - backend
+
+#  # Postgres container
+#  postgres:
+#    image: postgis/postgis:14-3.2
+#    environment:
+#      POSTGRES_DBNAME: ${DB_NAME}
+#      POSTGRES_DB: ${DB_NAME}
+#      POSTGRES_USER: ${DB_USER}
+#      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#    ports:
+#      - "5432:5432"
+#    # Needed because the postgres container does not provide a healthcheck
+#    healthcheck:
+#      test: pg_isready
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#
+#  # RabbitMQ message queue service for Celery task broker
+#  rabbitmq:
+#    image: rabbitmq:3.10
+#    container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
+#    restart: always
+#    environment:
+#      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+#      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+#    ports:
+#       - "5672:5672" # AMQP, no TLS
+#    networks:
+#      - backend
 
 # Define networks and volumes
 networks:

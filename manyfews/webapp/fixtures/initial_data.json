@@ -1,0 +1,185 @@
+[
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 1,
+        "fields": {
+            "every": 1,
+            "period": "days"
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 2,
+        "fields": {
+            "every": 1,
+            "period": "hours"
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 3,
+        "fields": {
+            "every": 1,
+            "period": "minutes"
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 4,
+        "fields": {
+            "every": 5,
+            "period": "minutes"
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 5,
+        "fields": {
+            "every": 6,
+            "period": "hours"
+        }
+    },
+    {
+        "model": "django_celery_beat.intervalschedule",
+        "pk": 6,
+        "fields": {
+            "every": 12,
+            "period": "hours"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 1,
+        "fields": {
+            "clocked_time": "2022-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictasks",
+        "pk": 1,
+        "fields": {
+            "last_update": "2022-10-18T19:42:17.393Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 2,
+        "fields": {
+            "name": "Initial Catchment Model Setup",
+            "task": "calculations.initialModelSetUp",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 1,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": null,
+            "one_off": true,
+            "start_time": "2022-01-01T00:00:00Z",
+            "enabled": false,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2022-10-18T19:40:25.201Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 3,
+        "fields": {
+            "name": "Import Zentra Devices",
+            "task": "Import Zentra Devices",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 1,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": null,
+            "one_off": true,
+            "start_time": "2022-01-01T00:00:00Z",
+            "enabled": false,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2022-10-18T19:38:48.985Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 4,
+        "fields": {
+            "name": "Daily Model Update",
+            "task": "calculations.dailyModelUpdate",
+            "interval": 1,
+            "crontab": null,
+            "solar": null,
+            "clocked": null,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": null,
+            "one_off": false,
+            "start_time": "2022-01-01T00:00:00Z",
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2022-10-18T19:40:22.590Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 5,
+        "fields": {
+            "name": "Run Flood Model",
+            "task": "Run flood model",
+            "interval": 1,
+            "crontab": null,
+            "solar": null,
+            "clocked": null,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": null,
+            "one_off": false,
+            "start_time": "2022-01-01T01:00:00Z",
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2022-10-18T19:42:17.397Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "calculations.zentradevice",
+        "pk": "06-02047",
+        "fields": {
+            "device_name": "LLHD Jakarta",
+            "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+            "height": 1.0
+        }
+    }
+]

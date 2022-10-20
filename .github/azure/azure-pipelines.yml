@@ -6,6 +6,8 @@ trigger:
     include:
     - release
 
+pr: none
+
 resources:
 - repo: self
 
@@ -23,7 +25,14 @@ variables:
 - name: imageRepository
   value: 'durhamarc/manyfews'
 - name: azureSubscriptionEndpoint
-  value: 'svc-con-awh'
+  value: 'svc-con-awh-01'
+
+- name: containerRegistryName
+  value: 'https://index.docker.io/v1/'
+- name: webAppResourceGroupName
+  value: 'du-uks-awh-floodwarnings-01'
+- name: webAppName
+  value: 'duuksawhfloodwarnings01'
 
 
 stages:
@@ -165,16 +174,6 @@ stages:
       condition: and(not(canceled()), or(failed(), ne(variables.CACHE_RESTORED, 'true')))
 
 
-- stage: Test
-  displayName: Test docker-compose configuration
-  # Deploy to Azure App service environment with Docker Compose
-  jobs:
-  - job: Test
-    displayName: Test deployment using docker-compose
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-
     -
       task: DockerCompose@0
       displayName: Run docker-compose to check config is correct
@@ -216,7 +215,7 @@ stages:
         GEFS_FORECAST_DAYS: $(GEFS_FORECAST_DAYS)
 
         # Celery broker connection details
-        RABBITMQ_DEFAULT_USER: (RABBITMQ_DEFAULT_USER)
+        RABBITMQ_DEFAULT_USER: $(RABBITMQ_DEFAULT_USER)
         RABBITMQ_DEFAULT_PASS: $(RABBITMQ_DEFAULT_PASS)
         RABBITMQ_HOST: $(RABBITMQ_HOST)
         RABBITMQ_PORT: $(RABBITMQ_PORT)
@@ -237,3 +236,99 @@ stages:
         buildImages: false
         abortOnContainerExit: true
         detached: false
+
+
+- stage: Deploy
+  displayName: Deploy app to Production App Service Environment
+  # Deploy to Azure App service environment with Docker Compose
+  jobs:
+  - job: Deploy
+    displayName: Deploy using AzureWebAppContainer task
+    pool:
+      name: Default
+    steps:
+
+    -
+      task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: $(connectedServiceName)
+        appName: $(webAppName)
+        deployToSlotOrASE: true
+        resourceGroupName: $(webAppResourceGroupName)
+        slotName: 'production'
+        containers: |
+          registry.hub.docker.com/durhamarc/manyfews-gunicorn:azure-latest
+          registry.hub.docker.com/durhamarc/manyfews-web:azure-latest
+          registry.hub.docker.com/library/rabbitmq
+          registry.hub.docker.com/postgis/postgis:14-3.2
+        multicontainerConfigFile: '.github/azure/docker-compose.azure.yml'
+        appSettings:
+          -COMPOSE_PROJECT_NAME "$(COMPOSE_PROJECT_NAME)"
+          -ZENTRA_UN "$(ZENTRA_UN)"
+          -ZENTRA_PW "$(ZENTRA_PW)"
+          -MAP_URL "$(MAP_URL)"
+          -SITE_URL "$(SITE_URL)"
+          -DB_NAME "$(DB_NAME)"
+          -DB_USER "$(DB_USER)"
+          -DB_PASSWORD "$(DB_PASSWORD)"
+          -DB_HOST "$(DB_HOST)"
+          -DB_PORT "$(DB_PORT)"
+          -EMAIL_HOST "$(EMAIL_HOST)"
+          -EMAIL_PORT "$(EMAIL_PORT)"
+          -EMAIL_HOST_USER "$(EMAIL_HOST_USER)"
+          -EMAIL_HOST_PASSWORD "$(EMAIL_HOST_PASSWORD)"
+          -TWILIO_ACCOUNT_SID "$(TWILIO_ACCOUNT_SID)"
+          -TWILIO_AUTH_TOKEN "$(TWILIO_AUTH_TOKEN)"
+          -TWILIO_PHONE_NUMBER "$(TWILIO_PHONE_NUMBER)"
+          -TWILIO_VERIFICATION_SID "$(TWILIO_VERIFICATION_SID)"
+          -LAT_VALUE "$(LAT_VALUE)"
+          -LON_VALUE "$(LON_VALUE)"
+          -INITIAL_BACKTIME "$(INITIAL_BACKTIME)"
+          -STATION_SN "$(STATION_SN)"
+          -GEFS_FORECAST_DAYS "$(GEFS_FORECAST_DAYS)"
+          -RABBITMQ_DEFAULT_USER "$(RABBITMQ_DEFAULT_USER)"
+          -RABBITMQ_DEFAULT_PASS "$(RABBITMQ_DEFAULT_PASS)"
+          -RABBITMQ_HOST "$(RABBITMQ_HOST)"
+          -RABBITMQ_PORT "$(RABBITMQ_PORT)"
+          -ALLOWED_HOSTS "$(ALLOWED_HOSTS)"
+          -CSRF_TRUSTED_ORIGINS "$(CSRF_TRUSTED_ORIGINS)"
+
+
+- stage: Release
+  displayName: Release
+  jobs:
+  - job: Build
+    displayName: Release
+    pool:
+      name: Default
+    steps:
+      -
+        script: |
+          echo  '$(System.DefaultWorkingDirectory)'
+        displayName: Default Working Directory
+
+      # Azure App Service deploy v4
+      # Deploy app to Azure App Service using Docker
+      -
+        task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'                         # 'AzureRM' | 'PublishProfile'. Required. Connection type. Default: AzureRM.
+          azureSubscription: $(azureSubscriptionEndpoint)   # string. Required when ConnectionType = AzureRM. Azure subscription.
+          appType: 'webAppContainer'                        # 'webApp' | 'webAppLinux' | 'webAppContainer' | 'functionApp' | 'functionAppLinux' | 'functionAppContainer' | 'apiApp' | 'mobileApp'. Required when ConnectionType = AzureRM. App Service type. Default: webApp.
+          WebAppName: $(webAppName)                         # string. Required when ConnectionType = AzureRM. App Service name.
+          deployToSlotOrASE: true                           # boolean. Optional. Use when ConnectionType = AzureRM && WebAppKind != "". Deploy to Slot or App Service Environment. Default: false.
+          ResourceGroupName: $(webAppResourceGroupName)     # string. Required when DeployToSlotOrASEFlag = true. Resource group.
+          SlotName: 'production'                            # string. Required when DeployToSlotOrASEFlag = true. Slot. Default: production.
+          DockerNamespace: $(containerRegistryName)         # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Registry or Namespace.
+          DockerRepository: $(imageRepository)-web          # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Image.
+          DockerImageTag: $(tag)                            # string. Optional. Use when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Tag.
+          StartupCommand:                                   # string. Optional. Use when WebAppKind = webAppLinux || WebAppKind = webAppContainer || WebAppkind = functionAppContainer || WebAppKind = functionAppLinux. Startup command.
+          # Application and Configuration Settings
+#          AppSettings:                                      # string. App settings.
+#          ConfigurationSettings:                            # string. Configuration settings.
+      -
+        task: AzureAppServiceManage@0
+        inputs:
+          azureSubscription: $(connectedServiceName)
+          Action: 'Restart Azure App Service'
+          WebAppName: $(webAppName)
