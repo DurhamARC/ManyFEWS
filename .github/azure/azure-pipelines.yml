@@ -42,6 +42,7 @@ stages:
   -
     job: BuildAndPush
     displayName: Build and Push ManyFEWS docker images
+    condition: eq(variables.PIPELINE_SKIP_BUILD, 'false')
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -244,6 +245,7 @@ stages:
   jobs:
   - job: Deploy
     displayName: Deploy using AzureWebAppContainer task
+    condition: eq(variables.PIPELINE_SKIP_RELEASE, 'false')
     pool:
       name: Default
     steps:
