@@ -291,7 +291,7 @@ stages:
           deployToSlotOrASE: true                           # boolean. Optional. Use when ConnectionType = AzureRM && WebAppKind != "". Deploy to Slot or App Service Environment. Default: false.
           ResourceGroupName: $(webAppResourceGroupName)     # string. Required when DeployToSlotOrASEFlag = true. Resource group.
           SlotName: 'production'                            # string. Required when DeployToSlotOrASEFlag = true. Slot. Default: production.
-          DockerNamespace: $(containerRegistryName)         # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Registry or Namespace.
+          DockerNamespace: $(DOCKER_REGISTRY_SERVER_URL)    # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Registry or Namespace.
           DockerRepository: $(imageRepository)-web          # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Image.
           DockerImageTag: $(tag)                            # string. Optional. Use when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Tag.
           StartupCommand:                                   # string. Optional. Use when WebAppKind = webAppLinux || WebAppKind = webAppContainer || WebAppkind = functionAppContainer || WebAppKind = functionAppLinux. Startup command.
