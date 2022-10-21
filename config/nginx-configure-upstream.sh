@@ -24,7 +24,7 @@ then
     exit 1;
 fi
 
-echo >&3 "$ME: info: Setting Upstream Server to ${UPSTREAM_SERVER}:${UPSTREAM_PORT}"
+entrypoint_log "$ME: info: Setting Upstream Server to ${UPSTREAM_SERVER}:${UPSTREAM_PORT}"
 
 sed -i -e "s/SED_UPSTREAM_SERVER/${UPSTREAM_SERVER}/g" \
        -e "s/SED_UPSTREAM_PORT/${UPSTREAM_PORT}/g" \
