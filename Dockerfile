@@ -169,7 +169,9 @@ FROM nginx:stable-alpine as web
 COPY --from=build_static /app/static /var/www/html/static
 COPY config/subsite.conf /etc/nginx/conf.d/default.conf
 COPY config/nginx-configure-upstream.sh /docker-entrypoint.d/40-configure-upstream.sh
+COPY config/50x.html /usr/share/nginx/html/50x.html
 RUN chmod +x /docker-entrypoint.d/40-configure-upstream.sh
+
 ENV UPSTREAM_SERVER=localhost
 ENV UPSTREAM_PORT=5000
 
