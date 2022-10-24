@@ -54,9 +54,9 @@ FROM continuumio/miniconda3:4.12.0 as build_python
 
 # https://pythonspeed.com/articles/conda-docker-image-size/
 # Create the environment:
-COPY config/manyFEWSdocker.yml .
+COPY config/manyFEWS.base.yml .
 RUN --mount=type=cache,target=/opt/conda/pkgs \
-    conda env create -f manyFEWSdocker.yml
+    conda env create -f manyFEWS.base.yml
 
 # Install conda-pack:
 RUN --mount=type=cache,target=/opt/conda/pkgs \

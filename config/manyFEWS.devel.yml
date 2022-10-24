@@ -1,0 +1,11 @@
+name: ManyFEWS
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # dev dependencies
+  - black=22.3.0
+  - pre-commit
+  - pytest
+  - selenium==4.4.0
+prefix: /usr/local/Caskroom/miniconda/base/envs/ManyFEWS
