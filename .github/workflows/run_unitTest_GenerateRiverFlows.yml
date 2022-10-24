@@ -65,7 +65,7 @@ jobs:
       # https://github.com/conda-incubator/setup-miniconda/issues/105#issuecomment-730243912
       - shell: bash -l {0}
         run: |
-          conda env update -n anaconda-client-env -f manyFEWS.devel.yml
+          conda env update -n anaconda-client-env -f config/manyFEWS.devel.yml
 
       -
         name: Install npm
