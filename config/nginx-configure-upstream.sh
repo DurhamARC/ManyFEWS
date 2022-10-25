@@ -24,7 +24,14 @@ then
     exit 1;
 fi
 
-entrypoint_log "$ME: info: Setting Upstream Server to ${UPSTREAM_SERVER}:${UPSTREAM_PORT}"
+if [ -z ${UPSTREAM_PORT+x} ];
+then
+    UPSTREAM_PORT=5000
+    entrypoint_log "$ME: info: Using default \$UPSTREAM_PORT of ${UPSTREAM_PORT}"
+    exit 1;
+fi
+
+entrypoint_log "$ME: info: Setting Upstream to ${UPSTREAM_SERVER}:${UPSTREAM_PORT}"
 
 sed -i -e "s/SED_UPSTREAM_SERVER/${UPSTREAM_SERVER}/g" \
        -e "s/SED_UPSTREAM_PORT/${UPSTREAM_PORT}/g" \
