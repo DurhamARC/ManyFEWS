@@ -304,7 +304,7 @@ stages:
           SlotName: 'production'                            # string. Required when DeployToSlotOrASEFlag = true. Slot. Default: production.
           DockerNamespace: $(DOCKER_REGISTRY_SERVER_URL)    # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Registry or Namespace.
           DockerRepository: $(imageRepository)-web          # string. Required when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Image.
-          DockerImageTag: $(tag)                            # string. Optional. Use when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Tag.
+          DockerImageTag: 'azure-latest'                    # string. Optional. Use when WebAppKind = webAppContainer || WebAppkind = functionAppContainer. Tag.
           StartupCommand:                                   # string. Optional. Use when WebAppKind = webAppLinux || WebAppKind = webAppContainer || WebAppkind = functionAppContainer || WebAppKind = functionAppLinux. Startup command.
           # Application and Configuration Settings
 #          AppSettings:                                      # string. App settings.
