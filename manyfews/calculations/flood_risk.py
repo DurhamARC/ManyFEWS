@@ -72,7 +72,16 @@ def run_flood_model_for_time(prediction_date, forecast_time):
     # FIXME: this is slow (both with celery in batches of 1000, and running in series
     # (took several hours for 1 time))
     predict_depths(forecast_time, [p.id for p in params], flow_values)
-    aggregate_flood_models(forecast_time)
+
+    # count the total number of processed pixels.
+    total_pixel_count = len(DepthPrediction.objects.all())
+    logger.info(f"The total processed pixels are: {total_pixel_count}")
+    if total_pixel_count == 0:
+        raise Exception(
+            "There are no floods that occurred, or check the parameter file."
+        )
+    else:
+        aggregate_flood_models(forecast_time)
     # batch_size = 1000
     # i = 0
     #
