@@ -1,0 +1,160 @@
+version: '3.6'
+
+x-zentra-variables: &zentra-variables
+  # Zentra acccount credentials
+  ZENTRA_UN: ${ZENTRA_UN}
+  ZENTRA_PW: ${ZENTRA_PW}
+
+x-postgres-variables: &postgres-variables
+  # Postgres database credentials
+  DB_NAME: ${DB_NAME}
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_HOST: ${DB_HOST}
+  DB_PORT: ${DB_PORT}
+
+x-common-variables: &common-variables
+  <<: *zentra-variables
+  <<: *postgres-variables
+  # Celery broker connection details
+  CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+
+  # Django settings
+  TIME_ZONE: ${TIME_ZONE}
+
+services:
+
+  # Gunicorn container running Django app with uWSGI
+  #
+  # Run commands within the running container using:
+  # docker exec -it <container_id> /bin/bash
+  # Use `docker ps` to find the <container_id>
+  gunicorn:
+    container_name: ${COMPOSE_PROJECT_NAME}_gunicorn
+    # "image" here overrides build: in docker-compose.yml, unless --build is passed :)
+    image: durhamarc/manyfews-gunicorn:azure-latest
+    environment:
+      <<: *common-variables
+
+      # External mailer credentials
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+
+      # Twilio account credentials:
+      # see https://console.twilio.com/
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+      TWILIO_VERIFICATION_SID: ${TWILIO_VERIFICATION_SID}
+
+      # Django deployment settings
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS}
+      MAP_URL: ${MAP_URL}
+      SITE_URL: ${SITE_URL}
+    depends_on:
+      - postgres
+      - rabbitmq
+      - celery
+    volumes:
+      - uploads:/app/files/params/
+    command:
+      - "python manage.py migrate && \
+         python manage.py loaddata webapp/fixtures/initial_data.json && \
+         python manage.py createsuperuser --noinput || \
+         gunicorn --timeout=300 --log-file=- --bind=0.0.0.0:5000 manyfews.wsgi"
+    networks:
+      - backend
+      - default
+    ports:
+      - "5000:5000/tcp"
+
+
+  # Celery container runs from the same image as the django container below
+  celery:
+    container_name: ${COMPOSE_PROJECT_NAME}_celery
+    image: durhamarc/manyfews-celery:azure-latest
+    restart: always
+    environment:
+      <<: *common-variables
+
+      # Model values
+      LAT_VALUE: ${LAT_VALUE}
+      LON_VALUE: ${LON_VALUE}
+      INITIAL_BACKTIME: ${INITIAL_BACKTIME}
+      STATION_SN: ${STATION_SN}
+      GEFS_FORECAST_DAYS: ${GEFS_FORECAST_DAYS}
+    depends_on:
+      - rabbitmq
+    volumes:
+      - uploads:/app/files/params/
+    networks:
+      - backend
+
+
+  # Handle scheduled tasks with Celery Beat
+  celery_beat:
+    image: durhamarc/manyfews-celery:azure-latest
+    restart: always
+    environment: *common-variables
+    command:
+      - "celery -A manyfews beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - ./project/:/usr/src/app/
+    depends_on:
+      - rabbitmq
+    networks:
+      - backend
+
+
+  # RabbitMQ message queue service for Celery task broker
+  rabbitmq:
+    image: rabbitmq:3.10
+    container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_NODE_PORT: ${RABBITMQ_NODE_PORT}
+    networks:
+      - backend
+
+
+  # PostGIS server
+  postgres:
+    image: postgis/postgis:14-3.2
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    restart: always
+    environment:
+      # must specify password for PG Docker container image, see: https://registry.hub.docker.com/_/postgres?tab=descr
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGUSER: ${DB_USER}
+    shm_size: 8g
+    # Needed because the postgres container does not provide a healthcheck
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgresql:/var/lib/postgresql
+    networks:
+      - backend
+
+
+# Define networks and volumes
+networks:
+  backend:
+  default:
+
+volumes:
+  postgresql:
+    driver_opts:
+      type: none
+      device: ${PWD}/volumes/postgres
+      o: bind
+  uploads:

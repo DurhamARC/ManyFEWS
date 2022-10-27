@@ -19,9 +19,12 @@ Make sure you have the following installed:
 3. Install and activate the ManyFEWS conda environment:
 
    ```bash
-   $ conda env create --file config/manyFEWSenv.yml
+   $ conda env create -f config/manyFEWS.base.yml
+   $ conda env update -f config/manyFEWS.devel.yml
    $ conda activate ManyFEWS
    ```
+   Note there are two files to use to configure the development environment:
+   you must install both the base and the local dependencies to run the unit tests.
 
 4. Set up the pre-commit hook (see `.pre-commit-config.yaml`) to run `black` before committing:
 

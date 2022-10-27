@@ -54,9 +54,9 @@ FROM continuumio/miniconda3:4.12.0 as build_python
 
 # https://pythonspeed.com/articles/conda-docker-image-size/
 # Create the environment:
-COPY config/manyFEWSdocker.yml .
+COPY config/manyFEWS.base.yml .
 RUN --mount=type=cache,target=/opt/conda/pkgs \
-    conda env create -f manyFEWSdocker.yml
+    conda env create -f manyFEWS.base.yml
 
 # Install conda-pack:
 RUN --mount=type=cache,target=/opt/conda/pkgs \
@@ -168,3 +168,10 @@ CMD ["python manage.py migrate && \
 FROM nginx:stable-alpine as web
 COPY --from=build_static /app/static /var/www/html/static
 COPY config/subsite.conf /etc/nginx/conf.d/default.conf
+COPY config/nginx-configure-upstream.sh /docker-entrypoint.d/40-configure-upstream.sh
+COPY config/50x.html /usr/share/nginx/html/50x.html
+RUN chmod +x /docker-entrypoint.d/40-configure-upstream.sh
+
+ENV UPSTREAM_SERVER=localhost
+ENV UPSTREAM_PORT=5000
+
