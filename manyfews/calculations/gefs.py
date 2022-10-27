@@ -171,7 +171,7 @@ def prepareGEFS():
     latValue = settings.LAT_VALUE
     lonValue = settings.LON_VALUE
 
-    for i in trange(loopRange, name="GEFS Download"):
+    for i in trange(loopRange, desc="GEFS Download"):
         forceastHour = deltaHour + i * deltaHour
 
         gefsData = GEFSdownloader(
