@@ -124,18 +124,18 @@ def predict_depths(forecast_time, param_ids, flow_values):
         # logger.info(
         #     f"type {type(param)}"
         # )
-        #logger.info(
-         #   f"value {i} {param_id} {lower_centile} {mid_lower_centile} {median} {upper_centile}"
-        #)
+        # logger.info(
+        #   f"value {i} {param_id} {lower_centile} {mid_lower_centile} {median} {upper_centile}"
+        # )
         # logger.info(f"prediction {prediction}")
 
         if upper_centile <= 0:
             if prediction:
-                #logger.info(f"DB delete")
+                # logger.info(f"DB delete")
                 prediction.delete()
         else:
             if not prediction:  # create:
-                #logger.info(f"DB add")
+                # logger.info(f"DB add")
                 bulk_mgr.add(
                     DepthPrediction(
                         date=forecast_time,
@@ -149,7 +149,7 @@ def predict_depths(forecast_time, param_ids, flow_values):
                 )
 
             else:  # update:
-                #logger.info(f"DB update")
+                # logger.info(f"DB update")
                 prediction.model_version = param.model_version
                 prediction.median_depth = median
                 prediction.lower_centile = lower_centile
@@ -173,8 +173,7 @@ def predict_depth(flow_values, param):
         depths = np.zeros_like(flow_values)
 
     else:
-        beta_values[4] = 0
-        polynomial = np.polynomial.Polynomial(beta_values)
+        polynomial = np.polynomial.Polynomial(beta_values[:4])
         depths = polynomial(flow_values)
 
     depths[depths < 0] = 0
