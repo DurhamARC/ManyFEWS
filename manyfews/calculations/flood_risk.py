@@ -74,7 +74,7 @@ def run_flood_model_for_time(prediction_date, forecast_time):
     predict_depths(forecast_time, [p.id for p in params], flow_values)
 
     # count the total number of processed pixels.
-    total_pixel_count = len(DepthPrediction.objects.all())
+    total_pixel_count = DepthPrediction.objects.count()
     logger.info(f"The total processed pixels are: {total_pixel_count}")
     if total_pixel_count == 0:
         raise Exception(
@@ -121,11 +121,21 @@ def predict_depths(forecast_time, param_ids, flow_values):
             date=forecast_time, parameters_id=param_id
         ).first()
 
+        # logger.info(
+        #     f"type {type(param)}"
+        # )
+        #logger.info(
+         #   f"value {i} {param_id} {lower_centile} {mid_lower_centile} {median} {upper_centile}"
+        #)
+        # logger.info(f"prediction {prediction}")
+
         if upper_centile <= 0:
             if prediction:
+                #logger.info(f"DB delete")
                 prediction.delete()
         else:
             if not prediction:  # create:
+                #logger.info(f"DB add")
                 bulk_mgr.add(
                     DepthPrediction(
                         date=forecast_time,
@@ -139,6 +149,7 @@ def predict_depths(forecast_time, param_ids, flow_values):
                 )
 
             else:  # update:
+                #logger.info(f"DB update")
                 prediction.model_version = param.model_version
                 prediction.median_depth = median
                 prediction.lower_centile = lower_centile
@@ -177,6 +188,13 @@ def predict_depth(flow_values, param):
     lower_centile = np.percentile(depths, 10)
     mid_lower_centile = np.percentile(depths, 30)
     upper_centile = np.percentile(depths, 90)
+
+    # logger.info(
+    #    f"depths type {type(depths)}, shape: {np.shape(depths)}"
+    # )
+    # logger.info(
+    #    f"get median and centiles: {median} & {mid_lower_centile} & {upper_centile}"
+    # )
 
     return lower_centile, mid_lower_centile, median, upper_centile
 
