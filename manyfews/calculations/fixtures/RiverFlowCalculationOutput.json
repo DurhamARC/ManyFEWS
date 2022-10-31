@@ -1,0 +1,90 @@
+[
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 1,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.47965223413219643
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 2,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-27T06:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.44339368644551697
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 3,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-27T12:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.35272258622499725
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 4,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-27T18:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.33413108025100585
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 5,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.2052469024108966
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 6,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-28T06:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.23603021853534772
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 7,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-28T12:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.22304412200238694
+  }
+},
+{
+  "model": "calculations.riverflowcalculationoutput",
+  "pk": 8,
+  "fields": {
+    "prediction_date": "2022-10-27T00:00:00Z",
+    "forecast_time": "2022-10-28T18:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "rain_fall": 0.0,
+    "potential_evapotranspiration": 0.23334815717790672
+  }
+}
+]

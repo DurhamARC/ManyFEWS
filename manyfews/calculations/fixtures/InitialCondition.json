@@ -1,0 +1,2202 @@
+[
+{
+  "model": "calculations.initialcondition",
+  "pk": 1,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.660246040515897,
+    "slow_flow_rate": 4.302387816232277,
+    "fast_flow_rate": 1.9697650227952375
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 2,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.845202382081413,
+    "slow_flow_rate": 4.439085038796117,
+    "fast_flow_rate": 2.307391230322364
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 3,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.106646828375194,
+    "slow_flow_rate": 4.387708672217965,
+    "fast_flow_rate": 2.476620418101435
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 4,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.62945217571451,
+    "slow_flow_rate": 4.239807657011777,
+    "fast_flow_rate": 2.56750787702083
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 5,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.320401214111254,
+    "slow_flow_rate": 4.354551958964021,
+    "fast_flow_rate": 2.445397319864869
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 6,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.797455876990888,
+    "slow_flow_rate": 4.236402372792948,
+    "fast_flow_rate": 2.3249050892230683
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 7,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 12.312909632672884,
+    "slow_flow_rate": 4.344597906406914,
+    "fast_flow_rate": 2.295874202316521
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 8,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.886033791950533,
+    "slow_flow_rate": 4.704820553703387,
+    "fast_flow_rate": 1.7486514840002851
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 9,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.818612792580375,
+    "slow_flow_rate": 4.442669468349406,
+    "fast_flow_rate": 1.4775054042412994
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 10,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 25.385289351473695,
+    "slow_flow_rate": 4.15134813646954,
+    "fast_flow_rate": 2.2806036658399
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 11,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 23.64171791700239,
+    "slow_flow_rate": 4.1441180505394195,
+    "fast_flow_rate": 2.3046950266413044
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 12,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 33.24745653628423,
+    "slow_flow_rate": 4.065041804225159,
+    "fast_flow_rate": 2.273247986030002
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 13,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.242102751647113,
+    "slow_flow_rate": 4.448634043494694,
+    "fast_flow_rate": 1.9932303513958154
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 14,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 26.00285690099346,
+    "slow_flow_rate": 4.053745779439991,
+    "fast_flow_rate": 2.5626969081025996
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 15,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.1888732864272,
+    "slow_flow_rate": 4.445916320251176,
+    "fast_flow_rate": 1.4807756947687722
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 16,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.607671486343673,
+    "slow_flow_rate": 4.2865487361021435,
+    "fast_flow_rate": 2.3508099071640705
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 17,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 28.03547614033804,
+    "slow_flow_rate": 4.330886549555586,
+    "fast_flow_rate": 1.7613997329461066
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 18,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.128449675502452,
+    "slow_flow_rate": 4.088587962774436,
+    "fast_flow_rate": 2.6667030741923896
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 19,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 8.629607428921343,
+    "slow_flow_rate": 4.544208426666454,
+    "fast_flow_rate": 1.7877860926915212
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 20,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.88875693742004,
+    "slow_flow_rate": 4.285569485623966,
+    "fast_flow_rate": 2.6548989133167664
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 21,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.511210305038741,
+    "slow_flow_rate": 4.317130554629194,
+    "fast_flow_rate": 2.744179021432009
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 22,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 17.24118369606162,
+    "slow_flow_rate": 4.109650623345042,
+    "fast_flow_rate": 2.7426511672039338
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 23,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 18.344504946652915,
+    "slow_flow_rate": 4.195987761600293,
+    "fast_flow_rate": 2.7175540925386534
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 24,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 14.557103366560533,
+    "slow_flow_rate": 4.352807612618223,
+    "fast_flow_rate": 2.169784374482312
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 25,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 30.512599056049467,
+    "slow_flow_rate": 4.165614366017968,
+    "fast_flow_rate": 1.7743858173559701
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 26,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 18.45631062570546,
+    "slow_flow_rate": 4.433840423490497,
+    "fast_flow_rate": 1.457512768912762
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 27,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 23.0167718319757,
+    "slow_flow_rate": 4.33391185830086,
+    "fast_flow_rate": 1.426513372383443
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 28,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.19790218546498,
+    "slow_flow_rate": 4.521147059621011,
+    "fast_flow_rate": 1.0086083724294594
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 29,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.66245185949434,
+    "slow_flow_rate": 4.213540529360015,
+    "fast_flow_rate": 2.1965859399618517
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 30,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.549903692246012,
+    "slow_flow_rate": 4.21866751597898,
+    "fast_flow_rate": 2.275541240616348
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 31,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 24.52288584375507,
+    "slow_flow_rate": 4.249917419509168,
+    "fast_flow_rate": 1.7328365452741838
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 32,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.988411779842485,
+    "slow_flow_rate": 4.152565126758838,
+    "fast_flow_rate": 3.1964681894610223
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 33,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 29.92815201635489,
+    "slow_flow_rate": 4.057612932409716,
+    "fast_flow_rate": 2.4813014997913627
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 34,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.957177765545854,
+    "slow_flow_rate": 4.451052014295377,
+    "fast_flow_rate": 2.3468952526125535
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 35,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 26.484004129085882,
+    "slow_flow_rate": 4.339710993120579,
+    "fast_flow_rate": 0.925727679091427
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 36,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 11.479820385962007,
+    "slow_flow_rate": 4.226396060807036,
+    "fast_flow_rate": 2.6276336883326796
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 37,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 27.8688089264486,
+    "slow_flow_rate": 4.147291809742884,
+    "fast_flow_rate": 1.9822305613283118
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 38,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 30.062189489341222,
+    "slow_flow_rate": 4.136243604848478,
+    "fast_flow_rate": 2.038319774795324
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 39,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 12.72646293075161,
+    "slow_flow_rate": 4.38236906070884,
+    "fast_flow_rate": 1.9970777978753833
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 40,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.0187605954479,
+    "slow_flow_rate": 4.590792289785834,
+    "fast_flow_rate": 1.0603565114191515
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 41,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 27.646729368050558,
+    "slow_flow_rate": 4.3444401629685,
+    "fast_flow_rate": 1.3719487134054373
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 42,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.00784834066328,
+    "slow_flow_rate": 4.176628989991124,
+    "fast_flow_rate": 2.7897043270663104
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 43,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.25820638458886,
+    "slow_flow_rate": 4.505994787809262,
+    "fast_flow_rate": 0.5729274137442638
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 44,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.24505245715308,
+    "slow_flow_rate": 4.51586549755562,
+    "fast_flow_rate": 0.6686445313403523
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 45,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 17.984651361600953,
+    "slow_flow_rate": 4.498135863654595,
+    "fast_flow_rate": 2.063837861031266
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 46,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.049681582557929,
+    "slow_flow_rate": 4.229047448642823,
+    "fast_flow_rate": 2.6843274234717396
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 47,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 23.34193454934028,
+    "slow_flow_rate": 4.00153689430932,
+    "fast_flow_rate": 2.8727230953489595
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 48,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 23.118900642752585,
+    "slow_flow_rate": 4.32513573110872,
+    "fast_flow_rate": 2.300073478470379
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 49,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.0076307156145745,
+    "slow_flow_rate": 4.2976073853574075,
+    "fast_flow_rate": 3.2030997194806274
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 50,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.664376126572298,
+    "slow_flow_rate": 4.388760028207349,
+    "fast_flow_rate": 2.6141457624812574
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 51,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.193805015099134,
+    "slow_flow_rate": 4.065900752193422,
+    "fast_flow_rate": 2.8986922664326955
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 52,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.95053183836292,
+    "slow_flow_rate": 4.488179001952594,
+    "fast_flow_rate": 2.5872373207467523
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 53,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.639842656608692,
+    "slow_flow_rate": 4.22937738761207,
+    "fast_flow_rate": 2.7361874892835343
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 54,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 33.94915194928036,
+    "slow_flow_rate": 4.0734340970806775,
+    "fast_flow_rate": 2.295608605526286
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 55,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.173241997443156,
+    "slow_flow_rate": 4.451384926845412,
+    "fast_flow_rate": 1.818858211695588
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 56,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 25.0247737229569,
+    "slow_flow_rate": 4.411830266688624,
+    "fast_flow_rate": 1.1914464704709715
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 57,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.352516582645407,
+    "slow_flow_rate": 4.476863121188077,
+    "fast_flow_rate": 0.5913864823843251
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 58,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 34.33399404664498,
+    "slow_flow_rate": 4.0590559907483446,
+    "fast_flow_rate": 2.0419486683787014
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 59,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.63799359505109,
+    "slow_flow_rate": 4.408220745811346,
+    "fast_flow_rate": 0.7676536889759059
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 60,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 8.992865536023832,
+    "slow_flow_rate": 4.217253876627438,
+    "fast_flow_rate": 2.687136102058361
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 61,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.430052623787017,
+    "slow_flow_rate": 4.192438338762886,
+    "fast_flow_rate": 2.95735753041624
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 62,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.562307311049155,
+    "slow_flow_rate": 4.165899488164746,
+    "fast_flow_rate": 3.0997648019368143
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 63,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.939228389974005,
+    "slow_flow_rate": 4.315995455956998,
+    "fast_flow_rate": 1.7331381848474066
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 64,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 30.90518365599535,
+    "slow_flow_rate": 4.230230609182707,
+    "fast_flow_rate": 2.096338075677572
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 65,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 10.62646375894729,
+    "slow_flow_rate": 4.709065934929573,
+    "fast_flow_rate": 0.6761836263874907
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 66,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 17.502097035250237,
+    "slow_flow_rate": 4.193005309991924,
+    "fast_flow_rate": 2.294646649737149
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 67,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.644984006137337,
+    "slow_flow_rate": 4.601211470139309,
+    "fast_flow_rate": 1.9573567590137493
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 68,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 22.725929520156757,
+    "slow_flow_rate": 3.992311136964446,
+    "fast_flow_rate": 2.9769576648130607
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 69,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 32.553468022092304,
+    "slow_flow_rate": 3.9989491083400184,
+    "fast_flow_rate": 2.440817798469252
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 70,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.526513979888616,
+    "slow_flow_rate": 4.3137618074109225,
+    "fast_flow_rate": 2.333408577168654
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 71,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 17.588575800691892,
+    "slow_flow_rate": 4.611463605932327,
+    "fast_flow_rate": 1.7150925168613738
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 72,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.076550504912628,
+    "slow_flow_rate": 4.692958801916307,
+    "fast_flow_rate": 1.4071549138417896
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 73,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.103097103677825,
+    "slow_flow_rate": 4.288350809382316,
+    "fast_flow_rate": 1.956404637604379
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 74,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 29.305499143753263,
+    "slow_flow_rate": 4.113097872989268,
+    "fast_flow_rate": 1.9947573830048166
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 75,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 33.420441643290275,
+    "slow_flow_rate": 4.178196113604943,
+    "fast_flow_rate": 1.4366586743994
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 76,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.37455798547116,
+    "slow_flow_rate": 4.184965626678533,
+    "fast_flow_rate": 2.913142257305517
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 77,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.6533213186502245,
+    "slow_flow_rate": 4.701002089661634,
+    "fast_flow_rate": 0.6619711796437213
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 78,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 12.926770163416853,
+    "slow_flow_rate": 4.426920717972054,
+    "fast_flow_rate": 1.4477716888735783
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 79,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.068771414963173,
+    "slow_flow_rate": 4.356675842299654,
+    "fast_flow_rate": 2.406959768933183
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 80,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 31.914078054601337,
+    "slow_flow_rate": 4.236075214916327,
+    "fast_flow_rate": 1.1638545586733176
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 81,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.116819825950337,
+    "slow_flow_rate": 4.367642782027614,
+    "fast_flow_rate": 1.9986782354083452
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 82,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.755246046060687,
+    "slow_flow_rate": 4.578904702084827,
+    "fast_flow_rate": 1.0923916044471542
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 83,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 31.423366930511637,
+    "slow_flow_rate": 4.021584933970131,
+    "fast_flow_rate": 2.361807697551652
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 84,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 33.52240131570886,
+    "slow_flow_rate": 3.990701314910269,
+    "fast_flow_rate": 2.5705824455604405
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 85,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.46923646543595,
+    "slow_flow_rate": 4.574259963231072,
+    "fast_flow_rate": 2.2106115644390867
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 86,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 12.062351016646307,
+    "slow_flow_rate": 4.376939211470206,
+    "fast_flow_rate": 2.6621113671004304
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 87,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 30.360020133726184,
+    "slow_flow_rate": 4.239458961390722,
+    "fast_flow_rate": 1.0715385181443313
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 88,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 8.26748554440008,
+    "slow_flow_rate": 4.828137303854059,
+    "fast_flow_rate": 0.908078612709061
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 89,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 38.906858194103386,
+    "slow_flow_rate": 4.188911526903242,
+    "fast_flow_rate": 0.8705702079888274
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 90,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 26.49356059634062,
+    "slow_flow_rate": 4.341021174224412,
+    "fast_flow_rate": 1.1331075903289778
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 91,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 15.529146942794519,
+    "slow_flow_rate": 4.381275278857105,
+    "fast_flow_rate": 2.3222073946369157
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 92,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 35.88701419234534,
+    "slow_flow_rate": 4.225487986032217,
+    "fast_flow_rate": 0.851566901188166
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 93,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 24.548732095850283,
+    "slow_flow_rate": 4.527614199254708,
+    "fast_flow_rate": 1.3322319744511066
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 94,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.5485807079893945,
+    "slow_flow_rate": 4.572437631947141,
+    "fast_flow_rate": 0.6745237508614934
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 95,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 30.38986063852507,
+    "slow_flow_rate": 4.178199784604874,
+    "fast_flow_rate": 1.647114432751824
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 96,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 37.97261242499644,
+    "slow_flow_rate": 3.960521049361772,
+    "fast_flow_rate": 2.347480288983786
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 97,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.923745922951692,
+    "slow_flow_rate": 4.8224163243329174,
+    "fast_flow_rate": 1.5344651533190246
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 98,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 15.783146419794074,
+    "slow_flow_rate": 4.732061936812053,
+    "fast_flow_rate": 0.8554251851701533
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 99,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 12.475164024364513,
+    "slow_flow_rate": 4.732459075350044,
+    "fast_flow_rate": 0.4906061036372728
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 100,
+  "fields": {
+    "date": "2022-10-27T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 11.742595556384348,
+    "slow_flow_rate": 4.04212433962129,
+    "fast_flow_rate": 3.1661516627858646
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 101,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.318578444678836,
+    "slow_flow_rate": 4.287075535238065,
+    "fast_flow_rate": 1.2944715791539776
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 102,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.03474976417137765,
+    "slow_flow_rate": 4.313680100154275,
+    "fast_flow_rate": 1.5993322453058991
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 103,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.264873683808082,
+    "fast_flow_rate": 1.684001315322961
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 104,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.122094527033139,
+    "slow_flow_rate": 4.198986523654871,
+    "fast_flow_rate": 1.9917512298212305
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 105,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.8405295892955538,
+    "slow_flow_rate": 4.288572331720022,
+    "fast_flow_rate": 1.7431771665941826
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 106,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.823294091055194,
+    "slow_flow_rate": 4.218485567792005,
+    "fast_flow_rate": 1.5553591179547608
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 107,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.209750452832822,
+    "slow_flow_rate": 4.28008395895468,
+    "fast_flow_rate": 1.5902876672594894
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 108,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.517564920953065,
+    "fast_flow_rate": 1.0622073709667355
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 109,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.138013290978261,
+    "slow_flow_rate": 4.423699437234159,
+    "fast_flow_rate": 0.8033609977364478
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 110,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 11.6096668637828,
+    "slow_flow_rate": 4.148948049575894,
+    "fast_flow_rate": 1.7230202699571673
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 111,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 10.110062427915416,
+    "slow_flow_rate": 4.139155956952332,
+    "fast_flow_rate": 1.6666575474194796
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 112,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.151989302375924,
+    "slow_flow_rate": 4.070307778761758,
+    "fast_flow_rate": 1.6694622105901606
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 113,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.7551046541071174,
+    "slow_flow_rate": 4.351493297860688,
+    "fast_flow_rate": 1.290923782752621
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 114,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.018550386642078,
+    "slow_flow_rate": 4.045036229048307,
+    "fast_flow_rate": 2.04781832854772
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 115,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.945768988655065,
+    "slow_flow_rate": 4.420211468978981,
+    "fast_flow_rate": 0.85620756309474
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 116,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.9540432777223247,
+    "slow_flow_rate": 4.236308963734228,
+    "fast_flow_rate": 1.5838763154100313
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 117,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.107342413390166,
+    "slow_flow_rate": 4.34109424018412,
+    "fast_flow_rate": 1.125151340379177
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 118,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.467685087176251,
+    "slow_flow_rate": 4.075592343988306,
+    "fast_flow_rate": 1.954167575233056
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 119,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.5147309904793902,
+    "slow_flow_rate": 4.427201663754809,
+    "fast_flow_rate": 1.1356176161854108
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 120,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 3.3227885381104594,
+    "slow_flow_rate": 4.226574666850168,
+    "fast_flow_rate": 1.9050463979324848
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 121,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.24539199826804653,
+    "slow_flow_rate": 4.210192091473298,
+    "fast_flow_rate": 1.9755924894895476
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 122,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.7277591325022925,
+    "slow_flow_rate": 4.084202288286516,
+    "fast_flow_rate": 2.0553414257412634
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 123,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.664051088832298,
+    "slow_flow_rate": 4.1570156864366465,
+    "fast_flow_rate": 2.148911117520179
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 124,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 3.3773517328461415,
+    "slow_flow_rate": 4.302817103693359,
+    "fast_flow_rate": 1.5938285784844242
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 125,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 15.465406609964372,
+    "slow_flow_rate": 4.180823407895831,
+    "fast_flow_rate": 1.071996323386636
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 126,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.4481572516299455,
+    "slow_flow_rate": 4.405849445993107,
+    "fast_flow_rate": 0.8369152852003652
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 127,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 8.766296746941933,
+    "slow_flow_rate": 4.331209505614872,
+    "fast_flow_rate": 0.7444507833296794
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 128,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.856081911950675,
+    "slow_flow_rate": 4.49115302089375,
+    "fast_flow_rate": 0.4410600422196819
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 129,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.162043382562455,
+    "slow_flow_rate": 4.204793904949698,
+    "fast_flow_rate": 1.3898071567625512
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 130,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.214916297371861,
+    "slow_flow_rate": 4.206682000856061,
+    "fast_flow_rate": 1.774488346216916
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 131,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 10.116320068062283,
+    "slow_flow_rate": 4.252827246041402,
+    "fast_flow_rate": 1.0616503821862524
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 132,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0898418379983505,
+    "slow_flow_rate": 4.065599078820487,
+    "fast_flow_rate": 2.476725317002761
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 133,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.242565148294013,
+    "slow_flow_rate": 4.057288538243143,
+    "fast_flow_rate": 1.747973913665507
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 134,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.310737221611147,
+    "fast_flow_rate": 1.4863564762971633
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 135,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 11.339110909974387,
+    "slow_flow_rate": 4.351865079695578,
+    "fast_flow_rate": 0.34086419654641104
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 136,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 1.9707740696393365,
+    "slow_flow_rate": 4.1662929386752525,
+    "fast_flow_rate": 2.0646324870380015
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 137,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 13.31394958277226,
+    "slow_flow_rate": 4.155246369808067,
+    "fast_flow_rate": 1.2590350524271756
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 138,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 15.479314090626213,
+    "slow_flow_rate": 4.145767836577148,
+    "fast_flow_rate": 1.246752362268282
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 139,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.2907093517703214,
+    "slow_flow_rate": 4.322237906220087,
+    "fast_flow_rate": 1.3663194312102227
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 140,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 3.876506773688446,
+    "slow_flow_rate": 4.532679995816586,
+    "fast_flow_rate": 0.49297443223439164
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 141,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 12.40586342917064,
+    "slow_flow_rate": 4.359015410815767,
+    "fast_flow_rate": 0.759420376086788
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 142,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.139631596882458,
+    "slow_flow_rate": 4.1433767752821264,
+    "fast_flow_rate": 2.081540310627866
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 143,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.890978976226787,
+    "slow_flow_rate": 4.496237452236568,
+    "fast_flow_rate": 0.14784019662845405
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 144,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.826528109442685,
+    "slow_flow_rate": 4.48841917854992,
+    "fast_flow_rate": 0.21755006042167638
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 145,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.492250680846988,
+    "slow_flow_rate": 4.448002003485562,
+    "fast_flow_rate": 1.395069204419325
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 146,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.812121281370599,
+    "slow_flow_rate": 4.156057583793732,
+    "fast_flow_rate": 2.05354157392563
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 147,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 11.23143899094345,
+    "slow_flow_rate": 3.98737155875705,
+    "fast_flow_rate": 2.249490668921975
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 148,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.65371346051686,
+    "slow_flow_rate": 4.306293828567277,
+    "fast_flow_rate": 1.6080985242456625
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 149,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.160466067013575,
+    "fast_flow_rate": 2.409811937229839
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 150,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.25907626070013,
+    "fast_flow_rate": 1.9853880351041566
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 151,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 10.114479701035716,
+    "slow_flow_rate": 4.044302720520101,
+    "fast_flow_rate": 2.2162346170662723
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 152,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.328846838850599,
+    "fast_flow_rate": 1.9848407300646798
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 153,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.142177659631999,
+    "fast_flow_rate": 2.0216084162933483
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 154,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.028948392474447,
+    "slow_flow_rate": 4.076207287184977,
+    "fast_flow_rate": 1.7517853590557222
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 155,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.770069079868557,
+    "slow_flow_rate": 4.4261199825840265,
+    "fast_flow_rate": 1.254849244003838
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 156,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 10.100870815784257,
+    "slow_flow_rate": 4.4174957254465985,
+    "fast_flow_rate": 0.6180622402265762
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 157,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 6.517480650279813,
+    "slow_flow_rate": 4.460009781797557,
+    "fast_flow_rate": 0.1803454156281174
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 158,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.704440969822024,
+    "slow_flow_rate": 4.070640877972258,
+    "fast_flow_rate": 1.2992114112950686
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 159,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 8.1868721419942,
+    "slow_flow_rate": 4.4055377494464905,
+    "fast_flow_rate": 0.2789665937861874
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 160,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.7905981655998553,
+    "slow_flow_rate": 4.146415282821818,
+    "fast_flow_rate": 2.0669815872981068
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 161,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.106792365546805,
+    "fast_flow_rate": 2.1454214545030283
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 162,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.082300144433036,
+    "fast_flow_rate": 2.2877945213566937
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 163,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 7.285524484881835,
+    "slow_flow_rate": 4.3053708261889705,
+    "fast_flow_rate": 1.1276990885258604
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 164,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.326425883083665,
+    "slow_flow_rate": 4.238822267266379,
+    "fast_flow_rate": 1.5007906766841115
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 165,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 1.1641037949104902,
+    "slow_flow_rate": 4.591957091795563,
+    "fast_flow_rate": 0.28595242139523297
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 166,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.376440711508771,
+    "slow_flow_rate": 4.170458171543985,
+    "fast_flow_rate": 1.5361822162560264
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 167,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.7512169259697417,
+    "slow_flow_rate": 4.511689268679757,
+    "fast_flow_rate": 1.3520579774824957
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 168,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 10.91228372359007,
+    "slow_flow_rate": 3.97550897576499,
+    "fast_flow_rate": 2.327110705814034
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 169,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 18.88401490069015,
+    "slow_flow_rate": 4.000110877471417,
+    "fast_flow_rate": 1.7812031381344657
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 170,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.22177346588335645,
+    "slow_flow_rate": 4.222718380884069,
+    "fast_flow_rate": 1.518590583647382
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 171,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 4.9901796166540064,
+    "slow_flow_rate": 4.553984010702001,
+    "fast_flow_rate": 1.0850155210243566
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 172,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.306982938563991,
+    "slow_flow_rate": 4.595081579476154,
+    "fast_flow_rate": 0.8214200783838872
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 173,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 4.195614603789657,
+    "slow_flow_rate": 4.257427051709971,
+    "fast_flow_rate": 1.2954713693277382
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 174,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 14.662153425358925,
+    "slow_flow_rate": 4.122726326179197,
+    "fast_flow_rate": 1.2588239907665455
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 175,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 17.989705750796357,
+    "slow_flow_rate": 4.200741223190128,
+    "fast_flow_rate": 0.7027069606320604
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 176,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 5.309502646453288,
+    "slow_flow_rate": 4.138768504568622,
+    "fast_flow_rate": 2.1856645373872245
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 177,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.527186051485618,
+    "fast_flow_rate": 0.2873975720325796
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 178,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.2778257993837077,
+    "slow_flow_rate": 4.367835656517096,
+    "fast_flow_rate": 0.8015291325853917
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 179,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.7547686358978802,
+    "slow_flow_rate": 4.265759754623471,
+    "fast_flow_rate": 1.8560475151887497
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 180,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 16.164081346083915,
+    "slow_flow_rate": 4.26181084521811,
+    "fast_flow_rate": 0.5528290203729801
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 181,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.262175867300503,
+    "fast_flow_rate": 1.2277139349657005
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 182,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 4.243808057076105,
+    "slow_flow_rate": 4.530173900164121,
+    "fast_flow_rate": 0.5647494566457602
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 183,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 17.47188482628616,
+    "slow_flow_rate": 4.025114128047816,
+    "fast_flow_rate": 1.684302615114683
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 184,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 20.637081792352333,
+    "slow_flow_rate": 3.981415088325836,
+    "fast_flow_rate": 2.0159231433418445
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 185,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.8653815078027469,
+    "slow_flow_rate": 4.445473626627127,
+    "fast_flow_rate": 1.6250012379242529
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 186,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.2969174427894963,
+    "slow_flow_rate": 4.286140868033131,
+    "fast_flow_rate": 2.056134582866301
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 187,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 14.79852976148552,
+    "slow_flow_rate": 4.261201489385064,
+    "fast_flow_rate": 0.429205414730738
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 188,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.3645320002776347,
+    "slow_flow_rate": 4.655404447760399,
+    "fast_flow_rate": 0.43681280187859156
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 189,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 23.133782172312426,
+    "slow_flow_rate": 4.222854794290951,
+    "fast_flow_rate": 0.2514550627311919
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 190,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 11.520922309300099,
+    "slow_flow_rate": 4.350608062924343,
+    "fast_flow_rate": 0.45291687826696303
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 191,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 4.12663760987771,
+    "slow_flow_rate": 4.32468248465352,
+    "fast_flow_rate": 1.8374383430222858
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 192,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 19.85161394433579,
+    "slow_flow_rate": 4.2597251341734585,
+    "fast_flow_rate": 0.2993603933572585
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 193,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 9.89313629224105,
+    "slow_flow_rate": 4.52142009414571,
+    "fast_flow_rate": 0.6787102978617359
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 194,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.0,
+    "slow_flow_rate": 4.439784005584982,
+    "fast_flow_rate": 0.2976552772178303
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 195,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 15.126788912315575,
+    "slow_flow_rate": 4.195708094227099,
+    "fast_flow_rate": 1.0060308011701766
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 196,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 24.569340008212947,
+    "slow_flow_rate": 3.959869947263861,
+    "fast_flow_rate": 1.7498642801941198
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 197,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 0.28423055504474637,
+    "slow_flow_rate": 4.636015306269553,
+    "fast_flow_rate": 0.9142062772251751
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 198,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 3.6640149876695576,
+    "slow_flow_rate": 4.656244812868367,
+    "fast_flow_rate": 0.37980162962914094
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 199,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 1.9586350796130996,
+    "slow_flow_rate": 4.628013681172364,
+    "fast_flow_rate": 0.16640122206508617
+  }
+},
+{
+  "model": "calculations.initialcondition",
+  "pk": 200,
+  "fields": {
+    "date": "2022-10-28T00:00:00Z",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "storage_level": 2.482397133724618,
+    "slow_flow_rate": 4.002475943608356,
+    "fast_flow_rate": 2.4659095712812342
+  }
+}
+]

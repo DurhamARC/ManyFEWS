@@ -1,0 +1,11 @@
+[
+{
+  "model": "calculations.zentradevice",
+  "pk": "06-02047",
+  "fields": {
+    "device_name": "LLHD Jakarta",
+    "location": "SRID=4326;POINT (106.8346787 -6.226065)",
+    "height": 1.0
+  }
+}
+]

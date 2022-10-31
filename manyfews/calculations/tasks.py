@@ -45,8 +45,8 @@ def hello_celery():
     logger.info("Hello logging from celery!")
 
 
-@shared_task(name="calculations.initialModelSetUp")
-def initialModelSetUp():
+@shared_task(name="calculations.initialModelSetUp", bind=True)
+def initialModelSetUp(self):
     """
     Initial model set up
     This is part is only run once when the application is just installed.
@@ -64,7 +64,7 @@ def initialModelSetUp():
 
     # prepare the time point for getting zentra data.
     # For initial model setup, it needs 365 days zentra data.
-    for backDay in trange(backDays, 0, -1):
+    for backDay in trange(backDays, 0, -1, desc=self.name):
         prepareZentra(backDay=backDay)
 
     # prepare weather data (from Zentra).
@@ -241,8 +241,8 @@ def send_alerts():
         )
 
 
-@shared_task(name="Load parameters")
-def load_params_from_csv(filename, model_version_id):
+@shared_task(name="Load parameters", bind=True)
+def load_params_from_csv(self, filename, model_version_id):
     logger.info(f"Loading parameters from {filename}")
 
     total_rows = sum(1 for _ in open(filename))
@@ -253,7 +253,9 @@ def load_params_from_csv(filename, model_version_id):
     with open(filename) as csvfile:
         bulk_mgr = BulkCreateManager(chunk_size=settings.DATABASE_CHUNK_SIZE)
 
-        for row in tqdm(csv.DictReader(csvfile), total=total_rows, mininterval=5):
+        for row in tqdm(
+            csv.DictReader(csvfile), desc=self.name, total=total_rows, mininterval=5
+        ):
             if row["size"] == "":
                 continue
 

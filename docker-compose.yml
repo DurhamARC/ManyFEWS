@@ -28,7 +28,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGUSER: ${DB_USER}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432/tcp"
     shm_size: 8g
     # Needed because the postgres container does not provide a healthcheck
     healthcheck:

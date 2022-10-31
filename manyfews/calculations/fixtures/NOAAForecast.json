@@ -1,0 +1,114 @@
+[
+{
+  "model": "calculations.noaaforecast",
+  "pk": 1,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 255.63,
+    "max_temperature": 258.17,
+    "wind_u": -3.23,
+    "wind_v": 2.0300000000000002,
+    "relative_humidity": 93.4
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 2,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 254.11,
+    "max_temperature": 255.59,
+    "wind_u": -3.42,
+    "wind_v": 1.52,
+    "relative_humidity": 91.10000000000001
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 3,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 252.23000000000002,
+    "max_temperature": 254.07,
+    "wind_u": -2.72,
+    "wind_v": 2.2,
+    "relative_humidity": 99.4
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 4,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 251.91,
+    "max_temperature": 252.52,
+    "wind_u": -2.46,
+    "wind_v": 2.33,
+    "relative_humidity": 99.5
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 5,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 252.43,
+    "max_temperature": 253.45000000000002,
+    "wind_u": -2.6,
+    "wind_v": 2.08,
+    "relative_humidity": 99.10000000000001
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 6,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 253.19,
+    "max_temperature": 253.73000000000002,
+    "wind_u": -2.43,
+    "wind_v": 1.84,
+    "relative_humidity": 96.10000000000001
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 7,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 252.8,
+    "max_temperature": 253.33,
+    "wind_u": -2.31,
+    "wind_v": 2.17,
+    "relative_humidity": 96.9
+  }
+},
+{
+  "model": "calculations.noaaforecast",
+  "pk": 8,
+  "fields": {
+    "date": "2022-10-27T13:31:07.215Z",
+    "location": "SRID=4326;POINT (80.5 175)",
+    "precipitation": 0.0,
+    "min_temperature": 252.47,
+    "max_temperature": 252.92000000000002,
+    "wind_u": -1.37,
+    "wind_v": 1.9100000000000001,
+    "relative_humidity": 98.2
+  }
+}
+]
