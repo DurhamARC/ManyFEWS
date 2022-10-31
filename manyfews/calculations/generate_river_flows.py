@@ -13,14 +13,19 @@ from .models import (
 
 
 def ModelFun(qp, Ep, dt, CatArea, X, F0):
+    """
+    ModelFun determines river flow data from weather data using a combination of FAO56, PDMmodel and RoutingFun.
 
-    # qp - rainfall (mm/day)
-    # Ep - potential evapotranspiration (mm/day)
-    # dt - time-step (day)
-    # CatArea - catchment area (km2)
-    # X - array containing model parameters
-    # F0 - array containing initial condition of state variables
-    # Q - river flow rate (m3/s)
+    :params qp: rainfall (mm/day)
+    :params Ep: potential evapotranspiration (mm/day)
+    :params dt: time-step (day)
+    :params CatArea: catchment area (km2)
+    :params X: array containing model parameters
+
+    :return F0: array containing initial condition of state variables
+    :return Q: river flow rate (m3/s)
+    """
+
     Q = np.zeros(((np.size(Ep[:])), (np.size(X[:, 1]))))  # initialize the matrix Q
 
     for n in range(np.size(X[:, 1])):
@@ -66,6 +71,21 @@ def ModelFun(qp, Ep, dt, CatArea, X, F0):
 
 
 def RoutingFun(qs, X, b, dt, q0):
+    """
+    determines river flow data from surface runoff data using a combination of non-linear routing stores as described
+    by Mathias et al. (2016).
+
+    Source: Mathias, S. A., McIntyre, N., & Oughton, R. H. (2016).
+    A study of non-linearity in rainfall-runoff response using 120 UK catchments. Journal of Hydrology, 540, 423-436.
+
+    :params qs: Determine drainage rate
+    :params X: residence time in days
+    :params b: b=5/3 Exponent in q=a*vˆb
+    :params dt: hourly time step
+    :params q0: estimate initial river flow array (mm/day)
+
+    :return q: river flow array (mm/day)
+    """
 
     numPoint = np.size(qs)  # Determine number of data points
 
@@ -115,6 +135,24 @@ def RoutingFun(qs, X, b, dt, q0):
 
 
 def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
+    """
+    PDMmodel determines surface runoff from rainfall and potential evapotranspiration data using the PDM model structure
+    with pareto probability distribution according to Moore (2007)
+    Source: Moore, R. J. (2007). The PDM rainfall-runoff model. Hydrology and Earth System Sciences, 11(1), 483-499.
+
+    params qp: Rainfall (mm/day)
+    params Ep: Potential evapotranspiration (mm/day)
+    params Smax: Maximum storage for PDM (mm)
+    params gamma: Exponent for Pareto distribution
+    params k: model parameter (mm/day)
+    params dt: hourly time step
+    params S0: Estimate initial storage value  for PDM (mm)
+
+    return qro: Exponent for Pareto distribution
+    return qd: Determine drainage rate
+    return Ea: Actual evapotranspiration
+    return S: Catchment storage
+    """
 
     # Specify input parameters:
     # Smax=80; %Maximum storage for PDM (mm)
@@ -162,7 +200,25 @@ def PDMmodel(qp, Ep, Smax, gamma, k, dt, S0):
 
 
 def FAO56(dt, predictionDate, Tmin, Tmax, alt, lat, T, u2, RH):
+    """
+    FAO56 potential evapotranspiration from weather data using the FAO56 method.
+    Source: Allen, R. G., Pereira, L. S., Raes, D., & Smith, M. (1998).
+            FAO Irrigation and drainage paper No. 56.
+            Rome: Food and Agriculture Organization of the United Nations, 56(97), e156.
 
+    :param dt: hourly time step
+    :param predictionDate: the date information of begin date.
+    :param Tmin: daily minimum air temperature [°C]
+    :param Tmax: daily maximum air temperature [°C]
+    :param alt: station elevation above sea level [m]
+    :param lat: latitude
+    :param T: air temperature [°C]
+    :param u2: wind speed at 2 m above ground surface [m*s-1]
+    :param RH: Relative humidity [%]
+    :return ET0: reference evapotranspiration [mm day-1]
+    :return E0: open water evaporation [mm day-1]
+
+    """
     # Ensure Tmax > Tmin
     Tmax = np.maximum(Tmax, Tmin)
     Tmin = np.minimum(Tmax, Tmin)
