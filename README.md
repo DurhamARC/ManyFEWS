@@ -1,5 +1,4 @@
 # ManyFEWS
-## About
 
 ManyFEWS (the Many Flood Early Warning System) can be deployed by a community where there is currently no such system in place. The system uses weather forecast information from the [Global Ensemble Forecast System](https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast) produced by [NOAA](https://www.noaa.gov), coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework.
 
@@ -15,11 +14,17 @@ The initial version of the system (v1.0) will become available from Autumn 2022.
 
 The initial implementation of the ManyFEWS tool was architected and developed in Python/Django by [Alison Clarke](https://github.com/alisonrclarke).
 
+### Acknowledgements
+
+The development of the new flood early warning system was funded under the [Java Flood One](https://www.durham.ac.uk/research/institutes-and-centres/hazard-risk-resilience/research/current-projects/indonesia-java-flood-one/) project (UKRI grant ref. [NE/S00310X/1 ](https://gtr.ukri.org/projects?ref=NE%2FS00310X%2F1)) funded by [UKRI’s NERC](https://nerc.ukri.org) and Indonesia’s [Ristekdikti](http://litbangda.ristekdikti.go.id).
+
+The project is run by [Durham University](https://www.dur.ac.uk), the [UK Centre for Ecology and Hydrology](https://www.ceh.ac.uk), [Bandung Insitute of Technology](https://www.itb.ac.id) and local NGO in Indonesia [Jaga Balai](https://instagram.com/jagabalai?utm_medium=copy_link).
+
 ## Getting Started
 
 See [DEVELOPMENT.md](DEVELOPMENT.md) for details of how to set up a development instance, and [SCHEDULING.md](SCHEDULING.md) for how to set up the scheduled tasks to run the weather modelling and create alerts.
 
-### Docker Deployment
+### Docker
 
 A multi-stage [Dockerfile](Dockerfile) is included in this repository. Pre-built Docker images are available for:
 
@@ -31,7 +36,7 @@ A multi-stage [Dockerfile](Dockerfile) is included in this repository. Pre-built
 
 The [docker-compose.yml](docker-compose.yml) file in the root of this repository includes the project dependencies and can be run to set up an instant working development system. For manual setup instructions, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
-## Deployment
+### Deployment
 
 A couple of different production deployment possibilities are documented in [PRODUCTION.md](PRODUCTION.md). We include a production [docker-compose](docker-compose.production.yml) file for running the system behind a [Træfik](https://traefik.io/traefik) load balancer.
 
@@ -61,17 +66,8 @@ $ git push origin release v1.x
 $ git checkout main
 ```
 
-## License
-This work is licensed under the [GNU General Public License v3.0](LICENSE), which allows Commercial use, Modification, and Distribution, but does not admit any liability or warranty for use of this code.
 
-## Acknowledgements
-
-The development of the new flood early warning system was funded under the [Java Flood One](https://www.durham.ac.uk/research/institutes-and-centres/hazard-risk-resilience/research/current-projects/indonesia-java-flood-one/) project (UKRI grant ref. [NE/S00310X/1 ](https://gtr.ukri.org/projects?ref=NE%2FS00310X%2F1)) funded by [UKRI’s NERC](https://nerc.ukri.org) and Indonesia’s [Ristekdikti](http://litbangda.ristekdikti.go.id).
-
-The project is run by [Durham University](https://www.dur.ac.uk), the [UK Centre for Ecology and Hydrology](https://www.ceh.ac.uk), [Bandung Insitute of Technology](https://www.itb.ac.id) and local NGO in Indonesia [Jaga Balai](https://instagram.com/jagabalai?utm_medium=copy_link).
-
-
-### Built With
+## Built With
 
 We are using the following frameworks and tools to develop this software:
 
@@ -82,42 +78,29 @@ We are using the following frameworks and tools to develop this software:
 A CI/CD pipeline is used to test and release this software, using [GitHub Actions](https://github.com/features/actions) and [Azure Pipelines](https://azure.microsoft.com/en-gb/products/devops/pipelines/). 
 
 
-[//]: # (## Citation)
+## License
+This work is licensed under the [GNU General Public License v3.0](LICENSE), which allows Commercial use, Modification, and Distribution, but does not admit any liability or warranty for use of this code.
 
+[//]: # (## Citation)
 [//]: # ()
 [//]: # (Please cite the associated papers for this work if you use this code:)
-
 [//]: # ()
 [//]: # (```)
-
 [//]: # (@article{xxx2021paper,)
-
 [//]: # (  title={Title},)
-
 [//]: # (  author={Author},)
-
 [//]: # (  journal={arXiv},)
-
 [//]: # (  year={2021})
-
 [//]: # (})
-
 [//]: # (```)
-
 
 [//]: # (## Usage)
-
 [//]: # ()
 [//]: # (Any links to production environment, video demos and screenshots.)
-
 [//]: # ()
 [//]: # (## Roadmap)
-
 [//]: # ()
 [//]: # (- [x] Initial Research  )
-
 [//]: # (- [x] Minimum viable product: )
-
 [//]: # (- [ ] Alpha Release  )
-
 [//]: # (- [ ] Feature-Complete Release  )
