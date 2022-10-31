@@ -3,6 +3,8 @@ Django Bulk Inserts class originally from:
 https://www.caktusgroup.com/blog/2019/01/09/django-bulk-inserts/
 """
 from collections import defaultdict
+from typing import Union
+
 from django.apps import apps
 
 
@@ -16,7 +18,7 @@ class BulkCreateManager(object):
     call `done()` to ensure the final set of objects is created for all models.
     """
 
-    def __init__(self, chunk_size=100):
+    def __init__(self, chunk_size: int = 100):
         self._create_queues = defaultdict(list)
         self.chunk_size = chunk_size
 
@@ -57,3 +59,41 @@ class BulkUpdateManager(BulkCreateManager):
             self._create_queues[model_key], self.update_fields
         )
         self._create_queues[model_key] = []
+
+
+class BulkCreateUpdateManager(BulkCreateManager):
+    """
+    Extend BulkCreateManager with the ability to update model records
+    """
+
+    def __init__(self, chunk_size: int = 100, fields: Union[list, tuple] = []):
+        self._update_queues = defaultdict(list)
+        self._fields = fields
+        super().__init__(chunk_size)
+
+    def _commit(self, model_class):
+        model_key = model_class._meta.label
+        model_class.objects.bulk_update(
+            self._update_queues[model_key], fields=self._fields
+        )
+        self._update_queues[model_key] = []
+
+        super()._commit(model_class)
+
+    def update(self, obj):
+        """
+        Add an object to the queue to be updated, and call bulk_update if we
+        have enough objs.
+        """
+        model_class = type(obj)
+        model_key = model_class._meta.label
+        self._update_queues[model_key].append(obj)
+        if len(self._update_queues[model_key]) >= self.chunk_size:
+            self._commit(model_class)
+
+    def done(self):
+        for model_name, objs in self._update_queues.items():
+            if len(objs) > 0:
+                self._commit(apps.get_model(model_name))
+
+        super().done()

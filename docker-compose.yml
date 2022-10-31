@@ -11,7 +11,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     # ports:
-    #   - 5672:5672 # AMQP no TLS
+    #   - "5672:5672" # AMQP no TLS
     networks:
       - backend
 
@@ -28,7 +28,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGUSER: ${DB_USER}
     ports:
-      - 5432:5432
+      - "127.0.0.1:5432:5432/tcp"
     shm_size: 8g
     # Needed because the postgres container does not provide a healthcheck
     healthcheck:
@@ -107,6 +107,9 @@ services:
       target: web
     container_name: ${COMPOSE_PROJECT_NAME}_nginx
     restart: always
+    environment:
+      UPSTREAM_SERVER: "gunicorn"
+      UPSTREAM_PORT: "5000"
     depends_on:
       - gunicorn
     networks:
@@ -128,3 +131,4 @@ volumes:
       device: ${PWD}/volumes/postgres
       o: bind
   uploads:
+

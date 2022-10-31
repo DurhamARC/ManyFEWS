@@ -1,0 +1,12 @@
+[
+{
+  "model": "calculations.modelversion",
+  "pk": 1,
+  "fields": {
+    "version_name": "1",
+    "date_created": "2022-10-27T14:28:32.849Z",
+    "is_current": true,
+    "param_file": "params/MajalayaFloodEmulatorParams-2m-20220512_mkvVNSz.csv"
+  }
+}
+]

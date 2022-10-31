@@ -1,0 +1,7202 @@
+[
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 1,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 1,
+    "river_flow": 14.83926450001498
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 2,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 1,
+    "river_flow": 15.922800105000592
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 3,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 1,
+    "river_flow": 16.131626496912933
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 4,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 1,
+    "river_flow": 16.25850286511262
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 5,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 1,
+    "river_flow": 16.104632999561737
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 6,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 1,
+    "river_flow": 15.46322497526064
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 7,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 1,
+    "river_flow": 15.700200234866115
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 8,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 1,
+    "river_flow": 15.158705252296828
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 9,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 1,
+    "river_flow": 13.935103371157263
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 10,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 1,
+    "river_flow": 15.362997681226707
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 11,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 1,
+    "river_flow": 15.32273277046588
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 12,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 1,
+    "river_flow": 15.08517801721994
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 13,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 1,
+    "river_flow": 15.179940559046525
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 14,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 1,
+    "river_flow": 15.84965363521467
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 15,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 1,
+    "river_flow": 14.009557341708529
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 16,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 1,
+    "river_flow": 15.635277868707892
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 17,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 1,
+    "river_flow": 14.448249284738257
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 18,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 1,
+    "river_flow": 16.004740064712806
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 19,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 1,
+    "river_flow": 14.942770458664416
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 20,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 1,
+    "river_flow": 16.41003116354349
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 21,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 1,
+    "river_flow": 16.662588818698172
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 22,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 1,
+    "river_flow": 16.263871512806062
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 23,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 1,
+    "river_flow": 16.52802865205434
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 24,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 1,
+    "river_flow": 15.548314018471778
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 25,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 1,
+    "river_flow": 13.983945528647133
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 26,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 1,
+    "river_flow": 13.921416518588211
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 27,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 1,
+    "river_flow": 13.523944008282083
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 28,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 1,
+    "river_flow": 13.026778802499852
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 29,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 1,
+    "river_flow": 15.044632777787262
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 30,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 1,
+    "river_flow": 15.569874025911504
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 31,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 1,
+    "river_flow": 14.12068711249679
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 32,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 1,
+    "river_flow": 17.437557130383635
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 33,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 1,
+    "river_flow": 15.450484110174576
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 34,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 1,
+    "river_flow": 15.877625216391657
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 35,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 1,
+    "river_flow": 12.329482719801112
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 36,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 1,
+    "river_flow": 16.371190677928286
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 37,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 1,
+    "river_flow": 14.43741106889075
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 38,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 1,
+    "river_flow": 14.47460139737066
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 39,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 1,
+    "river_flow": 15.126223425292245
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 40,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 1,
+    "river_flow": 13.32509120868354
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 41,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 1,
+    "river_flow": 13.51406249356432
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 42,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 1,
+    "river_flow": 16.528446129762788
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 43,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 1,
+    "river_flow": 11.987557732745396
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 44,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 1,
+    "river_flow": 12.246075477646594
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 45,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 1,
+    "river_flow": 15.560797117485391
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 46,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 1,
+    "river_flow": 16.445834413026002
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 47,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 1,
+    "river_flow": 16.379911397352803
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 48,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 1,
+    "river_flow": 15.711510140640579
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 49,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 1,
+    "river_flow": 17.723435741969134
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 50,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 1,
+    "river_flow": 16.63981724270637
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 51,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 1,
+    "river_flow": 16.549074049777467
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 52,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 1,
+    "river_flow": 16.833782125796617
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 53,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 1,
+    "river_flow": 16.48520063893131
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 54,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 1,
+    "river_flow": 15.22011466683887
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 55,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 1,
+    "river_flow": 14.95319359561547
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 56,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 1,
+    "river_flow": 13.258376316503735
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 57,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 1,
+    "river_flow": 12.00027068269386
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 58,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 1,
+    "river_flow": 14.344478482085192
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 59,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 1,
+    "river_flow": 12.21118050560635
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 60,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 1,
+    "river_flow": 16.434261812923385
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 61,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 1,
+    "river_flow": 16.849819515522526
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 62,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 1,
+    "river_flow": 17.14094121200359
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 63,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 1,
+    "river_flow": 14.355445461170119
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 64,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 1,
+    "river_flow": 15.077775917520972
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 65,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 1,
+    "river_flow": 12.802764613903845
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 66,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 1,
+    "river_flow": 15.283213899758138
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 67,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 1,
+    "river_flow": 15.592978863579555
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 68,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 1,
+    "river_flow": 16.58833603318087
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 69,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 1,
+    "river_flow": 15.27457998702381
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 70,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 1,
+    "river_flow": 15.578122291123043
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 71,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 1,
+    "river_flow": 15.004595342723
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 72,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 1,
+    "river_flow": 14.44386743036006
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 73,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 1,
+    "river_flow": 14.772586469324217
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 74,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 1,
+    "river_flow": 14.3683677987382
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 75,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 1,
+    "river_flow": 13.0990492900089
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 76,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 1,
+    "river_flow": 16.829856391704528
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 77,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 1,
+    "river_flow": 12.719732621897393
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 78,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 1,
+    "river_flow": 13.820828058540712
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 79,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 1,
+    "river_flow": 16.143926729009618
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 80,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 1,
+    "river_flow": 12.696160705715558
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 81,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 1,
+    "river_flow": 14.900965759440115
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 82,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 1,
+    "river_flow": 13.4445120485686
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 83,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 1,
+    "river_flow": 15.118313846268945
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 84,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 1,
+    "river_flow": 15.672440704847691
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 85,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 1,
+    "river_flow": 16.149234651920768
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 86,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 1,
+    "river_flow": 16.782197615864163
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 87,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 1,
+    "river_flow": 12.396272769276505
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 88,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 1,
+    "river_flow": 13.571311548032405
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 89,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 1,
+    "river_flow": 11.722191100115102
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 90,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 1,
+    "river_flow": 12.756556952698364
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 91,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 1,
+    "river_flow": 16.084945224441597
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 92,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 1,
+    "river_flow": 11.898458276656314
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 93,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 1,
+    "river_flow": 13.80921853672229
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 94,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 1,
+    "river_flow": 12.455228037085364
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 95,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 1,
+    "river_flow": 13.764608131421662
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 96,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 1,
+    "river_flow": 15.004537652281686
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 97,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 1,
+    "river_flow": 14.990605533052191
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 98,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 1,
+    "river_flow": 13.25538574768686
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 99,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 1,
+    "river_flow": 12.458732470961714
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 100,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 1,
+    "river_flow": 17.12324870008077
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 101,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 2,
+    "river_flow": 14.659364713584925
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 102,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 2,
+    "river_flow": 15.702671748645638
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 103,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 2,
+    "river_flow": 15.888226387637799
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 104,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 2,
+    "river_flow": 16.101460814814143
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 105,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 2,
+    "river_flow": 15.90593451756555
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 106,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 2,
+    "river_flow": 15.258062489293403
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 107,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 2,
+    "river_flow": 15.499867942705686
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 108,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 2,
+    "river_flow": 14.921888123478354
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 109,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 2,
+    "river_flow": 13.75153287893366
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 110,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 2,
+    "river_flow": 15.219885370020712
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 111,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 2,
+    "river_flow": 15.156938616826
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 112,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 2,
+    "river_flow": 14.931113193659135
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 113,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 2,
+    "river_flow": 14.969107174464346
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 114,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 2,
+    "river_flow": 15.71674371418435
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 115,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 2,
+    "river_flow": 13.83834969759362
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 116,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 2,
+    "river_flow": 15.421989401124955
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 117,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 2,
+    "river_flow": 14.285224162958514
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 118,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 2,
+    "river_flow": 15.817605127774907
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 119,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 2,
+    "river_flow": 14.739106014901253
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 120,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 2,
+    "river_flow": 16.20091293014078
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 121,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 2,
+    "river_flow": 16.43347983916828
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 122,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 2,
+    "river_flow": 16.080572235644038
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 123,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 2,
+    "river_flow": 16.373854194674912
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 124,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 2,
+    "river_flow": 15.387463374829917
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 125,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 2,
+    "river_flow": 13.802530187729129
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 126,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 2,
+    "river_flow": 13.75039639562231
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 127,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 2,
+    "river_flow": 13.341404788626008
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 128,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 2,
+    "river_flow": 12.866980313487476
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 129,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 2,
+    "river_flow": 14.830489559108033
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 130,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 2,
+    "river_flow": 15.439838902414717
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 131,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 2,
+    "river_flow": 13.944969158995372
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 132,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 2,
+    "river_flow": 17.228160038445914
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 133,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 2,
+    "river_flow": 15.260099114757356
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 134,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 2,
+    "river_flow": 15.609009722658962
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 135,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 2,
+    "river_flow": 12.174903132715798
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 136,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 2,
+    "river_flow": 16.211799866864865
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 137,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 2,
+    "river_flow": 14.249550391247475
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 138,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 2,
+    "river_flow": 14.268136593152814
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 139,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 2,
+    "river_flow": 14.946421235928455
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 140,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 2,
+    "river_flow": 13.158204500818213
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 141,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 2,
+    "river_flow": 13.355901178920154
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 142,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 2,
+    "river_flow": 16.33816472686486
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 143,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 2,
+    "river_flow": 11.87323072419494
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 144,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 2,
+    "river_flow": 12.11835831178682
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 145,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 2,
+    "river_flow": 15.375004074087226
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 146,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 2,
+    "river_flow": 16.264121236996452
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 147,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 2,
+    "river_flow": 16.21698796766357
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 148,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 2,
+    "river_flow": 15.528317061210233
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 149,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 2,
+    "river_flow": 17.4783545615306
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 150,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 2,
+    "river_flow": 16.438897243866652
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 151,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 2,
+    "river_flow": 16.368729140705206
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 152,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 2,
+    "river_flow": 16.632261798556836
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 153,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 2,
+    "river_flow": 16.275392379870098
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 154,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 2,
+    "river_flow": 15.081951383251676
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 155,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 2,
+    "river_flow": 14.801692081670772
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 156,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 2,
+    "river_flow": 13.107800222424842
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 157,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 2,
+    "river_flow": 11.886417803882987
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 158,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 2,
+    "river_flow": 14.152037572515576
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 159,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 2,
+    "river_flow": 12.07922096942683
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 160,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 2,
+    "river_flow": 16.255964729188186
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 161,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 2,
+    "river_flow": 16.614317339622506
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 162,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 2,
+    "river_flow": 16.906672079690455
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 163,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 2,
+    "river_flow": 14.194982911247536
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 164,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 2,
+    "river_flow": 14.927104726378309
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 165,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 2,
+    "river_flow": 12.66642598221799
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 166,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 2,
+    "river_flow": 15.079274561687765
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 167,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 2,
+    "river_flow": 15.413378425242334
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 168,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 2,
+    "river_flow": 16.41781734081146
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 169,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 2,
+    "river_flow": 15.104367093091197
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 170,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 2,
+    "river_flow": 15.338250636282982
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 171,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 2,
+    "river_flow": 14.825965484671865
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 172,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 2,
+    "river_flow": 14.26392298577964
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 173,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 2,
+    "river_flow": 14.59202776791186
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 174,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 2,
+    "river_flow": 14.177242383056862
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 175,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 2,
+    "river_flow": 12.907562080894655
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 176,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 2,
+    "river_flow": 16.63127302379586
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 177,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 2,
+    "river_flow": 12.566452348211612
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 178,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 2,
+    "river_flow": 13.633148791820352
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 179,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 2,
+    "river_flow": 15.978279864096773
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 180,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 2,
+    "river_flow": 12.53881745262627
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 181,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 2,
+    "river_flow": 14.665706021787571
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 182,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 2,
+    "river_flow": 13.291943240335815
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 183,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 2,
+    "river_flow": 14.94354836134806
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 184,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 2,
+    "river_flow": 15.528607820602863
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 185,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 2,
+    "river_flow": 15.96390464466206
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 186,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 2,
+    "river_flow": 16.603990849625053
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 187,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 2,
+    "river_flow": 12.228155584552791
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 188,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 2,
+    "river_flow": 13.397160648685492
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 189,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 2,
+    "river_flow": 11.564287688378444
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 190,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 2,
+    "river_flow": 12.575437676344686
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 191,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 2,
+    "river_flow": 15.947973679499095
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 192,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 2,
+    "river_flow": 11.75811177372492
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 193,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 2,
+    "river_flow": 13.634422838545552
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 194,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 2,
+    "river_flow": 12.315220152685985
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 195,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 2,
+    "river_flow": 13.600359127586376
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 196,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 2,
+    "river_flow": 14.850345431404406
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 197,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 2,
+    "river_flow": 14.77503943083548
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 198,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 2,
+    "river_flow": 13.109016800471268
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 199,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 2,
+    "river_flow": 12.344607018363751
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 200,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 2,
+    "river_flow": 16.93342531256836
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 201,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 3,
+    "river_flow": 14.486468049391707
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 202,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 3,
+    "river_flow": 15.489617036067592
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 203,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 3,
+    "river_flow": 15.65417849336838
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 204,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 3,
+    "river_flow": 15.94670979772422
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 205,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 3,
+    "river_flow": 15.712367205741904
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 206,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 3,
+    "river_flow": 15.061241796305541
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 207,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 3,
+    "river_flow": 15.305742818589604
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 208,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 3,
+    "river_flow": 14.69554198533594
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 209,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 3,
+    "river_flow": 13.578819480313589
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 210,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 3,
+    "river_flow": 15.08002541043879
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 211,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 3,
+    "river_flow": 14.996361584306197
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 212,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 3,
+    "river_flow": 14.781960963791015
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 213,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 3,
+    "river_flow": 14.76629180514071
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 214,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 3,
+    "river_flow": 15.586270256824468
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 215,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 3,
+    "river_flow": 13.67550174691041
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 216,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 3,
+    "river_flow": 15.216782840659338
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 217,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 3,
+    "river_flow": 14.128830191514933
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 218,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 3,
+    "river_flow": 15.636590314142932
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 219,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 3,
+    "river_flow": 14.542957554698273
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 220,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 3,
+    "river_flow": 15.997658478570822
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 221,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 3,
+    "river_flow": 16.211061808214314
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 222,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 3,
+    "river_flow": 15.902442909441177
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 223,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 3,
+    "river_flow": 16.221667530598232
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 224,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 3,
+    "river_flow": 15.229596316990113
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 225,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 3,
+    "river_flow": 13.631679837609187
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 226,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 3,
+    "river_flow": 13.587971157162196
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 227,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 3,
+    "river_flow": 13.171745326341957
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 228,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 3,
+    "river_flow": 12.719899497981826
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 229,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 3,
+    "river_flow": 14.627116575210245
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 230,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 3,
+    "river_flow": 15.311399993588006
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 231,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 3,
+    "river_flow": 13.778329010754993
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 232,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 3,
+    "river_flow": 17.023470557171716
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 233,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 3,
+    "river_flow": 15.077317049586764
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 234,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 3,
+    "river_flow": 15.352985423538897
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 235,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 3,
+    "river_flow": 12.038346104419048
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 236,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 3,
+    "river_flow": 16.05471559239426
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 237,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 3,
+    "river_flow": 14.07142875003334
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 238,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 3,
+    "river_flow": 14.073719288822822
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 239,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 3,
+    "river_flow": 14.771969623908273
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 240,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 3,
+    "river_flow": 13.002520091168734
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 241,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 3,
+    "river_flow": 13.207323905059908
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 242,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 3,
+    "river_flow": 16.15273474867391
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 243,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 3,
+    "river_flow": 11.77483335973698
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 244,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 3,
+    "river_flow": 12.004623073889878
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 245,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 3,
+    "river_flow": 15.193968827377232
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 246,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 3,
+    "river_flow": 16.08619035468809
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 247,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 3,
+    "river_flow": 16.058255956511502
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 248,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 3,
+    "river_flow": 15.350333554052003
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 249,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 3,
+    "river_flow": 17.239460607071113
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 250,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 3,
+    "river_flow": 16.242750575157064
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 251,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 3,
+    "river_flow": 16.193141866480588
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 252,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 3,
+    "river_flow": 16.434432440995636
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 253,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 3,
+    "river_flow": 16.071721056161277
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 254,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 3,
+    "river_flow": 14.947110271525208
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 255,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 3,
+    "river_flow": 14.653343146082284
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 256,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 3,
+    "river_flow": 12.966940938594758
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 257,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 3,
+    "river_flow": 11.786014123172793
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 258,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 3,
+    "river_flow": 13.970220807454645
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 259,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 3,
+    "river_flow": 11.961555046200703
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 260,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 3,
+    "river_flow": 16.081298365260817
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 261,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 3,
+    "river_flow": 16.38669647949896
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 262,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 3,
+    "river_flow": 16.679708245025616
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 263,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 3,
+    "river_flow": 14.040627707480462
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 264,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 3,
+    "river_flow": 14.78047831064353
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 265,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 3,
+    "river_flow": 12.538025983080589
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 266,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 3,
+    "river_flow": 14.883977748592226
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 267,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 3,
+    "river_flow": 15.23694925781211
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 268,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 3,
+    "river_flow": 16.25181636413863
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 269,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 3,
+    "river_flow": 14.940423530186665
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 270,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 3,
+    "river_flow": 15.109032197507531
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 271,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 3,
+    "river_flow": 14.652441901048473
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 272,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 3,
+    "river_flow": 14.090360392227165
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 273,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 3,
+    "river_flow": 14.418416544230018
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 274,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 3,
+    "river_flow": 13.996509247489092
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 275,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 3,
+    "river_flow": 12.733035212322577
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 276,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 3,
+    "river_flow": 16.43754606403265
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 277,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 3,
+    "river_flow": 12.423147051968877
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 278,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 3,
+    "river_flow": 13.456082464860327
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 279,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 3,
+    "river_flow": 15.814928934930311
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 280,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 3,
+    "river_flow": 12.395424895739644
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 281,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 3,
+    "river_flow": 14.442711331174221
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 282,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 3,
+    "river_flow": 13.147347205431176
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 283,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 3,
+    "river_flow": 14.775697932158838
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 284,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 3,
+    "river_flow": 15.388249992725866
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 285,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 3,
+    "river_flow": 15.781052036787896
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 286,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 3,
+    "river_flow": 16.42766694715389
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 287,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 3,
+    "river_flow": 12.078961347420396
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 288,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 3,
+    "river_flow": 13.23164001589421
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 289,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 3,
+    "river_flow": 11.431734396359992
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 290,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 3,
+    "river_flow": 12.413819796103192
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 291,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 3,
+    "river_flow": 15.811215485234968
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 292,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 3,
+    "river_flow": 11.636214904823955
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 293,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 3,
+    "river_flow": 13.470762547290327
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 294,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 3,
+    "river_flow": 12.18453133881717
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 295,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 3,
+    "river_flow": 13.445192929339642
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 296,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 3,
+    "river_flow": 14.70146163960736
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 297,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 3,
+    "river_flow": 14.567151206769617
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 298,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 3,
+    "river_flow": 12.97113851345002
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 299,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 3,
+    "river_flow": 12.238209789625877
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 300,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 3,
+    "river_flow": 16.748375438203425
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 301,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 4,
+    "river_flow": 14.32010458267132
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 302,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 4,
+    "river_flow": 15.283542883337564
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 303,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 4,
+    "river_flow": 15.429182392847894
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 304,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 4,
+    "river_flow": 15.794298701342772
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 305,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 4,
+    "river_flow": 15.52383434966231
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 306,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 4,
+    "river_flow": 14.872208849182304
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 307,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 4,
+    "river_flow": 15.117630705990965
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 308,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 4,
+    "river_flow": 14.479172305608694
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 309,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 4,
+    "river_flow": 13.415746399891223
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 310,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 4,
+    "river_flow": 14.943302265283192
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 311,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 4,
+    "river_flow": 14.84073929998312
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 312,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 4,
+    "river_flow": 14.637447962533981
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 313,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 4,
+    "river_flow": 14.57116985192807
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 314,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 4,
+    "river_flow": 15.458173305488286
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 315,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 4,
+    "river_flow": 13.520223875970165
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 316,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 4,
+    "river_flow": 15.019239510771115
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 317,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 4,
+    "river_flow": 13.97850837128583
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 318,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 4,
+    "river_flow": 15.461392332410067
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 319,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 4,
+    "river_flow": 14.35406413710294
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 320,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 4,
+    "river_flow": 15.800093202761861
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 321,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 4,
+    "river_flow": 15.995276957885311
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 322,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 4,
+    "river_flow": 15.72929548446355
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 323,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 4,
+    "river_flow": 16.07150826594257
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 324,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 4,
+    "river_flow": 15.074758586576259
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 325,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 4,
+    "river_flow": 13.470394556497808
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 326,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 4,
+    "river_flow": 13.433325804005449
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 327,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 4,
+    "river_flow": 13.013401529399884
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 328,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 4,
+    "river_flow": 12.583524038579762
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 329,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 4,
+    "river_flow": 14.433640841975977
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 330,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 4,
+    "river_flow": 15.184583244241134
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 331,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 4,
+    "river_flow": 13.619959399617189
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 332,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 4,
+    "river_flow": 16.823576971448222
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 333,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 4,
+    "river_flow": 14.901656943094212
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 334,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 4,
+    "river_flow": 15.108888922608298
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 335,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 4,
+    "river_flow": 11.91639514027776
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 336,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 4,
+    "river_flow": 15.900061091532882
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 337,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 4,
+    "river_flow": 13.902236415428693
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 338,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 4,
+    "river_flow": 13.890251003317495
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 339,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 4,
+    "river_flow": 14.602723126095853
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 340,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 4,
+    "river_flow": 12.856473117262697
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 341,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 4,
+    "river_flow": 13.067221754072248
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 342,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 4,
+    "river_flow": 15.971986278462953
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 343,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 4,
+    "river_flow": 11.688138042057915
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 344,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 4,
+    "river_flow": 11.90180242629883
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 345,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 4,
+    "river_flow": 15.017512239954774
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 346,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 4,
+    "river_flow": 15.912118000972333
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 347,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 4,
+    "river_flow": 15.903559043039076
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 348,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 4,
+    "river_flow": 15.177284817416554
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 349,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 4,
+    "river_flow": 17.006858523487093
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 350,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 4,
+    "river_flow": 16.05136871944703
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 351,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 4,
+    "river_flow": 16.022124018505785
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 352,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 4,
+    "river_flow": 16.240582945976396
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 353,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 4,
+    "river_flow": 15.874137282070993
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 354,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 4,
+    "river_flow": 14.815437731510627
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 355,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 4,
+    "river_flow": 14.508064528330637
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 356,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 4,
+    "river_flow": 12.834544259177587
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 357,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 4,
+    "river_flow": 11.695916998729343
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 358,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 4,
+    "river_flow": 13.798136059687506
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 359,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 4,
+    "river_flow": 11.855377100129557
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 360,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 4,
+    "river_flow": 15.91034433855257
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 361,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 4,
+    "river_flow": 16.16677891194251
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 362,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 4,
+    "river_flow": 16.459929204898806
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 363,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 4,
+    "river_flow": 13.891965233614595
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 364,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 4,
+    "river_flow": 14.63766095316598
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 365,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 4,
+    "river_flow": 12.416447612639644
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 366,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 4,
+    "river_flow": 14.696774681085033
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 367,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 4,
+    "river_flow": 15.06379016892787
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 368,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 4,
+    "river_flow": 16.09015985979056
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 369,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 4,
+    "river_flow": 14.782392905741357
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 370,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 4,
+    "river_flow": 14.88991921849924
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 371,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 4,
+    "river_flow": 14.483754021685295
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 372,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 4,
+    "river_flow": 13.922795389878566
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 373,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 4,
+    "river_flow": 14.251353901527002
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 374,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 4,
+    "river_flow": 13.825288744835898
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 375,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 4,
+    "river_flow": 12.573193277455905
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 376,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 4,
+    "river_flow": 16.248539810363198
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 377,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 4,
+    "river_flow": 12.288556871996729
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 378,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 4,
+    "river_flow": 13.288637026974
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 379,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 4,
+    "river_flow": 15.654106496449376
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 380,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 4,
+    "river_flow": 12.263985728869292
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 381,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 4,
+    "river_flow": 14.231193306190228
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 382,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 4,
+    "river_flow": 13.009800166781151
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 383,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 4,
+    "river_flow": 14.61434045979506
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 384,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 4,
+    "river_flow": 15.251222743161868
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 385,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 4,
+    "river_flow": 15.600990340223014
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 386,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 4,
+    "river_flow": 16.25344295578321
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 387,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 4,
+    "river_flow": 11.945452209916736
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 388,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 4,
+    "river_flow": 13.07395261298591
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 389,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 4,
+    "river_flow": 11.3188316422615
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 390,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 4,
+    "river_flow": 12.268331997988854
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 391,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 4,
+    "river_flow": 15.674915950800417
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 392,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 4,
+    "river_flow": 11.529132685086717
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 393,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 4,
+    "river_flow": 13.316745854065587
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 394,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 4,
+    "river_flow": 12.062060826948969
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 395,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 4,
+    "river_flow": 13.298263868980047
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 396,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 4,
+    "river_flow": 14.557600066402554
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 397,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 4,
+    "river_flow": 14.366711051593375
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 398,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 4,
+    "river_flow": 12.840444897669547
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 399,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 4,
+    "river_flow": 12.13791415187231
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 400,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 4,
+    "river_flow": 16.567992331258203
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 401,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 5,
+    "river_flow": 14.159889947863032
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 402,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 5,
+    "river_flow": 15.084407810661942
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 403,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 5,
+    "river_flow": 15.213008699585666
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 404,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 5,
+    "river_flow": 15.644308442041721
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 405,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 5,
+    "river_flow": 15.34029114883405
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 406,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 5,
+    "river_flow": 14.69049680720309
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 407,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 5,
+    "river_flow": 14.935395010473167
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 408,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 5,
+    "river_flow": 14.272278845955416
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 409,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 5,
+    "river_flow": 13.261321675581321
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 410,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 5,
+    "river_flow": 14.809634677515861
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 411,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 5,
+    "river_flow": 14.689855085987993
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 412,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 5,
+    "river_flow": 14.497341543220939
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 413,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 5,
+    "river_flow": 14.383495370673206
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 414,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 5,
+    "river_flow": 15.33241638912052
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 415,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 5,
+    "river_flow": 13.371881117118365
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 416,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 5,
+    "river_flow": 14.829017359910683
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 417,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 5,
+    "river_flow": 13.833801886905375
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 418,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 5,
+    "river_flow": 15.291752779726334
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 419,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 5,
+    "river_flow": 14.172244301701907
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 420,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 5,
+    "river_flow": 15.60809751542665
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 421,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 5,
+    "river_flow": 15.78611052761096
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 422,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 5,
+    "river_flow": 15.560979305894513
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 423,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 5,
+    "river_flow": 15.9234485206125
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 424,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 5,
+    "river_flow": 14.923031027419064
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 425,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 5,
+    "river_flow": 13.317814523463797
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 426,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 5,
+    "river_flow": 13.285802724152042
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 427,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 5,
+    "river_flow": 12.865079877340142
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 428,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 5,
+    "river_flow": 12.456280103212583
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 429,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 5,
+    "river_flow": 14.249313207107132
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 430,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 5,
+    "river_flow": 15.059444383526895
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 431,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 5,
+    "river_flow": 13.469177767411521
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 432,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 5,
+    "river_flow": 16.628588953257747
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 433,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 5,
+    "river_flow": 14.732696665123273
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 434,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 5,
+    "river_flow": 14.87581605272344
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 435,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 5,
+    "river_flow": 11.806398905202984
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 436,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 5,
+    "river_flow": 15.747982356411393
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 437,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 5,
+    "river_flow": 13.741272275735378
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 438,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 5,
+    "river_flow": 13.716779094885066
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 439,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 5,
+    "river_flow": 14.438590059659766
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 440,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 5,
+    "river_flow": 12.718847131405346
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 441,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 5,
+    "river_flow": 12.934679059947255
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 442,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 5,
+    "river_flow": 15.795795042803663
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 443,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 5,
+    "river_flow": 11.610165107168374
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 444,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 5,
+    "river_flow": 11.807636467371
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 445,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 5,
+    "river_flow": 14.845531168145811
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 446,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 5,
+    "river_flow": 15.742004143816803
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 447,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 5,
+    "river_flow": 15.752766348945222
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 448,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 5,
+    "river_flow": 15.00896489465025
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 449,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 5,
+    "river_flow": 16.78012861874387
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 450,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 5,
+    "river_flow": 15.86577964419247
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 451,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 5,
+    "river_flow": 15.855523265026306
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 452,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 5,
+    "river_flow": 16.050646980338755
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 453,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 5,
+    "river_flow": 15.68262298995554
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 454,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 5,
+    "river_flow": 14.686813144638418
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 455,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 5,
+    "river_flow": 14.365832359107074
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 456,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 5,
+    "river_flow": 12.709594652340707
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 457,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 5,
+    "river_flow": 11.613839403556277
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 458,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 5,
+    "river_flow": 13.63499960665343
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 459,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 5,
+    "river_flow": 11.758543932658513
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 460,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 5,
+    "river_flow": 15.74320653914452
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 461,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 5,
+    "river_flow": 15.954427968823477
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 462,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 5,
+    "river_flow": 16.247249814182723
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 463,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 5,
+    "river_flow": 13.748661901037524
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 464,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 5,
+    "river_flow": 14.498471708702645
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 465,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 5,
+    "river_flow": 12.300891417557754
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 466,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 5,
+    "river_flow": 14.517196972995523
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 467,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 5,
+    "river_flow": 14.894051994346423
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 468,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 5,
+    "river_flow": 15.932700902914073
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 469,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 5,
+    "river_flow": 14.629959072904708
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 470,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 5,
+    "river_flow": 14.680454703393735
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 471,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 5,
+    "river_flow": 14.31973131360002
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 472,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 5,
+    "river_flow": 13.760969941790053
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 473,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 5,
+    "river_flow": 14.090515053644115
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 474,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 5,
+    "river_flow": 13.662814482364247
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 475,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 5,
+    "river_flow": 12.426139292758322
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 476,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 5,
+    "river_flow": 16.064163826643764
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 477,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 5,
+    "river_flow": 12.162845821257937
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 478,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 5,
+    "river_flow": 13.130005020024457
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 479,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 5,
+    "river_flow": 15.496062542710398
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 480,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 5,
+    "river_flow": 12.142858337875367
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 481,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 5,
+    "river_flow": 14.030493090524008
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 482,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 5,
+    "river_flow": 12.878591539377782
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 483,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 5,
+    "river_flow": 14.459102223185697
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 484,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 5,
+    "river_flow": 15.117407277915538
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 485,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 5,
+    "river_flow": 15.424058204017902
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 486,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 5,
+    "river_flow": 16.08156865245296
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 487,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 5,
+    "river_flow": 11.82504838203673
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 488,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 5,
+    "river_flow": 12.923535884746794
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 489,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 5,
+    "river_flow": 11.221329403994796
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 490,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 5,
+    "river_flow": 12.13630529937791
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 491,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 5,
+    "river_flow": 15.5393470857174
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 492,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 5,
+    "river_flow": 11.4340494505573
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 493,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 5,
+    "river_flow": 13.17117627649379
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 494,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 5,
+    "river_flow": 11.946982595654536
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 495,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 5,
+    "river_flow": 13.15884818544203
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 496,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 5,
+    "river_flow": 14.41850617576934
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 497,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 5,
+    "river_flow": 14.173597654986857
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 498,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 5,
+    "river_flow": 12.715973361496582
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 499,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 5,
+    "river_flow": 12.042604426649614
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 500,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 5,
+    "river_flow": 16.39219705631744
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 501,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 6,
+    "river_flow": 14.005423983075719
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 502,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 6,
+    "river_flow": 14.891993213181381
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 503,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 6,
+    "river_flow": 15.005223343032146
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 504,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 6,
+    "river_flow": 15.49675007702669
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 505,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 6,
+    "river_flow": 15.161604951892368
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 506,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 6,
+    "river_flow": 14.515633157568953
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 507,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 6,
+    "river_flow": 14.758819360759185
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 508,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 6,
+    "river_flow": 14.075330273752805
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 509,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 6,
+    "river_flow": 13.114628643533441
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 510,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 6,
+    "river_flow": 14.678910435638647
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 511,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 6,
+    "river_flow": 14.54347298772146
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 512,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 6,
+    "river_flow": 14.361399933313692
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 513,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 6,
+    "river_flow": 14.202915471638523
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 514,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 6,
+    "river_flow": 15.208936710938207
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 515,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 6,
+    "river_flow": 13.229853428541295
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 516,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 6,
+    "river_flow": 14.645731501760006
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 517,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 6,
+    "river_flow": 13.694254351672885
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 518,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 6,
+    "river_flow": 15.12739902626964
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 519,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 6,
+    "river_flow": 13.99717982584625
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 520,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 6,
+    "river_flow": 15.421481707176945
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 521,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 6,
+    "river_flow": 15.583396468040695
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 522,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 6,
+    "river_flow": 15.397312063199093
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 523,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 6,
+    "river_flow": 15.777498482679205
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 524,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 6,
+    "river_flow": 14.774405843863004
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 525,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 6,
+    "river_flow": 13.173144850479861
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 526,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 6,
+    "river_flow": 13.144762685924848
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 527,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 6,
+    "river_flow": 12.725624445781158
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 528,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 6,
+    "river_flow": 12.336814690038322
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 529,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 6,
+    "river_flow": 14.07341920072338
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 530,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 6,
+    "river_flow": 14.935987665780486
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 531,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 6,
+    "river_flow": 13.325336339861767
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 532,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 6,
+    "river_flow": 16.438469886438575
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 533,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 6,
+    "river_flow": 14.570021913494907
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 534,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 6,
+    "river_flow": 14.65421463590353
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 535,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 6,
+    "river_flow": 11.706209360880386
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 536,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 6,
+    "river_flow": 15.598531843673973
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 537,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 6,
+    "river_flow": 13.587875327645493
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 538,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 6,
+    "river_flow": 13.552423743473167
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 539,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 6,
+    "river_flow": 14.27939570350055
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 540,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 6,
+    "river_flow": 12.588552869684824
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 541,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 6,
+    "river_flow": 12.808857583072523
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 542,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 6,
+    "river_flow": 15.623994164716786
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 543,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 6,
+    "river_flow": 11.538690691471775
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 544,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 6,
+    "river_flow": 11.720337871209692
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 545,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 6,
+    "river_flow": 14.677846188132788
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 546,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 6,
+    "river_flow": 15.575837760441543
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 547,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 6,
+    "river_flow": 15.605730991787846
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 548,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 6,
+    "river_flow": 14.845127336661568
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 549,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 6,
+    "river_flow": 16.56056515500717
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 550,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 6,
+    "river_flow": 15.685713281992657
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 551,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 6,
+    "river_flow": 15.693163070521043
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 552,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 6,
+    "river_flow": 15.865922903071832
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 553,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 6,
+    "river_flow": 15.4970221792984
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 554,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 6,
+    "river_flow": 14.561095317646208
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 555,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 6,
+    "river_flow": 14.22655339089582
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 556,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 6,
+    "river_flow": 12.591176724866322
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 557,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 6,
+    "river_flow": 11.538003885631042
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 558,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 6,
+    "river_flow": 13.48008286112554
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 559,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 6,
+    "river_flow": 11.669319652023837
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 560,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 6,
+    "river_flow": 15.579880058313035
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 561,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 6,
+    "river_flow": 15.749376356587689
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 562,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 6,
+    "river_flow": 16.041453100189603
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 563,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 6,
+    "river_flow": 13.610365496248283
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 564,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 6,
+    "river_flow": 14.362702256568205
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 565,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 6,
+    "river_flow": 12.190594672778017
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 566,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 6,
+    "river_flow": 14.344771518341014
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 567,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 6,
+    "river_flow": 14.72774883541713
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 568,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 6,
+    "river_flow": 15.779277696171402
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 569,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 6,
+    "river_flow": 14.48280972915001
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 570,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 6,
+    "river_flow": 14.480096226556418
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 571,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 6,
+    "river_flow": 14.160127996960307
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 572,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 6,
+    "river_flow": 13.60453672947718
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 573,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 6,
+    "river_flow": 13.935545143607408
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 574,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 6,
+    "river_flow": 13.508370847952419
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 575,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 6,
+    "river_flow": 12.290231643514742
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 576,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 6,
+    "river_flow": 15.884274194037092
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 577,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 6,
+    "river_flow": 12.044852746690387
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 578,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 6,
+    "river_flow": 12.979401879530279
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 579,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 6,
+    "river_flow": 15.340898959863852
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 580,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 6,
+    "river_flow": 12.03062794389612
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 581,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 6,
+    "river_flow": 13.839810280660402
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 582,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 6,
+    "river_flow": 12.753040113520942
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 583,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 6,
+    "river_flow": 14.30961772109691
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 584,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 6,
+    "river_flow": 14.986669558546227
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 585,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 6,
+    "river_flow": 15.250395525658627
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 586,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 6,
+    "river_flow": 15.912161783692063
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 587,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 6,
+    "river_flow": 11.71562124566168
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 588,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 6,
+    "river_flow": 12.77973413150679
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 589,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 6,
+    "river_flow": 11.13596530513484
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 590,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 6,
+    "river_flow": 12.015534976466101
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 591,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 6,
+    "river_flow": 15.404673709984879
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 592,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 6,
+    "river_flow": 11.348709538083396
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 593,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 6,
+    "river_flow": 13.032977617585656
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 594,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 6,
+    "river_flow": 11.838456151007108
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 595,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 6,
+    "river_flow": 13.026270698188195
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 596,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 6,
+    "river_flow": 14.283926668175218
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 597,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 6,
+    "river_flow": 13.98748007457193
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 598,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 6,
+    "river_flow": 12.596850858188862
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 599,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 6,
+    "river_flow": 11.951341694302771
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 600,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 6,
+    "river_flow": 16.22086725044796
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 601,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 7,
+    "river_flow": 13.856424279842829
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 602,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 7,
+    "river_flow": 14.706261020848551
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 603,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 7,
+    "river_flow": 14.806052914322942
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 604,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 7,
+    "river_flow": 15.351714197771901
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 605,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 7,
+    "river_flow": 14.987759737469206
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 606,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 7,
+    "river_flow": 14.347260545408068
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 607,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 7,
+    "river_flow": 14.58780760844132
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 608,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 7,
+    "river_flow": 13.88752915834813
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 609,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 7,
+    "river_flow": 12.974977890463393
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 610,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 7,
+    "river_flow": 14.551078856994225
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 611,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 7,
+    "river_flow": 14.401427238604915
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 612,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 7,
+    "river_flow": 14.229439968829423
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 613,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 7,
+    "river_flow": 14.029243656147829
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 614,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 7,
+    "river_flow": 15.087716462457385
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 615,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 7,
+    "river_flow": 13.093701509438201
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 616,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 7,
+    "river_flow": 14.46912024446684
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 617,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 7,
+    "river_flow": 13.559538387282318
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 618,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 7,
+    "river_flow": 14.968125204827384
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 619,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 7,
+    "river_flow": 13.828738897769258
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 620,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 7,
+    "river_flow": 15.240166647311353
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 621,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 7,
+    "river_flow": 15.38711871236438
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 622,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 7,
+    "river_flow": 15.238177875616705
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 623,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 7,
+    "river_flow": 15.63374392281224
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 624,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 7,
+    "river_flow": 14.628970073874976
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 625,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 7,
+    "river_flow": 13.035729870813089
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 626,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 7,
+    "river_flow": 13.009748262142852
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 627,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 7,
+    "river_flow": 12.594122234640851
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 628,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 7,
+    "river_flow": 12.224133931242855
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 629,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 7,
+    "river_flow": 13.905382080818953
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 630,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 7,
+    "river_flow": 14.814283660615288
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 631,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 7,
+    "river_flow": 13.187924168648419
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 632,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 7,
+    "river_flow": 16.2533024485006
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 633,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 7,
+    "river_flow": 14.41329128808693
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 634,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 7,
+    "river_flow": 14.443224287698209
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 635,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 7,
+    "river_flow": 11.614185665688918
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 636,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 7,
+    "river_flow": 15.451844215092361
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 637,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 7,
+    "river_flow": 13.441500459759046
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 638,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 7,
+    "river_flow": 13.396448141741702
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 639,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 7,
+    "river_flow": 14.12508233198429
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 640,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 7,
+    "river_flow": 12.464822540950603
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 641,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 7,
+    "river_flow": 12.689109505526424
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 642,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 7,
+    "river_flow": 15.456499537539177
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 643,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 7,
+    "river_flow": 11.4721858186481
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 644,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 7,
+    "river_flow": 11.63864554992442
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 645,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 7,
+    "river_flow": 14.514416761921318
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 646,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 7,
+    "river_flow": 15.413704242485148
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 647,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 7,
+    "river_flow": 15.462348475605419
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 648,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 7,
+    "river_flow": 14.685636524528995
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 649,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 7,
+    "river_flow": 16.347826529630087
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 650,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 7,
+    "river_flow": 15.510915187780224
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 651,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 7,
+    "river_flow": 15.534927274058765
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 652,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 7,
+    "river_flow": 15.686182565926737
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 653,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 7,
+    "river_flow": 15.317308620053495
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 654,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 7,
+    "river_flow": 14.438197624464918
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 655,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 7,
+    "river_flow": 14.090246906342385
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 656,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 7,
+    "river_flow": 12.478600356741794
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 657,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 7,
+    "river_flow": 11.467164920005507
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 658,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 7,
+    "river_flow": 13.332765152547832
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 659,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 7,
+    "river_flow": 11.586418984690987
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 660,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 7,
+    "river_flow": 15.420453226491984
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 661,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 7,
+    "river_flow": 15.551192757129003
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 662,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 7,
+    "river_flow": 15.842454206798731
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 663,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 7,
+    "river_flow": 13.476836909274489
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 664,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 7,
+    "river_flow": 14.23023030681053
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 665,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 7,
+    "river_flow": 12.085122144295509
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 666,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 7,
+    "river_flow": 14.17913146076488
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 667,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 7,
+    "river_flow": 14.565038497911756
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 668,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 7,
+    "river_flow": 15.6297714321972
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 669,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 7,
+    "river_flow": 14.340683825273132
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 670,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 7,
+    "river_flow": 14.288474442327685
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 671,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 7,
+    "river_flow": 14.00486528657279
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 672,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 7,
+    "river_flow": 13.453354892202686
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 673,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 7,
+    "river_flow": 13.786201121509068
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 674,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 7,
+    "river_flow": 13.361358001351384
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 675,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 7,
+    "river_flow": 12.164123625388337
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 676,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 7,
+    "river_flow": 15.708815261425523
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 677,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 7,
+    "river_flow": 11.933602797283967
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 678,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 7,
+    "river_flow": 12.83625441591433
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 679,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 7,
+    "river_flow": 15.188827839367697
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 680,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 7,
+    "river_flow": 11.926159442486883
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 681,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 7,
+    "river_flow": 13.659017368206753
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 682,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 7,
+    "river_flow": 12.63269823834611
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 683,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 7,
+    "river_flow": 14.165580719444787
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 684,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 7,
+    "river_flow": 14.858917858389923
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 685,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 7,
+    "river_flow": 15.080292242673234
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 686,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 7,
+    "river_flow": 15.745456068738505
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 687,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 7,
+    "river_flow": 11.615491782893026
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 688,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 7,
+    "river_flow": 12.642224615542471
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 689,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 7,
+    "river_flow": 11.060283005942207
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 690,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 7,
+    "river_flow": 11.904304796148033
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 691,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 7,
+    "river_flow": 15.271153453943631
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 692,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 7,
+    "river_flow": 11.271374566477578
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 693,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 7,
+    "river_flow": 12.901352064991604
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 694,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 7,
+    "river_flow": 11.735969831544358
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 695,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 7,
+    "river_flow": 12.899982198520703
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 696,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 7,
+    "river_flow": 14.153649805086703
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 697,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 7,
+    "river_flow": 13.80829537738078
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 698,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 7,
+    "river_flow": 12.48253359444655
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 699,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 7,
+    "river_flow": 11.863596136995605
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 700,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 7,
+    "river_flow": 16.053941395518624
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 701,
+  "fields": {
+    "prediction_index": 0,
+    "calculation_output": 8,
+    "river_flow": 13.712517554274452
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 702,
+  "fields": {
+    "prediction_index": 1,
+    "calculation_output": 8,
+    "river_flow": 14.526847829823595
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 703,
+  "fields": {
+    "prediction_index": 2,
+    "calculation_output": 8,
+    "river_flow": 14.61495373629111
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 704,
+  "fields": {
+    "prediction_index": 3,
+    "calculation_output": 8,
+    "river_flow": 15.209152297498278
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 705,
+  "fields": {
+    "prediction_index": 4,
+    "calculation_output": 8,
+    "river_flow": 14.818556429515818
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 706,
+  "fields": {
+    "prediction_index": 5,
+    "calculation_output": 8,
+    "river_flow": 14.184946393233236
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 707,
+  "fields": {
+    "prediction_index": 6,
+    "calculation_output": 8,
+    "river_flow": 14.422089847994497
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 708,
+  "fields": {
+    "prediction_index": 7,
+    "calculation_output": 8,
+    "river_flow": 13.708157242732227
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 709,
+  "fields": {
+    "prediction_index": 8,
+    "calculation_output": 8,
+    "river_flow": 12.84162912232177
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 710,
+  "fields": {
+    "prediction_index": 9,
+    "calculation_output": 8,
+    "river_flow": 14.426012539089884
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 711,
+  "fields": {
+    "prediction_index": 10,
+    "calculation_output": 8,
+    "river_flow": 14.263486084397897
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 712,
+  "fields": {
+    "prediction_index": 11,
+    "calculation_output": 8,
+    "river_flow": 14.101233067358747
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 713,
+  "fields": {
+    "prediction_index": 12,
+    "calculation_output": 8,
+    "river_flow": 13.862060407399348
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 714,
+  "fields": {
+    "prediction_index": 13,
+    "calculation_output": 8,
+    "river_flow": 14.968676849694019
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 715,
+  "fields": {
+    "prediction_index": 14,
+    "calculation_output": 8,
+    "river_flow": 12.962891312778892
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 716,
+  "fields": {
+    "prediction_index": 15,
+    "calculation_output": 8,
+    "river_flow": 14.298794075142094
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 717,
+  "fields": {
+    "prediction_index": 16,
+    "calculation_output": 8,
+    "river_flow": 13.429249443433887
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 718,
+  "fields": {
+    "prediction_index": 17,
+    "calculation_output": 8,
+    "river_flow": 14.813668512657443
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 719,
+  "fields": {
+    "prediction_index": 18,
+    "calculation_output": 8,
+    "river_flow": 13.666507773579061
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 720,
+  "fields": {
+    "prediction_index": 19,
+    "calculation_output": 8,
+    "river_flow": 15.0639168251739
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 721,
+  "fields": {
+    "prediction_index": 20,
+    "calculation_output": 8,
+    "river_flow": 15.19698354506363
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 722,
+  "fields": {
+    "prediction_index": 21,
+    "calculation_output": 8,
+    "river_flow": 15.083380867064728
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 723,
+  "fields": {
+    "prediction_index": 22,
+    "calculation_output": 8,
+    "river_flow": 15.492144063832079
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 724,
+  "fields": {
+    "prediction_index": 23,
+    "calculation_output": 8,
+    "river_flow": 14.486638878261399
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 725,
+  "fields": {
+    "prediction_index": 24,
+    "calculation_output": 8,
+    "river_flow": 12.904913512047935
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 726,
+  "fields": {
+    "prediction_index": 25,
+    "calculation_output": 8,
+    "river_flow": 12.880210797477444
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 727,
+  "fields": {
+    "prediction_index": 26,
+    "calculation_output": 8,
+    "river_flow": 12.469675411719054
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 728,
+  "fields": {
+    "prediction_index": 27,
+    "calculation_output": 8,
+    "river_flow": 12.117260111443397
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 729,
+  "fields": {
+    "prediction_index": 28,
+    "calculation_output": 8,
+    "river_flow": 13.744587960223251
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 730,
+  "fields": {
+    "prediction_index": 29,
+    "calculation_output": 8,
+    "river_flow": 14.694295631378456
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 731,
+  "fields": {
+    "prediction_index": 30,
+    "calculation_output": 8,
+    "river_flow": 13.056392121274481
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 732,
+  "fields": {
+    "prediction_index": 31,
+    "calculation_output": 8,
+    "river_flow": 16.072916036516503
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 733,
+  "fields": {
+    "prediction_index": 32,
+    "calculation_output": 8,
+    "river_flow": 14.262132281156687
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 734,
+  "fields": {
+    "prediction_index": 33,
+    "calculation_output": 8,
+    "river_flow": 14.242063619129743
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 735,
+  "fields": {
+    "prediction_index": 34,
+    "calculation_output": 8,
+    "river_flow": 11.52890610060451
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 736,
+  "fields": {
+    "prediction_index": 35,
+    "calculation_output": 8,
+    "river_flow": 15.307883733374977
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 737,
+  "fields": {
+    "prediction_index": 36,
+    "calculation_output": 8,
+    "river_flow": 13.301586016311822
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 738,
+  "fields": {
+    "prediction_index": 37,
+    "calculation_output": 8,
+    "river_flow": 13.248123929256092
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 739,
+  "fields": {
+    "prediction_index": 38,
+    "calculation_output": 8,
+    "river_flow": 13.975415910559114
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 740,
+  "fields": {
+    "prediction_index": 39,
+    "calculation_output": 8,
+    "river_flow": 12.346823049951539
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 741,
+  "fields": {
+    "prediction_index": 40,
+    "calculation_output": 8,
+    "river_flow": 12.574764512396804
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 742,
+  "fields": {
+    "prediction_index": 41,
+    "calculation_output": 8,
+    "river_flow": 15.293122688930541
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 743,
+  "fields": {
+    "prediction_index": 42,
+    "calculation_output": 8,
+    "river_flow": 11.409380764568114
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 744,
+  "fields": {
+    "prediction_index": 43,
+    "calculation_output": 8,
+    "river_flow": 11.56143350163272
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 745,
+  "fields": {
+    "prediction_index": 44,
+    "calculation_output": 8,
+    "river_flow": 14.355019292531516
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 746,
+  "fields": {
+    "prediction_index": 45,
+    "calculation_output": 8,
+    "river_flow": 15.255490227015542
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 747,
+  "fields": {
+    "prediction_index": 46,
+    "calculation_output": 8,
+    "river_flow": 15.322469026574772
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 748,
+  "fields": {
+    "prediction_index": 47,
+    "calculation_output": 8,
+    "river_flow": 14.530238175665344
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 749,
+  "fields": {
+    "prediction_index": 48,
+    "calculation_output": 8,
+    "river_flow": 16.141591322832454
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 750,
+  "fields": {
+    "prediction_index": 49,
+    "calculation_output": 8,
+    "river_flow": 15.341145477831033
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 751,
+  "fields": {
+    "prediction_index": 50,
+    "calculation_output": 8,
+    "river_flow": 15.380633072053639
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 752,
+  "fields": {
+    "prediction_index": 51,
+    "calculation_output": 8,
+    "river_flow": 15.511210395002694
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 753,
+  "fields": {
+    "prediction_index": 52,
+    "calculation_output": 8,
+    "river_flow": 15.142938514122894
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 754,
+  "fields": {
+    "prediction_index": 53,
+    "calculation_output": 8,
+    "river_flow": 14.317974896546712
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 755,
+  "fields": {
+    "prediction_index": 54,
+    "calculation_output": 8,
+    "river_flow": 13.956773748986649
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 756,
+  "fields": {
+    "prediction_index": 55,
+    "calculation_output": 8,
+    "river_flow": 12.37115365770429
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 757,
+  "fields": {
+    "prediction_index": 56,
+    "calculation_output": 8,
+    "river_flow": 11.400235597527356
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 758,
+  "fields": {
+    "prediction_index": 57,
+    "calculation_output": 8,
+    "river_flow": 13.192434332512034
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 759,
+  "fields": {
+    "prediction_index": 58,
+    "calculation_output": 8,
+    "river_flow": 11.508699420277098
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 760,
+  "fields": {
+    "prediction_index": 59,
+    "calculation_output": 8,
+    "river_flow": 15.264820292119627
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 761,
+  "fields": {
+    "prediction_index": 60,
+    "calculation_output": 8,
+    "river_flow": 15.360184193276131
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 762,
+  "fields": {
+    "prediction_index": 61,
+    "calculation_output": 8,
+    "river_flow": 15.649789052536935
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 763,
+  "fields": {
+    "prediction_index": 62,
+    "calculation_output": 8,
+    "river_flow": 13.347744819178576
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 764,
+  "fields": {
+    "prediction_index": 63,
+    "calculation_output": 8,
+    "river_flow": 14.100847244614664
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 765,
+  "fields": {
+    "prediction_index": 64,
+    "calculation_output": 8,
+    "river_flow": 11.983849362360314
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 766,
+  "fields": {
+    "prediction_index": 65,
+    "calculation_output": 8,
+    "river_flow": 14.019841611990529
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 767,
+  "fields": {
+    "prediction_index": 66,
+    "calculation_output": 8,
+    "river_flow": 14.405815340965097
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 768,
+  "fields": {
+    "prediction_index": 67,
+    "calculation_output": 8,
+    "river_flow": 15.484019260308914
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 769,
+  "fields": {
+    "prediction_index": 68,
+    "calculation_output": 8,
+    "river_flow": 14.203296738525086
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 770,
+  "fields": {
+    "prediction_index": 69,
+    "calculation_output": 8,
+    "river_flow": 14.105013958880834
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 771,
+  "fields": {
+    "prediction_index": 70,
+    "calculation_output": 8,
+    "river_flow": 13.853664312527355
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 772,
+  "fields": {
+    "prediction_index": 71,
+    "calculation_output": 8,
+    "river_flow": 13.307040600740784
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 773,
+  "fields": {
+    "prediction_index": 72,
+    "calculation_output": 8,
+    "river_flow": 13.642134611610512
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 774,
+  "fields": {
+    "prediction_index": 73,
+    "calculation_output": 8,
+    "river_flow": 13.221173570326053
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 775,
+  "fields": {
+    "prediction_index": 74,
+    "calculation_output": 8,
+    "river_flow": 12.046591727903163
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 776,
+  "fields": {
+    "prediction_index": 75,
+    "calculation_output": 8,
+    "river_flow": 15.537609435390229
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 777,
+  "fields": {
+    "prediction_index": 76,
+    "calculation_output": 8,
+    "river_flow": 11.828272896556328
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 778,
+  "fields": {
+    "prediction_index": 77,
+    "calculation_output": 8,
+    "river_flow": 12.699884810116327
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 779,
+  "fields": {
+    "prediction_index": 78,
+    "calculation_output": 8,
+    "river_flow": 15.039806693511823
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 780,
+  "fields": {
+    "prediction_index": 79,
+    "calculation_output": 8,
+    "river_flow": 11.828411069789666
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 781,
+  "fields": {
+    "prediction_index": 80,
+    "calculation_output": 8,
+    "river_flow": 13.48733760403048
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 782,
+  "fields": {
+    "prediction_index": 81,
+    "calculation_output": 8,
+    "river_flow": 12.517000132058941
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 783,
+  "fields": {
+    "prediction_index": 82,
+    "calculation_output": 8,
+    "river_flow": 14.026662448734315
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 784,
+  "fields": {
+    "prediction_index": 83,
+    "calculation_output": 8,
+    "river_flow": 14.734016231559126
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 785,
+  "fields": {
+    "prediction_index": 84,
+    "calculation_output": 8,
+    "river_flow": 14.913695331587201
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 786,
+  "fields": {
+    "prediction_index": 85,
+    "calculation_output": 8,
+    "river_flow": 15.581443938769873
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 787,
+  "fields": {
+    "prediction_index": 86,
+    "calculation_output": 8,
+    "river_flow": 11.523200591380053
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 788,
+  "fields": {
+    "prediction_index": 87,
+    "calculation_output": 8,
+    "river_flow": 12.510351878210308
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 789,
+  "fields": {
+    "prediction_index": 88,
+    "calculation_output": 8,
+    "river_flow": 10.992302170034122
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 790,
+  "fields": {
+    "prediction_index": 89,
+    "calculation_output": 8,
+    "river_flow": 11.801104376354532
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 791,
+  "fields": {
+    "prediction_index": 90,
+    "calculation_output": 8,
+    "river_flow": 15.138847400066865
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 792,
+  "fields": {
+    "prediction_index": 91,
+    "calculation_output": 8,
+    "river_flow": 11.200575583515976
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 793,
+  "fields": {
+    "prediction_index": 92,
+    "calculation_output": 8,
+    "river_flow": 12.775468489919774
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 794,
+  "fields": {
+    "prediction_index": 93,
+    "calculation_output": 8,
+    "river_flow": 11.638747823204355
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 795,
+  "fields": {
+    "prediction_index": 94,
+    "calculation_output": 8,
+    "river_flow": 12.779420195516288
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 796,
+  "fields": {
+    "prediction_index": 95,
+    "calculation_output": 8,
+    "river_flow": 14.027442431216906
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 797,
+  "fields": {
+    "prediction_index": 96,
+    "calculation_output": 8,
+    "river_flow": 13.635558266191262
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 798,
+  "fields": {
+    "prediction_index": 97,
+    "calculation_output": 8,
+    "river_flow": 12.37235372766541
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 799,
+  "fields": {
+    "prediction_index": 98,
+    "calculation_output": 8,
+    "river_flow": 11.77872320625919
+  }
+},
+{
+  "model": "calculations.riverflowprediction",
+  "pk": 800,
+  "fields": {
+    "prediction_index": 99,
+    "calculation_output": 8,
+    "river_flow": 15.891266006163471
+  }
+}
+]

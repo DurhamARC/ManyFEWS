@@ -48,12 +48,14 @@ jobs:
       -
         name: Install chromedriver
         uses: nanasess/setup-chromedriver@df428506cbc5d79cc069d20a689094d634c79e3e
-      - uses: conda-incubator/setup-miniconda@v2
+
+      -
+        uses: conda-incubator/setup-miniconda@v2
         with:
           miniforge-variant: Mambaforge
           miniforge-version: latest
           activate-environment: anaconda-client-env
-          environment-file: config/manyFEWSenv.yml
+          environment-file: config/manyFEWS.base.yml
           python-version: 3.9
           auto-activate-base: false
           use-mamba: true
@@ -61,6 +63,11 @@ jobs:
       - run: |
           conda info
           conda list
+
+      # https://github.com/conda-incubator/setup-miniconda/issues/105#issuecomment-730243912
+      - shell: bash -l {0}
+        run: |
+          conda env update -n anaconda-client-env -f config/manyFEWS.devel.yml
 
       -
         name: Install npm
