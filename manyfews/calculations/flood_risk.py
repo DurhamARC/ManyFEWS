@@ -107,7 +107,7 @@ def predict_depths(forecast_time, param_ids, flow_values):
         ),
     )
     predictions_to_delete = []
-    batch_size = 500
+    batch_size = settings.DATABASE_CHUNK_SIZE
     for batch in range(int(math.ceil(len(param_ids) / batch_size))):
         params_batch = FloodModelParameters.objects.defer("bounding_box").filter(
             id__in=param_ids
