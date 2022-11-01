@@ -96,7 +96,7 @@ jobs:
           EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
           EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
           DISPLAY: :99
-        run: python manage.py test
+        run: coverage run --source='.' manage.py test
         working-directory: manyfews
 
       -
@@ -116,3 +116,7 @@ jobs:
             exit 1
           fi
         working-directory: manyfews
+
+      -
+        name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v3
