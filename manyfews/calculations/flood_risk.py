@@ -107,8 +107,6 @@ def predict_depths(forecast_time, param_ids, flow_values):
     )
     predictions_to_delete = []
 
-    # counter is better option compared to len() or count() in case of appending empty QS
-
     for i, param_id in enumerate(param_ids):
         param = FloodModelParameters.objects.defer("bounding_box").get(id=param_id)
 
@@ -120,13 +118,15 @@ def predict_depths(forecast_time, param_ids, flow_values):
         ) = predict_depth(flow_values, param)
 
         # Replace current object if there is one
-        prediction = DepthPrediction.objects.filter(
-            date=forecast_time, parameters_id=param_id
+        prediction = (
+            DepthPrediction.objects.filter(date=forecast_time, parameters_id=param_id)
+            .only("pk")
+            .first()
         )
 
         if upper_centile <= 0:
-            if prediction.exists():
-                predictions_to_delete.append(prediction.only("pk").first().pk)
+            if prediction:
+                predictions_to_delete.append(prediction.pk)
                 if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
                     DepthPrediction.objects.filter(
                         pk__in=predictions_to_delete
@@ -142,11 +142,11 @@ def predict_depths(forecast_time, param_ids, flow_values):
                 mid_lower_centile=mid_lower_centile,
                 upper_centile=upper_centile,
             )
-            if not prediction.exists():  # create:
-                bulk_mgr.add(new_prediction)
-            else:  # update:
-                new_prediction.pk = prediction.only("pk").first().pk
+            if prediction:  # update:
+                new_prediction.pk = prediction.pk
                 bulk_mgr.update(new_prediction)
+            else:  # create:
+                bulk_mgr.add(new_prediction)
 
         if i % 1000 == 0:
             logger.info(
