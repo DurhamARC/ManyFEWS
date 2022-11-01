@@ -176,6 +176,7 @@ export DISPLAY=:0
 
 * Check your webdriver version is up-to-date. Sometimes, it is necessary to manually download the webdriver as the version installed by `webdrivermanager` is out-of-date. For example, installing `geckodriver` v29.0 when v32.0 is available.
 * Check that the web driver is in the `$PATH`. The output of `webdrivermanager` will WARN when the $PATH does not include the directory that the web driver is installed within, but will not add it for you.
+* You can install a webdriver directly into the $PATH already set up for the conda environment using: `webdrivermanager firefox --linkpath $CONDA_PREFIX/bin`
 
 ### `ImportError: Couldn't import Django.`
 
