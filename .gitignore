@@ -159,3 +159,7 @@ manyfews/files
 
 # Ignore volumes
 /volumes
+
+# Code coverage reports
+.coverage
+coverage.xml
