@@ -287,9 +287,11 @@ class WebAppTestCase(StaticLiveServerTestCase):
 
         # Save
         save_alert = self.selenium.find_element(By.ID, "save-alert")
-        WebDriverWait(self.selenium, 1000).until(
+        self.selenium.execute_script("arguments[0].scrollIntoView();", save_alert)
+        WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, "save-alert"))
         )
+        sleep(1)
         save_alert.click()
 
         # Should now have a table under "Your Alerts"
