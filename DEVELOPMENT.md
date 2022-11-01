@@ -60,7 +60,7 @@ Make sure you have the following installed:
    $ vi .env
    > Update 'ZENTRA_UN=zentraCloudUserName' with your user name of your Zentra cloud account.
    > Update 'ZENTRA_PW=zentraCloudPassword' with your password of your Zentra cloud account.
-   > Add an API key parameter to end of MAP_URL as '?api_key=<...>', with your Stadia Maps API token.
+   > Add your Stadia Maps API token to the end of MAP_URL as '?api_key=<...>'.
    > replace the lines starting with 'EMAIL_' with your SMTP settings (either real settings, or using something like [mailcatcher](https://mailcatcher.me))
    > Save and quit.
    $ cd ..
