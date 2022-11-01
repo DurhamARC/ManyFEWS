@@ -96,7 +96,7 @@ jobs:
           EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
           EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
           DISPLAY: :99
-        run: python manage.py test
+        run: coverage run --source='.' manage.py test
         working-directory: manyfews
 
       -
@@ -115,12 +115,6 @@ jobs:
             echo "Run 'npm run build' from the 'manyfews' directory and commit the changes."
             exit 1
           fi
-        working-directory: manyfews
-
-      -
-        name: Run tests and collect coverage
-        run: |
-            coverage run --source='.' manage.py test
         working-directory: manyfews
 
       -
