@@ -48,6 +48,19 @@ class BulkCreateManager(object):
                 self._commit(apps.get_model(model_name))
 
 
+class BulkUpdateManager(BulkCreateManager):
+    def __init__(self, chunk_size: int = 100, update_fields: list = []):
+        super().__init__(chunk_size=chunk_size)
+        self.update_fields = update_fields
+
+    def _commit(self, model_class: str):
+        model_key = model_class._meta.label
+        model_class.objects.bulk_update(
+            self._create_queues[model_key], self.update_fields
+        )
+        self._create_queues[model_key] = []
+
+
 class BulkCreateUpdateManager(BulkCreateManager):
     """
     Extend BulkCreateManager with the ability to update model records
