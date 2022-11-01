@@ -12,9 +12,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.common.exceptions import WebDriverException
 
 from .alerts import TwilioAlerts
 from .converters import BoundingBoxUrlParameterConverter
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ConverterTestCase(TestCase):
@@ -46,10 +51,21 @@ class WebAppTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        options = webdriver.ChromeOptions()
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        cls.selenium = webdriver.Chrome(options=options)
+
+        # Check for ChromeDriver in path and fall back to Firefox if not found
+        try:
+            options = webdriver.ChromeOptions()
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            cls.selenium = webdriver.Chrome(options=options)
+            cls.selenium.implicitly_wait(10)
+            return
+        except (FileNotFoundError, WebDriverException) as e:
+            logger.warning("Chrome driver not found. Falling back to Firefox")
+            logger.debug(e)
+
+        options = webdriver.FirefoxOptions()
+        cls.selenium = webdriver.Firefox(options=options)
         cls.selenium.implicitly_wait(10)
 
     @classmethod
@@ -73,10 +89,13 @@ class WebAppTestCase(StaticLiveServerTestCase):
         daily_risk_elements[1].find_element(By.CLASS_NAME, "risk").click()
         sleep(1)
 
-        log = self.selenium.get_log("browser")
-        assert len(log) == 0, "Errors in browser log:\n" + "\n".join(
-            [f"{line['level']}: {line['message']}" for line in log]
-        )
+        # get_log is a webkit-only non-standard WebDriver extension!
+        # https://github.com/mozilla/geckodriver/issues/330
+        if isinstance(self.selenium, webdriver.Chrome):
+            log = self.selenium.get_log("browser")
+            assert len(log) == 0, "Errors in browser log:\n" + "\n".join(
+                [f"{line['level']}: {line['message']}" for line in log]
+            )
 
     def test_users(self):
         # Add a user, log in, log out
@@ -267,7 +286,13 @@ class WebAppTestCase(StaticLiveServerTestCase):
         ).click_and_hold().move_by_offset(20, 20).release().perform()
 
         # Save
-        self.selenium.find_element(By.ID, "save-alert").click()
+        save_alert = self.selenium.find_element(By.ID, "save-alert")
+        self.selenium.execute_script("arguments[0].scrollIntoView();", save_alert)
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, "save-alert"))
+        )
+        sleep(1)
+        save_alert.click()
 
         # Should now have a table under "Your Alerts"
         table = self.selenium.find_element(By.TAG_NAME, "table")
