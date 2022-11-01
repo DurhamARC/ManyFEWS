@@ -163,3 +163,7 @@ manyfews/files
 # Code coverage reports
 .coverage
 coverage.xml
+
+# Development Ephemera
+dbexport.pgsql
+k8s-deploy.yml
