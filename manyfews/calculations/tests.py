@@ -10,7 +10,7 @@ from unittest import mock
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
-from .flood_risk import predict_depth
+from .flood_risk import predict_depth, predict_depths
 from .models import (
     DepthPrediction,
     FloodModelParameters,
@@ -307,6 +307,29 @@ class UserAlertTests(TestCase):
 
 
 class FloodCalculationTests(TestCase):
+    fixtures = ["ModelVersion", "FloodModelParameters"]
+
+    def setUp(self):
+        super().setUp()
+        self.test_date = datetime(2015, 10, 3, 23, 55, 59, 342380)
+        self.test_flood_param = FloodModelParameters.objects.first()
+
+    def create_depth_predictions(self):
+        model_version = ModelVersion.objects.first()
+
+        depth_predictions = [
+            DepthPrediction.objects.create(
+                date=self.test_date,
+                parameters_id=param_id,
+                lower_centile=0.5,
+                median_depth=1,
+                mid_lower_centile=0.7,
+                upper_centile=1.5,
+                model_version=model_version,
+            )
+            for param_id in range(1, 5)
+        ]
+
     def test_predict_depth(self):
         params = FloodModelParameters(beta0=1, beta1=2, beta2=3, beta3=4)
 
@@ -325,3 +348,39 @@ class FloodCalculationTests(TestCase):
         flows = np.array([0.1, 2, 1.5, 5])
         stats = predict_depth(flows, params)
         assert stats == (0, 0, 0, 0)
+
+    @mock.patch("calculations.flood_risk.predict_depth")
+    def test_bulk_predict_depths_delete(self, predict_depth):
+        predict_depth.return_value = (8.14, 21.95, 36.63, -1)
+        dummy_param_list = [1, 2, 3, 4]
+        self.create_depth_predictions()
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+        with self.assertNumQueries(13):
+            predict_depths(self.test_date, dummy_param_list, None)
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 0)
+
+    @mock.patch("calculations.flood_risk.predict_depth")
+    def test_bulk_predict_depths_create(self, predict_depth):
+        predict_depth.return_value = (8.14, 21.95, 36.63, 1)
+
+        dummy_param_list = [1, 2, 3, 4]
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 0)
+        with self.assertNumQueries(13):
+            predict_depths(self.test_date, dummy_param_list, None)
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+
+    @mock.patch("calculations.flood_risk.predict_depth")
+    def test_bulk_predict_depths_update(self, predict_depth):
+        predict_depth.return_value = (8.14, 21.95, 36.63, 1)
+
+        dummy_param_list = [1, 2, 3, 4]
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+        with self.assertNumQueries(17):
+            predict_depths(self.test_date, dummy_param_list, None)
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
