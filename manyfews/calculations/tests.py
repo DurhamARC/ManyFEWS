@@ -312,7 +312,6 @@ class FloodCalculationTests(TestCase):
     def setUp(self):
         super().setUp()
         self.test_date = datetime(2015, 10, 3, 23, 55, 59, 342380)
-        self.test_flood_param = FloodModelParameters.objects.first()
 
     def create_depth_predictions(self):
         model_version = ModelVersion.objects.first()
@@ -376,6 +375,7 @@ class FloodCalculationTests(TestCase):
     @mock.patch("calculations.flood_risk.predict_depth")
     def test_bulk_predict_depths_update(self, predict_depth):
         predict_depth.return_value = (8.14, 21.95, 36.63, 1)
+        self.create_depth_predictions()
 
         dummy_param_list = [1, 2, 3, 4]
 
