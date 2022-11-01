@@ -106,12 +106,15 @@ def predict_depths(forecast_time, param_ids, flow_values):
             "upper_centile",
         ),
     )
+
     predictions_to_delete = []
     batch_size = settings.DATABASE_CHUNK_SIZE
+
     for batch in range(int(math.ceil(len(param_ids) / batch_size))):
         params_batch = FloodModelParameters.objects.defer("bounding_box").filter(
             id__in=param_ids
         )[batch * batch_size : (batch + 1) * batch_size]
+
         for i, param in enumerate(params_batch):
             (
                 lower_centile,
@@ -132,11 +135,13 @@ def predict_depths(forecast_time, param_ids, flow_values):
             if upper_centile <= 0:
                 if prediction:
                     predictions_to_delete.append(prediction.pk)
+
                     if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
                         DepthPrediction.objects.filter(
                             pk__in=predictions_to_delete
                         ).delete()
                         predictions_to_delete = []
+
             else:
                 new_prediction = DepthPrediction(
                     date=forecast_time,
@@ -147,16 +152,20 @@ def predict_depths(forecast_time, param_ids, flow_values):
                     mid_lower_centile=mid_lower_centile,
                     upper_centile=upper_centile,
                 )
+
                 if prediction:  # update:
                     new_prediction.pk = prediction.pk
                     bulk_mgr.update(new_prediction)
+
                 else:  # create:
                     bulk_mgr.add(new_prediction)
 
             if ((batch * batch_size) * i) % 1000 == 0:
                 logger.info(
-                    f"Calculated {(batch*batch_size)*i} of {len(param_ids)} pixels ({((batch*batch_size)*i / len(param_ids)) * 100 :.1f}%)"
+                    f"Calculated {(batch*batch_size)*i} of {len(param_ids)} pixels "
+                    f"({((batch*batch_size)*i / len(param_ids)) * 100 :.1f}%)"
                 )
+
     DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
     bulk_mgr.done()
 
