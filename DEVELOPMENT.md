@@ -10,7 +10,11 @@ Make sure you have the following installed:
  * [RabbitMQ](https://www.rabbitmq.com/download.html)
  * [PostgreSQL](https://www.postgresql.org/download/) and [PostGIS](https://postgis.net/docs/manual-3.2/postgis_installation.html) - see (see https://docs.djangoproject.com/en/3.2/ref/contrib/gis/install/postgis/)
  * [Node.js (and npm)](https://nodejs.org/en/)
- * [Chrome](https://www.google.co.uk/chrome/) and a version of [ChromeDriver](https://chromedriver.chromium.org/downloads) which matches the major version of Chrome - ChromeDriver is used for automated browser testing.
+ * A browser and webdriver for automated browser testing. Choose from the following options (these will be tried in-order by the test framework):
+   1. [Chrome](https://www.google.co.uk/chrome/) + [ChromeDriver](https://chromedriver.chromium.org/downloads) (ensure this matches the major version of Chrome)
+   2. [Firefox](https://www.mozilla.org/en-GB/firefox/new/) + [GeckoDriver](https://github.com/mozilla/geckodriver/releases)
+
+NB: You must install a browser driver to run automated UI tests. You can try using `webdrivermanager` which is installed with the Conda development dependencies, by running e.g. `webdrivermanager firefox`.
 
 ## Setup
 
@@ -96,7 +100,7 @@ Make sure you have the following installed:
     python manage.py test
     ```
 
-    Note that this will run the browser tests which will open up Chrome and automatically click through the tests.
+    Note that this will run the browser tests which will open up your browser and automatically click through the tests.
 
 12. Run the django app in development mode (still in the `manyfews` directory):
 
@@ -154,4 +158,56 @@ st_aslatlontext                |        st_x        |        st_y
 7°3'49.500"S 107°44'6.900"E   | 107.73525000000001 |  -7.063750000000001
 7°3'47.700"S 107°44'6.900"E   | 107.73525000000001 |  -7.063250000000001
 7°3'45.900"S 107°44'6.900"E   | 107.73525000000001 |            -7.06275
+```
+
+## Troubleshooting
+
+Common Unit testing failures and exceptions:
+
+### `selenium.common.exceptions.WebDriverException: Message: Process unexpectedly closed with status 1`
+
+Perhaps you are running the test suite on a remote machine, for example via SSH? This error will occur when the installed web driver (e.g. `geckodriver`) cannot open the web browser. Tests cannot be run on a headless server, but if a display server (like X11) is running on the machine, you can target a display by exporting the environment variable:
+
+```shell
+export DISPLAY=:0
+```
+
+### `selenium.common.exceptions.WebDriverException: Message: Service geckodriver unexpectedly exited. Status code was: 64`
+
+* Check your webdriver version is up-to-date. Sometimes, it is necessary to manually download the webdriver as the version installed by `webdrivermanager` is out-of-date. For example, installing `geckodriver` v29.0 when v32.0 is available.
+* Check that the web driver is in the `$PATH`. The output of `webdrivermanager` will WARN when the $PATH does not include the directory that the web driver is installed within, but will not add it for you.
+
+### `ImportError: Couldn't import Django.`
+
+You need to activate the conda environment:
+
+```shell
+conda activate ManyFEWS
+```
+
+Note that conda environments are case-sensitive. `manyfews` will not work.
+
+### `segmentation fault  python manage.py test` on Apple aarch64 (M1 Mac)
+
+Running tests on an M1 Mac (ARM architecture) is currently broken. You can check where a segmentation fault arises in the code by running python with maximum trace verbosity:
+
+```shell
+python -vvvvv manage.py test webapp 
+```
+
+In this case, python raises `SIGSEGV` at:
+
+```shell
+# code object from '/opt/miniconda3/envs/ManyFEWS/lib/python3.9/site-packages/django/contrib/gis/geos/prototypes/__pycache__/threadsafe.cpython-39.pyc'
+import 'django.contrib.gis.geos.prototypes.threadsafe' # <_frozen_importlib_external.SourceFileLoader object at 0x1138198b0>
+```
+
+This appears to be related to the following bug in the GEOS library: [https://code.djangoproject.com/ticket/32600](https://code.djangoproject.com/ticket/32600).
+
+Unit testing on ARM/aarch64 is currently not supported by GitHub Actions, and until this changes we are likely to see many more instances where FOSS projects encounter regressions and make breaking changes on the Apple M1 platform. 
+
+To work around this, you can create a VM or Docker container running on the Rosetta x86 translation layer, or just run tests by pushing to a development branch which will run the GitHub Actions pipeline. E.g.:
+
+```shell
+docker run --rm -it -v $(pwd):/data amd64/debian:jessie bash
 ```
