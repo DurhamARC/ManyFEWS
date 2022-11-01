@@ -89,10 +89,13 @@ class WebAppTestCase(StaticLiveServerTestCase):
         daily_risk_elements[1].find_element(By.CLASS_NAME, "risk").click()
         sleep(1)
 
-        log = self.selenium.get_log("browser")
-        assert len(log) == 0, "Errors in browser log:\n" + "\n".join(
-            [f"{line['level']}: {line['message']}" for line in log]
-        )
+        # get_log is a webkit-only non-standard WebDriver extension!
+        # https://github.com/mozilla/geckodriver/issues/330
+        if isinstance(self.selenium, webdriver.Chrome):
+            log = self.selenium.get_log("browser")
+            assert len(log) == 0, "Errors in browser log:\n" + "\n".join(
+                [f"{line['level']}: {line['message']}" for line in log]
+            )
 
     def test_users(self):
         # Add a user, log in, log out
@@ -284,8 +287,8 @@ class WebAppTestCase(StaticLiveServerTestCase):
 
         # Save
         save_alert = self.selenium.find_element(By.ID, "save-alert")
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, "save-alert"))
+        WebDriverWait(self.selenium, 1000).until(
+            EC.element_to_be_clickable((By.ID, "save-alert"))
         )
         save_alert.click()
 
