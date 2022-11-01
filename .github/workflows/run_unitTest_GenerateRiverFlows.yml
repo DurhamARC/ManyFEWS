@@ -118,6 +118,12 @@ jobs:
         working-directory: manyfews
 
       -
+        name: Create coverage.py XML report
+        run: |
+          coverage xml
+        working-directory: manyfews
+
+      -
         name: Upload coverage reports to Codecov with GitHub Action
         uses: codecov/codecov-action@v3
         with:
