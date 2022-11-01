@@ -12,9 +12,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.common.exceptions import WebDriverException
 
 from .alerts import TwilioAlerts
 from .converters import BoundingBoxUrlParameterConverter
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ConverterTestCase(TestCase):
@@ -46,10 +51,21 @@ class WebAppTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        options = webdriver.ChromeOptions()
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        cls.selenium = webdriver.Chrome(options=options)
+
+        # Check for ChromeDriver in path and fall back to Firefox if not found
+        try:
+            options = webdriver.ChromeOptions()
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            cls.selenium = webdriver.Chrome(options=options)
+            cls.selenium.implicitly_wait(10)
+            return
+        except (FileNotFoundError, WebDriverException) as e:
+            logger.warning("Chrome driver not found. Falling back to Firefox")
+            logger.debug(e)
+
+        options = webdriver.FirefoxOptions()
+        cls.selenium = webdriver.Firefox(options=options)
         cls.selenium.implicitly_wait(10)
 
     @classmethod
