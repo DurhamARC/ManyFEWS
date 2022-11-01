@@ -283,7 +283,11 @@ class WebAppTestCase(StaticLiveServerTestCase):
         ).click_and_hold().move_by_offset(20, 20).release().perform()
 
         # Save
-        self.selenium.find_element(By.ID, "save-alert").click()
+        save_alert = self.selenium.find_element(By.ID, "save-alert")
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, "save-alert"))
+        )
+        save_alert.click()
 
         # Should now have a table under "Your Alerts"
         table = self.selenium.find_element(By.TAG_NAME, "table")
