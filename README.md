@@ -1,9 +1,9 @@
 # ManyFEWS
 
 [![Actions Status](https://github.com/DurhamARC/ManyFEWS/workflows/Unit%20Tests/badge.svg)](https://github.com/DurhamARC/ManyFEWS/actions)
+[![codecov.io](https://codecov.io/gh/DurhamARC/ManyFEWS/branch/main/graphs/badge.svg)](https://codecov.io/gh/DurhamARC/ManyFEWS/branch/main)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![codecov.io](https://codecov.io/gh/DurhamARC/ManyFEWS/branch/main/graphs/badge.svg)](https://codecov.io/gh/DurhamARC/ManyFEWS/branch/main)
 
 ManyFEWS (the Many Flood Early Warning System) can be deployed by a community where there is currently no such system in place. The system uses weather forecast information from the [Global Ensemble Forecast System](https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast) produced by [NOAA](https://www.noaa.gov), coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework.
 

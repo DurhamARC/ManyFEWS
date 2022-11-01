@@ -28,6 +28,21 @@ You should create a `.env` file using [`.env.CI`](manyfews/manyfews/.env.CI) as 
 
 The production example uses [Træfik](https://traefik.io/traefik) to reverse proxy the application stack and request certificates. It also includes [watchtower](https://github.com/containrrr/watchtower) to monitor for and pull base image updates. 
 
+### Manual production deployment steps:
+
+  *  Install [Docker](https://www.docker.com/)  
+     * Docker-compose has been included in the base docker package since version 4.4.2.  
+     * Older versions of Docker may require installation of the [plugin](https://docs.docker.com/compose/install/linux/) or the [standalone](https://docs.docker.com/compose/install/other/) `docker-compose` command.
+  *  Clone the git repo (or at a minimum, `docker-compose.yml` and `docker-compose.production.yml`)
+  *  Move `docker-compose.production.yml` to `docker-compose.override.yml`
+  *  Copy `manyfews/manyfews/.env.CI` to `.env`
+  *  Edit `.env` to populate it with the production environment variables.
+  *  Run `docker compose pull && docker compose up -d`
+     * Note that if you decided to install the standalone command, this is `docker-compose`, with a hyphen.
+  *  Check that the ports for `:80` and `:443` are open to serve http+s traffic.
+  *  Wait for certificate issuance while Traefik uses Let'sEncrypt to request a TLS cert.
+
+
 ### Environment Variables
 The following environment variables *must* be set in the `.env` file to use this configuration:
 
