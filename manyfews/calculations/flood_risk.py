@@ -105,12 +105,12 @@ def predict_depths(forecast_time, param_ids, flow_values):
             "upper_centile",
         ),
     )
-    predictions_to_delete = DepthPrediction.objects.none()
+    predictions_to_delete = []
+
     # counter is better option compared to len() or count() in case of appending empty QS
-    delete_counter = 0
 
     for i, param_id in enumerate(param_ids):
-        param = FloodModelParameters.objects.get(id=param_id)
+        param = FloodModelParameters.objects.defer("bounding_box").get(id=param_id)
 
         (
             lower_centile,
@@ -122,53 +122,37 @@ def predict_depths(forecast_time, param_ids, flow_values):
         # Replace current object if there is one
         prediction = DepthPrediction.objects.filter(
             date=forecast_time, parameters_id=param_id
-        ).first()
-
-        # logger.info(
-        #     f"type {type(param)}"
-        # )
-        # logger.info(
-        #   f"value {i} {param_id} {lower_centile} {mid_lower_centile} {median} {upper_centile}"
-        # )
-        # logger.info(f"prediction {prediction}")
+        )
 
         if upper_centile <= 0:
-            if prediction:
-                # logger.info(f"DB delete")
-                predictions_to_delete |= prediction
-                delete_counter += 1
-                if delete_counter > settings.DATABASE_CHUNK_SIZE:
-                    predictions_to_delete.delete()
-                    predictions_to_delete = DepthPrediction.objects.none()
+            if prediction.exists():
+                predictions_to_delete.append(prediction.only("pk").first().pk)
+                if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
+                    DepthPrediction.objects.filter(
+                        pk__in=predictions_to_delete
+                    ).delete()
+                    predictions_to_delete = []
         else:
-            if not prediction:  # create:
-                # logger.info(f"DB add")
-                bulk_mgr.add(
-                    DepthPrediction(
-                        date=forecast_time,
-                        parameters_id=param_id,
-                        model_version=param.model_version,
-                        median_depth=median,
-                        lower_centile=lower_centile,
-                        mid_lower_centile=mid_lower_centile,
-                        upper_centile=upper_centile,
-                    )
-                )
-
+            new_prediction = DepthPrediction(
+                date=forecast_time,
+                parameters_id=param_id,
+                model_version=param.model_version,
+                median_depth=median,
+                lower_centile=lower_centile,
+                mid_lower_centile=mid_lower_centile,
+                upper_centile=upper_centile,
+            )
+            if not prediction.exists():  # create:
+                bulk_mgr.add(new_prediction)
             else:  # update:
-                # logger.info(f"DB update")
-                prediction.model_version = param.model_version
-                prediction.median_depth = median
-                prediction.lower_centile = lower_centile
-                prediction.mid_lower_centile = mid_lower_centile
-                prediction.upper_centile = upper_centile
-                bulk_mgr.update(prediction)
+                new_prediction.pk = prediction.only("pk").first().pk
+                bulk_mgr.update(new_prediction)
 
         if i % 1000 == 0:
             logger.info(
                 f"Calculated {i} of {len(param_ids)} pixels ({(i / len(param_ids)) * 100 :.1f}%)"
             )
-    predictions_to_delete.delete()
+    DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
     bulk_mgr.done()
 
 
