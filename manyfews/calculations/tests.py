@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import os
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import TestCase
@@ -271,7 +272,7 @@ class UserAlertTests(TestCase):
         call_args = sms_mock.call_args[0]
         assert call_args[0] == "+441234567890"
         assert call_args[1].startswith("Floods up to 1.0m predicted from ")
-        assert call_args[1].endswith("See http://localhost:8000 for details.")
+        assert call_args[1].endswith(f"See {settings.SITE_URL} for details.")
 
         sms_mock.reset_mock()
 
