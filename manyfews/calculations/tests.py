@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-import os
+import os, tempfile
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -25,20 +25,26 @@ from .models import (
     RiverFlowPrediction,
     RiverFlowCalculationOutput,
 )
-from .tasks import initialModelSetUp, dailyModelUpdate, send_alerts
+from .tasks import (
+    initialModelSetUp,
+    dailyModelUpdate,
+    send_alerts,
+    load_params_from_csv,
+    import_zentra_devices,
+)
 from .zentra import offsetTime
 
 
-def excel_to_matrix(path, sheetNum):
+def excel_to_matrix(path, sheet_num):
     """
     This function is used to convert data form from excel (.xlsx) into a Numpy array.
 
     :param path: the absolute path of the excel file.
-    :param sheetNum: the sheet number of the table in the excel file.
+    :param sheet_num: the sheet number of the table in the excel file.
 
     """
 
-    table = xlrd.open_workbook(path).sheets()[sheetNum]
+    table = xlrd.open_workbook(path).sheets()[sheet_num]
     row = table.nrows
     col = table.ncols
     datamatrix = np.zeros((row, col))  # ignore the first title row.
@@ -52,7 +58,7 @@ def excel_to_matrix(path, sheetNum):
     return datamatrix
 
 
-def prepare_test_Data():
+def prepare_test_data():
     """
     This function is used to import test GEFS and initial condition data into database.
 
@@ -120,54 +126,91 @@ def prepare_test_Data():
     return testDate, testLocation
 
 
-class taskTest(TestCase):
+class TaskTest(TestCase):
     def test_tasks(self):
-        """
-        Test the inital Model SetUp and daily update tasks.
-        """
-        #  Check  the  initialModelSetUp task can run and adds some records to the db
-        sn = "06-02047"
-        zentraDevice = ZentraDevice(sn, location=Point(0, 0))
+        #  Check the initialModelSetUp task can run and adds some records to the db
+        self.sn = "06-02047"
+        zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
         zentraDevice.save()
+
+        self.test_load_params_from_csv()
+        self.test_initial_model_setup()
+        self.test_daily_model_update()
+        self.test_import_zentra_devices()
+
+    def test_import_zentra_devices(self):
+        import_zentra_devices()
+
+    def test_initial_model_setup(self):
+        """
+        Test the initial Model SetUp and daily update tasks.
+        """
 
         # test initial model setup task.
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
 
-        timeInfo = offsetTime(backDays=365)
-        startTime = timeInfo[0]
-        endTime = timeInfo[1] + timedelta(days=365)
+        self.timeInfo = offsetTime(backDays=365)
+        self.startTime = self.timeInfo[0]
+        self.endTime = self.timeInfo[1] + timedelta(days=365)
 
-        readings = ZentraReading.objects.filter(date__range=(startTime, endTime))
-        aggregateReading = AggregatedZentraReading.objects.filter(
-            date__range=(startTime, endTime)
+        self.readings = ZentraReading.objects.filter(
+            date__range=(self.startTime, self.endTime)
+        )
+        self.aggregateReading = AggregatedZentraReading.objects.filter(
+            date__range=(self.startTime, self.endTime)
         )
 
-        assert len(readings) == 1440
-        assert len(aggregateReading) == 20
+        assert len(self.readings) == 1440
+        assert len(self.aggregateReading) == 20
 
-        # check that there are inidtial condition  in the database
-        initialcondition = InitialCondition.objects.all()
+        # check that there are initial conditions in the database
+        self.initial_condition = InitialCondition.objects.all()
+        assert len(self.initial_condition) == 100
 
-        assert len(initialcondition) == 100
-
+    def test_daily_model_update(self):
         # test daily model update task.
         dailyModelUpdate()
 
-        riverOutput = RiverFlowCalculationOutput.objects.all()
-        riverOutputPrediction = RiverFlowPrediction.objects.all()
-        initialCondition = InitialCondition.objects.all()
-        gefsReadings = NoaaForecast.objects.all()
+        # check that there are output in the database
+        self.riverOutput = RiverFlowCalculationOutput.objects.all()
+        assert len(self.riverOutput) == 8
+
+        self.riverOutputPrediction = RiverFlowPrediction.objects.all()
+        assert len(self.riverOutputPrediction) == 800
+
+        # check that the new initial condition in the database
+        self.initialCondition = InitialCondition.objects.all()
+        assert len(self.initialCondition) == 200
 
         # check the gefs data
-        assert len(gefsReadings) == 8
-        # check that there are output in the database
-        assert len(riverOutput) == 8
-        assert len(riverOutputPrediction) == 800
+        self.gefsReadings = NoaaForecast.objects.all()
+        assert len(self.gefsReadings) == 8
 
-        # check that the new initial condition in the datebase
-        assert len(initialCondition) == 200
+    def test_load_params_from_csv(self):
+        self.csv = """lng,lat,size,P0,P1,P2,P3,minQ
+100.0,1.0,1.8E-05,-0.7,0.01,-1.17E-05,4.56E-09,125
+100.0,1.0,1.8E-05,-0.7,0.01,1.07E-05,-2.93E-08,125
+100.0,1.0,1.8E-05,-0.7,0.01,-2.46E-05,2.50E-08,125
+100.0,1.0,1.8E-05,-0.7,0.01,-3.71E-05,4.37E-08,100
+100.0,1.0,1.8E-05,-0.7,0.01,-4.50E-05,5.54E-08,100
+100.0,1.0,1.8E-05,-0.7,0.01,-3.29E-05,3.62E-08,100
+100.0,1.0,1.8E-05,-0.7,0.01,-2.76E-05,2.69E-08,100
+100.0,1.0,1.8E-05,-0.7,0.01,-2.15E-05,1.76E-08,100
+100.0,1.0,1.8E-05,-0.7,0.01,-4.03E-05,4.71E-08,100
+        """
+
+        settings.DATABASE_CHUNK_SIZE = 5
+
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            # logging.info(f"Creating temporary file: {tmp.name}")
+            try:
+                tmp.write(self.csv)
+            finally:
+                tmp.close()
+                load_params_from_csv(self, tmp.name, -1)
+                os.unlink(tmp.name)
 
 
 class UserAlertTests(TestCase):
