@@ -134,6 +134,9 @@ class TaskTest(TestCase):
         self.zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
         self.zentraDevice.save()
 
+    def test_import_zentra_devices(self):
+        import_zentra_devices()
+
     def test_initial_model_setup(self):
         """
         Test the initial Model SetUp and daily update tasks.
@@ -161,7 +164,6 @@ class TaskTest(TestCase):
         self.initial_condition = InitialCondition.objects.all()
         assert len(self.initial_condition) == 100
 
-    def test_daily_model_update(self):
         # test daily model update task.
         dailyModelUpdate()
 
@@ -201,7 +203,7 @@ class TaskTest(TestCase):
                 tmp.write(self.csv)
             finally:
                 tmp.close()
-                load_params_from_csv(self, tmp.name, -1)
+                load_params_from_csv(tmp.name, -1)
                 os.unlink(tmp.name)
 
 
