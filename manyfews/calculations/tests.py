@@ -197,7 +197,7 @@ class TaskTest(TestCase):
             "utf-8"
         )
 
-        self.version_name = "-1"
+        self.version_name = "1"
         self.model_version = ModelVersion(
             version_name=self.version_name, is_current=True
         )
