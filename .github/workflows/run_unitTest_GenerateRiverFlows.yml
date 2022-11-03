@@ -60,14 +60,15 @@ jobs:
           auto-activate-base: false
           use-mamba: true
           use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
-      - run: |
-          conda info
-          conda list
 
       # https://github.com/conda-incubator/setup-miniconda/issues/105#issuecomment-730243912
-      - shell: bash -l {0}
+      -
+        name: Install dev dependencies and list packages
+        shell: bash -l {0}
         run: |
           conda env update -n anaconda-client-env -f config/manyFEWS.devel.yml
+          conda info
+          conda list
 
       -
         name: Install npm
