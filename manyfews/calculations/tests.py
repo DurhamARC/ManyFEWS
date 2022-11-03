@@ -197,6 +197,12 @@ class TaskTest(TestCase):
             "utf-8"
         )
 
+        self.version_name = "-1"
+        self.model_version = ModelVersion(
+            version_name=self.version_name, is_current=True
+        )
+        self.model_version.save()
+
         settings.DATABASE_CHUNK_SIZE = 5
 
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
@@ -205,7 +211,7 @@ class TaskTest(TestCase):
                 tmp.write(self.csv)
             finally:
                 tmp.close()
-                load_params_from_csv(tmp.name, -1)
+                load_params_from_csv(tmp.name, self.version_name)
                 os.unlink(tmp.name)
 
 
