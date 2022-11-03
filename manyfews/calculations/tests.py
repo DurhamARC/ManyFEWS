@@ -127,19 +127,12 @@ def prepare_test_data():
 
 
 class TaskTest(TestCase):
-    def test_tasks(self):
+    def setUp(self):
+        super.setUp()
         #  Check the initialModelSetUp task can run and adds some records to the db
         self.sn = "06-02047"
-        zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
-        zentraDevice.save()
-
-        self.test_load_params_from_csv()
-        self.test_initial_model_setup()
-        self.test_daily_model_update()
-        self.test_import_zentra_devices()
-
-    def test_import_zentra_devices(self):
-        import_zentra_devices()
+        self.zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
+        self.zentraDevice.save()
 
     def test_initial_model_setup(self):
         """
@@ -150,7 +143,6 @@ class TaskTest(TestCase):
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
-
         self.timeInfo = offsetTime(backDays=365)
         self.startTime = self.timeInfo[0]
         self.endTime = self.timeInfo[1] + timedelta(days=365)
