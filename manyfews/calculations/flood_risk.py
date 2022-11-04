@@ -169,12 +169,24 @@ def predict_depth(flow_values, param):
     beta_values = [getattr(param, f"beta{i}", 0) for i in range(12)]
     beta_values = [0 if b is None else b for b in beta_values]
 
-    if np.all(flow_values < beta_values[4]):
-        depths = np.zeros_like(flow_values)
+    depths = np.zeros_like(flow_values)
+    for index, element in np.ndenumerate(flow_values):
+        if element < beta_values[4]:
+            depth = 0
+        else:
+            polynomial = np.polynomial.Polynomial(beta_values[:4])
+            depth = polynomial(element)
 
-    else:
-        polynomial = np.polynomial.Polynomial(beta_values[:4])
-        depths = polynomial(flow_values)
+        depths[index] = depth
+
+    # loop each element in flow_values array
+    # if np.all(flow_values < beta_values[4]):
+    #    depths = np.zeros_like(flow_values)
+
+    # do polynommial calculation for each element in the flow_values array.
+    # else:
+    #    polynomial = np.polynomial.Polynomial(beta_values[:4])
+    #    depths = polynomial(flow_values)
 
     depths[depths < 0] = 0
 
