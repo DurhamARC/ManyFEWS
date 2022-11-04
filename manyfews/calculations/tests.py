@@ -183,25 +183,28 @@ class TaskTest(TestCase):
         assert len(self.gefsReadings) == 8
 
     def test_load_params_from_csv(self):
-        self.csv = """lng,lat,size,P0,P1,P2,P3,minQ
-100.0,1.0,1.8E-05,-0.7,0.01,-1.17E-05,4.56E-09,125
-100.0,1.0,1.8E-05,-0.7,0.01,1.07E-05,-2.93E-08,125
-100.0,1.0,1.8E-05,-0.7,0.01,-2.46E-05,2.50E-08,125
-100.0,1.0,1.8E-05,-0.7,0.01,-3.71E-05,4.37E-08,100
-100.0,1.0,1.8E-05,-0.7,0.01,-4.50E-05,5.54E-08,100
-100.0,1.0,1.8E-05,-0.7,0.01,-3.29E-05,3.62E-08,100
-100.0,1.0,1.8E-05,-0.7,0.01,-2.76E-05,2.69E-08,100
-100.0,1.0,1.8E-05,-0.7,0.01,-2.15E-05,1.76E-08,100
-100.0,1.0,1.8E-05,-0.7,0.01,-4.03E-05,4.71E-08,100
-        """.encode(
-            "utf-8"
+        self.csv = (
+            "lng,lat,size,P0,P1,P2,P3,minQ\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-1.17E-05,4.56E-09,125\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,1.07E-05,-2.93E-08,125\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-2.46E-05,2.50E-08,125\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-3.71E-05,4.37E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-4.50E-05,5.54E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-3.29E-05,3.62E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-2.76E-05,2.69E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-2.15E-05,1.76E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-4.03E-05,4.71E-08,100"
         )
+
+        self.csv = self.csv.encode("utf-8")
 
         self.version_name = "1"
         self.model_version = ModelVersion(
             version_name=self.version_name, is_current=True
         )
         self.model_version.save()
+
+        assert ModelVersion.objects.first().version_name == self.version_name
 
         settings.DATABASE_CHUNK_SIZE = 5
 
@@ -211,7 +214,9 @@ class TaskTest(TestCase):
                 tmp.write(self.csv)
             finally:
                 tmp.close()
-                load_params_from_csv(tmp.name, self.version_name)
+                load_params_from_csv(
+                    filename=tmp.name, model_version_id=self.version_name
+                )
                 os.unlink(tmp.name)
 
 
