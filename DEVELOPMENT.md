@@ -219,8 +219,8 @@ docker run --platform=linux/amd64 \
   --env-file=.env \
   -e DB_HOST=host.docker.internal \
   -w /data/manyfews/ \
-  durhamarc/manyfews-gunicorn \
-  "python manage.py test"
+  durhamarc/manyfews-celery \
+  "python manage.py test calculations"
 ```
 
 (assuming you are already running a postgres container locally using Docker and have bound the port to localhost)
