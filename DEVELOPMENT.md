@@ -207,8 +207,20 @@ This appears to be related to the following bug in the GEOS library: [https://co
 
 Unit testing on ARM/aarch64 is currently not supported by GitHub Actions, and until this changes we are likely to see many more instances where FOSS projects encounter regressions and make breaking changes on the Apple M1 platform. 
 
-To work around this, you can create a VM or Docker container running on the Rosetta x86 translation layer, or just run tests by pushing to a development branch which will run the GitHub Actions pipeline. E.g.:
+To work around this, you can:
+
+* run tests by pushing to a development branch to run the GitHub Actions pipeline;
+* OR, run tests locally in an AMD64 docker container, e.g.:
 
 ```shell
-docker run --rm -it -v $(pwd):/data amd64/debian:jessie bash
+# From the root of the ManyFEWS git directory, run:
+docker run --platform=linux/amd64 \
+  --rm -it -v $(pwd):/data/ \
+  --env-file=.env \
+  -e DB_HOST=host.docker.internal \
+  -w /data/manyfews/ \
+  durhamarc/manyfews-celery \
+  "python manage.py test calculations"
 ```
+
+(assuming you are already running a postgres container locally using Docker and have bound the port to localhost)
