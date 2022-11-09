@@ -18,6 +18,7 @@ from .models import (
     ModelVersion,
     PercentageFloodRisk,
     RiverFlowCalculationOutput,
+    RiverChannel,
 )
 
 logger = logging.getLogger(__name__)
@@ -107,6 +108,10 @@ def predict_depths(forecast_time, param_ids, flow_values):
         ),
     )
 
+    channels = RiverChannel.objects.all()
+    if not channels:
+        logger.warning("No river channels found")
+
     predictions_to_delete = []
     batch_size = settings.DATABASE_CHUNK_SIZE
 
@@ -116,58 +121,88 @@ def predict_depths(forecast_time, param_ids, flow_values):
         )[batch * batch_size : (batch + 1) * batch_size]
 
         for i, param in enumerate(params_batch):
-            (
-                lower_centile,
-                mid_lower_centile,
-                median,
-                upper_centile,
-            ) = predict_depth(flow_values, param)
-
-            # Replace current object if there is one
-            prediction = (
-                DepthPrediction.objects.filter(
-                    date=forecast_time, parameters_id=param.id
-                )
-                .only("pk")
-                .first()
+            process_pixel(
+                param,
+                i,
+                flow_values,
+                channels,
+                forecast_time,
+                predictions_to_delete,
+                bulk_mgr,
+                batch,
+                batch_size,
+                param_ids,
             )
-
-            if upper_centile <= 0:
-                if prediction:
-                    predictions_to_delete.append(prediction.pk)
-
-                    if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
-                        DepthPrediction.objects.filter(
-                            pk__in=predictions_to_delete
-                        ).delete()
-                        predictions_to_delete = []
-
-            else:
-                new_prediction = DepthPrediction(
-                    date=forecast_time,
-                    parameters_id=param.id,
-                    model_version=param.model_version,
-                    median_depth=median,
-                    lower_centile=lower_centile,
-                    mid_lower_centile=mid_lower_centile,
-                    upper_centile=upper_centile,
-                )
-
-                if prediction:  # update:
-                    new_prediction.pk = prediction.pk
-                    bulk_mgr.update(new_prediction)
-
-                else:  # create:
-                    bulk_mgr.add(new_prediction)
-
-            if ((batch * batch_size) * i) % 1000 == 0:
-                logger.info(
-                    f"Calculated {(batch*batch_size)*i} of {len(param_ids)} pixels "
-                    f"({((batch*batch_size)*i / len(param_ids)) * 100 :.1f}%)"
-                )
 
     DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
     bulk_mgr.done()
+
+
+def process_pixel(
+    param,
+    i,
+    flow_values,
+    channels,
+    forecast_time,
+    predictions_to_delete,
+    bulk_mgr,
+    batch,
+    batch_size,
+    param_ids,
+):
+
+    # Break out of loop if current param is within a river channel
+    # (there may be more than one river channel returned)
+    for channel in channels:
+        # Check if param is within RiverChannel
+        if channel.intersects(param.bounding_box):
+            return
+
+    (
+        lower_centile,
+        mid_lower_centile,
+        median,
+        upper_centile,
+    ) = predict_depth(flow_values, param)
+
+    # Replace current object if there is one
+    prediction = (
+        DepthPrediction.objects.filter(date=forecast_time, parameters_id=param.id)
+        .only("pk")
+        .first()
+    )
+
+    if upper_centile <= 0:
+        if prediction:
+            predictions_to_delete.append(prediction.pk)
+
+            if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
+                DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
+                predictions_to_delete = []
+
+    else:
+        new_prediction = DepthPrediction(
+            date=forecast_time,
+            parameters_id=param.id,
+            model_version=param.model_version,
+            median_depth=median,
+            lower_centile=lower_centile,
+            mid_lower_centile=mid_lower_centile,
+            upper_centile=upper_centile,
+        )
+
+        if prediction:  # update:
+            new_prediction.pk = prediction.pk
+            bulk_mgr.update(new_prediction)
+
+        else:  # create:
+            bulk_mgr.add(new_prediction)
+
+    if ((batch * batch_size) * i) % 1000 == 0:
+        logger.info(
+            f"Calculated {(batch * batch_size) * i} of {len(param_ids)} pixels "
+            f"({((batch * batch_size) * i / len(param_ids)) * 100 :.1f}%)"
+        )
 
 
 def predict_depth(flow_values, param):
