@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
-import os
+import os, tempfile
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import TestCase
@@ -10,7 +11,7 @@ from unittest import mock
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
 from .alerts import send_phone_alerts_for_user
-from .flood_risk import predict_depth
+from .flood_risk import predict_depth, predict_depths
 from .models import (
     DepthPrediction,
     FloodModelParameters,
@@ -24,20 +25,26 @@ from .models import (
     RiverFlowPrediction,
     RiverFlowCalculationOutput,
 )
-from .tasks import initialModelSetUp, dailyModelUpdate, send_alerts
+from .tasks import (
+    initialModelSetUp,
+    dailyModelUpdate,
+    send_alerts,
+    load_params_from_csv,
+    import_zentra_devices,
+)
 from .zentra import offsetTime
 
 
-def excel_to_matrix(path, sheetNum):
+def excel_to_matrix(path, sheet_num):
     """
     This function is used to convert data form from excel (.xlsx) into a Numpy array.
 
     :param path: the absolute path of the excel file.
-    :param sheetNum: the sheet number of the table in the excel file.
+    :param sheet_num: the sheet number of the table in the excel file.
 
     """
 
-    table = xlrd.open_workbook(path).sheets()[sheetNum]
+    table = xlrd.open_workbook(path).sheets()[sheet_num]
     row = table.nrows
     col = table.ncols
     datamatrix = np.zeros((row, col))  # ignore the first title row.
@@ -51,7 +58,7 @@ def excel_to_matrix(path, sheetNum):
     return datamatrix
 
 
-def prepare_test_Data():
+def prepare_test_data():
     """
     This function is used to import test GEFS and initial condition data into database.
 
@@ -119,54 +126,98 @@ def prepare_test_Data():
     return testDate, testLocation
 
 
-class taskTest(TestCase):
-    def test_tasks(self):
+class TaskTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        #  Check the initialModelSetUp task can run and adds some records to the db
+        self.sn = "06-02047"
+        self.zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
+        self.zentraDevice.save()
+
+    def test_import_zentra_devices(self):
+        import_zentra_devices()
+
+    def test_initial_model_setup(self):
         """
-        Test the inital Model SetUp and daily update tasks.
+        Test the initial Model SetUp and daily update tasks.
         """
-        #  Check  the  initialModelSetUp task can run and adds some records to the db
-        sn = "06-02047"
-        zentraDevice = ZentraDevice(sn, location=Point(0, 0))
-        zentraDevice.save()
 
         # test initial model setup task.
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
+        self.timeInfo = offsetTime(backDays=365)
+        self.startTime = self.timeInfo[0]
+        self.endTime = self.timeInfo[1] + timedelta(days=365)
 
-        timeInfo = offsetTime(backDays=365)
-        startTime = timeInfo[0]
-        endTime = timeInfo[1] + timedelta(days=365)
-
-        readings = ZentraReading.objects.filter(date__range=(startTime, endTime))
-        aggregateReading = AggregatedZentraReading.objects.filter(
-            date__range=(startTime, endTime)
+        self.readings = ZentraReading.objects.filter(
+            date__range=(self.startTime, self.endTime)
+        )
+        self.aggregateReading = AggregatedZentraReading.objects.filter(
+            date__range=(self.startTime, self.endTime)
         )
 
-        assert len(readings) == 1440
-        assert len(aggregateReading) == 20
+        assert len(self.readings) == 1440
+        assert len(self.aggregateReading) == 20
 
-        # check that there are inidtial condition  in the database
-        initialcondition = InitialCondition.objects.all()
-
-        assert len(initialcondition) == 100
+        # check that there are initial conditions in the database
+        self.initial_condition = InitialCondition.objects.all()
+        assert len(self.initial_condition) == 100
 
         # test daily model update task.
         dailyModelUpdate()
 
-        riverOutput = RiverFlowCalculationOutput.objects.all()
-        riverOutputPrediction = RiverFlowPrediction.objects.all()
-        initialCondition = InitialCondition.objects.all()
-        gefsReadings = NoaaForecast.objects.all()
+        # check that there are output in the database
+        self.riverOutput = RiverFlowCalculationOutput.objects.all()
+        assert len(self.riverOutput) == 8
+
+        self.riverOutputPrediction = RiverFlowPrediction.objects.all()
+        assert len(self.riverOutputPrediction) == 800
+
+        # check that the new initial condition in the database
+        self.initialCondition = InitialCondition.objects.all()
+        assert len(self.initialCondition) == 200
 
         # check the gefs data
-        assert len(gefsReadings) == 8
-        # check that there are output in the database
-        assert len(riverOutput) == 8
-        assert len(riverOutputPrediction) == 800
+        self.gefsReadings = NoaaForecast.objects.all()
+        assert len(self.gefsReadings) == 8
 
-        # check that the new initial condition in the datebase
-        assert len(initialCondition) == 200
+    def test_load_params_from_csv(self):
+        self.csv = (
+            "lng,lat,size,P0,P1,P2,P3,minQ\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-1.17E-05,4.56E-09,125\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,1.07E-05,-2.93E-08,125\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-2.46E-05,2.50E-08,125\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-3.71E-05,4.37E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-4.50E-05,5.54E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-3.29E-05,3.62E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-2.76E-05,2.69E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-2.15E-05,1.76E-08,100\n"
+            "100.0,1.0,1.8E-05,-0.7,0.01,-4.03E-05,4.71E-08,100"
+        )
+
+        self.csv = self.csv.encode("utf-8")
+
+        self.version_name = "1"
+        self.model_version = ModelVersion(
+            version_name=self.version_name, is_current=True
+        )
+        self.model_version.save()
+
+        assert ModelVersion.objects.first().version_name == self.version_name
+
+        settings.DATABASE_CHUNK_SIZE = 5
+
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            # logging.info(f"Creating temporary file: {tmp.name}")
+            try:
+                tmp.write(self.csv)
+            finally:
+                tmp.close()
+                load_params_from_csv(
+                    filename=tmp.name, model_version_id=self.version_name
+                )
+                os.unlink(tmp.name)
 
 
 class UserAlertTests(TestCase):
@@ -271,7 +322,7 @@ class UserAlertTests(TestCase):
         call_args = sms_mock.call_args[0]
         assert call_args[0] == "+441234567890"
         assert call_args[1].startswith("Floods up to 1.0m predicted from ")
-        assert call_args[1].endswith("See http://localhost:8000 for details.")
+        assert call_args[1].endswith(f"See {settings.SITE_URL} for details.")
 
         sms_mock.reset_mock()
 
@@ -307,6 +358,28 @@ class UserAlertTests(TestCase):
 
 
 class FloodCalculationTests(TestCase):
+    fixtures = ["ModelVersion", "FloodModelParameters"]
+
+    def setUp(self):
+        super().setUp()
+        self.test_date = datetime(2015, 10, 3, 23, 55, 59, 342380)
+
+    def create_depth_predictions(self):
+        model_version = ModelVersion.objects.first()
+
+        depth_predictions = [
+            DepthPrediction.objects.create(
+                date=self.test_date,
+                parameters_id=param_id,
+                lower_centile=0.5,
+                median_depth=1,
+                mid_lower_centile=0.7,
+                upper_centile=1.5,
+                model_version=model_version,
+            )
+            for param_id in range(1, 5)
+        ]
+
     def test_predict_depth(self):
         params = FloodModelParameters(beta0=1, beta1=2, beta2=3, beta3=4)
 
@@ -325,3 +398,40 @@ class FloodCalculationTests(TestCase):
         flows = np.array([0.1, 2, 1.5, 5])
         stats = predict_depth(flows, params)
         assert stats == (0, 0, 0, 0)
+
+    @mock.patch("calculations.flood_risk.predict_depth")
+    def test_bulk_predict_depths_delete(self, predict_depth):
+        predict_depth.return_value = (8.14, 21.95, 36.63, -1)
+        dummy_param_list = [1, 2, 3, 4]
+        self.create_depth_predictions()
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+        with self.assertNumQueries(6):
+            predict_depths(self.test_date, dummy_param_list, None)
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 0)
+
+    @mock.patch("calculations.flood_risk.predict_depth")
+    def test_bulk_predict_depths_create(self, predict_depth):
+        predict_depth.return_value = (8.14, 21.95, 36.63, 1)
+
+        dummy_param_list = [1, 2, 3, 4]
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 0)
+        with self.assertNumQueries(10):
+            predict_depths(self.test_date, dummy_param_list, None)
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+
+    @mock.patch("calculations.flood_risk.predict_depth")
+    def test_bulk_predict_depths_update(self, predict_depth):
+        predict_depth.return_value = (8.14, 21.95, 36.63, 1)
+        self.create_depth_predictions()
+
+        dummy_param_list = [1, 2, 3, 4]
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+        with self.assertNumQueries(10):
+            predict_depths(self.test_date, dummy_param_list, None)
+
+        self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)

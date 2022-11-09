@@ -242,7 +242,7 @@ def send_alerts():
 
 
 @shared_task(name="Load parameters", bind=True)
-def load_params_from_csv(self, filename, model_version_id):
+def load_params_from_csv(self, filename: str, model_version_id: str):
     logger.info(f"Loading parameters from {filename}")
 
     total_rows = sum(1 for _ in open(filename))

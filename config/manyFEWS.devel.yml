@@ -8,4 +8,6 @@ dependencies:
   - pre-commit
   - pytest
   - selenium==4.4.0
+  - coverage>=6.5.0
+  - webdrivermanager
 prefix: /usr/local/Caskroom/miniconda/base/envs/ManyFEWS

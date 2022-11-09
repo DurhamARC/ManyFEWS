@@ -60,14 +60,15 @@ jobs:
           auto-activate-base: false
           use-mamba: true
           use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
-      - run: |
-          conda info
-          conda list
 
       # https://github.com/conda-incubator/setup-miniconda/issues/105#issuecomment-730243912
-      - shell: bash -l {0}
+      -
+        name: Install dev dependencies and list packages
+        shell: bash -l {0}
         run: |
           conda env update -n anaconda-client-env -f config/manyFEWS.devel.yml
+          conda info
+          conda list
 
       -
         name: Install npm
@@ -96,7 +97,7 @@ jobs:
           EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
           EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
           DISPLAY: :99
-        run: python manage.py test
+        run: coverage run --source='.' manage.py test
         working-directory: manyfews
 
       -
@@ -116,3 +117,15 @@ jobs:
             exit 1
           fi
         working-directory: manyfews
+
+      -
+        name: Create coverage.py XML report
+        run: |
+          coverage xml
+        working-directory: manyfews
+
+      -
+        name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
