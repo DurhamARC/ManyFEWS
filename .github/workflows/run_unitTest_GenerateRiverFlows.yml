@@ -25,9 +25,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: psf/black@stable
-        with:
-          version: "22.3.0"
 
       -
         name: Install dependencies
