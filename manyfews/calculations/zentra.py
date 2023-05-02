@@ -48,19 +48,15 @@ def zentraReader(startTime, endTime, stationSN):
 
     except IndexError as e:
         if len(zentraData["device"]["timeseries"]) == 0:
-            logging.error(
+            import json
+
+            raise IndexError(
                 "Error preparing Zentra Cloud data.\n\t"
                 + f"No data was received from Zentra for the device {stationSN}.\n\t"
-                + f"Ensure the station is logging and uploading data to Zentra, or provide a different station."
-            )
-
-        import json
-
-        logging.error(
-            f"The data retrieved from Zentra for station {stationSN} was:\n\t"
-            + json.dumps(zentraData)
-        )
-
+                + f"Ensure the station is logging and uploading data to Zentra, or provide a different station.\n\n"
+                + f"The data retrieved from Zentra for station {stationSN} was:\n\t"
+                + json.dumps(zentraData)
+            ) from e
         raise e
 
     # Extract time stamp, Precipitation, solar, temperature, and humidity
