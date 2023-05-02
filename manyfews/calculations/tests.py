@@ -143,6 +143,7 @@ class TaskTest(TestCase):
         """
 
         # test initial model setup task.
+        logging.info(f"ZentraDevice is {settings.STATION_SN}")
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
