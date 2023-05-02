@@ -1,3 +1,5 @@
+import logging
+
 from .models import ZentraReading
 from zentra.api import ZentraReadings, ZentraToken
 from datetime import timedelta, timezone, datetime
@@ -38,12 +40,31 @@ def zentraReader(startTime, endTime, stationSN):
     airTem = []
     convertedDate = []
     RH = []
+    length = None
+
+    # Check that we have data
+    try:
+        length = len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
+
+    except IndexError as e:
+        if len(zentraData["device"]["timeseries"]) == 0:
+            logging.error(
+                "Error preparing Zentra Cloud data.\n\t"
+                + f"No data was received from Zentra for the device {stationSN}.\n\t"
+                + f"Ensure the station is logging and uploading data to Zentra, or provide a different station."
+            )
+
+        import json
+
+        logging.error(
+            f"The data retrieved from Zentra for station {stationSN} was:\n\t"
+            + json.dumps(zentraData)
+        )
+
+        raise e
 
     # Extract time stamp, Precipitation, solar, temperature, and humidity
-    for i in range(
-        len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
-    ):
-
+    for i in range(length):
         precip.append(
             zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][1][
                 "value"
