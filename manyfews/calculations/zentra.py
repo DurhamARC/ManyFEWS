@@ -53,68 +53,51 @@ def zentraReader(startTime, endTime, stationSN):
             raise IndexError(
                 "Error preparing Zentra Cloud data.\n\t"
                 + f"No data was received from Zentra for the device {stationSN}.\n\t"
-                + f"Ensure the station is logging and uploading data to Zentra, or provide a different station.\n\n"
+                + "Ensure the station is logging and uploading data to Zentra, "
+                + "or provide a different station.\n\n"
                 + f"The data retrieved from Zentra for station {stationSN} was:\n\t"
                 + json.dumps(zentraData)
             ) from e
         raise e
 
-    # Extract time stamp, Precipitation, solar, temperature, and humidity
-    for i in range(length):
-        precip.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][1][
-                "value"
-            ]
-        )  # Precipitation, 'unit':' mm'
+    try:
+        # Extract time stamp, Precipitation, solar, temperature, and humidity
+        data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
+        clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
+        for i in range(length):
+            precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
+            airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
+            wDirection.append(data[i][3][4]["value"])  # Wind Direction, 'units': ' °'
+            wSpeed.append(
+                data["values"][i][3][5]["value"]
+            )  # wind speed, 'units': ' m/s'
 
-        airTem.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][7][
-                "value"
-            ]
-        )  # air temperature, 'unit'=' °C'
+            # convert time stamp to Date
+            ts = data[i][0]  # time stamp
+            date = datetime.fromtimestamp(
+                ts, tz=timezone.utc
+            )  # change time stamp to UTC time.
+            convertedDate.append(date)
 
-        wDirection.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][4][
-                "value"
-            ]
-        )  # Wind Direction, 'units': ' °'
+            # calculate RH by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
+            #                  RH = VP / esTair
+            #                 which:Tc is the Air Temperature
+            #                       VP is the Vapour Pressure
+            #                       RH is the Relative Humidity between zero and one.
 
-        wSpeed.append(
-            zentraData["device"]["timeseries"][0]["configuration"]["values"][i][3][5][
-                "value"
-            ]
-        )  # wind speed, 'units': ' m/s'
+            tempAir = data["values"][i][3][7]["value"]
+            vapPressure = data[i][3][8]["value"]
+            rh = vapPressure / (
+                0.611 * (math.exp((17.502 * tempAir) / (240.97 + tempAir)))
+            )
+            RH.append(clamp(rh, 0, 1))
 
-        # convert time stamp to Date
-        ts = zentraData["device"]["timeseries"][0]["configuration"]["values"][i][
-            0
-        ]  # time stamp
-        date = datetime.fromtimestamp(
-            ts, tz=timezone.utc
-        )  # change time stamp to UTC time.
-        convertedDate.append(date)
-
-        # calculate RH by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
-        #                  RH = VP / esTair
-        #                 which:Tc is the Air Temperature
-        #                       VP is the Vapour Pressure
-        #                       RH is the Relative Humidity between zero and one.
-
-        Tempair = zentraData["device"]["timeseries"][0]["configuration"]["values"][i][
-            3
-        ][7]["value"]
-
-        vapPressure = zentraData["device"]["timeseries"][0]["configuration"]["values"][
-            i
-        ][3][8]["value"]
-        rh = vapPressure / (0.611 * (math.exp((17.502 * Tempair) / (240.97 + Tempair))))
-
-        if rh > 1:
-            rh = 1
-        elif rh < 0:
-            rh = 0
-
-        RH.append(rh)
+    except TypeError as e:
+        raise TypeError(
+            "Error in environmental data calculation. Values were:"
+            + f"\n\ttempAir: {tempAir} of type {type(tempAir)}"
+            + f"\n\tvapPressure: {vapPressure} of type {type(vapPressure)}"
+        ) from e
 
     zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
 
