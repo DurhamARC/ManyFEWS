@@ -60,14 +60,17 @@ def zentraReader(startTime, endTime, stationSN):
         raise e
 
     data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
+    kinds = [
+        "Precipitation",
+        "Wind Direction",
+        "Wind Speed",
+        "Air Temperature",
+        "Vapour Pressure",
+    ]
     clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
     try:
         # Extract time stamp, Precipitation, solar, temperature, and humidity
         for i in range(length):
-            precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
-            airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
-            wDirection.append(data[i][3][4]["value"])  # Wind Direction, 'units': ' °'
-            wSpeed.append(data[i][3][5]["value"])  # wind speed, 'units': ' m/s'
 
             # convert time stamp to Date
             ts = data[i][0]  # time stamp
@@ -76,12 +79,31 @@ def zentraReader(startTime, endTime, stationSN):
             )  # change time stamp to UTC time.
             convertedDate.append(date)
 
+            # Check data:
+            error = False
+            for k, j in enumerate([1, 4, 5, 7, 8]):
+                # kinds[k] is string of kind, j is index into data
+                if data[i][j][1]["error"]:
+                    logging.warning(
+                        f"ZentraDevice {kinds[k]} error at index {i}: {data[i][j][1]['description']}"
+                    )
+                    error = True
+
+            # If data is bad, don't process this entry
+            if error:
+                logging.warning(f"Skipping index {i} in ZentraData for {date}")
+                continue
+
+            precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
+            airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
+            wDirection.append(data[i][3][4]["value"])  # Wind Direction, 'units': ' °'
+            wSpeed.append(data[i][3][5]["value"])  # wind speed, 'units': ' m/s'
+
             # calculate rh by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
             #                  rh = VP / esTair
             #                 which:Tc is the Air Temperature
             #                       VP is the Vapour Pressure
             #                       rh is the Relative Humidity between zero and one.
-
             tempAir = data[i][3][7]["value"]
             vapPressure = data[i][3][8]["value"]
             relative_hum = vapPressure / (
@@ -96,7 +118,7 @@ def zentraReader(startTime, endTime, stationSN):
             "Error in environmental data calculation. Values were:"
             + f"\n\ttempAir: {tempAir} of type {type(tempAir)}"
             + f"\n\tvapPressure: {vapPressure} of type {type(vapPressure)}"
-            + f"Zentra Data was:\n\t"
+            + f"\n\nZentra Data was:\n\t"
             + json.dumps(data, indent=4)
         ) from e
 
