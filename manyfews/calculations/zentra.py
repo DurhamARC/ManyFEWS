@@ -10,7 +10,6 @@ import math
 
 
 def zentraReader(startTime, endTime, stationSN):
-
     """
     This function is used to extract observation climate data from ZENTRA cloud: https://zentracloud.com/,
     and output data sets into Database ( calculations_zentrareading table)
@@ -60,10 +59,10 @@ def zentraReader(startTime, endTime, stationSN):
             ) from e
         raise e
 
+    data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
+    clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
     try:
         # Extract time stamp, Precipitation, solar, temperature, and humidity
-        data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
-        clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
         for i in range(length):
             precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
             airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
@@ -91,10 +90,14 @@ def zentraReader(startTime, endTime, stationSN):
             rh.append(clamp(relative_hum, 0, 1))
 
     except TypeError as e:
+        import json
+
         raise TypeError(
             "Error in environmental data calculation. Values were:"
             + f"\n\ttempAir: {tempAir} of type {type(tempAir)}"
             + f"\n\tvapPressure: {vapPressure} of type {type(vapPressure)}"
+            + f"Zentra Data was:\n\t"
+            + json.dumps(data, indent=4)
         ) from e
 
     zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
@@ -122,7 +125,6 @@ def zentraReader(startTime, endTime, stationSN):
 
 
 def aggregateZentraData(startTime, endTime, stationSN):
-
     # extract data from DB and export data into a Numpy array.
     zentraReadingData = ZentraReading.objects.filter(
         date__range=(startTime, endTime)
@@ -202,7 +204,6 @@ def aggregateZentraData(startTime, endTime, stationSN):
 
     aggregatedData = np.zeros([intervalNum, 6], dtype=float)
     for i in range(intervalNum):
-
         # get the array sequence of data for each aggregating period
         seq = range(i * dataPointNum, ((i + 1) * dataPointNum))
         intervalData = zentraData[np.array(tuple(seq))]
