@@ -27,7 +27,7 @@ The project is run by [Durham University](https://www.dur.ac.uk), the [UK Centre
 
 ## Getting Started
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for details of how to set up a development instance, and [SCHEDULING.md](SCHEDULING.md) for how to set up the scheduled tasks to run the weather modelling and create alerts.
+See [DEVELOPMENT.md](docs/DEVELOPMENT.md) for details of how to set up a development instance, and [SCHEDULING.md](docs/SCHEDULING.md) for how to set up the scheduled tasks to run the weather modelling and create alerts.
 
 ### Docker
 
@@ -39,11 +39,11 @@ A multi-stage [Dockerfile](Dockerfile) is included in this repository. Pre-built
 
 ### Running Locally
 
-The [docker-compose.yml](docker-compose.yml) file in the root of this repository includes the project dependencies and can be run to set up an instant working development system. For manual setup instructions, see [DEVELOPMENT.md](DEVELOPMENT.md).
+The [docker-compose.yml](docker-compose.yml) file in the root of this repository includes the project dependencies and can be run to set up an instant working development system. For manual setup instructions, see [DEVELOPMENT.md](docs/DEVELOPMENT.md).
 
 ### Deployment
 
-A couple of different production deployment possibilities are documented in [PRODUCTION.md](PRODUCTION.md). We include a production [docker-compose](docker-compose.production.yml) file for running the system behind a [Træfik](https://traefik.io/traefik) load balancer.
+A couple of different production deployment possibilities are documented in [PRODUCTION.md](docs/PRODUCTION.md). We include a production [docker-compose](docker-compose.production.yml) file for running the system behind a [Træfik](https://traefik.io/traefik) load balancer.
 
 ## Contributing
 
