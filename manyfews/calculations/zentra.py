@@ -115,10 +115,7 @@ def zentraReader(startTime, endTime, stationSN):
         import json
 
         raise TypeError(
-            "Error in environmental data calculation. Values were:"
-            + f"\n\ttempAir: {tempAir} of type {type(tempAir)}"
-            + f"\n\tvapPressure: {vapPressure} of type {type(vapPressure)}"
-            + f"\n\nZentra Data was:\n\t"
+            "Error in environmental data calculation.\n\nZentra Data was:\n\t"
             + json.dumps(data, indent=4)
         ) from e
 
