@@ -41,6 +41,16 @@ def zentraReader(startTime, endTime, stationSN):
     rh = []
     length = None
 
+    # Variables used in data preparation:
+    kinds = [
+        "Precipitation",
+        "Wind Direction",
+        "Wind Speed",
+        "Air Temperature",
+        "Vapour Pressure",
+    ]
+    clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
+
     # Check that we have data
     try:
         length = len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
@@ -60,14 +70,7 @@ def zentraReader(startTime, endTime, stationSN):
         raise e
 
     data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
-    kinds = [
-        "Precipitation",
-        "Wind Direction",
-        "Wind Speed",
-        "Air Temperature",
-        "Vapour Pressure",
-    ]
-    clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
+
     try:
         # Extract time stamp, Precipitation, solar, temperature, and humidity
         for i in range(length):
@@ -77,7 +80,6 @@ def zentraReader(startTime, endTime, stationSN):
             date = datetime.fromtimestamp(
                 ts, tz=timezone.utc
             )  # change time stamp to UTC time.
-            convertedDate.append(date)
 
             # Check data:
             error = False
@@ -94,6 +96,7 @@ def zentraReader(startTime, endTime, stationSN):
                 logging.warning(f"Skipping index {i} in ZentraData for {date}")
                 continue
 
+            convertedDate.append(date)
             precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
             airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
             wDirection.append(data[i][3][4]["value"])  # Wind Direction, 'units': ' °'
