@@ -1,9 +1,11 @@
 import csv
+import logging
 
 from celery import Celery, shared_task
 
 from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
+from django.core.exceptions import ObjectDoesNotExist
 
 import numpy as np
 from tqdm import tqdm, trange
@@ -31,9 +33,6 @@ from .zentra import prepareZentra, offsetTime
 from .zentra_devices import ZentraDeviceMap
 
 app = Celery()
-
-import logging
-
 logger = logging.getLogger(__name__)
 
 
@@ -60,7 +59,13 @@ def initialModelSetUp(self):
 
     backDays = settings.INITIAL_BACKTIME
     timeInfo = offsetTime(backDays=backDays)
-    location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
+
+    try:
+        location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
+    except ObjectDoesNotExist as e:
+        raise ObjectDoesNotExist(
+            f"Station {settings.STATION_SN} did not resolve to a valid Zentra object"
+        ) from e
 
     # prepare the time point for getting zentra data.
     # For initial model setup, it needs 365 days zentra data.
