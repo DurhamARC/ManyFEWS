@@ -166,10 +166,35 @@ Common Unit testing failures and exceptions:
 
 ### `selenium.common.exceptions.WebDriverException: Message: Process unexpectedly closed with status 1`
 
-Perhaps you are running the test suite on a remote machine, for example via SSH? This error will occur when the installed web driver (e.g. `geckodriver`) cannot open the web browser. Tests cannot be run on a headless server, but if a display server (like X11) is running on the machine, you can target a display by exporting the environment variable:
+Perhaps you are running the test suite on a remote machine, for example via SSH? This error will occur when the installed web driver (e.g. `geckodriver`) cannot open the web browser. Tests can be run on a headless server using `xvfb`, but if a display server (like X11) is already running on the machine, you can target a display by exporting the environment variable:
 
 ```shell
 export DISPLAY=:0
+```
+
+### `selenium.common.exceptions.WebDriverException: Message: 'geckodriver' executable needs to be in PATH.`
+
+The webdriver may not be installed, or if it is, is not in the `$PATH`.
+
+First, make sure a compatible web browser is installed. If running on a headless server, also install xvfb:
+
+```shell
+sudo apt-get install firefox xvfb
+```
+
+Then, ensure the web driver is installed:
+```shell
+$ webdrivermanager firefox
+Downloading WebDriver for browser: "firefox"
+Driver binary downloaded to: "/home/jrhq77/.local/share/WebDriverManager/gecko/v0.29.0/geckodriver-v0.29.0-linux64/geckodriver"
+Symlink created: /home/jrhq77/.local/share/WebDriverManager/bin/geckodriver
+WARNING: Path "/home/jrhq77/.local/share/WebDriverManager/bin" is not in the PATH environment variable.
+```
+
+Note that `webdrivermanager` has warned us that the web driver is not in the PATH. Let's put it there:
+
+```shell
+$ export PATH=~/.local/share/WebDriverManager/bin:$PATH
 ```
 
 ### `selenium.common.exceptions.WebDriverException: Message: Service geckodriver unexpectedly exited. Status code was: 64`
