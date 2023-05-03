@@ -85,7 +85,7 @@ def zentraReader(startTime, endTime, stationSN):
                 # kinds[k] is string of kind, j is index into data
                 if data[i][3][j]["error"]:
                     logging.warning(
-                        f"ZentraDevice {kinds[k]} error at index {i}: {data[i][j][1]['description']}"
+                        f"ZentraDevice {kinds[k]} error at index {i}: {data[i][3][j]['description']}"
                     )
                     error = True
 
