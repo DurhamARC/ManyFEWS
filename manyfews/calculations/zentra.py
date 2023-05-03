@@ -39,7 +39,7 @@ def zentraReader(startTime, endTime, stationSN):
     wSpeed = []
     airTem = []
     convertedDate = []
-    RH = []
+    rh = []
     length = None
 
     # Check that we have data
@@ -79,18 +79,18 @@ def zentraReader(startTime, endTime, stationSN):
             )  # change time stamp to UTC time.
             convertedDate.append(date)
 
-            # calculate RH by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
-            #                  RH = VP / esTair
+            # calculate rh by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
+            #                  rh = VP / esTair
             #                 which:Tc is the Air Temperature
             #                       VP is the Vapour Pressure
-            #                       RH is the Relative Humidity between zero and one.
+            #                       rh is the Relative Humidity between zero and one.
 
-            tempAir = data["values"][i][3][7]["value"]
+            tempAir = data[i][3][7]["value"]
             vapPressure = data[i][3][8]["value"]
-            rh = vapPressure / (
+            relative_hum = vapPressure / (
                 0.611 * (math.exp((17.502 * tempAir) / (240.97 + tempAir)))
             )
-            RH.append(clamp(rh, 0, 1))
+            rh.append(clamp(relative_hum, 0, 1))
 
     except TypeError as e:
         raise TypeError(
@@ -103,7 +103,7 @@ def zentraReader(startTime, endTime, stationSN):
 
     # converting string 'None' to None by strNoneToNone method.
     precip = list(map(strNoneToNone, precip))
-    RH = list(map(strNoneToNone, RH))
+    rh = list(map(strNoneToNone, rh))
     airTem = list(map(strNoneToNone, airTem))
     wSpeed = list(map(strNoneToNone, wSpeed))
     wDirection = list(map(strNoneToNone, wDirection))
@@ -114,7 +114,7 @@ def zentraReader(startTime, endTime, stationSN):
             date=convertedDate[i],
             device=zentraDevice,
             precipitation=precip[i],
-            relative_humidity=RH[i],
+            relative_humidity=rh[i],
             air_temperature=airTem[i],
             wind_speed=wSpeed[i],
             wind_direction=wDirection[i],
