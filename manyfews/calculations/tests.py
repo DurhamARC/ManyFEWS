@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta, timezone
 import os, tempfile
-import logging
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -144,7 +143,6 @@ class TaskTest(TestCase):
         """
 
         # test initial model setup task.
-        logging.info(f"ZentraDevice is {settings.STATION_SN}")
         initialModelSetUp()
 
         # Check that there are readings (past 365 days) in the database
