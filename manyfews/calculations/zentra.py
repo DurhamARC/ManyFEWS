@@ -68,9 +68,7 @@ def zentraReader(startTime, endTime, stationSN):
             precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
             airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
             wDirection.append(data[i][3][4]["value"])  # Wind Direction, 'units': ' °'
-            wSpeed.append(
-                data["values"][i][3][5]["value"]
-            )  # wind speed, 'units': ' m/s'
+            wSpeed.append(data[i][3][5]["value"])  # wind speed, 'units': ' m/s'
 
             # convert time stamp to Date
             ts = data[i][0]  # time stamp
