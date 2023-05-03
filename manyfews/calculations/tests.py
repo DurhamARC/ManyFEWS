@@ -130,7 +130,7 @@ class TaskTest(TestCase):
     def setUp(self):
         super().setUp()
         #  Check the initialModelSetUp task can run and adds some records to the db
-        self.sn = "06-02047"
+        self.sn = settings.STATION_SN
         self.zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
         self.zentraDevice.save()
 
