@@ -83,7 +83,7 @@ def zentraReader(startTime, endTime, stationSN):
             error = False
             for k, j in enumerate([1, 4, 5, 7, 8]):
                 # kinds[k] is string of kind, j is index into data
-                if data[i][j][1]["error"]:
+                if data[i][3][j]["error"]:
                     logging.warning(
                         f"ZentraDevice {kinds[k]} error at index {i}: {data[i][j][1]['description']}"
                     )
