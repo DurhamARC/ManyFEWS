@@ -172,6 +172,7 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "django_celery_results",
     "crispy_forms",
+    "crispy_bootstrap4",
     "djgeojson",
     "leaflet",
     "phonenumber_field",

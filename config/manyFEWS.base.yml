@@ -24,5 +24,6 @@ dependencies:
   - pip:
     - django-geojson>=4.0.0
     - django-phonenumber-field[phonenumberslite]
+    - crispy-bootstrap4
     - git+https://github.com/mt-climate-office/Zentra-API
 prefix: /usr/local/Caskroom/miniconda/base/envs/ManyFEWS
