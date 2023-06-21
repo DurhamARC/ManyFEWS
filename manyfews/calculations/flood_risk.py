@@ -2,7 +2,7 @@ from datetime import timedelta
 import logging
 import math
 
-from celery import Celery, shared_task
+from celery import shared_task
 from django.conf import settings
 from django.contrib.gis.db.models import Extent
 from django.contrib.gis.geos import Polygon
@@ -155,7 +155,7 @@ def process_pixel(
     # (there may be more than one river channel returned)
     for channel in channels:
         # Check if param is within RiverChannel
-        if channel.intersects(param.bounding_box):
+        if channel.channel_location.intersects(param.bounding_box):
             return
 
     (
