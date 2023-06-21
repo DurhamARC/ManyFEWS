@@ -10,7 +10,7 @@ dependencies:
   - psycopg2
   - django
   - django-leaflet
-  - celery
+  - celery=5.2.7
   - django-celery-beat
   - django-celery-results
   - django-crispy-forms
