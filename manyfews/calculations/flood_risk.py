@@ -100,7 +100,7 @@ def run_flood_model_for_time(prediction_date, forecast_time):
     # TODO: join results to call aggregate_flood_models
 
 
-@shared_task(name="Predict depths for batch of cells")
+@shared_task(name="Predict depths")
 def predict_depths(forecast_time, param_ids, flow_values):
     bulk_mgr = BulkCreateUpdateManager(
         chunk_size=settings.DATABASE_CHUNK_SIZE,
@@ -119,8 +119,9 @@ def predict_depths(forecast_time, param_ids, flow_values):
 
     predictions_to_delete = []
     batch_size = settings.DATABASE_CHUNK_SIZE
+    total_batches = int(math.ceil(len(param_ids) / batch_size))
 
-    for batch in range(int(math.ceil(len(param_ids) / batch_size))):
+    for batch in range(total_batches):
         params_batch = FloodModelParameters.objects.defer("bounding_box").filter(
             id__in=param_ids
         )[batch * batch_size : (batch + 1) * batch_size]
@@ -138,6 +139,12 @@ def predict_depths(forecast_time, param_ids, flow_values):
                 batch_size,
                 param_ids,
             )
+
+        logger.info(
+            f"Calculated {batch * batch_size} of {total_batches * batch_size} pixels "
+            f"in batch {batch}/{total_batches} ({(batch / total_batches) * 100 :.1f}%) "
+            f"for {forecast_time}"
+        )
 
     DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
     bulk_mgr.done()
@@ -203,12 +210,6 @@ def process_pixel(
         else:  # create:
             bulk_mgr.add(new_prediction)
 
-    if ((batch * batch_size) * i) % 1000 == 0:
-        logger.info(
-            f"Calculated {(batch * batch_size) * i} of {len(param_ids)} pixels "
-            f"({((batch * batch_size) * i / len(param_ids)) * 100 :.1f}%)"
-        )
-
 
 def predict_depth(flow_values, param):
     beta_values = [getattr(param, f"beta{i}", 0) for i in range(12)]
@@ -223,6 +224,9 @@ def predict_depth(flow_values, param):
 
     depths = np.zeros_like(flow_values)
     for index, element in np.ndenumerate(flow_values):
+        # beta_values[4] is minQ
+        # minQ is the minimum flow rate to calculate polynomial on
+        # If we're less than the minimum flow rate, then depth = 0
         if element < beta_values[4]:
             depth = 0
         else:
@@ -231,6 +235,7 @@ def predict_depth(flow_values, param):
 
         depths[index] = depth
 
+    # TODO: Does this have any effect?
     depths[depths < 0] = 0
 
     # polynomial = np.polynomial.Polynomial(beta_values)
