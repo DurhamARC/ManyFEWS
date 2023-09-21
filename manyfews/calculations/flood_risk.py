@@ -82,7 +82,8 @@ def run_flood_model_for_time(prediction_date, forecast_time):
 
     # count the total number of processed pixels.
     total_pixel_count = DepthPrediction.objects.count()
-    logger.info(f"The total processed pixels are: {total_pixel_count}")
+    logger.info(f"Total Depth Predictions made: {total_pixel_count}")
+
     if total_pixel_count == 0:
         raise RuntimeError(
             "There are no floods that occurred, or check the parameter file."
@@ -141,12 +142,17 @@ def predict_depths(forecast_time, param_ids, flow_values):
             )
 
         logger.info(
-            f"Calculated {batch * batch_size} of {total_batches * batch_size} pixels "
-            f"in batch {batch}/{total_batches} ({(batch / total_batches) * 100 :.1f}%) "
+            f"Calculated {(batch+1) * batch_size} of {total_batches * batch_size} pixels "
+            f"in batch {batch+1}/{total_batches} ({(batch / total_batches) * 100 :.1f}%) "
             f"for {forecast_time}"
         )
 
-    DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
+    if len(predictions_to_delete):
+        logger.debug(
+            f"Cleaning up {len(predictions_to_delete)} remaining no-longer flooded cells"
+        )
+        DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
+
     bulk_mgr.done()
 
 
@@ -189,6 +195,9 @@ def process_pixel(
             predictions_to_delete.append(prediction.pk)
 
             if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
+                logger.debug(
+                    f"Cleaning up {len(predictions_to_delete)} no-longer flooded cells"
+                )
                 DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
                 predictions_to_delete = []
 
