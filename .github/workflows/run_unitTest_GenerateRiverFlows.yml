@@ -44,7 +44,7 @@ jobs:
 
       -
         name: Install chromedriver
-        uses: nanasess/setup-chromedriver@df428506cbc5d79cc069d20a689094d634c79e3e
+        uses: nanasess/setup-chromedriver@v2
 
       -
         uses: conda-incubator/setup-miniconda@v2
