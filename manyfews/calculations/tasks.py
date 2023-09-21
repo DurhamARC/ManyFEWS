@@ -102,7 +102,7 @@ def initialModelSetUp(self):
         initialData=initialConditionData,
         riverFlowSave=False,
         initialDataSave=True,
-        mode="inital",
+        mode="initial",
     )
 
 
@@ -212,7 +212,7 @@ def dailyModelUpdate():
         predictionDate=today[0], location=location, dataSource="gefs"
     )
 
-    # Run the model with the new initial conditions
+    # Run the catchment model with the new initial conditions
     runningGenerateRiverFlows(
         predictionDate=today[0],
         dataLocation=location,

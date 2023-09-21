@@ -609,7 +609,7 @@ def runningGenerateRiverFlows(
     # import the next day's initial condition data F0 into DB.
     # ('calculations_initialcondition' table)
 
-    if mode == "inital":
+    if mode == "initial":
         nextDay = predictionDate + timedelta(days=settings.INITIAL_BACKTIME)
     elif mode == "daily":
         nextDay = predictionDate + timedelta(days=1)
