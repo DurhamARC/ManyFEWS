@@ -1,5 +1,4 @@
 import csv
-import logging
 
 from celery import Celery, shared_task
 
@@ -32,8 +31,11 @@ from .models import (
 from .zentra import prepareZentra, offsetTime
 from .zentra_devices import ZentraDeviceMap
 
+from celery.utils.log import get_task_logger
+
+logger = get_task_logger(__name__)
+
 app = Celery()
-logger = logging.getLogger(__name__)
 
 
 @shared_task(name="calculations.hello_celery")
@@ -59,6 +61,11 @@ def initialModelSetUp(self):
 
     backDays = settings.INITIAL_BACKTIME
     timeInfo = offsetTime(backDays=backDays)
+
+    logger.info(
+        f"Setting up model with INITIAL_BACKTIME {backDays} from "
+        f"{timeInfo[0].strftime('%Y-%m-%d %H:%M:%S')}"
+    )
 
     try:
         location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
@@ -135,11 +142,12 @@ def dailyModelUpdate():
     logger.info(
         """
         ZentraDevice location: {}
+        ZentraDevice station: {}
         Yesterday: {:%B %d, %Y}
         Today: {:%B %d, %Y}
         Zentra data records: {}
     """.format(
-            location, yday[0], today[0], aggregateDataLength
+            location, settings.STATION_SN, yday[0], today[0], aggregateDataLength
         )
     )
 

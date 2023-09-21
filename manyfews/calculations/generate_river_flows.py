@@ -11,6 +11,10 @@ from .models import (
     AggregatedZentraReading,
 )
 
+from celery.utils.log import get_task_logger
+
+logger = get_task_logger(__name__)
+
 
 def ModelFun(qp, Ep, dt, CatArea, X, F0):
     """
@@ -369,6 +373,9 @@ def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
     Column 6 precip (mm)
     Column 7 energy (J/kg)
     """
+
+    logger.debug(f"Generating river flows for {predictionDate}")
+
     # Determine number of data points
     N = np.size(gefsData[:, 1])
 
@@ -530,6 +537,9 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs", back
         )
     )
     weatherForecastData = np.array(dataList)
+    logger.debug(
+        f"Extracted weather forecast data with length {len(weatherForecastData)}"
+    )
 
     return weatherForecastData
 
@@ -569,6 +579,13 @@ def runningGenerateRiverFlows(
     # plus time zone information
     predictionDate = datetime.astimezone(predictionDate, tz=timezone.utc)
 
+    logger.debug(
+        "\nRunning generateRiverFlows:\n"
+        f"\tParameter file path {parametersFilePath}\n"
+        f"\tpredictionDate {predictionDate}\n"
+        f"\tmode={mode}, riverFlowSave={riverFlowSave}, initialDataSave={initialDataSave}\n"
+    )
+
     # run model.
     dt = float(settings.MODEL_TIMESTEP)
     riverFlowsData = GenerateRiverFlows(
@@ -607,6 +624,7 @@ def runningGenerateRiverFlows(
                 fast_flow_rate=F0[i, 2],
             )
             nextDayInitialCondition.save()
+            logger.debug("Saved nextDayInitialCondition")
 
     if riverFlowSave == True:
         for i in range(qp.shape[0]):
@@ -631,5 +649,6 @@ def runningGenerateRiverFlows(
                     river_flow=riverFlows[i, j],
                 )
                 riverFlowPredictionData.save()
+                logger.debug("Saved river flow prediction")
 
     return F0

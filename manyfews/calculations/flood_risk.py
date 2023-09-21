@@ -1,5 +1,4 @@
 from datetime import timedelta
-import logging
 import math
 
 from celery import shared_task
@@ -21,7 +20,9 @@ from .models import (
     RiverChannel,
 )
 
-logger = logging.getLogger(__name__)
+from celery.utils.log import get_task_logger
+
+logger = get_task_logger(__name__)
 
 
 def run_all_flood_models():
