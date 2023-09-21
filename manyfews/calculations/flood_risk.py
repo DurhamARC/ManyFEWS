@@ -43,7 +43,7 @@ def run_all_flood_models():
     )
     # Raise an error and stop the program if outputs_by_time is empty
     if len(outputs_by_time) == 0:
-        raise Exception(
+        raise RuntimeError(
             "No River Flow result found. Check the task dailyModelUpdate ran properly."
         )
 
@@ -68,8 +68,12 @@ def run_flood_model_for_time(prediction_date, forecast_time):
     params = FloodModelParameters.objects.filter(model_version_id=latest_model_id).all()
 
     if not len(params):
-        raise Exception(
-            "There are no catchment model parameters populated in the database"
+        raise RuntimeError(
+            "There are no FloodModelParameters populated"
+            f" for {prediction_date.strftime('%Y-%m-%d')}"
+            f" {forecast_time.strftime('%H:%M:%S')}"
+            " and therefore nothing to do."
+            "\nHave you added a ModelVersion? You may need to load the model parameters from CSV."
         )
 
     # FIXME: this is slow (both with celery in batches of 1000, and running in series
@@ -80,7 +84,7 @@ def run_flood_model_for_time(prediction_date, forecast_time):
     total_pixel_count = DepthPrediction.objects.count()
     logger.info(f"The total processed pixels are: {total_pixel_count}")
     if total_pixel_count == 0:
-        raise Exception(
+        raise RuntimeError(
             "There are no floods that occurred, or check the parameter file."
         )
     else:
