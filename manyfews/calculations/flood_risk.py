@@ -130,15 +130,11 @@ def predict_depths(forecast_time, param_ids, flow_values):
         for i, param in enumerate(params_batch):
             process_pixel(
                 param,
-                i,
                 flow_values,
                 channels,
                 forecast_time,
                 predictions_to_delete,
                 bulk_mgr,
-                batch,
-                batch_size,
-                param_ids,
             )
 
         logger.info(
@@ -158,15 +154,11 @@ def predict_depths(forecast_time, param_ids, flow_values):
 
 def process_pixel(
     param,
-    i,
     flow_values,
     channels,
     forecast_time,
     predictions_to_delete,
     bulk_mgr,
-    batch,
-    batch_size,
-    param_ids,
 ):
 
     # Break out of loop if current param is within a river channel
