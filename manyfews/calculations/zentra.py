@@ -33,16 +33,18 @@ def zentraReader(startTime, endTime, stationSN):
     )
     zentraData = readings.response
 
+    # Indices to interpolate if ZENTRA_INTERPOLATE_MISSING is True
+    interpolation_indices = []
+
     precip = []
     wDirection = []
     wSpeed = []
     airTem = []
     convertedDate = []
     rh = []
-    length = None
 
     # Variables used in data preparation:
-    kinds = [
+    kind_strings = [
         "Precipitation",
         "Wind Direction",
         "Wind Speed",
@@ -53,19 +55,15 @@ def zentraReader(startTime, endTime, stationSN):
 
     # Check that we have data
     try:
-        length = len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
+        len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
 
     except IndexError as e:
         if len(zentraData["device"]["timeseries"]) == 0:
-            import json
-
             raise IndexError(
                 "Error preparing Zentra Cloud data.\n\t"
                 + f"No data was received from Zentra for the device {stationSN}.\n\t"
                 + "Ensure the station is logging and uploading data to Zentra, "
-                + "or provide a different station.\n\n"
-                + f"The data retrieved from Zentra for station {stationSN} was:\n\t"
-                + json.dumps(zentraData)
+                + "or provide a different station."
             ) from e
         raise e
 
@@ -73,56 +71,84 @@ def zentraReader(startTime, endTime, stationSN):
 
     try:
         # Extract time stamp, Precipitation, solar, temperature, and humidity
-        for i in range(length):
+        for i, d in enumerate(data):
 
             # convert time stamp to Date
-            ts = data[i][0]  # time stamp
+            ts = d[0]  # time stamp
             date = datetime.fromtimestamp(
                 ts, tz=timezone.utc
             )  # change time stamp to UTC time.
 
-            # Check data:
+            # Check data: the series we want are at indices 1, 4, 5, 7, 8
             error = False
-            for k, j in enumerate([1, 4, 5, 7, 8]):
+            for kind, j in enumerate([1, 4, 5, 7, 8]):
                 # kinds[k] is string of kind, j is index into data
-                if data[i][3][j]["error"]:
-                    logging.warning(
-                        f"ZentraDevice {kinds[k]} error at index {i}: {data[i][3][j]['description']}"
+                if d[3][j]["error"]:
+                    logging.debug(
+                        f"ZentraDevice {kind_strings[kind]} error at index {i}: {d[3][j]['description']}"
                     )
                     error = True
 
             # If data is bad, don't process this entry
             if error:
-                logging.warning(f"Skipping index {i} in ZentraData for {date}")
-                continue
+                if settings.ZENTRA_FAIL_ON_MISSING:
+                    raise RuntimeError(
+                        f"Bad data at index {i} in ZentraData for {date}\n"
+                        f"The Zentra device {stationSN} is missing data.\n"
+                        f"This program is configured not to operate on partial data "
+                        f"(ZENTRA_INTERPOLATE_MISSING is False).\n"
+                        "Select another Zentra Device or check the device's connection."
+                    )
+                elif settings.ZENTRA_INTERPOLATE_MISSING:
+                    logging.warning(
+                        f"Missing value at index {i} in ZentraData for {date}. "
+                        "Interpolation will be attempted."
+                    )
+
+                    # Mark as interpolation start point
+                    interpolation_indices.append(i)
+                    convertedDate.append(date)
+                    precip.append(np.nan)
+                    airTem.append(np.nan)
+                    wDirection.append(np.nan)
+                    wSpeed.append(np.nan)
+                    rh.append(np.nan)
+                    continue
 
             convertedDate.append(date)
-            precip.append(data[i][3][1]["value"])  # Precipitation, 'unit':' mm'
-            airTem.append(data[i][3][7]["value"])  # air temperature, 'unit'=' °C'
-            wDirection.append(data[i][3][4]["value"])  # Wind Direction, 'units': ' °'
-            wSpeed.append(data[i][3][5]["value"])  # wind speed, 'units': ' m/s'
+            precip.append(d[3][1]["value"])  # Precipitation, 'unit':' mm'
+            airTem.append(d[3][7]["value"])  # air temperature, 'unit'=' °C'
+            wDirection.append(d[3][4]["value"])  # Wind Direction, 'units': ' °'
+            wSpeed.append(d[3][5]["value"])  # wind speed, 'units': ' m/s'
 
             # calculate rh by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
             #                  rh = VP / esTair
             #                 which:Tc is the Air Temperature
             #                       VP is the Vapour Pressure
             #                       rh is the Relative Humidity between zero and one.
-            tempAir = data[i][3][7]["value"]
-            vapPressure = data[i][3][8]["value"]
+            tempAir = d[3][7]["value"]
+            vapPressure = d[3][8]["value"]
+
+            # Missing data will be strings of value "None"
+            if type(tempAir) is str and tempAir == "None":
+                rh.append("None")
+                continue
+
             relative_hum = vapPressure / (
                 0.611 * (math.exp((17.502 * tempAir) / (240.97 + tempAir)))
             )
             rh.append(clamp(relative_hum, 0, 1))
 
     except TypeError as e:
-        import json
-
-        raise TypeError(
-            "Error in environmental data calculation.\n\nZentra Data was:\n\t"
-            + json.dumps(data, indent=4)
-        ) from e
+        raise TypeError("Error in environmental data calculation.") from e
 
     zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
+
+    # Interpotate values (if switched on)
+    if len(interpolation_indices):
+        precip, rh, airTem, wSpeed, wDirection = interpolate_missing_data(
+            interpolation_indices, [precip, rh, airTem, wSpeed, wDirection]
+        )
 
     # converting string 'None' to None by strNoneToNone method.
     precip = list(map(strNoneToNone, precip))
@@ -146,7 +172,46 @@ def zentraReader(startTime, endTime, stationSN):
         zentraData.save()
 
 
+def interpolate_missing_data(null_indices: list, series: list):
+    """
+    Perform linear interpolation of missing values.
+    This functionality can be switched on using the environment variable
+    ZENTRA_INTERPOLATE_MISSING = True on the command line.
+    @param null_indices:
+    @param series: [precip, rh, airTem, wSpeed, wDirection]
+    @return:
+    """
+    logging.debug(f"Filling indices: \n{null_indices}")
+
+    new_series = []
+    # For the null indices, interpolate data
+    for i, s in enumerate(series):
+        # logging.debug(s)
+        data_array = np.array(s)
+        non_null_mask = ~np.isnan(data_array)
+
+        # Use linear interpolation to fill null values
+        data_array[null_indices] = np.interp(
+            null_indices,
+            np.arange(len(data_array))[non_null_mask],
+            data_array[non_null_mask],
+        )
+
+        # Append resulting dataset with linearly interpolated values to return list
+        new_series.append(data_array.tolist())
+
+    return new_series
+
+
 def aggregateZentraData(startTime, endTime, stationSN):
+    """
+    Aggregate Zentra Data for use within the flood model
+    Converts
+    @param startTime:
+    @param endTime:
+    @param stationSN:
+    @return:
+    """
     # extract data from DB and export data into a Numpy array.
     zentraReadingData = ZentraReading.objects.filter(
         date__range=(startTime, endTime)
@@ -165,15 +230,13 @@ def aggregateZentraData(startTime, endTime, stationSN):
         wSpeedList.append(data.wind_speed)
         wDirectionList.append(data.wind_direction)
 
-    # convert temperature Unit from °C to ℉
-    airTemList = [i + 273.15 for i in airTemList]
-
+    # Data cleaning:
     #  defaults value when zentra does not report a value
     defaultsRH = settings.DEFAULT_RH
     defaultsAirTemp = settings.DEFAULT_AIR_TEMP
     defaultPrecip = settings.DEFAULT_PRECIP
 
-    # convert temperature Unit from °C to ℉
+    # convert temperature Unit from °C to ˚K
     defaultsAirTemp = [i + 273.15 for i in defaultsAirTemp]
 
     # get month info
@@ -198,6 +261,10 @@ def aggregateZentraData(startTime, endTime, stationSN):
     RHList = [
         defaultsRHvalue if i == None else i for i in RHList
     ]  # for None data, set it to defaults
+
+    # Convert values
+    # convert temperature Unit from °C to ˚K
+    airTemList = [i + 273.15 for i in airTemList]
 
     zentraReadingList = list(
         zip(RHList, precipList, airTemList, wSpeedList, wDirectionList)

@@ -31,8 +31,10 @@ DB_PORT = env.int("DB_PORT", 5432)
 # Zentra account and station details
 ZENTRA_UN = env.str("ZENTRA_UN")
 ZENTRA_PW = env.str("ZENTRA_PW")
-INITIAL_BACKTIME = env.int("INITIAL_BACKTIME", 365)
-STATION_SN = env.str("STATION_SN", "06-02047")
+INITIAL_BACKTIME = env.int("INITIAL_BACKTIME", 29)
+STATION_SN = env.str("STATION_SN", "06-02010")
+ZENTRA_INTERPOLATE_MISSING = env.bool("ZENTRA_INTERPOLATE_MISSING", False)
+ZENTRA_FAIL_ON_MISSING = env.bool("ZENTRA_FAIL_ON_MISSING", False)
 
 # defaults value when zentra does not report a value.
 DEFAULT_RH = env.tuple(

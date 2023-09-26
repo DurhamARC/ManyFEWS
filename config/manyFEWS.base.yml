@@ -4,6 +4,7 @@ channels:
   - defaults
 dependencies:
   - numpy=1.21.2
+  - numba=0.57.1
   - pandas=1.4.4
   - xlrd=1.2.0
   - pip
