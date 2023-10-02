@@ -50,9 +50,10 @@ def hello_celery():
 def initialModelSetUp(self):
     """
     Initial model set up
-    This is part is only run once when the application is just installed.
+    This is part is run once when the application is just installed.
+    It must be run again if the scheduled tasks were not run in the last INITIAL_BACKTIME days.
 
-    1. Start with all parameters at their default values. These are the default value that Simon passed to you.
+    1. Start with all parameters at their default values.
     2. Get the last 365 days of data from the catchment via Zentra
     3. Run the model for this dataset
     4. The model will write out the initial conditions for each of the model parameter sets.
@@ -63,8 +64,10 @@ def initialModelSetUp(self):
     timeInfo = offsetTime(backDays=backDays)
 
     logger.info(
-        f"Setting up model with INITIAL_BACKTIME {backDays} from "
-        f"{timeInfo[0].strftime('%Y-%m-%d %H:%M:%S')}"
+        f"Setting up catchment model:\n"
+        f"\tUsing Zentra Device {settings.STATION_SN}\n"
+        f"\tINITIAL_BACKTIME is {backDays}\n"
+        f"\tStarting on {timeInfo[0].strftime('%Y-%m-%d %H:%M:%S')}"
     )
 
     try:
