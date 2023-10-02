@@ -32,7 +32,7 @@ from .tasks import (
     load_params_from_csv,
     import_zentra_devices,
 )
-from .zentra import offsetTime
+from .zentra import offsetTime, findZentraDataIndex
 
 
 def excel_to_matrix(path, sheet_num):
@@ -435,3 +435,40 @@ class FloodCalculationTests(TestCase):
             predict_depths(self.test_date, dummy_param_list, None)
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
+
+    def test_find_zentra_data_index(self):
+        kind_dict = {
+            1: "Precipitation",
+            4: "Wind Direction",
+            5: "Wind Speed",
+            7: "Air Temperature",
+            8: "Vapor Pressure",
+        }
+
+        test_record = [
+            1695772800,
+            268788,
+            100,
+            [
+                {"error": True, "description": "No response from sensor"},
+            ],
+            [
+                {"value": 122.2, "error": False, "description": "Solar Radiation"},
+                {"value": 0.0, "error": False, "description": "Precipitation"},
+                {"value": 0.0, "error": False, "description": "Lightning Activity"},
+                {"value": 0.0, "error": False, "description": "Lightning Distance"},
+                {"value": 198, "error": False, "description": "Wind Direction"},
+                {"value": 0.35, "error": False, "description": "Wind Speed"},
+                {"value": 0.79, "error": False, "description": "Gust Speed"},
+                {"value": 21.94, "error": False, "description": "Air Temperature"},
+                {"value": 2.588, "error": False, "description": "Vapor Pressure"},
+                {"value": 93.69, "error": False, "description": "Atmospheric Pressure"},
+                {"value": 1.2, "error": False, "description": "X-axis Level"},
+                {"value": 3.9, "error": False, "description": "Y-axis Level"},
+                {"value": 0.0, "error": False, "description": "Max Precip Rate"},
+                {"value": 22.52, "error": False, "description": "RH Sensor Temp"},
+                {"value": 0.04439549102977036, "error": False, "description": "VPD"},
+            ],
+        ]
+
+        self.assertEqual(4, findZentraDataIndex(test_record, kind_dict))

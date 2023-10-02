@@ -36,6 +36,7 @@ def zentraReader(startTime, endTime, stationSN):
     # Indices to interpolate if ZENTRA_INTERPOLATE_MISSING is True
     interpolation_indices = []
 
+    # Data readings of each type
     precip = []
     wDirection = []
     wSpeed = []
@@ -43,33 +44,25 @@ def zentraReader(startTime, endTime, stationSN):
     convertedDate = []
     rh = []
 
-    # Variables used in data preparation:
+    # Kind of reading to search for in the incoming data (which may be dirty)
     kind_strings = [
         "Precipitation",
         "Wind Direction",
         "Wind Speed",
         "Air Temperature",
-        "Vapour Pressure",
+        "Vapor Pressure",
     ]
+    kind_indices = [1, 4, 5, 7, 8]
+    kind_dict = dict(zip(kind_indices, kind_strings))
+
+    # Clamp Relative Humidity values between 0 and 1 (or minn and maxn)
     clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
 
     # Check that we have data
     try:
-        len(zentraData["device"]["timeseries"][0]["configuration"]["values"])
+        data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
+        data_index = findZentraDataIndex(data[0], kind_dict)
 
-    except IndexError as e:
-        if len(zentraData["device"]["timeseries"]) == 0:
-            raise IndexError(
-                "Error preparing Zentra Cloud data.\n\t"
-                + f"No data was received from Zentra for the device {stationSN}.\n\t"
-                + "Ensure the station is logging and uploading data to Zentra, "
-                + "or provide a different station."
-            ) from e
-        raise e
-
-    data = zentraData["device"]["timeseries"][0]["configuration"]["values"]
-
-    try:
         # Extract time stamp, Precipitation, solar, temperature, and humidity
         for i, d in enumerate(data):
 
@@ -81,16 +74,18 @@ def zentraReader(startTime, endTime, stationSN):
 
             # Check data: the series we want are at indices 1, 4, 5, 7, 8
             error = False
-            for kind, j in enumerate([1, 4, 5, 7, 8]):
+            for kind, j in enumerate(kind_indices):
                 # kinds[k] is string of kind, j is index into data
-                if d[3][j]["error"]:
+                if d[data_index][j]["error"]:
                     logging.debug(
-                        f"ZentraDevice {kind_strings[kind]} error at index {i}: {d[3][j]['description']}"
+                        f"ZentraDevice {kind_strings[kind]} error at index {i}: {d[data_index][j]['description']}"
                     )
                     error = True
 
-            # If data is bad, don't process this entry
+            # If data is bad, decide how to process this entry
             if error:
+                # Default behaviour is to use default data, e.g. settings.DEFAULT_RH and similar.
+                # Other behaviours are turned on by the following settings switches:
                 if settings.ZENTRA_FAIL_ON_MISSING:
                     raise RuntimeError(
                         f"Bad data at index {i} in ZentraData for {date}\n"
@@ -105,7 +100,7 @@ def zentraReader(startTime, endTime, stationSN):
                         "Interpolation will be attempted."
                     )
 
-                    # Mark as interpolation start point
+                    # Mark index for later interpolation
                     interpolation_indices.append(i)
                     convertedDate.append(date)
                     precip.append(np.nan)
@@ -116,18 +111,18 @@ def zentraReader(startTime, endTime, stationSN):
                     continue
 
             convertedDate.append(date)
-            precip.append(d[3][1]["value"])  # Precipitation, 'unit':' mm'
-            airTem.append(d[3][7]["value"])  # air temperature, 'unit'=' °C'
-            wDirection.append(d[3][4]["value"])  # Wind Direction, 'units': ' °'
-            wSpeed.append(d[3][5]["value"])  # wind speed, 'units': ' m/s'
+            precip.append(d[data_index][1]["value"])  # Precipitation, 'unit':' mm'
+            wDirection.append(d[data_index][4]["value"])  # Wind Dir., 'units': ' °'
+            wSpeed.append(d[data_index][5]["value"])  # wind speed, 'units': ' m/s'
+            airTem.append(d[data_index][7]["value"])  # air temperature, 'unit'=' °C'
 
             # calculate rh by: esTair = 0.611*EXP((17.502*Tc)/(240.97+Tc))
             #                  rh = VP / esTair
             #                 which:Tc is the Air Temperature
             #                       VP is the Vapour Pressure
             #                       rh is the Relative Humidity between zero and one.
-            tempAir = d[3][7]["value"]
-            vapPressure = d[3][8]["value"]
+            tempAir = d[data_index][7]["value"]
+            vapPressure = d[data_index][8]["value"]
 
             # Missing data will be strings of value "None"
             if type(tempAir) is str and tempAir == "None":
@@ -141,6 +136,16 @@ def zentraReader(startTime, endTime, stationSN):
 
     except TypeError as e:
         raise TypeError("Error in environmental data calculation.") from e
+
+    except IndexError as e:
+        if len(zentraData["device"]["timeseries"]) == 0:
+            raise IndexError(
+                "Error preparing Zentra Cloud data.\n\t"
+                + f"No data was received from Zentra for the device {stationSN}.\n\t"
+                + "Ensure the station is logging and uploading data to Zentra, "
+                + "or provide a different station."
+            ) from e
+        raise e
 
     zentraDevice = ZentraDevice.objects.get(device_sn=stationSN)
 
@@ -170,6 +175,54 @@ def zentraReader(startTime, endTime, stationSN):
         )
 
         zentraData.save()
+
+
+def findZentraDataIndex(d, kind_dict):
+    """
+    Find the index at which the Weather Station data resides.
+    This method is necessary because on some sensors, the weather station is plugged
+    into port 2, and therefore appears at a different index in the data array.
+
+    We make the following assumptions about good data:
+        Good data is of array length 15
+        Good data contains the following strings, at the following indices of that sub array:
+            1:  "Precipitation"
+            4:  "Wind Direction"
+            5:  "Wind Speed"
+            7:  "Air Temperature"
+            8:  "Vapor Pressure"
+        Good data does not have ‘error’: True in any of the dictionaries
+
+    @param d:         A single record from the zentraData (probably the first)
+    @param kind_dict: A dict of {indices: 'string'} for strings to look for at each data_index
+    @return:          data_index, the offset at which good data was found
+    """
+    # Find data offset in data structure. Assumption for initial index is 3
+    data_index = 3
+
+    # Define a 'good data' test. Test succeeds if:
+    #     Data record has 15 entries
+    #     All requested fields (i.e. kinds) exist in the record
+    #     All kinds of data have no error ('error': False)
+    good_data = lambda x: (
+        len(d[x]) == 15
+        and list(set([d[x][k]["description"] == kind_dict[k] for k in kind_dict]))[0]
+        and not list(set([d[x][k]["error"] for k in kind_dict]))[0]
+    )
+
+    while data_index < len(d):
+        if good_data(data_index):
+            break
+        data_index += 1
+
+    # If we have no good data (i.e. we ran off the end of the array), raise RuntimeError!
+    if data_index == len(d):
+        raise RuntimeError(
+            f"Unable to find a good first record in the Zentra Data "
+            f"for STATION_SN {settings.STATION_SN}!"
+        )
+
+    return data_index
 
 
 def interpolate_missing_data(null_indices: list, series: list):
