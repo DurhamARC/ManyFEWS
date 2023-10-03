@@ -24,6 +24,9 @@ from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
 
+# Generate list of [beta0..beta4]
+BETA_ARGS = [f"beta{i}" for i in range(5)]
+
 
 def run_all_flood_models():
     # Run flood model over latest outputs from river flow
@@ -213,35 +216,34 @@ def process_pixel(
 
 
 def predict_depth(flow_values, param):
-    beta_values = [getattr(param, f"beta{i}", 0) for i in range(12)]
+    """
+    Predict the depth of a cell using numpy polynomial
+    @param flow_values:
+    @param param:
+    @return:
+    """
+
+    # FIXME: getattr is slow
+    beta_values = [getattr(param, i, 0) for i in BETA_ARGS]
     beta_values = [0 if b is None else b for b in beta_values]
 
-    # if np.all(flow_values < beta_values[4]):
-    #    depths = np.zeros_like(flow_values)
-
-    # else:
-    #    polynomial = np.polynomial.Polynomial(beta_values[:4])
-    #    depths = polynomial(flow_values)
+    minQ = beta_values[4]
+    beta_values = beta_values[:4]
 
     depths = np.zeros_like(flow_values)
     for index, element in np.ndenumerate(flow_values):
-        # beta_values[4] is minQ
         # minQ is the minimum flow rate to calculate polynomial on
         # If we're less than the minimum flow rate, then depth = 0
-        if element < beta_values[4]:
+        if element < minQ:
             depth = 0
         else:
-            polynomial = np.polynomial.Polynomial(beta_values[:4])
+            polynomial = np.polynomial.Polynomial(beta_values)
             depth = polynomial(element)
 
         depths[index] = depth
 
     # TODO: Does this have any effect?
     depths[depths < 0] = 0
-
-    # polynomial = np.polynomial.Polynomial(beta_values)
-    # depths = polynomial(flow_values)
-    # depths[depths < 0] = 0
 
     # Get median and centiles
     median = np.median(depths)
