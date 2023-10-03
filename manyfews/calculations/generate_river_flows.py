@@ -649,6 +649,6 @@ def runningGenerateRiverFlows(
                     river_flow=riverFlows[i, j],
                 )
                 riverFlowPredictionData.save()
-                logger.debug("Saved river flow prediction")
+                logger.debug(f"Saved river flow prediction {j}")
 
     return F0

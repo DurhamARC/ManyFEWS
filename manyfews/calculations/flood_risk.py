@@ -8,6 +8,7 @@ from django.contrib.gis.geos import Polygon
 from django.db.models import Avg, Count, Max
 from django.utils import timezone
 import numpy as np
+from numba import jit
 
 from .bulk_create_manager import BulkCreateUpdateManager
 from .models import (
@@ -130,7 +131,24 @@ def predict_depths(forecast_time, param_ids, flow_values):
             id__in=param_ids
         )[batch * batch_size : (batch + 1) * batch_size]
 
+        # Preload existing predictions for batch and insert into dictionary by parameters_id
+        # Do a single database SELECT query for batch instead of making a SELECT query
+        #   for each pixel (by default up to 1,000 records)
+        # Note that if the Flood Model has not run, this will return with len() == 0!
+        existing_predictions = {
+            rec.parameters_id: rec
+            for rec in DepthPrediction.objects.filter(
+                date=forecast_time, parameters_id__in=params_batch
+            )
+            .only("parameters_id")
+            .all()
+        }
+
         for i, param in enumerate(params_batch):
+            prediction = None
+            if param.id in existing_predictions:
+                prediction = existing_predictions[param.id]
+
             process_pixel(
                 param,
                 flow_values,
@@ -138,7 +156,16 @@ def predict_depths(forecast_time, param_ids, flow_values):
                 forecast_time,
                 predictions_to_delete,
                 bulk_mgr,
+                prediction,
             )
+
+        # Clean up cell depth predictions to delete once per patch
+        if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
+            logger.debug(
+                f"Cleaning up {len(predictions_to_delete)} no-longer flooded cells"
+            )
+            DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
+            predictions_to_delete = []
 
         logger.info(
             f"Calculated {(batch+1) * batch_size} of {total_batches * batch_size} pixels "
@@ -162,6 +189,7 @@ def process_pixel(
     forecast_time,
     predictions_to_delete,
     bulk_mgr,
+    prediction,
 ):
 
     # Break out of loop if current param is within a river channel
@@ -179,22 +207,9 @@ def process_pixel(
     ) = predict_depth(flow_values, param)
 
     # Replace current object if there is one
-    prediction = (
-        DepthPrediction.objects.filter(date=forecast_time, parameters_id=param.id)
-        .only("pk")
-        .first()
-    )
-
     if upper_centile <= 0:
         if prediction:
             predictions_to_delete.append(prediction.pk)
-
-            if len(predictions_to_delete) > settings.DATABASE_CHUNK_SIZE:
-                logger.debug(
-                    f"Cleaning up {len(predictions_to_delete)} no-longer flooded cells"
-                )
-                DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
-                predictions_to_delete = []
 
     else:
         new_prediction = DepthPrediction(
@@ -251,10 +266,10 @@ def predict_depth(flow_values, param):
     mid_lower_centile = np.percentile(depths, 30)
     upper_centile = np.percentile(depths, 90)
 
-    # logger.info(
+    # logger.debug(
     #    f"depths type {type(depths)}, shape: {np.shape(depths)}"
     # )
-    # logger.info(
+    # logger.debug(
     #    f"get median and centiles: {median} & {mid_lower_centile} & {upper_centile}"
     # )
 
