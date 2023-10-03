@@ -406,7 +406,7 @@ class FloodCalculationTests(TestCase):
         self.create_depth_predictions()
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
-        with self.assertNumQueries(7):
+        with self.assertNumQueries(4):
             predict_depths(self.test_date, dummy_param_list, None)
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 0)
@@ -418,7 +418,7 @@ class FloodCalculationTests(TestCase):
         dummy_param_list = [1, 2, 3, 4]
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 0)
-        with self.assertNumQueries(11):
+        with self.assertNumQueries(8):
             predict_depths(self.test_date, dummy_param_list, None)
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
@@ -431,7 +431,7 @@ class FloodCalculationTests(TestCase):
         dummy_param_list = [1, 2, 3, 4]
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
-        with self.assertNumQueries(11):
+        with self.assertNumQueries(8):
             predict_depths(self.test_date, dummy_param_list, None)
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
