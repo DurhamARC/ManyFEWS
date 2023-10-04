@@ -1,5 +1,6 @@
 from datetime import timedelta
 import math
+import time
 
 from celery import shared_task
 from django.conf import settings
@@ -127,6 +128,8 @@ def predict_depths(forecast_time, param_ids, flow_values):
     total_batches = int(math.ceil(len(param_ids) / batch_size))
 
     for batch in range(total_batches):
+        start = time.time()
+
         params_batch = FloodModelParameters.objects.defer("bounding_box").filter(
             id__in=param_ids
         )[batch * batch_size : (batch + 1) * batch_size]
@@ -167,10 +170,12 @@ def predict_depths(forecast_time, param_ids, flow_values):
             DepthPrediction.objects.filter(pk__in=predictions_to_delete).delete()
             predictions_to_delete = []
 
+        end = time.time()
+
         logger.info(
             f"Calculated {(batch+1) * batch_size} of {total_batches * batch_size} pixels "
             f"in batch {batch+1}/{total_batches} ({(batch / total_batches) * 100 :.1f}%) "
-            f"for {forecast_time}"
+            f"for {forecast_time.strftime('%y-%m-%d %H:%M')}. Executed in {(end-start):.2f}s"
         )
 
     if len(predictions_to_delete):
@@ -230,6 +235,7 @@ def process_pixel(
             bulk_mgr.add(new_prediction)
 
 
+@jit(nopython=False)
 def predict_depth(flow_values, param):
     """
     Predict the depth of a cell using numpy polynomial
