@@ -67,23 +67,43 @@ def run_flood_model_for_time(prediction_date, forecast_time):
         "river_flow", flat=True
     )
     flow_values = np.fromiter(flow_values_iter, np.dtype("float_"))
-    logger.info(f"Got river flow values: {flow_values}")
+    logger.info(
+        f"Got river flow values: "
+        f"[{', '.join(format(x, '2.5f') for x in flow_values[:2])} ... "
+        f"{', '.join(format(x, '2.5f') for x in flow_values[-2:])}]."
+    )
 
     latest_model_id = ModelVersion.get_current_id()
-    params = FloodModelParameters.objects.filter(model_version_id=latest_model_id).all()
+    params = FloodModelParameters.objects.filter(model_version_id=latest_model_id)
 
+    # Check if we have FloodModel parameters (common error in app setup)
     if not len(params):
         raise RuntimeError(
             "There are no FloodModelParameters populated"
-            f" for {prediction_date.strftime('%Y-%m-%d')}"
-            f" {forecast_time.strftime('%H:%M:%S')}"
+            f" for {prediction_date.strftime('%Y-%m-%d')} {forecast_time.strftime('%H:%M:%S')}"
             " and therefore nothing to do."
             "\nHave you added a ModelVersion? You may need to load the model parameters from CSV."
         )
 
+    # Perform check: will depth be zero for all cells? beta4 is minQ. Early-out if so.
+    elif max(flow_values) < min(params.only("beta4").values_list("beta4", flat=True)):
+        logger.warning(
+            "No floods (flow_rate < minQ).\n"
+            "Maximum predicted river flow rate"
+            f" for {prediction_date.strftime('%Y-%m-%d')} {forecast_time.strftime('%H:%M:%S')}"
+            " is less than (<) minimum minQ in the flood model parameters.\n"
+            "Depth would be 0 for every cell. All existing predictions for this date/time will be removed."
+        )
+
+        DepthPrediction.objects.filter(
+            date=forecast_time, parameters_id__in=params
+        ).delete()
+
+        return
+
     # FIXME: this is slow (both with celery in batches of 1000, and running in series
     # (took several hours for 1 time))
-    predict_depths(forecast_time, [p.id for p in params], flow_values)
+    predict_depths(forecast_time, [p.id for p in params.only("id").all()], flow_values)
 
     # count the total number of processed pixels.
     total_pixel_count = DepthPrediction.objects.count()
@@ -95,14 +115,7 @@ def run_flood_model_for_time(prediction_date, forecast_time):
         )
     else:
         aggregate_flood_models(forecast_time)
-    # batch_size = 1000
-    # i = 0
-    #
-    # while i < len(params):
-    #     end = min(i + batch_size, len(params))
-    #     param_ids = [p.id for p in params[i:end]]
-    #     predict_depths.delay(forecast_time, param_ids, flow_values)
-    #     i += batch_size
+
     # TODO: join results to call aggregate_flood_models
 
 
