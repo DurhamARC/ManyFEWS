@@ -27,6 +27,12 @@ from .models import (
     ModelVersion,
     NoaaForecast,
     ZentraDevice,
+    PercentageFloodRisk,
+    AggregatedDepthPrediction,
+    DepthPrediction,
+    RiverFlowPrediction,
+    RiverFlowCalculationOutput,
+    ZentraReading,
 )
 from .zentra import prepareZentra, offsetTime
 from .zentra_devices import ZentraDeviceMap
@@ -341,15 +347,6 @@ def import_zentra_devices():
 
 @shared_task(name="calculations.dropCalculatedValues")
 def drop_database():
-    from models import (
-        PercentageFloodRisk,
-        AggregatedDepthPrediction,
-        DepthPrediction,
-        RiverFlowPrediction,
-        RiverFlowCalculationOutput,
-        ZentraReading,
-    )
-
     logger.info("Dropping all calculated values")
 
     PercentageFloodRisk.objects.all().delete()
