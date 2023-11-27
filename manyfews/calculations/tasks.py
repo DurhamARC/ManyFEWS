@@ -167,15 +167,22 @@ def dailyModelUpdate():
         location=location
     )
 
+    if len(initialConditions) == 0:
+        logger.error(
+            "No Initial Conditions for River Flow Prediction found for previous day! "
+            "Will now run calculations.initialModelSetUp"
+        )
+
+        # Run calculations.initialModelSetUp to get initial conditions
+        initialModelSetUp()
+        initialConditions = InitialCondition.objects.filter(date=today[0]).filter(
+            location=location
+        )
+
     # Check data input is correct
     logger.debug(
         f"InitialCondition records found: {len(initialConditions)} for location {location}"
     )
-    if len(initialConditions) == 0:
-        raise Exception(
-            "No Initial Conditions for River Flow Prediction found for previous day! "
-            "Try running calculations.initialModelSetUp first."
-        )
 
     slowFlowRateList = []
     fastFlowRateList = []
@@ -209,6 +216,7 @@ def dailyModelUpdate():
 
     if len(gefsData) == 0:
         # Check whether GEFS data has been downloaded
+        logger.info("Preparing GEFS data")
         prepareGEFS()
 
     weatherForecastData = prepareWeatherForecastData(
@@ -266,7 +274,7 @@ def load_params_from_csv(self, filename: str, model_version_id: str):
         f"CSV file contains {total_rows} rows. Loading in chunks of {settings.DATABASE_CHUNK_SIZE}..."
     )
 
-    with open(filename) as csvfile:
+    with open(filename, mode="r", encoding="utf-8-sig") as csvfile:
         bulk_mgr = BulkCreateManager(chunk_size=settings.DATABASE_CHUNK_SIZE)
 
         for row in tqdm(
@@ -329,3 +337,27 @@ def import_zentra_devices():
     token = ZentraToken(username=settings.ZENTRA_UN, password=settings.ZENTRA_PW)
     device_map = ZentraDeviceMap(token=token)
     device_map.save()
+
+
+@shared_task(name="calculations.dropCalculatedValues")
+def drop_database():
+    from models import (
+        PercentageFloodRisk,
+        AggregatedDepthPrediction,
+        DepthPrediction,
+        RiverFlowPrediction,
+        RiverFlowCalculationOutput,
+        ZentraReading,
+    )
+
+    logger.info("Dropping all calculated values")
+
+    PercentageFloodRisk.objects.all().delete()
+    AggregatedDepthPrediction.objects.all().delete()
+    DepthPrediction.objects.all().delete()
+    RiverFlowPrediction.objects.all().delete()
+    RiverFlowCalculationOutput.objects.all().delete()
+    InitialCondition.objects.all().delete()
+    AggregatedZentraReading.objects.all().delete()
+    ZentraReading.objects.all().delete()
+    NoaaForecast.objects.all().delete()
