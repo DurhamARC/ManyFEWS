@@ -60,6 +60,7 @@ def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
 
     tmp_fd, tmp_path = tempfile.mkstemp()
     os.close(tmp_fd)
+    gefsData = None
     try:
         urlretrieve(fullUrl, tmp_path)
         gefsData = pygrib.open(tmp_path)
@@ -133,8 +134,9 @@ def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
                 )
                 totalPrecipValue = grb.values[index]
 
-        gefsData.close()
     finally:
+        if gefsData is not None:
+            gefsData.close()
         os.unlink(tmp_path)
 
     missing = [

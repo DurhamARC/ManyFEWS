@@ -30,6 +30,7 @@ m s⁻¹).  We decompose wind speed + direction into these components:
 
 import math
 import logging
+from collections import defaultdict
 from datetime import datetime, timezone
 
 import requests
@@ -177,14 +178,12 @@ def _rows_to_noaa_forecasts(
     :return: list of ``NoaaForecast`` objects (not yet saved to the DB)
     """
     KELVIN_OFFSET = 273.15
-    location = Point(lat, lon)
+    location = Point(lon, lat)
     forecasts: list[NoaaForecast] = []
 
     for member_label, rows in members.items():
         # We need per-day min/max temperature from hourly data.
         # Group rows by calendar date first.
-        from collections import defaultdict
-
         daily_temps: dict[str, list[float]] = defaultdict(list)
         for row in rows:
             if row["temperature_2m"] is not None:
