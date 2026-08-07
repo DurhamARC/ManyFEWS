@@ -1,15 +1,17 @@
+import os
+import tempfile
 from urllib.request import urlretrieve
 import pygrib
 import numpy as np
 from datetime import datetime, timedelta, timezone
 from .models import NoaaForecast
 from django.contrib.gis.geos import Point
-from retrying import retry
+from tenacity import retry, stop_after_attempt, wait_fixed
 from django.conf import settings
 from tqdm import trange
 
-# if report error, retrying 72 times (6 hours), sleep 300 seconds (5 minutes) between attempts
-@retry(stop_max_attempt_number=72, wait_fixed=300)
+# Retry up to 72 times (6 hours), sleeping 300 seconds (5 minutes) between attempts
+@retry(stop=stop_after_attempt(72), wait=wait_fixed(300))
 def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
     """
     This script is developed to download files, read files, and export necessary data for generating river flows.
@@ -48,77 +50,111 @@ def GEFSdownloader(fileDate, forecastHour, latValue, lonValue):
     fileName = fileNameBase + (str(forecastHour)).zfill(3)
     fullUrl = rootUrl + "gefs." + fileDate + subUrl + fileName
 
-    gefsFile = urlretrieve(fullUrl)
-    gefsData = pygrib.open(gefsFile[0])
+    # Initialise output variables; will raise a clear error if any remain None.
+    RHvalue = None
+    maxTempValue = None
+    minTempValue = None
+    uWindValue = None
+    vWindValue = None
+    totalPrecipValue = None
 
-    # extract necessary data sets:
-    for grb in gefsData:
+    tmp_fd, tmp_path = tempfile.mkstemp()
+    os.close(tmp_fd)
+    gefsData = None
+    try:
+        urlretrieve(fullUrl, tmp_path)
+        gefsData = pygrib.open(tmp_path)
 
-        # metre relative humidity, unit:% (instant).
-        if grb.parameterName == "Relative humidity" and grb.level == 2:
-            lats, lons = grb.latlons()
-            index = cellIndexFinder(
-                latitudeInfo=lats,
-                longitudeInfo=lons,
-                latValue=latValue,
-                lonValue=lonValue,
-            )
-            RHvalue = grb.values[index]
+        # extract necessary data sets:
+        for grb in gefsData:
 
-        # Maximum temperature: unit:K (max).
-        elif grb.parameterName == "Maximum temperature" and grb.level == 2:
-            lats, lons = grb.latlons()
-            index = cellIndexFinder(
-                latitudeInfo=lats,
-                longitudeInfo=lons,
-                latValue=latValue,
-                lonValue=lonValue,
-            )
-            maxTempValue = grb.values[index]
+            # metre relative humidity, unit:% (instant).
+            if grb.parameterName == "Relative humidity" and grb.level == 2:
+                lats, lons = grb.latlons()
+                index = cellIndexFinder(
+                    latitudeInfo=lats,
+                    longitudeInfo=lons,
+                    latValue=latValue,
+                    lonValue=lonValue,
+                )
+                RHvalue = grb.values[index]
 
-        # Minimum temperature: unit:K (min).
-        elif grb.parameterName == "Minimum temperature" and grb.level == 2:
-            lats, lons = grb.latlons()
-            index = cellIndexFinder(
-                latitudeInfo=lats,
-                longitudeInfo=lons,
-                latValue=latValue,
-                lonValue=lonValue,
-            )
-            minTempValue = grb.values[index]
+            # Maximum temperature: unit:K (max).
+            elif grb.parameterName == "Maximum temperature" and grb.level == 2:
+                lats, lons = grb.latlons()
+                index = cellIndexFinder(
+                    latitudeInfo=lats,
+                    longitudeInfo=lons,
+                    latValue=latValue,
+                    lonValue=lonValue,
+                )
+                maxTempValue = grb.values[index]
 
-        # metre U wind component: unit:m/s (instant).
-        elif grb.parameterName == "u-component of wind" and grb.level == 10:
-            lats, lons = grb.latlons()
-            index = cellIndexFinder(
-                latitudeInfo=lats,
-                longitudeInfo=lons,
-                latValue=latValue,
-                lonValue=lonValue,
-            )
-            uWindValue = grb.values[index]
+            # Minimum temperature: unit:K (min).
+            elif grb.parameterName == "Minimum temperature" and grb.level == 2:
+                lats, lons = grb.latlons()
+                index = cellIndexFinder(
+                    latitudeInfo=lats,
+                    longitudeInfo=lons,
+                    latValue=latValue,
+                    lonValue=lonValue,
+                )
+                minTempValue = grb.values[index]
 
-        # metre V wind component: unit:m/s (instant).
-        elif grb.parameterName == "v-component of wind" and grb.level == 10:
-            lats, lons = grb.latlons()
-            index = cellIndexFinder(
-                latitudeInfo=lats,
-                longitudeInfo=lons,
-                latValue=latValue,
-                lonValue=lonValue,
-            )
-            vWindValue = grb.values[index]
+            # metre U wind component: unit:m/s (instant).
+            elif grb.parameterName == "u-component of wind" and grb.level == 10:
+                lats, lons = grb.latlons()
+                index = cellIndexFinder(
+                    latitudeInfo=lats,
+                    longitudeInfo=lons,
+                    latValue=latValue,
+                    lonValue=lonValue,
+                )
+                uWindValue = grb.values[index]
 
-        # Total Precipitation: unit:kg/m2 (accum).
-        elif grb.parameterName == "Total precipitation" and grb.level == 0:
-            lats, lons = grb.latlons()
-            index = cellIndexFinder(
-                latitudeInfo=lats,
-                longitudeInfo=lons,
-                latValue=latValue,
-                lonValue=lonValue,
-            )
-            totalPrecipValue = grb.values[index]
+            # metre V wind component: unit:m/s (instant).
+            elif grb.parameterName == "v-component of wind" and grb.level == 10:
+                lats, lons = grb.latlons()
+                index = cellIndexFinder(
+                    latitudeInfo=lats,
+                    longitudeInfo=lons,
+                    latValue=latValue,
+                    lonValue=lonValue,
+                )
+                vWindValue = grb.values[index]
+
+            # Total Precipitation: unit:kg/m2 (accum).
+            elif grb.parameterName == "Total precipitation" and grb.level == 0:
+                lats, lons = grb.latlons()
+                index = cellIndexFinder(
+                    latitudeInfo=lats,
+                    longitudeInfo=lons,
+                    latValue=latValue,
+                    lonValue=lonValue,
+                )
+                totalPrecipValue = grb.values[index]
+
+    finally:
+        if gefsData is not None:
+            gefsData.close()
+        os.unlink(tmp_path)
+
+    missing = [
+        name
+        for name, val in (
+            ("Relative humidity", RHvalue),
+            ("Maximum temperature", maxTempValue),
+            ("Minimum temperature", minTempValue),
+            ("U wind component", uWindValue),
+            ("V wind component", vWindValue),
+            ("Total precipitation", totalPrecipValue),
+        )
+        if val is None
+    ]
+    if missing:
+        raise ValueError(
+            f"GEFS GRIB file for forecastHour={forecastHour} is missing required fields: {missing}"
+        )
 
     return RHvalue, maxTempValue, minTempValue, uWindValue, vWindValue, totalPrecipValue
 
@@ -163,9 +199,9 @@ def prepareGEFS():
     loopRange = int(forecastDays / dt)
     deltaHour = int(24 * dt)
 
-    downloadDate = datetime.utcnow()  # download today's GEFS data.
+    downloadDate = datetime.now(tz=timezone.utc)  # download today's GEFS data.
     fileDate = downloadDate.strftime("%Y%m%d")
-    date = datetime.astimezone(downloadDate, tz=timezone(timedelta(hours=0)))
+    date = downloadDate.astimezone(tz=timezone(timedelta(hours=0)))
 
     # get the lat & lon value of studying cell
     latValue = settings.LAT_VALUE

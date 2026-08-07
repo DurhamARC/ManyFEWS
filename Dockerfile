@@ -28,7 +28,7 @@
 #
 # ----------------------------------------------------------------------------
 # Build node / Frontend assets
-FROM node:alpine3.15 as build_node
+FROM node:lts-alpine as build_node
 MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 
 # Install Python (required for node-gyp)
@@ -50,7 +50,7 @@ RUN npm run build
 
 # ----------------------------------------------------------------------------
 # Create conda environment
-FROM continuumio/miniconda3:4.12.0 as build_python
+FROM continuumio/miniconda3 as build_python
 
 # https://pythonspeed.com/articles/conda-docker-image-size/
 # Create the environment:
@@ -93,7 +93,7 @@ RUN source /venv/bin/activate && \
 
 # ----------------------------------------------------------------------------
 # Create a python docker container base for gunicorn and celery
-FROM debian:bullseye-slim as manyfews
+FROM debian:bookworm-slim as manyfews
 MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 WORKDIR /app
 

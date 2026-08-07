@@ -1,6 +1,6 @@
 import csv
 
-from celery import Celery, shared_task
+from celery import shared_task
 
 from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
@@ -16,6 +16,7 @@ from .alerts import send_phone_alerts_for_user
 from .bulk_create_manager import BulkCreateManager
 from .flood_risk import run_all_flood_models, calculate_risk_percentages
 from .gefs import prepareGEFS
+from .open_meteo import prepareOpenMeteo
 from .generate_river_flows import (
     prepareWeatherForecastData,
     runningGenerateRiverFlows,
@@ -40,8 +41,6 @@ from .zentra_devices import ZentraDeviceMap
 from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
-
-app = Celery()
 
 
 @shared_task(name="calculations.hello_celery")
@@ -221,9 +220,13 @@ def dailyModelUpdate():
     gefsData = NoaaForecast.objects.filter(date__range=(today[0], today[1]))
 
     if len(gefsData) == 0:
-        # Check whether GEFS data has been downloaded
-        logger.info("Preparing GEFS data")
-        prepareGEFS()
+        weather_source = getattr(settings, "WEATHER_SOURCE", "open_meteo")
+        if weather_source == "gefs":
+            logger.info("Preparing GEFS weather forecast data")
+            prepareGEFS()
+        else:
+            logger.info("Preparing Open-Meteo ensemble forecast data")
+            prepareOpenMeteo()
 
     weatherForecastData = prepareWeatherForecastData(
         predictionDate=today[0], location=location, dataSource="gefs"
@@ -275,7 +278,7 @@ def send_alerts():
 def load_params_from_csv(self, filename: str, model_version_id: str):
     logger.info(f"Loading parameters from {filename}")
 
-    total_rows = sum(1 for _ in open(filename))
+    total_rows = sum(1 for _ in open(filename, encoding="utf-8-sig"))
     logger.info(
         f"CSV file contains {total_rows} rows. Loading in chunks of {settings.DATABASE_CHUNK_SIZE}..."
     )

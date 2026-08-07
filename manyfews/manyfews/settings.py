@@ -24,7 +24,7 @@ environ.Env.read_env()
 # Database details
 DB_NAME = env.str("DB_NAME", "manyfews")
 DB_USER = env.str("DB_USER", "manyfews")
-DB_PASSWORD = env.str("DB_PASSWORD", "manyfews")
+DB_PASSWORD = env.str("DB_PASSWORD")
 DB_HOST = env.str("DB_HOST", "localhost")
 DB_PORT = env.int("DB_PORT", 5432)
 
@@ -87,6 +87,15 @@ GEFS_FORECAST_DAYS = env.int("GEFS_FORECAST_DAYS", 16)
 LAT_VALUE = env.float("LAT_VALUE", -7.05)
 LON_VALUE = env.float("LON_VALUE", 175)
 
+# Weather source selection: "open_meteo" (default) or "gefs"
+WEATHER_SOURCE = env.str("WEATHER_SOURCE", "open_meteo")
+
+# Open-Meteo ensemble forecast settings
+# See https://open-meteo.com/en/docs/ensemble-api for available model identifiers
+OPEN_METEO_MODEL = env.str("OPEN_METEO_MODEL", "gfs_seamless")
+# Maximum number of ensemble members to store (0 = keep all available members)
+OPEN_METEO_ENSEMBLE_MEMBERS = env.int("OPEN_METEO_ENSEMBLE_MEMBERS", 0)
+
 # Thresholds for number of m^2 cells that count towards flood risk
 # CHANNEL_CELL_COUNT is number of cells in the river channel
 CHANNEL_CELL_COUNT = env.int("CHANNEL_CELL_COUNT", 93794)
@@ -148,9 +157,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str(
-    "SECRET_KEY", "django-insecure-jau(^3c!z+wl6#zsz!%bu1$v7ks48dosj1#=l=^+58)r1y2n8b"
-)
+# This must be set via the SECRET_KEY environment variable in production.
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", True)
