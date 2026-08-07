@@ -134,6 +134,12 @@ def _parse_ensemble_members(data: dict) -> dict[str, list]:
         )
 
     members: dict[str, list] = {}
+
+    def _get_value(key: str, idx: int):
+        """Safely retrieve the i-th element from an hourly list, returning None if absent."""
+        lst = hourly.get(key, [])
+        return lst[idx] if idx < len(lst) else None
+
     for suffix in member_suffixes:
         label = suffix.lstrip("_") or "control"
         rows = []
@@ -141,17 +147,11 @@ def _parse_ensemble_members(data: dict) -> dict[str, list]:
             rows.append(
                 {
                     "time": ts,
-                    "precipitation": hourly.get(f"precipitation{suffix}", [None])[i],
-                    "temperature_2m": hourly.get(f"temperature_2m{suffix}", [None])[
-                        i
-                    ],
-                    "windspeed_10m": hourly.get(f"windspeed_10m{suffix}", [None])[i],
-                    "winddirection_10m": hourly.get(
-                        f"winddirection_10m{suffix}", [None]
-                    )[i],
-                    "relativehumidity_2m": hourly.get(
-                        f"relativehumidity_2m{suffix}", [None]
-                    )[i],
+                    "precipitation": _get_value(f"precipitation{suffix}", i),
+                    "temperature_2m": _get_value(f"temperature_2m{suffix}", i),
+                    "windspeed_10m": _get_value(f"windspeed_10m{suffix}", i),
+                    "winddirection_10m": _get_value(f"winddirection_10m{suffix}", i),
+                    "relativehumidity_2m": _get_value(f"relativehumidity_2m{suffix}", i),
                 }
             )
         members[label] = rows

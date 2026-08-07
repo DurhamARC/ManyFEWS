@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import TestCase
 import numpy as np
-import xlrd
+import openpyxl
 from unittest import mock
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
@@ -44,17 +44,15 @@ def excel_to_matrix(path, sheet_num):
 
     """
 
-    table = xlrd.open_workbook(path).sheets()[sheet_num]
-    row = table.nrows
-    col = table.ncols
-    datamatrix = np.zeros((row, col))  # ignore the first title row.
-    for x in range(1, row):
-        #        row = np.matrix(table.row_values(x))
-        row = np.array(table.row_values(x))
-        datamatrix[x, :] = row
-    datamatrix = np.delete(
-        datamatrix, 0, axis=0
-    )  # Delete the first blank line.(Its elements are all zero)
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    sheet = wb.worksheets[sheet_num]
+    rows = list(sheet.iter_rows(values_only=True))
+    row_count = len(rows) - 1  # exclude header row
+    col_count = len(rows[0]) if rows else 0
+    datamatrix = np.zeros((row_count, col_count))
+    for x in range(row_count):
+        datamatrix[x, :] = [float(v) if v is not None else 0.0 for v in rows[x + 1]]
+    wb.close()
     return datamatrix
 
 
@@ -62,7 +60,7 @@ def prepare_test_data():
     """
     This function is used to import test GEFS and initial condition data into database.
 
-    1. For GEFS: It will read data from GEFS xlrd file (GEFSdata) in Data directory.
+    1. For GEFS: It will read data from GEFS Excel file (GEFSdata) in Data directory.
     2. For initial condition: It will read data from csv file ( 'RainfallRunoffModelInitialConditions.csv')
     in Data directory.
 
