@@ -1,21 +1,20 @@
 # ManyFEWS
-
-[![Actions Status](https://github.com/DurhamARC/ManyFEWS/workflows/Unit%20Tests/badge.svg)](https://github.com/DurhamARC/ManyFEWS/actions)
-[![codecov.io](https://codecov.io/gh/DurhamARC/ManyFEWS/branch/main/graphs/badge.svg)](https://codecov.io/gh/DurhamARC/ManyFEWS/branch/main)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-ManyFEWS (the Many Flood Early Warning System) can be deployed by a community where there is currently no such system in place. The system uses weather forecast information from the [Global Ensemble Forecast System](https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast) produced by [NOAA](https://www.noaa.gov), coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework.
 
-The initial version of the system (v1.0) will become available from Autumn 2022. Funding for the future development of the system is currently being secured.
+ManyFEWS (the Many Flood Early Warning System) can be deployed by a community where there is currently no such system in place. The system uses ensemble weather forecast and historical reanalysis data from the [Open-Meteo](https://open-meteo.com) API, coupled with a catchment hydrological model and a flood inundation model. The user interface is in development and will allow for the issuing of the alerts via a messaging service. A key innovation in the system is the use of statistical emulation of the 2D hydraulic flood model to enable rapid warnings to be generated within an uncertainty framework.
+
 
 ### Durham University Project Team
 
 | Project Member                                   | Contact address                                                      | Role                             | Unit                                                                                |
 |--------------------------------------------------|----------------------------------------------------------------------|----------------------------------|-------------------------------------------------------------------------------------|
+
+
+| Prof. Simon Mathias                              | [simon.mathias@durham.ac.uk](mailto:simon.mathias@durham.ac.uk)      | Project Lead (PI)                | [Department of Engineering](https://www.durham.ac.uk/departments/academic/engineering/) |
+| Prof. [Sim Reaney](https://github.com/simreaney)   | [sim.reaney@durham.ac.uk](mailto:sim.reaney@durham.ac.uk)               | Java Flood One Co-Investigator   | [Department of Geography](https://www.durham.ac.uk/departments/academic/geography/) |
 | Dr. [Samantha Finnigan](https://github.com/sjmf) | [samantha.finnigan@dur.ac.uk](mailto:samantha.finnigan@durham.ac.uk) | Research Software Engineer (RSE) | [Advanced Research Computing](https://www.dur.ac.uk/arc/rse/)                       |
 | Dr. [Jiada Tu](https://github.com/Abel-Durham)   | [jiada.tu@dur.ac.uk](mailto:jiada.tu@durham.ac.uk)                   | Research Software Engineer (RSE) | [Advanced Research Computing](https://www.dur.ac.uk/arc/rse/)                       |
-| Dr. [Sim Reaney](https://github.com/simreaney)   | [sim.reaney@dur.ac.uk](mailto:sim.reaney@durham.ac.uk)               | Java Flood One Co-Investigator   | [Department of Geography](https://www.durham.ac.uk/departments/academic/geography/) |
 
 The initial implementation of the ManyFEWS tool was architected and developed in Python/Django by [Alison Clarke](https://github.com/alisonrclarke).
 

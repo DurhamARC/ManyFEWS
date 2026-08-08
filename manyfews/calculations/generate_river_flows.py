@@ -8,7 +8,7 @@ from .models import (
     InitialCondition,
     RiverFlowCalculationOutput,
     RiverFlowPrediction,
-    AggregatedZentraReading,
+    AggregatedWeatherReading,
 )
 
 from celery.utils.log import get_task_logger
@@ -349,9 +349,10 @@ def FAO56(dt, predictionDate, Tmin, Tmax, alt, lat, T, u2, RH):
     return ETo, E0
 
 
-def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
+def GenerateRiverFlows(dt, predictionDate, weatherData, F0, parametersFilePath):
     """
-    Generates 100 river flow time-series for one realisation of GEFS weather data.
+    Generates 100 river flow time-series for one realisation of weather data
+    (one Open-Meteo forecast ensemble member, or historical weather).
 
     Outputs:
     Q - River flow (m3/s)
@@ -361,30 +362,29 @@ def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
 
     Inputs:
     dt - time step(unit:day)
-    GEFSdata - Contains one realisation of GEFS data
+    weatherData - Contains one realisation of weather data
     F0 - Initial conditions for state variables
 
-    The GEFS data array contains the following items:
+    The weather data array contains the following items:
     Column 1 RH (%)
     Column 2 TempMax (K)
     Column 3 TempMin (K)
     Column 4 10 metre U wind (m/s)
     Column 5 10 metre V wind (m/s)
     Column 6 precip (mm)
-    Column 7 energy (J/kg)
     """
 
     logger.debug(f"Generating river flows for {predictionDate}")
 
     # Determine number of data points
-    N = np.size(gefsData[:, 1])
+    N = np.size(weatherData[:, 1])
 
     # Get relative humidity (%)
-    RH = gefsData[:, 0]
+    RH = weatherData[:, 0]
 
     # Convert temperature to deg C
-    TempMax = gefsData[:, 1] - 273.15
-    TempMin = gefsData[:, 2] - 273.15
+    TempMax = weatherData[:, 1] - 273.15
+    TempMin = weatherData[:, 2] - 273.15
 
     # Estimate average temperature
     T = (TempMin + TempMax) / 2
@@ -402,7 +402,7 @@ def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
     Tmax = np.repeat(MaxTemPerHour, 4)
 
     # Determine magnitude of wind speed at 10 m
-    u10 = np.sqrt((gefsData[:, 3]) ** 2 + (gefsData[:, 4]) ** 2)
+    u10 = np.sqrt((weatherData[:, 3]) ** 2 + (weatherData[:, 4]) ** 2)
 
     # Estimate wind speed at 2 m
     z0 = 0.006247  # m(surface roughness equivalent to FAO56 reference crop)
@@ -413,7 +413,7 @@ def GenerateRiverFlows(dt, predictionDate, gefsData, F0, parametersFilePath):
     u2 = 2.5 * uTAU * (math.log(z2 / z0)) + u0
 
     # Extract precipitation data (mm)
-    precip = gefsData[:, 5]
+    precip = weatherData[:, 5]
 
     # Convert preiciptation to (mm/day)
     qp = precip / dt
@@ -480,20 +480,28 @@ def prepareInitialCondition(predictionDate, location):
     return intialConditionData
 
 
-def prepareWeatherForecastData(predictionDate, location, dataSource="gefs", backDays=0):
+def prepareWeatherForecastData(
+    predictionDate, location, dataSource="forecast", backDays=0, ensemble_member=None
+):
 
     """
 
-    This function is for extracting GEFS data with specific dates and locations from DB,
+    This function is for extracting weather data with specific dates and locations from DB,
     and returning data into a Numpy array.
 
     :param date: date information.
     :param location: location information.
-    :param dataSource: the data source of weather forecasting data.
-                       1: 'gefs': from Noaa Forecast data. (default)
-                       2. 'zentra': from Zentra data. (it is usually used in the initial model set up.)
-    :param backDays: the number of back days need to extract date. (default = 0).
-    :return gefsData: a numpy array contains GEFS or zentra data.
+    :param dataSource: the data source of weather data.
+                       1: 'forecast': the Open-Meteo ensemble forecast (from NoaaForecast). (default)
+                       2. 'historical': observed historical weather from Open-Meteo's archive
+                          (from AggregatedWeatherReading; used for the initial model set up and
+                          daily state updates).
+    :param backDays: the number of back days need to extract date. Only used for 'historical'. (default = 0).
+    :param ensemble_member: when dataSource='forecast', restrict to a single ensemble member
+                       (e.g. "control", "member01"). If None, all members present are returned
+                       (do not mix this with array-order assumptions - use one member per call).
+    :return weatherForecastData: a numpy array containing forecast or historical weather data,
+                       ordered chronologically by valid time.
 
     """
 
@@ -501,15 +509,22 @@ def prepareWeatherForecastData(predictionDate, location, dataSource="gefs", back
     startTime = datetime.astimezone(predictionDate, tz=timezone.utc)
 
     # prepare weather forecast data for model.
-    if dataSource == "gefs":
+    if dataSource == "forecast":
         endTime = startTime + timedelta(hours=23, minutes=59, seconds=59)
-        weatherData = NoaaForecast.objects.filter(date__range=(startTime, endTime))
+        weatherData = NoaaForecast.objects.filter(
+            issue_date__range=(startTime, endTime)
+        )
+        if ensemble_member is not None:
+            weatherData = weatherData.filter(ensemble_member=ensemble_member)
+        weatherData = weatherData.order_by("date")
 
-    elif dataSource == "zentra":
+    elif dataSource == "historical":
         endTime = startTime + timedelta(days=backDays)
-        weatherData = AggregatedZentraReading.objects.filter(
-            date__range=(startTime, endTime)
-        ).filter(location=location)
+        weatherData = (
+            AggregatedWeatherReading.objects.filter(date__range=(startTime, endTime))
+            .filter(location=location)
+            .order_by("date")
+        )
 
     RHList = []
     minTemperatureList = []
@@ -591,7 +606,7 @@ def runningGenerateRiverFlows(
     riverFlowsData = GenerateRiverFlows(
         dt=dt,
         predictionDate=predictionDate,
-        gefsData=weatherForecast,
+        weatherData=weatherForecast,
         F0=initialData,
         parametersFilePath=parametersFilePath,
     )

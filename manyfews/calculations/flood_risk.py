@@ -19,6 +19,7 @@ from .models import (
     ModelVersion,
     PercentageFloodRisk,
     RiverFlowCalculationOutput,
+    RiverFlowPrediction,
     RiverChannel,
 )
 
@@ -41,31 +42,43 @@ def run_all_flood_models():
 
     today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
-    # Next find all calculations with that date, in the next 16 days
-    outputs_by_time = RiverFlowCalculationOutput.objects.filter(
-        prediction_date=latest_prediction_date,
-        forecast_time__lte=today + timedelta(days=16),
+    # Next find all forecast times with that date, in the next 16 days. A single
+    # forecast_time may have multiple RiverFlowCalculationOutput rows - one per
+    # Open-Meteo ensemble member - so dedupe on forecast_time itself rather than
+    # scheduling once per row.
+    forecast_times = (
+        RiverFlowCalculationOutput.objects.filter(
+            prediction_date=latest_prediction_date,
+            forecast_time__lte=today + timedelta(days=16),
+        )
+        .values_list("forecast_time", flat=True)
+        .distinct()
     )
-    # Raise an error and stop the program if outputs_by_time is empty
-    if len(outputs_by_time) == 0:
+    # Raise an error and stop the program if forecast_times is empty
+    if len(forecast_times) == 0:
         raise RuntimeError(
             "No River Flow result found. Check the task dailyModelUpdate ran properly."
         )
 
-    logger.info(f"Found {len(outputs_by_time)} sets of output data.")
-    for output in outputs_by_time:
-        run_flood_model_for_time.delay(latest_prediction_date, output.forecast_time)
+    logger.info(f"Found {len(forecast_times)} sets of output data.")
+    for forecast_time in forecast_times:
+        run_flood_model_for_time.delay(latest_prediction_date, forecast_time)
 
 
 @shared_task(name="Run flood model for time")
 def run_flood_model_for_time(prediction_date, forecast_time):
     logger.info(f"Running flood model for {forecast_time}")
-    output = RiverFlowCalculationOutput.objects.filter(
+    # There may be multiple RiverFlowCalculationOutput rows for this
+    # (prediction_date, forecast_time) - one per Open-Meteo ensemble member.
+    # Gather river flow values across all of them, so the percentile-based
+    # depth predictions below capture weather-ensemble uncertainty alongside
+    # the existing 100-parameter-set uncertainty.
+    outputs = RiverFlowCalculationOutput.objects.filter(
         prediction_date=prediction_date, forecast_time=forecast_time
-    ).first()
-    flow_values_iter = output.riverflowprediction_set.values_list(
-        "river_flow", flat=True
     )
+    flow_values_iter = RiverFlowPrediction.objects.filter(
+        calculation_output__in=outputs
+    ).values_list("river_flow", flat=True)
     flow_values = np.fromiter(flow_values_iter, np.dtype("float_"))
     logger.info(
         f"Got river flow values: "

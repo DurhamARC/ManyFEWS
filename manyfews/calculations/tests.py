@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import TestCase
 import numpy as np
-import xlrd
 from unittest import mock
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
@@ -17,11 +16,9 @@ from .models import (
     FloodModelParameters,
     ModelVersion,
     RiverChannel,
-    ZentraDevice,
-    ZentraReading,
     NoaaForecast,
     InitialCondition,
-    AggregatedZentraReading,
+    AggregatedWeatherReading,
     RiverFlowPrediction,
     RiverFlowCalculationOutput,
 )
@@ -30,114 +27,75 @@ from .tasks import (
     dailyModelUpdate,
     send_alerts,
     load_params_from_csv,
-    import_zentra_devices,
 )
-from .zentra import offsetTime, findZentraDataIndex
+from .open_meteo import offsetTime
 
 
-def excel_to_matrix(path, sheet_num):
+class _FakeOpenMeteoResponse:
+    """A minimal stand-in for requests.Response, for mocking Open-Meteo calls."""
+
+    def __init__(self, json_data):
+        self._json_data = json_data
+
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return self._json_data
+
+
+def _synthetic_hourly(start_date_str, end_date_str, member_suffixes=("",)):
     """
-    This function is used to convert data form from excel (.xlsx) into a Numpy array.
-
-    :param path: the absolute path of the excel file.
-    :param sheet_num: the sheet number of the table in the excel file.
-
+    Build a synthetic Open-Meteo "hourly" response dict covering
+    [start_date, end_date] inclusive (24 hourly points/day, UTC), for one or
+    more ensemble member suffixes (e.g. ("", "_member01", ...)).
     """
+    start = datetime.strptime(start_date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    end = datetime.strptime(end_date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    num_hours = ((end.date() - start.date()).days + 1) * 24
 
-    table = xlrd.open_workbook(path).sheets()[sheet_num]
-    row = table.nrows
-    col = table.ncols
-    datamatrix = np.zeros((row, col))  # ignore the first title row.
-    for x in range(1, row):
-        #        row = np.matrix(table.row_values(x))
-        row = np.array(table.row_values(x))
-        datamatrix[x, :] = row
-    datamatrix = np.delete(
-        datamatrix, 0, axis=0
-    )  # Delete the first blank line.(Its elements are all zero)
-    return datamatrix
+    times = [int((start + timedelta(hours=h)).timestamp()) for h in range(num_hours)]
+
+    hourly = {"time": times}
+    for suffix in member_suffixes:
+        hourly[f"precipitation{suffix}"] = [0.1] * num_hours
+        hourly[f"temperature_2m{suffix}"] = [
+            20.0 + (h % 24) * 0.1 for h in range(num_hours)
+        ]
+        hourly[f"windspeed_10m{suffix}"] = [5.0] * num_hours
+        hourly[f"winddirection_10m{suffix}"] = [180.0] * num_hours
+        hourly[f"relativehumidity_2m{suffix}"] = [70.0] * num_hours
+
+    return {"hourly": hourly}
 
 
-def prepare_test_data():
+def _mock_open_meteo_get(url, params=None, timeout=None):
     """
-    This function is used to import test GEFS and initial condition data into database.
-
-    1. For GEFS: It will read data from GEFS xlrd file (GEFSdata) in Data directory.
-    2. For initial condition: It will read data from csv file ( 'RainfallRunoffModelInitialConditions.csv')
-    in Data directory.
-
-    return: a tuple of test information, which includes: test date and test location.
-            [0]: test date
-            [1]: test location
+    Stand-in for calculations.open_meteo.requests.get, used to test the
+    Open-Meteo integration without hitting the network. Returns synthetic
+    hourly data spanning exactly the requested date range, so
+    prepareOpenMeteoHistorical's completeness check passes and
+    prepareOpenMeteo produces a predictable number of ensemble members.
     """
+    start_date = params["start_date"]
+    end_date = params["end_date"]
 
-    projectPath = os.path.abspath(
-        os.path.join((os.path.split(os.path.realpath(__file__))[0]), "../../")
+    if "archive-api" in url:
+        return _FakeOpenMeteoResponse(_synthetic_hourly(start_date, end_date))
+
+    # Ensemble forecast endpoint: return more members than
+    # OPEN_METEO_ENSEMBLE_MEMBERS so the truncation logic gets exercised.
+    member_suffixes = ("", "_member01", "_member02", "_member03", "_member04")
+    return _FakeOpenMeteoResponse(
+        _synthetic_hourly(start_date, end_date, member_suffixes=member_suffixes)
     )
-
-    dataFileDirPath = os.path.join(projectPath, "Data")
-    GefsDataFile = os.path.join(dataFileDirPath, "GEFSdata.xlsx")
-    InitialConditionFile = os.path.join(
-        dataFileDirPath, "RainfallRunoffModelInitialConditions.csv"
-    )
-
-    # prepare test date information
-    testDate = datetime(
-        year=2010, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
-    )
-    date = datetime.astimezone(testDate, tz=timezone.utc)
-
-    # prepare test location information (fake)
-    testLocation = Point(0, 0)
-
-    # prepare test GEFS data
-    sheetNum = 16
-    gefsData = excel_to_matrix(GefsDataFile, sheetNum)
-
-    # save into DB ( 'calculations_noaaforecast' table)
-    for i in range(len(gefsData[:, 0])):
-        testGefsData = NoaaForecast(
-            date=date,
-            location=testLocation,
-            relative_humidity=gefsData[i, 0],
-            min_temperature=gefsData[i, 2],
-            max_temperature=gefsData[i, 1],
-            wind_u=gefsData[i, 3],
-            wind_v=gefsData[i, 4],
-            precipitation=gefsData[i, 5],
-        )
-        testGefsData.save()
-
-    # prepare initial condition data
-    F0 = np.loadtxt(open(InitialConditionFile), delimiter=",", usecols=range(3))
-
-    # save into DB ( 'calculations_initialcondition' table)
-    for i in range(len(F0[:, 0])):
-        testInitialCondition = InitialCondition(
-            date=date,
-            location=testLocation,
-            storage_level=F0[i, 0],
-            slow_flow_rate=F0[i, 1],
-            fast_flow_rate=F0[i, 2],
-        )
-
-        testInitialCondition.save()
-
-    return testDate, testLocation
 
 
 class TaskTest(TestCase):
-    def setUp(self):
-        super().setUp()
-        #  Check the initialModelSetUp task can run and adds some records to the db
-        self.sn = settings.STATION_SN
-        self.zentraDevice = ZentraDevice(self.sn, location=Point(0, 0))
-        self.zentraDevice.save()
-
-    def test_import_zentra_devices(self):
-        import_zentra_devices()
-
-    def test_initial_model_setup(self):
+    @mock.patch(
+        "calculations.open_meteo.requests.get", side_effect=_mock_open_meteo_get
+    )
+    def test_initial_model_setup(self, mock_get):
         """
         Test the initial Model SetUp and daily update tasks.
         """
@@ -145,20 +103,18 @@ class TaskTest(TestCase):
         # test initial model setup task.
         initialModelSetUp()
 
-        # Check that there are readings (past 365 days) in the database
-        self.timeInfo = offsetTime(backDays=365)
+        # Check that there are historical weather readings in the database,
+        # covering INITIAL_BACKTIME days (4 six-hour buckets/day).
+        location = Point(settings.LON_VALUE, settings.LAT_VALUE)
+        self.timeInfo = offsetTime(backDays=settings.INITIAL_BACKTIME)
         self.startTime = self.timeInfo[0]
-        self.endTime = self.timeInfo[1] + timedelta(days=365)
+        self.endTime = self.timeInfo[1] + timedelta(days=settings.INITIAL_BACKTIME)
 
-        self.readings = ZentraReading.objects.filter(
+        self.aggregateReading = AggregatedWeatherReading.objects.filter(
             date__range=(self.startTime, self.endTime)
-        )
-        self.aggregateReading = AggregatedZentraReading.objects.filter(
-            date__range=(self.startTime, self.endTime)
-        )
+        ).filter(location=location)
 
-        assert len(self.readings) == 1440
-        assert len(self.aggregateReading) == 20
+        assert len(self.aggregateReading) == settings.INITIAL_BACKTIME * 4
 
         # check that there are initial conditions in the database
         self.initial_condition = InitialCondition.objects.all()
@@ -167,20 +123,25 @@ class TaskTest(TestCase):
         # test daily model update task.
         dailyModelUpdate()
 
-        # check that there are output in the database
+        # Open-Meteo ensemble forecast: OPEN_METEO_ENSEMBLE_MEMBERS members,
+        # each with OPEN_METEO_FORECAST_DAYS * 4 six-hour buckets.
+        num_members = settings.OPEN_METEO_ENSEMBLE_MEMBERS
+        buckets_per_member = settings.OPEN_METEO_FORECAST_DAYS * 4
+
+        self.forecastReadings = NoaaForecast.objects.all()
+        assert len(self.forecastReadings) == num_members * buckets_per_member
+
+        # every member gets a saved river flow forecast (riverFlowSave=True)...
         self.riverOutput = RiverFlowCalculationOutput.objects.all()
-        assert len(self.riverOutput) == 8
+        assert len(self.riverOutput) == num_members * buckets_per_member
 
         self.riverOutputPrediction = RiverFlowPrediction.objects.all()
-        assert len(self.riverOutputPrediction) == 800
+        assert len(self.riverOutputPrediction) == num_members * buckets_per_member * 100
 
-        # check that the new initial condition in the database
+        # ...but only the control member's state carries forward, so only
+        # 100 more InitialCondition rows get added (not num_members * 100).
         self.initialCondition = InitialCondition.objects.all()
         assert len(self.initialCondition) == 200
-
-        # check the gefs data
-        self.gefsReadings = NoaaForecast.objects.all()
-        assert len(self.gefsReadings) == 8
 
     def test_load_params_from_csv(self):
         self.csv = (
@@ -435,40 +396,3 @@ class FloodCalculationTests(TestCase):
             predict_depths(self.test_date, dummy_param_list, None)
 
         self.assertEqual(DepthPrediction.objects.filter(date=self.test_date).count(), 4)
-
-    def test_find_zentra_data_index(self):
-        kind_dict = {
-            1: "Precipitation",
-            4: "Wind Direction",
-            5: "Wind Speed",
-            7: "Air Temperature",
-            8: "Vapor Pressure",
-        }
-
-        test_record = [
-            1695772800,
-            268788,
-            100,
-            [
-                {"error": True, "description": "No response from sensor"},
-            ],
-            [
-                {"value": 122.2, "error": False, "description": "Solar Radiation"},
-                {"value": 0.0, "error": False, "description": "Precipitation"},
-                {"value": 0.0, "error": False, "description": "Lightning Activity"},
-                {"value": 0.0, "error": False, "description": "Lightning Distance"},
-                {"value": 198, "error": False, "description": "Wind Direction"},
-                {"value": 0.35, "error": False, "description": "Wind Speed"},
-                {"value": 0.79, "error": False, "description": "Gust Speed"},
-                {"value": 21.94, "error": False, "description": "Air Temperature"},
-                {"value": 2.588, "error": False, "description": "Vapor Pressure"},
-                {"value": 93.69, "error": False, "description": "Atmospheric Pressure"},
-                {"value": 1.2, "error": False, "description": "X-axis Level"},
-                {"value": 3.9, "error": False, "description": "Y-axis Level"},
-                {"value": 0.0, "error": False, "description": "Max Precip Rate"},
-                {"value": 22.52, "error": False, "description": "RH Sensor Temp"},
-                {"value": 0.04439549102977036, "error": False, "description": "VPD"},
-            ],
-        ]
-
-        self.assertEqual(4, findZentraDataIndex(test_record, kind_dict))

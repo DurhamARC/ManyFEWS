@@ -38,23 +38,6 @@ class ModelVersion(models.Model):
         return result["id__max"]
 
 
-class ZentraDevice(models.Model):
-    device_sn = models.CharField(primary_key=True, max_length=100)
-    device_name = models.CharField(max_length=100, blank=True, default="")
-    location = models.PointField()
-    height = models.FloatField(default=1)
-
-
-class ZentraReading(models.Model):
-    date = models.DateTimeField()
-    device = models.ForeignKey(ZentraDevice, on_delete=models.CASCADE)
-    relative_humidity = models.FloatField(null=True)
-    precipitation = models.FloatField(null=True)
-    air_temperature = models.FloatField(null=True)
-    wind_speed = models.FloatField(null=True)
-    wind_direction = models.FloatField(null=True)
-
-
 class WeatherReading(models.Model):
     date = models.DateTimeField()
     location = models.PointField(default=Point(0, 0))
@@ -70,10 +53,18 @@ class WeatherReading(models.Model):
 
 
 class NoaaForecast(WeatherReading):
-    pass
+    # The calendar day this forecast batch was fetched for ("today" at fetch
+    # time). `date` above is the row's actual forecast valid-time; `issue_date`
+    # is what `prepareWeatherForecastData` filters on to select "this run's"
+    # rows, since a single run writes rows spanning many days into the future.
+    issue_date = models.DateTimeField(db_index=True, null=True)
+    # Open-Meteo ensemble member label, e.g. "control", "member01". Lets a
+    # single forecast run store every ensemble member's trajectory
+    # separately instead of blending them together.
+    ensemble_member = models.CharField(max_length=20, default="control", db_index=True)
 
 
-class AggregatedZentraReading(WeatherReading):
+class AggregatedWeatherReading(WeatherReading):
     pass
 
 

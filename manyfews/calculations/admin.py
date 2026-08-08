@@ -3,7 +3,6 @@ from django.forms import ModelForm, FileField
 from leaflet.admin import LeafletGeoAdmin
 
 from .models import (
-    ZentraDevice,
     ModelVersion,
     RiverChannel,
     RiverFlowPrediction,
@@ -22,13 +21,6 @@ class RiverFlowPredictionAdmin(admin.ModelAdmin):
 
     def forecast_time(self, obj):
         return obj.calculation_output.forecast_time
-
-
-@admin.register(ZentraDevice)
-class LocationAdmin(LeafletGeoAdmin):
-    # TODO: change admin interface to retrieve settings from Zentra
-    list_display = ("device_sn", "device_name", "height")
-    display_raw = True
 
 
 @admin.register(ModelVersion)

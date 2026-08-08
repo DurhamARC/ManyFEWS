@@ -91,34 +91,6 @@
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 3,
-        "fields": {
-            "name": "Import Zentra Devices",
-            "task": "Import Zentra Devices",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 1,
-            "args": "[]",
-            "kwargs": "{}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": null,
-            "one_off": true,
-            "start_time": "2022-01-01T00:00:00Z",
-            "enabled": false,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2022-10-18T19:38:48.985Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
         "pk": 4,
         "fields": {
             "name": "Daily Model Update",
@@ -171,15 +143,6 @@
             "total_run_count": 0,
             "date_changed": "2022-10-18T19:42:17.397Z",
             "description": ""
-        }
-    },
-    {
-        "model": "calculations.zentradevice",
-        "pk": "06-02047",
-        "fields": {
-            "device_name": "LLHD Jakarta",
-            "location": "SRID=4326;POINT (106.8346787 -6.226065)",
-            "height": 1.0
         }
     }
 ]

@@ -1,10 +1,5 @@
 version: '3.6'
 
-x-zentra-variables: &zentra-variables
-  # Zentra acccount credentials
-  ZENTRA_UN: ${ZENTRA_UN}
-  ZENTRA_PW: ${ZENTRA_PW}
-
 x-postgres-variables: &postgres-variables
   # Postgres database credentials
   DB_NAME: ${DB_NAME}
@@ -14,7 +9,6 @@ x-postgres-variables: &postgres-variables
   DB_PORT: ${DB_PORT}
 
 x-common-variables: &common-variables
-  <<: *zentra-variables
   <<: *postgres-variables
   # Celery broker connection details
   CELERY_BROKER_URL: ${CELERY_BROKER_URL}
@@ -84,8 +78,8 @@ services:
       LAT_VALUE: ${LAT_VALUE}
       LON_VALUE: ${LON_VALUE}
       INITIAL_BACKTIME: ${INITIAL_BACKTIME}
-      STATION_SN: ${STATION_SN}
-      GEFS_FORECAST_DAYS: ${GEFS_FORECAST_DAYS}
+      OPEN_METEO_FORECAST_DAYS: ${OPEN_METEO_FORECAST_DAYS}
+      OPEN_METEO_ENSEMBLE_MEMBERS: ${OPEN_METEO_ENSEMBLE_MEMBERS}
     depends_on:
       - rabbitmq
     volumes:

@@ -24,68 +24,27 @@ environ.Env.read_env()
 # Database details
 DB_NAME = env.str("DB_NAME", "manyfews")
 DB_USER = env.str("DB_USER", "manyfews")
-DB_PASSWORD = env.str("DB_PASSWORD", "manyfews")
+DB_PASSWORD = env.str("DB_PASSWORD")
 DB_HOST = env.str("DB_HOST", "localhost")
 DB_PORT = env.int("DB_PORT", 5432)
 
-# Zentra account and station details
-ZENTRA_UN = env.str("ZENTRA_UN")
-ZENTRA_PW = env.str("ZENTRA_PW")
+# Model spin-up: how many days of historical weather to back-fill on first run
 INITIAL_BACKTIME = env.int("INITIAL_BACKTIME", 29)
-STATION_SN = env.str("STATION_SN", "06-02010")
-ZENTRA_INTERPOLATE_MISSING = env.bool("ZENTRA_INTERPOLATE_MISSING", False)
-ZENTRA_FAIL_ON_MISSING = env.bool("ZENTRA_FAIL_ON_MISSING", False)
 
-# defaults value when zentra does not report a value.
-DEFAULT_RH = env.tuple(
-    "DEFAULT_RH",
-    float,
-    (
-        98.14,
-        99.08,
-        99.00,
-        98.53,
-        97.11,
-        94.85,
-        90.10,
-        87.21,
-        81.10,
-        83.64,
-        91.50,
-        96.63,
-    ),
-)
-
-DEFAULT_AIR_TEMP = env.tuple(
-    "DEFAULT_AIR_TEMP",
-    float,
-    (
-        23.83,
-        23.73,
-        23.83,
-        24.39,
-        24.79,
-        24.18,
-        23.73,
-        23.99,
-        24.58,
-        24.97,
-        24.61,
-        24.11,
-    ),
-)
-DEFAULT_PRECIP = env.tuple(
-    "DEFAULT_PRECIP",
-    float,
-    (11.98, 10.42, 13.08, 11.43, 4.94, 4.63, 0.09, 0.19, 0.37, 4.90, 6.63, 8.62),
-)
-
-
-# GEFS weather forecast details
+# Weather details
 MODEL_TIMESTEP = env.float("MODEL_TIMESTEP", 0.25)
-GEFS_FORECAST_DAYS = env.int("GEFS_FORECAST_DAYS", 16)
 LAT_VALUE = env.float("LAT_VALUE", -7.05)
 LON_VALUE = env.float("LON_VALUE", 175)
+
+# Open-Meteo ensemble forecast settings
+# See https://open-meteo.com/en/docs/ensemble-api for available model identifiers
+OPEN_METEO_MODEL = env.str("OPEN_METEO_MODEL", "gfs_seamless")
+# Forecast horizon in days
+OPEN_METEO_FORECAST_DAYS = env.int("OPEN_METEO_FORECAST_DAYS", 16)
+# Maximum number of ensemble members to store (0 = keep all available).
+# Each extra member multiplies the cost of the daily river-flow/flood-depth
+# computation, so this is capped by default rather than using every member.
+OPEN_METEO_ENSEMBLE_MEMBERS = env.int("OPEN_METEO_ENSEMBLE_MEMBERS", 10)
 
 # Thresholds for number of m^2 cells that count towards flood risk
 # CHANNEL_CELL_COUNT is number of cells in the river channel
@@ -148,9 +107,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str(
-    "SECRET_KEY", "django-insecure-jau(^3c!z+wl6#zsz!%bu1$v7ks48dosj1#=l=^+58)r1y2n8b"
-)
+# This must be set via the SECRET_KEY environment variable in production.
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", True)

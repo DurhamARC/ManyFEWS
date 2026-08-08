@@ -22,6 +22,30 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class TwilioAlertsTests(TestCase):
+    @mock.patch("webapp.alerts.Client")
+    def test_check_verification_code_requires_approved_status(self, client_cls):
+        client_instance = client_cls.return_value
+        verification_checks = (
+            client_instance.verify.services.return_value.verification_checks
+        )
+
+        twilio_alerts = TwilioAlerts()
+
+        # A correct code: Twilio reports "approved" - should verify.
+        verification_checks.create.return_value.status = "approved"
+        assert twilio_alerts.check_verification_code("+441234567890", "123456") is True
+
+        # A wrong code: Twilio reports "pending" (not an exception, not an error) -
+        # this must NOT be treated as verified, or any code would work.
+        verification_checks.create.return_value.status = "pending"
+        assert twilio_alerts.check_verification_code("+441234567890", "000000") is False
+
+        # Any other non-"approved" status should also not verify.
+        verification_checks.create.return_value.status = "canceled"
+        assert twilio_alerts.check_verification_code("+441234567890", "123456") is False
+
+
 class ConverterTestCase(TestCase):
     def test_bounding_box_url_parameter_converter(self):
         converter = BoundingBoxUrlParameterConverter()

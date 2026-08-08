@@ -51,10 +51,8 @@ NB: You must install a browser driver to run automated UI tests. You can try usi
    Exit the postgresql shell using Ctrl-D or typing `\q`.
 
 
-6. Register a Zentra Cloud account.
-   1. Sign up for an account on: `https://zentracloud.com/accounts/login/`;
-   2. Then contact the administrator for your Zentra Cloud organisation to add your user account to the organisation.
-   3. Also create a [Stadia Maps](https://stadiamaps.com/) developer account, and an API key.
+6. Create a [Stadia Maps](https://stadiamaps.com/) developer account, and an API key. (Weather data comes from
+   [Open-Meteo](https://open-meteo.com/), which is free and needs no account or API key.)
 
 
 7. Set up environment variables in Django.  
@@ -62,8 +60,6 @@ NB: You must install a browser driver to run automated UI tests. You can try usi
    $ cd manyfews
    $ cp .env.CI .env
    $ vi .env
-   > Update 'ZENTRA_UN=zentraCloudUserName' with your user name of your Zentra cloud account.
-   > Update 'ZENTRA_PW=zentraCloudPassword' with your password of your Zentra cloud account.
    > Add your Stadia Maps API token to the end of MAP_URL as '?api_key=<...>'.
    > replace the lines starting with 'EMAIL_' with your SMTP settings (either real settings, or using something like [mailcatcher](https://mailcatcher.me))
    > Save and quit.
@@ -118,9 +114,7 @@ NB: You must install a browser driver to run automated UI tests. You can try usi
 
 14. Go to the http://127.0.0.1:8000/admin and log in with the user you set up earlier. Go to **Periodic tasks** and set up a periodic task to run a scheduled task (e.g. `calculations.hello_celery`). You should be able to see the output in the terminal running `celery`. See [SCHEDULING.md](SCHEDULING.md) for details of setting up all scheduled tasks to run the model daily. If you would like to see what tasks are queued, run `celery -A manyfews flower` which sets up a web interface at http://localhost:5555/ to let you see the queues.
 
-15. Go to the http://127.0.0.1:8000/admin again. Go to **Zentra devices** (under Calculations) and you should be able to create a new ZentraDevice and select its location.
-
-16. To load some (dummy) flood model parameters, go to http://127.0.0.1:8000/admin and go to **Model versions** (under Calculations). Create a new Model version using the file `Data/MajalayaFloodEmulatorParams-DUMMY-5pcSample.csv` as the parameter file. The parameters will be loaded into the database via a celery task.
+15. To load some (dummy) flood model parameters, go to http://127.0.0.1:8000/admin and go to **Model versions** (under Calculations). Create a new Model version using the file `Data/MajalayaFloodEmulatorParams-DUMMY-5pcSample.csv` as the parameter file. The parameters will be loaded into the database via a celery task.
 
 17. To load the river channel into the database (to prevent sending alerts about depths in the channel), go to http://127.0.0.1:8000/admin again. Go to **River channels** (under Calculations), create new, and paste in the contents of `Data/channel.geojson` into the box beneath the map.
 

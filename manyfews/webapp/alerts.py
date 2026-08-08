@@ -24,7 +24,10 @@ class TwilioAlerts:
         verification_check = self.client.verify.services(
             self.verification_sid
         ).verification_checks.create(to=phone_number, code=code)
-        return verification_check.status
+        # Twilio returns "pending" (not an exception) for a wrong code, and other
+        # non-"approved" statuses for other failure cases - only "approved" means
+        # the code was actually correct.
+        return verification_check.status == "approved"
 
     def send_alert_sms(self, phone_number, message):
         self._send_alert_message(settings.TWILIO_PHONE_NUMBER, phone_number, message)

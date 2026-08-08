@@ -1,47 +1,39 @@
 import csv
 
-from celery import Celery, shared_task
+from celery import shared_task
 
 from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
-from django.core.exceptions import ObjectDoesNotExist
 
 import numpy as np
-from tqdm import tqdm, trange
+from tqdm import tqdm
 
 from webapp.models import UserAlert, UserPhoneNumber, AlertType
-from zentra.api import ZentraToken
 
 from .alerts import send_phone_alerts_for_user
 from .bulk_create_manager import BulkCreateManager
 from .flood_risk import run_all_flood_models, calculate_risk_percentages
-from .gefs import prepareGEFS
 from .generate_river_flows import (
     prepareWeatherForecastData,
     runningGenerateRiverFlows,
 )
 from .models import (
-    AggregatedZentraReading,
+    AggregatedWeatherReading,
     FloodModelParameters,
     InitialCondition,
     ModelVersion,
     NoaaForecast,
-    ZentraDevice,
     PercentageFloodRisk,
     AggregatedDepthPrediction,
     DepthPrediction,
     RiverFlowPrediction,
     RiverFlowCalculationOutput,
-    ZentraReading,
 )
-from .zentra import prepareZentra, offsetTime
-from .zentra_devices import ZentraDeviceMap
+from .open_meteo import prepareOpenMeteo, prepareOpenMeteoHistorical, offsetTime
 
 from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
-
-app = Celery()
 
 
 @shared_task(name="calculations.hello_celery")
@@ -60,7 +52,7 @@ def initialModelSetUp(self):
     It must be run again if the scheduled tasks were not run in the last INITIAL_BACKTIME days.
 
     1. Start with all parameters at their default values.
-    2. Get the last 365 days of data from the catchment via Zentra
+    2. Get the last INITIAL_BACKTIME days of historical weather for the catchment from Open-Meteo
     3. Run the model for this dataset
     4. The model will write out the initial conditions for each of the model parameter sets.
        This is the file that we will use for the next day in the processing.
@@ -68,37 +60,31 @@ def initialModelSetUp(self):
 
     backDays = settings.INITIAL_BACKTIME
     timeInfo = offsetTime(backDays=backDays)
+    location = Point(settings.LON_VALUE, settings.LAT_VALUE)
 
     logger.info(
         f"Setting up catchment model:\n"
-        f"\tUsing Zentra Device {settings.STATION_SN}\n"
+        f"\tLocation: {location}\n"
         f"\tINITIAL_BACKTIME is {backDays}\n"
         f"\tStarting on {timeInfo[0].strftime('%Y-%m-%d %H:%M:%S')}"
     )
 
-    try:
-        location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
-    except ObjectDoesNotExist as e:
-        raise ObjectDoesNotExist(
-            f"Station {settings.STATION_SN} did not resolve to a valid Zentra object"
-        ) from e
+    # Get the last `backDays` days of historical weather (ending yesterday - today
+    # isn't "historical" yet) from Open-Meteo's archive API in a single request.
+    yesterday, _ = offsetTime(backDays=1)
+    prepareOpenMeteoHistorical(start_date=timeInfo[0], end_date=yesterday)
 
-    # prepare the time point for getting zentra data.
-    # For initial model setup, it needs 365 days zentra data.
-    for backDay in trange(backDays, 0, -1, desc=self.name):
-        prepareZentra(backDay=backDay)
-
-    # prepare weather data (from Zentra).
+    # prepare weather data (from Open-Meteo historical archive).
     weatherForecastData = prepareWeatherForecastData(
         predictionDate=timeInfo[0],
         location=location,
-        dataSource="zentra",
+        dataSource="historical",
         backDays=backDays,
     )
 
     # Set up an initial value for model running.
     # Here use the mean value of the reference data as its initial value,
-    # Because through previous 365 days' iteration with zentra data,
+    # Because through previous `backDays` days' iteration with historical data,
     # it will be pulled back to the real.
 
     initialConditionData = np.tile((np.array([20.556992, 3.86579, 1.862992])), (100, 1))
@@ -120,52 +106,54 @@ def dailyModelUpdate():
     """
     On the daily updates, there are two steps that we need to do.
     1, update the model’s initial conditions based on the previous day’s weather.
-    2, run the GEFS weather forecast data.
+    2, run the Open-Meteo ensemble weather forecast data.
 
     Part 1:
-    1. Get the last day’s data from Zentra
+    1. Get the last day’s historical weather from Open-Meteo
     2. Read in the initial conditions from the previous day
     3. Run the catchment model for one day with the new data
     4. Write the new initial conditions for today.
     Part 2
-    1. Put together all of the time series from GEFS – there are 21 in total.
-    2. Run the model with the new initial conditions (from step 4 directly above) for each of the weather
-       forecast time series from step one above
-    3. We now have a set of ca. 2100 time series of river flow forecast for the next 16 days.
+    1. Fetch the Open-Meteo ensemble forecast - every ensemble member's weather trajectory.
+    2. Run the model with the new initial conditions (from step 4 directly above) for each
+       ensemble member's forecast time series from step one above.
+    3. We now have a set of river flow forecasts for the next OPEN_METEO_FORECAST_DAYS days,
+       for every ensemble member - flood_risk.py combines these with the 100 parameter-set
+       realisations to get depth-prediction uncertainty bounds that reflect both parameter
+       and weather-forecast uncertainty.
 
     """
 
     ## Part 1
     # prepare time and location info
-    location = ZentraDevice.objects.get(device_sn=settings.STATION_SN).location
+    location = Point(settings.LON_VALUE, settings.LAT_VALUE)
     yday = offsetTime(backDays=1)
     today = offsetTime(backDays=0)
 
-    # Check whether zentra data has been downloaded
+    # Check whether historical data has been downloaded for yesterday
     aggregateDataLength = len(
-        AggregatedZentraReading.objects.filter(date__range=(yday[0], yday[1])).filter(
+        AggregatedWeatherReading.objects.filter(date__range=(yday[0], yday[1])).filter(
             location=location
         )
     )
 
     logger.info(
         """
-        ZentraDevice location: {}
-        ZentraDevice station: {}
+        Location: {}
         Yesterday: {:%B %d, %Y}
         Today: {:%B %d, %Y}
-        Zentra data records: {}
+        Historical weather records: {}
     """.format(
-            location, settings.STATION_SN, yday[0], today[0], aggregateDataLength
+            location, yday[0], today[0], aggregateDataLength
         )
     )
 
     if aggregateDataLength == 0:
-        # Get the last day’s data from Zentra
-        prepareZentra(backDay=1)
+        # Get the last day’s data from Open-Meteo's historical archive
+        prepareOpenMeteoHistorical(start_date=yday[0], end_date=yday[0])
 
-    ydayZentra = prepareWeatherForecastData(
-        predictionDate=yday[0], location=location, dataSource="zentra", backDays=1
+    ydayWeather = prepareWeatherForecastData(
+        predictionDate=yday[0], location=location, dataSource="historical", backDays=1
     )
 
     # Read in the initial conditions from the previous day
@@ -209,7 +197,7 @@ def dailyModelUpdate():
     updateInitialData = runningGenerateRiverFlows(
         predictionDate=today[0],
         dataLocation=location,
-        weatherForecast=ydayZentra,
+        weatherForecast=ydayWeather,
         initialData=F0,
         riverFlowSave=False,
         initialDataSave=False,
@@ -217,28 +205,56 @@ def dailyModelUpdate():
     )
 
     ## part 2
-    # Put together all of the time series from GEFS
-    gefsData = NoaaForecast.objects.filter(date__range=(today[0], today[1]))
+    # Fetch the Open-Meteo ensemble forecast if not already downloaded for today
+    todaysForecast = NoaaForecast.objects.filter(issue_date__range=(today[0], today[1]))
 
-    if len(gefsData) == 0:
-        # Check whether GEFS data has been downloaded
-        logger.info("Preparing GEFS data")
-        prepareGEFS()
+    if len(todaysForecast) == 0:
+        logger.info("Preparing Open-Meteo ensemble forecast data")
+        prepareOpenMeteo()
+        todaysForecast = NoaaForecast.objects.filter(
+            issue_date__range=(today[0], today[1])
+        )
 
-    weatherForecastData = prepareWeatherForecastData(
-        predictionDate=today[0], location=location, dataSource="gefs"
+    members = list(
+        todaysForecast.order_by("ensemble_member")
+        .values_list("ensemble_member", flat=True)
+        .distinct()
     )
+    if not members:
+        raise RuntimeError(
+            "No Open-Meteo forecast data found for today - check prepareOpenMeteo() ran successfully."
+        )
 
-    # Run the catchment model with the new initial conditions
-    runningGenerateRiverFlows(
-        predictionDate=today[0],
-        dataLocation=location,
-        weatherForecast=weatherForecastData,
-        initialData=updateInitialData,
-        riverFlowSave=True,
-        initialDataSave=True,
-        mode="daily",
-    )
+    # The "control" (deterministic) member drives tomorrow's saved initial
+    # conditions, so state carry-forward stays unambiguous across ensemble
+    # members. Every member's flood forecast still gets saved (riverFlowSave),
+    # so flood_risk.py can combine all members' river flows to reflect
+    # weather-forecast uncertainty alongside the existing 100-parameter-set
+    # uncertainty.
+    control_member = "control" if "control" in members else members[0]
+    logger.info(f"Running river flow model for {len(members)} ensemble members")
+
+    for member in members:
+        memberForecastData = prepareWeatherForecastData(
+            predictionDate=today[0],
+            location=location,
+            dataSource="forecast",
+            ensemble_member=member,
+        )
+
+        # Run the catchment model with the new initial conditions. Each member
+        # needs its own independent copy of updateInitialData: ModelFun
+        # mutates F0 in place, so sharing the array across members would let
+        # one member's run pollute the starting state for the next.
+        runningGenerateRiverFlows(
+            predictionDate=today[0],
+            dataLocation=location,
+            weatherForecast=memberForecastData,
+            initialData=updateInitialData.copy(),
+            riverFlowSave=True,
+            initialDataSave=(member == control_member),
+            mode="daily",
+        )
 
 
 @shared_task(name="Run flood model")
@@ -275,7 +291,7 @@ def send_alerts():
 def load_params_from_csv(self, filename: str, model_version_id: str):
     logger.info(f"Loading parameters from {filename}")
 
-    total_rows = sum(1 for _ in open(filename))
+    total_rows = sum(1 for _ in open(filename, encoding="utf-8-sig"))
     logger.info(
         f"CSV file contains {total_rows} rows. Loading in chunks of {settings.DATABASE_CHUNK_SIZE}..."
     )
@@ -338,13 +354,6 @@ def load_params_from_csv(self, filename: str, model_version_id: str):
     logger.info("Deleted old model parameters")
 
 
-@shared_task(name="Import Zentra Devices")
-def import_zentra_devices():
-    token = ZentraToken(username=settings.ZENTRA_UN, password=settings.ZENTRA_PW)
-    device_map = ZentraDeviceMap(token=token)
-    device_map.save()
-
-
 @shared_task(name="calculations.dropCalculatedValues")
 def drop_database():
     logger.info("Dropping all calculated values")
@@ -355,6 +364,5 @@ def drop_database():
     RiverFlowPrediction.objects.all().delete()
     RiverFlowCalculationOutput.objects.all().delete()
     InitialCondition.objects.all().delete()
-    AggregatedZentraReading.objects.all().delete()
-    ZentraReading.objects.all().delete()
+    AggregatedWeatherReading.objects.all().delete()
     NoaaForecast.objects.all().delete()

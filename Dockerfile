@@ -28,7 +28,7 @@
 #
 # ----------------------------------------------------------------------------
 # Build node / Frontend assets
-FROM node:alpine3.15 as build_node
+FROM node:lts-alpine as build_node
 MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 
 # Install Python (required for node-gyp)
@@ -50,7 +50,7 @@ RUN npm run build
 
 # ----------------------------------------------------------------------------
 # Create conda environment
-FROM continuumio/miniconda3:4.12.0 as build_python
+FROM continuumio/miniconda3 as build_python
 
 # https://pythonspeed.com/articles/conda-docker-image-size/
 # Create the environment:
@@ -79,9 +79,10 @@ SHELL ["/bin/bash", "--login", "-c"]
 # ----------------------------------------------------------------------------
 # Create static files for ManyFEWS site using django (for deployment on standard webserver)
 FROM build_python as build_static
-# Set dummy variables for Zentra so that app doesn't error out
-# and the STATIC_ROOT var for the location to write static files
-ENV ZENTRA_UN=foo ZENTRA_PW=bar STATIC_ROOT='/app/static'
+# Set dummy variables for settings that must be present at import time (SECRET_KEY,
+# DB_PASSWORD have no default and are only needed for a real deploy) so collectstatic
+# doesn't error out, and the STATIC_ROOT var for the location to write static files
+ENV SECRET_KEY=dummy-build-time-secret-key DB_PASSWORD=dummy STATIC_ROOT='/app/static'
 COPY manyfews/ .
 COPY --from=build_node /app/webapp/static/index-bundle.js /app/webapp/static/
 
@@ -93,7 +94,7 @@ RUN source /venv/bin/activate && \
 
 # ----------------------------------------------------------------------------
 # Create a python docker container base for gunicorn and celery
-FROM debian:bullseye-slim as manyfews
+FROM debian:bookworm-slim as manyfews
 MAINTAINER Samantha Finnigan <samantha.finnigan@durham.ac.uk>, ARC Durham University
 WORKDIR /app
 
@@ -113,7 +114,6 @@ RUN apt-get update -q && \
 
 # Copy /venv from the previous stage:
 COPY --from=build_python /venv /venv
-COPY --from=build_python /opt/conda/envs/ManyFEWS/share/eccodes/definitions /opt/conda/envs/ManyFEWS/share/eccodes/definitions
 ENV PATH /opt/conda/bin:$PATH
 
 # Make RUN commands use the new environment:

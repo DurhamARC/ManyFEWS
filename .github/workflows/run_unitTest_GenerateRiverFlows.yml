@@ -24,7 +24,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
       -
         name: Install dependencies
@@ -34,7 +34,7 @@ jobs:
 
       -
         name: Cache Miniconda environment
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: /usr/share/miniconda3/envs/anaconda-client-env
           key: conda-${{ runner.os }}--${{ runner.arch }}--${{ steps.get-date.outputs.today }}-${{ hashFiles('config/manyFEWS.base.yml') }}-${{ env.CACHE_NUMBER }}
@@ -48,9 +48,8 @@ jobs:
         uses: nanasess/setup-chromedriver@v2
 
       -
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v4
         with:
-          miniforge-variant: Mambaforge
           miniforge-version: latest
           activate-environment: anaconda-client-env
           environment-file: config/manyFEWS.base.yml
@@ -70,7 +69,7 @@ jobs:
 
       -
         name: Install npm
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v7
         with:
           node-version: '16'
 
@@ -89,12 +88,9 @@ jobs:
       -
         name: Run Django tests
         env:
-          ZENTRA_UN: ${{ secrets.ZENTRA_CLOUD_USERNAME }}
-          ZENTRA_PW: ${{ secrets.ZENTRA_CLOUD_PASSWORD }}
           MAP_URL: ${{ secrets.MAP_URL }}
           EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
           EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
-          STATION_SN: ${{ vars.STATION_SN }}
           DISPLAY: :99
         run: coverage run --source='.' manage.py test
         working-directory: manyfews
@@ -125,6 +121,6 @@ jobs:
 
       -
         name: Upload coverage reports to Codecov with GitHub Action
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
